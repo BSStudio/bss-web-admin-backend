@@ -1,0 +1,8 @@
+openapi: 3.0.0
+info:
+  title: BSS Web admin API
+  version: 1.0.0
+  contact:
+    name: Bence Csik
+    url: https://github.com/csikb
+paths:

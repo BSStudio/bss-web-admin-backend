@@ -1,0 +1,6 @@
+${AnsiColor.172} ██████╗ ███████╗███████╗
+${AnsiColor.172} ██╔══██╗██╔════╝██╔════╝
+${AnsiColor.172} ██████╔╝███████╗███████╗
+${AnsiColor.172} ██╔══██╗╚════██║╚════██║
+${AnsiColor.172} ██████╔╝███████║███████║
+${AnsiColor.172} ╚═════╝ ╚══════╝╚══════╝ ${AnsiColor.027}${spring.application.name}${Ansi.DEFAULT}
