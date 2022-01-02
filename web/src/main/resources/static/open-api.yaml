@@ -5,4 +5,347 @@ info:
   contact:
     name: Bence Csik
     url: https://github.com/csikb
+tags:
+  - name: Member
+    description: "REST operations for members"
+  - name: Video
+    description: "REST operations for videos"
+  - name: VideoCrew
+    description: "REST operations for video crews"
+  - name: Event
+    description: "REST operations for events"
+  - name: EventVideo
+    description: "REST operations for event videos"
 paths:
+  /api/member:
+    get:
+      summary: "Read all member"
+      description: "Read all member"
+      tags:
+        - Member
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      summary: "Create member"
+      description: "Create member"
+      tags:
+        - Member
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/member/{memberId}:
+    get:
+      summary: "Read one member"
+      description: "Read one member"
+      tags:
+        - Member
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+    put:
+      summary: "Update member"
+      description: "Update member"
+      tags:
+        - Member
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      summary: "Delete member"
+      description: "Delete member"
+      tags:
+        - Member
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/video:
+    get:
+      summary: "Read all video (paginated)"
+      description: "Read all video (paginated)"
+      tags:
+        - Video
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      summary: "Create video"
+      description: "Create video"
+      tags:
+        - Video
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/video/{videoId}:
+    get:
+      summary: "Read one video"
+      description: "Read one video"
+      tags:
+        - Video
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+    put:
+      summary: "Update video"
+      description: "Update video"
+      tags:
+        - Video
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      summary: "Delete video"
+      description: "Delete video"
+      tags:
+        - Video
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/videocrew:
+    put:
+      summary: "Add position with member to the video"
+      description: "Add position with member to the video"
+      tags:
+        - VideoCrew
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/videocrew/{videoId}/{position}/{memberId}:
+    delete:
+      summary: "Delete position with member to the video"
+      description: "Delete position with member to the video"
+      tags:
+        - VideoCrew
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: position
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: memberId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/event:
+    get:
+      summary: "Read all event"
+      description: "Read all event"
+      tags:
+        - Event
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      summary: "Create event"
+      description: "Create event"
+      tags:
+        - Event
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/event/{eventId}:
+    get:
+      summary: "Read one event"
+      description: "Read one event"
+      tags:
+        - Event
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+    put:
+      summary: "Update event"
+      description: "Update event"
+      tags:
+        - Event
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      summary: "Delete event"
+      description: "Delete event"
+      tags:
+        - Event
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/eventVideo:
+    put:
+      summary: "Add video to event"
+      description: "Add video to event"
+      tags:
+        - EventVideo
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/eventVideo/{eventId}/{videoId}:
+    delete:
+      summary: "Delete video from event"
+      description: "Delete video from event"
+      tags:
+        - EventVideo
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
