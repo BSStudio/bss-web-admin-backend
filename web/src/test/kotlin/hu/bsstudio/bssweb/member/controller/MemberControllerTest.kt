@@ -1,4 +1,4 @@
-package hu.bsstudio.bssweb.controller
+package hu.bsstudio.bssweb.member.controller
 
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
@@ -12,8 +12,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import java.time.LocalDate
 import java.util.Optional
-import java.util.UUID
 
 internal class MemberControllerTest {
 
@@ -39,9 +39,9 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should retrieve a single member`() {
-        every { mockService.getMemberById(UUID_1) } returns Optional.of(MEMBER_1)
+        every { mockService.getMemberById(ID) } returns Optional.of(MEMBER_1)
 
-        val response = underTest.getMemberById(UUID_STRING)
+        val response = underTest.getMemberById(ID)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).isEqualTo(MEMBER_1)
@@ -49,9 +49,9 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should retrieve a not found if member was not found`() {
-        every { mockService.getMemberById(UUID_1) } returns Optional.empty()
+        every { mockService.getMemberById(ID) } returns Optional.empty()
 
-        val response = underTest.getMemberById(UUID_STRING)
+        val response = underTest.getMemberById(ID)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
         assertThat(response.body).isEqualTo(null)
@@ -59,10 +59,9 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should return ok on update`() {
-        val updateMember = UpdateMember("name")
-        every { mockService.updateMember(updateMember) } returns MEMBER_1
+        every { mockService.updateMember(UPDATE_MEMBER) } returns Optional.of(MEMBER_1)
 
-        val response = underTest.updateMember(updateMember)
+        val response = underTest.updateMember(UPDATE_MEMBER)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).isEqualTo(MEMBER_1)
@@ -70,33 +69,47 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should return created on create`() {
-        val createMember = CreateMember("name")
-        every { mockService.createMember(createMember) } returns MEMBER_1
+        every { mockService.createMember(CREATE_MEMBER) } returns MEMBER_1
 
-        val response = underTest.createMember(createMember)
+        val response = underTest.createMember(CREATE_MEMBER)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
         assertThat(response.body).isEqualTo(MEMBER_1)
     }
 
     companion object {
-        private const val UUID_STRING = "01234567-0123-0123-0123-0123456789ab"
-        private val UUID_1 = UUID.fromString(UUID_STRING)
-        private val MEMBER_1 = Member(
-            id = UUID_1,
-            name = "name",
+        private const val ID = "id1"
+        private const val NAME = "name1"
+        private val CREATE_MEMBER = CreateMember(ID, NAME)
+        private val UPDATE_MEMBER = UpdateMember(
+            id = ID,
+            name = NAME,
             description = "description",
             imageUrl = "imageUrl",
             role = "role",
-            status = MemberStatus.MEMBER
+            status = MemberStatus.MEMBER,
+            archived = false,
+            joinedAt = LocalDate.EPOCH
+        )
+        private val MEMBER_1 = Member(
+            id = ID,
+            name = NAME,
+            description = "description",
+            imageUrl = "imageUrl",
+            role = "role",
+            status = MemberStatus.MEMBER,
+            archived = false,
+            joinedAt = LocalDate.EPOCH
         )
         private val MEMBER_2 = Member(
-            id = UUID.fromString("00000000-0000-0000-0000-000000000000"),
-            name = "name",
+            id = "id2",
+            name = "name2",
             description = "description",
             imageUrl = "imageUrl",
             role = "role",
-            status = MemberStatus.MEMBER
+            status = MemberStatus.MEMBER,
+            archived = false,
+            joinedAt = LocalDate.EPOCH
         )
         private val MEMBER_LIST = listOf(MEMBER_1, MEMBER_2)
     }

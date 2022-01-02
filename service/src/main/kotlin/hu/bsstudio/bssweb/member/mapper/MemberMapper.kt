@@ -11,8 +11,10 @@ class MemberMapper {
             name = entity.name,
             description = entity.description,
             imageUrl = entity.imageUrl,
+            joinedAt = entity.joinedAt,
             role = entity.role,
             status = entity.status,
+            archived = entity.archived,
         )
     }
 
@@ -22,8 +24,10 @@ class MemberMapper {
             name = model.name,
             description = model.description,
             imageUrl = model.imageUrl,
+            joinedAt = model.joinedAt,
             role = model.role,
             status = model.status,
+            archived = model.archived,
         )
     }
 }

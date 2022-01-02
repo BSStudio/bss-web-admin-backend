@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  lint-and-test:
+  lint:
     docker:
       - image: cimg/openjdk:11.0.13
     steps:
@@ -12,7 +12,20 @@ jobs:
           paths:
             - ~/.gradle/wrapper
           key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - run: ./gradlew check --parallel
+      - run: ./gradlew ktlintCheck --parallel
+  test:
+    docker:
+      - image: cimg/openjdk:11.0.13
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - run: ./gradlew
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - run: ./gradlew jacocoTestReport --parallel
       - store_test_results:
           path: web/build/test-results
       - store_test_results:
@@ -25,6 +38,19 @@ jobs:
           path: service/build/reports
       - store_artifacts:
           path: data/build/reports
+  coverage:
+    docker:
+      - image: cimg/openjdk:11.0.13
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - run: ./gradlew
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - run: ./gradlew jacocoTestCoverageVerification --parallel
   docker-build:
     working_directory: ~/project
     docker:
@@ -57,7 +83,9 @@ jobs:
             - /caches/app.tar
 workflows:
   version: 2
-  build_and_test:
+  all:
     jobs:
-      - lint-and-test
+      - lint
+      - test
+      - coverage
       - docker-build

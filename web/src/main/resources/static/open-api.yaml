@@ -29,19 +29,51 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: array
+                items:
+                  $ref: '#/components/schemas/BasicMember'
     post:
       summary: "Create member"
       description: "Create member"
       tags:
         - Member
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMember'
       responses:
         201:
           description: "Created"
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/DetailedMember'
+    delete:
+      summary: "Delete member"
+      description: "Delete member"
+      tags:
+        - Member
+      parameters:
+        - name: memberId
+          in: path
+          required: true
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uuid
   /api/member/{memberId}:
     get:
       summary: "Read one member"
@@ -56,12 +88,12 @@ paths:
             type: string
             format: uuid
       responses:
-        200:
-          description: "OK"
+        201:
+          description: "Created"
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/DetailedMember'
     put:
       summary: "Update member"
       description: "Update member"
@@ -74,32 +106,18 @@ paths:
           schema:
             type: string
             format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMember'
       responses:
-        200:
-          description: "OK"
+        201:
+          description: "Created"
           content:
             application/json:
               schema:
-                type: object
-    delete:
-      summary: "Delete member"
-      description: "Delete member"
-      tags:
-        - Member
-      parameters:
-        - name: memberId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        200:
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: object
+                $ref: '#/components/schemas/DetailedMember'
   /api/video:
     get:
       summary: "Read all video (paginated)"
@@ -125,6 +143,32 @@ paths:
             application/json:
               schema:
                 type: object
+  /api/video/archive:
+    put:
+      summary: "Archive videos"
+      description: "Archive videos"
+      tags:
+        - Video
+      parameters:
+        - name: videoId
+          in: query
+          required: true
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uuid
   /api/video/{videoId}:
     get:
       summary: "Read one video"
@@ -182,8 +226,11 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-  /api/videocrew:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+  /api/videocrew/{videoId}:
     put:
       summary: "Add position with member to the video"
       description: "Add position with member to the video"
@@ -243,6 +290,19 @@ paths:
     post:
       summary: "Create event"
       description: "Create event"
+      tags:
+        - Event
+      responses:
+        201:
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/event/archive:
+    put:
+      summary: "Archive event"
+      description: "Archive event"
       tags:
         - Event
       responses:
@@ -349,3 +409,31 @@ paths:
             application/json:
               schema:
                 type: object
+components:
+  schemas:
+    CreateMember:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+    UpdateMember:
+      type: object
+    BasicMember:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: false
+        name:
+          type: string
+          nullable: false
+        status:
+          type: string
+          nullable: false
+        position:
+          type: string
+          nullable: false
+    DetailedMember:
+      type: object
