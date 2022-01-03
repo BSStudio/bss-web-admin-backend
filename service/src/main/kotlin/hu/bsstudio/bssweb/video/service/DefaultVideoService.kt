@@ -42,13 +42,20 @@ class DefaultVideoService(
             .map(VideoEntity::id)
     }
 
+    override fun changeVideoVisibility(videoIds: List<String>, visible: Boolean): List<String> {
+        return detailedRepository.findAllById(videoIds)
+            .map { it.copy(visible = visible) }
+            .map(detailedRepository::save)
+            .map(DetailedVideoEntity::id)
+    }
+
     override fun findVideoById(videoId: String): Optional<DetailedVideo> {
         return detailedRepository.findById(videoId)
             .map(detailedMapper::entityToModel)
     }
 
-    override fun updateVideo(updateVideo: UpdateVideo): Optional<DetailedVideo> {
-        return detailedRepository.findById(updateVideo.id)
+    override fun updateVideo(videoId: String, updateVideo: UpdateVideo): Optional<DetailedVideo> {
+        return detailedRepository.findById(videoId)
             .map { updateVideo(it, updateVideo) }
             .map(detailedRepository::save)
             .map(detailedMapper::entityToModel)
@@ -59,13 +66,14 @@ class DefaultVideoService(
     }
 
     private fun updateVideo(videoEntity: DetailedVideoEntity, updateVideo: UpdateVideo): DetailedVideoEntity {
-        videoEntity.title = updateVideo.title
-        videoEntity.description = updateVideo.description
-        videoEntity.videoUrl = updateVideo.videoUrl
-        videoEntity.thumbnailUrl = updateVideo.thumbnailUrl
-        videoEntity.uploadedAt = updateVideo.uploadedAt
-        videoEntity.visible = updateVideo.visible
-        videoEntity.archived = updateVideo.archived
-        return videoEntity
+        return videoEntity.copy(
+            title = updateVideo.title,
+            description = updateVideo.description,
+            videoUrl = updateVideo.videoUrl,
+            thumbnailUrl = updateVideo.thumbnailUrl,
+            uploadedAt = updateVideo.uploadedAt,
+            visible = updateVideo.visible,
+            archived = updateVideo.archived,
+        )
     }
 }

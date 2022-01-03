@@ -41,15 +41,27 @@ class VideoController(val service: VideoService) {
             .let { ResponseEntity.ok(it) }
     }
 
+    @PutMapping("/visible")
+    fun changeVideoVisibility(
+        @RequestParam videoIds: List<String>,
+        @RequestParam visible: Boolean
+    ): ResponseEntity<List<String>> {
+        return service.changeVideoVisibility(videoIds, visible)
+            .let { ResponseEntity.ok(it) }
+    }
+
     @GetMapping("/{videoId}")
     fun getVideo(@PathVariable videoId: String): ResponseEntity<DetailedVideo> {
         return service.findVideoById(videoId)
             .let { ResponseEntity.of(it) }
     }
 
-    @PutMapping
-    fun updateVideo(@RequestBody updateVideo: UpdateVideo): ResponseEntity<DetailedVideo> {
-        return service.updateVideo(updateVideo)
+    @PutMapping("/{videoId}")
+    fun updateVideo(
+        @PathVariable videoId: String,
+        @RequestBody updateVideo: UpdateVideo
+    ): ResponseEntity<DetailedVideo> {
+        return service.updateVideo(videoId, updateVideo)
             .let { ResponseEntity.of(it) }
     }
 

@@ -11,5 +11,5 @@ interface MemberService {
     fun archiveMembers(memberIds: List<String>, unArchive: Boolean): List<String>
     fun removeMember(memberId: String)
     fun getMemberById(memberIds: String): Optional<Member>
-    fun updateMember(member: UpdateMember): Optional<Member>
+    fun updateMember(memberId: String, updateMember: UpdateMember): Optional<Member>
 }

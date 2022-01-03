@@ -32,9 +32,12 @@ class MemberController(val service: MemberService) {
             .let { ResponseEntity(it, HttpStatus.CREATED) }
     }
 
-    @PutMapping("")
-    fun updateMember(@RequestBody member: UpdateMember): ResponseEntity<Member> {
-        return service.updateMember(member)
+    @PutMapping("/{memberId}")
+    fun updateMember(
+        @PathVariable memberId: String,
+        @RequestBody updateMember: UpdateMember
+    ): ResponseEntity<Member> {
+        return service.updateMember(memberId, updateMember)
             .let { ResponseEntity.of(it) }
     }
 

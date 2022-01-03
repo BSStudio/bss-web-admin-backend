@@ -14,26 +14,29 @@ VALUES ('ALUMNI'),
 
 CREATE TABLE bss_web.members
 (
-    id          TEXT PRIMARY KEY CHECK (trim(id) != ''),
+    id          TEXT PRIMARY KEY,
     name        TEXT UNIQUE NOT NULL,
     description TEXT        NOT NULL DEFAULT '',
     image_url   TEXT                 DEFAULT NULL,
     joined_at   DATE        NOT NULL DEFAULT current_date,
     role        TEXT        NOT NULL DEFAULT '',
     status      TEXT        NOT NULL DEFAULT 'MEMBER_CANDIDATE_CANDIDATE' REFERENCES bss_web.status (name),
-    archived    BOOLEAN     NOT NULL DEFAULT FALSE
+    archived    BOOLEAN     NOT NULL DEFAULT FALSE,
+    CONSTRAINT id_not_empty CHECK (trim(id) != '')
 );
 
 CREATE TABLE bss_web.videos
 (
-    id            TEXT PRIMARY KEY CHECK (trim(id) != ''),
+    id            TEXT PRIMARY KEY,
     title         TEXT UNIQUE NOT NULL,
     description   TEXT        NOT NULL DEFAULT '',
     video_url     TEXT UNIQUE          DEFAULT NULL,
     thumbnail_url TEXT UNIQUE          DEFAULT NULL,
     uploaded_at   DATE        NOT NULL DEFAULT current_date,
     visible       BOOLEAN     NOT NULL DEFAULT FALSE,
-    archived      BOOLEAN     NOT NULL DEFAULT FALSE
+    archived      BOOLEAN     NOT NULL DEFAULT FALSE,
+    CONSTRAINT id_not_empty CHECK (trim(id) != '') ,
+    CONSTRAINT title_not_empty CHECK (trim(title) != '')
 );
 
 CREATE VIEW bss_web.public_videos AS
@@ -45,17 +48,20 @@ CREATE TABLE bss_web.crew
 (
     video_id  TEXT REFERENCES bss_web.videos (id),
     member_id TEXT REFERENCES bss_web.members (id),
-    position  TEXT CHECK (trim(position) != ''),
-    PRIMARY KEY (video_id, member_id, position)
+    position  TEXT,
+    PRIMARY KEY (video_id, member_id, position),
+    CONSTRAINT position_not_empty CHECK (trim(position) != '')
 );
 
 CREATE TABLE bss_web.events
 (
-    id          TEXT PRIMARY KEY,
-    name        TEXT UNIQUE NOT NULL,
-    description TEXT        NOT NULL,
+    id   TEXT PRIMARY KEY,
+    name TEXT UNIQUE NOT NULL,
+    description TEXT        NOT NULL DEFAULT '',
     date        DATE        NOT NULL DEFAULT current_date,
-    archived    BOOLEAN     NOT NULL DEFAULT FALSE
+    archived    BOOLEAN     NOT NULL DEFAULT FALSE,
+    CONSTRAINT id_not_empty CHECK (trim(id) != '') ,
+    CONSTRAINT name_not_empty CHECK (trim(name) != '')
 );
 
 CREATE TABLE bss_web.event_video

@@ -30,9 +30,9 @@ class DefaultMemberService(val repository: MemberRepository) : MemberService {
             .map(MemberEntity::id)
     }
 
-    override fun updateMember(member: UpdateMember): Optional<Member> {
-        return repository.findById(member.id)
-            .map { updateMember(it, member) }
+    override fun updateMember(memberId: String, updateMember: UpdateMember): Optional<Member> {
+        return repository.findById(memberId)
+            .map { updateMember(it, updateMember) }
             .map(repository::save)
             .map(mapper::entityToModel)
     }

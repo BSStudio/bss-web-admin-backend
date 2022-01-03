@@ -17,4 +17,24 @@ class DetailedVideoEntity(
     var uploadedAt: LocalDate = LocalDate.now(),
     var visible: Boolean = false,
     var archived: Boolean = false
-) : SimpleVideoEntity
+) : SimpleVideoEntity {
+    fun copy(
+        id: String = this.id,
+        title: String = this.title,
+        description: String = this.description,
+        videoUrl: String? = this.videoUrl,
+        thumbnailUrl: String? = this.thumbnailUrl,
+        uploadedAt: LocalDate = this.uploadedAt,
+        visible: Boolean = this.visible,
+        archived: Boolean = this.archived,
+    ) = DetailedVideoEntity(
+        id,
+        title,
+        description,
+        videoUrl,
+        thumbnailUrl,
+        uploadedAt,
+        visible,
+        archived,
+    )
+}
