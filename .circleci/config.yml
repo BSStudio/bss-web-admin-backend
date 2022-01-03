@@ -81,6 +81,28 @@ jobs:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/app.tar
+  integration-test:
+    machine:
+      image: ubuntu-2004:202107-02
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - run:
+          command: npm install --no-fund --no-audit
+          working_directory: integration
+      - save_cache:
+          paths:
+            - integration/node_modules
+          key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - run:
+          command: npm test -- --ci
+          working_directory: integration
+          environment:
+            DEBUG: testcontainers
+      - store_test_results:
+          path: integration/out
 workflows:
   version: 2
   all:
@@ -89,3 +111,4 @@ workflows:
       - test
       - coverage
       - docker-build
+      - integration-test

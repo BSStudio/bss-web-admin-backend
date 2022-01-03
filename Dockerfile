@@ -15,7 +15,7 @@ COPY ./ ./
 ARG BUILD_ARG="bootJar --parallel"
 RUN ./gradlew $BUILD_ARG
 
-FROM openjdk:11-jre-slim as app
+FROM openjdk:11-jre as app
 ARG BOOT_JAR=/app/build/libs/*.jar
 COPY --from=build $BOOT_JAR ./app.jar
 ENTRYPOINT ["java","-jar","./app.jar"]
