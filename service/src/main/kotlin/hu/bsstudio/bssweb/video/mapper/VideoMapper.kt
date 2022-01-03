@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.video.mapper
 
 import hu.bsstudio.bssweb.video.entity.VideoEntity
+import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.Video
 
 class VideoMapper {
@@ -15,13 +16,7 @@ class VideoMapper {
         )
     }
 
-    fun modelToEntity(model: Video): VideoEntity {
-        return VideoEntity(
-            id = model.id,
-            title = model.title,
-            uploadedAt = model.uploadedAt,
-            visible = model.visible,
-            archived = model.archived,
-        )
+    fun modelToEntity(model: CreateVideo): VideoEntity {
+        return VideoEntity(id = model.id, title = model.title)
     }
 }

@@ -276,12 +276,28 @@ paths:
                 type: array
                 items:
                   type: string
-  /api/videocrew/{videoId}:
-    put:
+  /api/videoCrew:
+    post:
       summary: "Add position with member to the video"
       description: "Add position with member to the video"
       tags:
         - VideoCrew
+      parameters:
+        - name: videoId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: position
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: memberId
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: "OK"
@@ -289,7 +305,6 @@ paths:
             application/json:
               schema:
                 type: object
-  /api/videocrew/{videoId}/{position}/{memberId}:
     delete:
       summary: "Delete position with member to the video"
       description: "Delete position with member to the video"
@@ -297,22 +312,20 @@ paths:
         - VideoCrew
       parameters:
         - name: videoId
-          in: path
+          in: query
           required: true
           schema:
             type: string
-            format: uuid
         - name: position
-          in: path
+          in: query
           required: true
           schema:
             type: string
         - name: memberId
-          in: path
+          in: query
           required: true
           schema:
             type: string
-            format: uuid
       responses:
         200:
           description: "OK"

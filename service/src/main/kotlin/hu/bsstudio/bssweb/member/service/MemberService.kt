@@ -7,7 +7,7 @@ import java.util.Optional
 
 interface MemberService {
     fun getAllMembers(): List<Member>
-    fun createMember(member: CreateMember): Member
+    fun createMember(createMember: CreateMember): Member
     fun archiveMembers(memberIds: List<String>, unArchive: Boolean): List<String>
     fun removeMember(memberId: String)
     fun getMemberById(memberIds: String): Optional<Member>

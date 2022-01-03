@@ -30,7 +30,8 @@ class DefaultVideoService(
     }
 
     override fun insertVideo(createVideo: CreateVideo): Video {
-        return VideoEntity(id = createVideo.id, title = createVideo.title)
+        return createVideo
+            .let(mapper::modelToEntity)
             .let(repository::save)
             .let(mapper::entityToModel)
     }

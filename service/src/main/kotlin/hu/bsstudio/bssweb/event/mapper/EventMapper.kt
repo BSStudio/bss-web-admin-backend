@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.event.mapper
 
 import hu.bsstudio.bssweb.event.entity.EventEntity
+import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.Event
 
 class EventMapper {
@@ -12,6 +13,13 @@ class EventMapper {
             description = entity.description,
             date = entity.date,
             archived = entity.archived,
+        )
+    }
+
+    fun modelToEntity(model: CreateEvent): EventEntity {
+        return EventEntity(
+            id = model.id,
+            name = model.name,
         )
     }
 

@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.member.mapper
 
 import hu.bsstudio.bssweb.member.entity.MemberEntity
+import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 
 class MemberMapper {
@@ -18,16 +19,7 @@ class MemberMapper {
         )
     }
 
-    fun modelToEntity(model: Member): MemberEntity {
-        return MemberEntity(
-            id = model.id,
-            name = model.name,
-            description = model.description,
-            imageUrl = model.imageUrl,
-            joinedAt = model.joinedAt,
-            role = model.role,
-            status = model.status,
-            archived = model.archived,
-        )
+    fun modelToEntity(model: CreateMember): MemberEntity {
+        return MemberEntity(id = model.id, name = model.name)
     }
 }

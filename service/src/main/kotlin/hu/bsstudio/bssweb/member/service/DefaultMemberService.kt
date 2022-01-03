@@ -17,8 +17,9 @@ class DefaultMemberService(val repository: MemberRepository) : MemberService {
             .map(mapper::entityToModel)
     }
 
-    override fun createMember(member: CreateMember): Member {
-        return MemberEntity(id = member.id, name = member.name)
+    override fun createMember(createMember: CreateMember): Member {
+        return createMember
+            .let(mapper::modelToEntity)
             .let(repository::save)
             .let(mapper::entityToModel)
     }

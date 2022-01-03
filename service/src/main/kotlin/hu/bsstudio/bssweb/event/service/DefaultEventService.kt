@@ -18,7 +18,8 @@ class DefaultEventService(val repository: EventRepository) : EventService {
     }
 
     override fun insertEvent(createEvent: CreateEvent): Event {
-        return EventEntity(id = createEvent.id, name = createEvent.name)
+        return createEvent
+            .let(mapper::modelToEntity)
             .let(repository::save)
             .let(mapper::entityToModel)
     }

@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.video.mapper
 
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.model.DetailedVideo
+import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
 
 class DetailedVideoMapper {
     fun entityToModel(entity: DetailedVideoEntity): DetailedVideo {
@@ -14,19 +15,7 @@ class DetailedVideoMapper {
             uploadedAt = entity.uploadedAt,
             visible = entity.visible,
             archived = entity.archived,
-        )
-    }
-
-    fun modelToEntity(model: DetailedVideo): DetailedVideoEntity {
-        return DetailedVideoEntity(
-            id = model.id,
-            title = model.title,
-            description = model.description,
-            videoUrl = model.videoUrl,
-            thumbnailUrl = model.thumbnailUrl,
-            uploadedAt = model.uploadedAt,
-            visible = model.visible,
-            archived = model.archived,
+            crew = entity.videoCrew.map { SimpleCrew(it.position, it.memberId) },
         )
     }
 }
