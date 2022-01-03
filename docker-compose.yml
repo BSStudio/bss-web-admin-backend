@@ -13,7 +13,6 @@ services:
       spring.datasource.password: postgres
       spring.datasource.driver-class-name: org.postgresql.Driver
       spring.jpa.open-in-view: false
-
   db:
     image: postgres:alpine
     environment:
