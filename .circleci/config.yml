@@ -97,7 +97,7 @@ jobs:
             - integration/node_modules
           key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
       - run:
-          command: npm test -- --ci
+          command: npm run test:ci -- --ci
           working_directory: integration
           environment:
             DEBUG: testcontainers
