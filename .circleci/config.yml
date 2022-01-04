@@ -61,13 +61,11 @@ jobs:
           path: data/build/reports
   docker-build:
     working_directory: ~/project
-    docker:
-      - image: docker:20.10.12-git
+    machine:
+      image: ubuntu-2004:202111-02
+      docker_layer_caching: true
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.11
-          docker_layer_caching: true
       - restore_cache:
           keys:
             - v1-{{ .Branch }}
@@ -75,7 +73,7 @@ jobs:
           name: Load Docker image layer cache
           command: |
             set +o pipefail
-            docker load -i /caches/app.tar | true
+            docker load -i /home/circleci/caches/app.tar | true
       - run:
           name: Build application Docker image
           command: |
@@ -83,12 +81,12 @@ jobs:
       - run:
           name: Save Docker image layer cache
           command: |
-            mkdir -p /caches
-            docker save -o /caches/app.tar app
+            mkdir -p /home/circleci/caches
+            docker save -o /home/circleci/caches/app.tar app
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
-            - /caches/app.tar
+            - /home/circleci/caches/app.tar
   integration-test:
     machine:
       image: ubuntu-2004:202107-02
