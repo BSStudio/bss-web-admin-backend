@@ -61,13 +61,11 @@ jobs:
           path: data/build/reports
   docker-build:
     working_directory: ~/project
-    docker:
-      - image: docker:20.10.12-git
+    machine:
+      image: ubuntu-2004:202111-02
+      docker_layer_caching: true
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.11
-          docker_layer_caching: true
       - restore_cache:
           keys:
             - v1-{{ .Branch }}
