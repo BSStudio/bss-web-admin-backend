@@ -77,6 +77,25 @@ internal class MemberControllerTest {
         assertThat(response.body).isEqualTo(MEMBER_1)
     }
 
+    @Test
+    internal fun `should return ok and archived Ids`() {
+        val memberIds = listOf(ID)
+        val unArchive = true
+        every { mockService.archiveMembers(memberIds, unArchive) } returns memberIds
+
+        val response = underTest.archiveMembers(memberIds, unArchive)
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).isEqualTo(memberIds)
+    }
+
+    @Test
+    internal fun `should return ok after member was removed`() {
+        every { mockService.removeMember(ID) } returns Unit
+
+        underTest.removeMember(ID)
+    }
+
     companion object {
         private const val ID = "id1"
         private const val NAME = "name1"

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/videoCrew")
-class VideoCrewController(val service: VideoCrewService) {
+class VideoCrewController(private val service: VideoCrewService) {
 
     @PostMapping
     fun addPosition(@RequestParam videoId: String, @RequestParam position: String, @RequestParam memberId: String): ResponseEntity<List<SimpleCrew>> {
