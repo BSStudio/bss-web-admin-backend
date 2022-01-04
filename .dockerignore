@@ -105,3 +105,7 @@ docker-compose.yml
 
 ### Git template
 .git/
+
+### User template
+integration/
+db/

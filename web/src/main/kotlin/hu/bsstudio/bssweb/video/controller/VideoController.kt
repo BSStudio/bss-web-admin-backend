@@ -5,6 +5,7 @@ import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.service.VideoService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/video")
-class VideoController(val service: VideoService) {
+class VideoController(private val service: VideoService) {
 
     @GetMapping
     fun getAllVideos(@RequestParam page: Int, @RequestParam size: Int): ResponseEntity<List<Video>> {
@@ -29,7 +30,7 @@ class VideoController(val service: VideoService) {
     @PostMapping
     fun createVideo(@RequestBody createVideo: CreateVideo): ResponseEntity<Video> {
         return service.insertVideo(createVideo)
-            .let { ResponseEntity.ok(it) }
+            .let { ResponseEntity(it, HttpStatus.CREATED) }
     }
 
     @PutMapping("/archive")

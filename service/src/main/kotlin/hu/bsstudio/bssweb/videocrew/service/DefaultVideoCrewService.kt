@@ -11,7 +11,7 @@ class DefaultVideoCrewService(val repository: VideoCrewRepository) : VideoCrewSe
             .let(this::mapModelToEntity)
             .let(repository::save)
         return repository.findAllByVideoId(videoCrew.videoId)
-                .map{ SimpleCrew(it.position, it.memberId)}
+            .map { SimpleCrew(it.position, it.memberId) }
     }
 
     override fun removePosition(videoCrew: VideoCrew): List<SimpleCrew> {
@@ -19,7 +19,7 @@ class DefaultVideoCrewService(val repository: VideoCrewRepository) : VideoCrewSe
             .let(this::mapModelToEntity)
             .let(repository::deleteById)
         return repository.findAllByVideoId(videoCrew.videoId)
-                .map{ SimpleCrew(it.position, it.memberId)}
+            .map { SimpleCrew(it.position, it.memberId) }
     }
 
     private fun mapModelToEntity(model: VideoCrew): VideoCrewEntity {

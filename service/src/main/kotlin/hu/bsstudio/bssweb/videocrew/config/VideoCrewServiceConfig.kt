@@ -10,5 +10,5 @@ import org.springframework.context.annotation.Configuration
 class VideoCrewServiceConfig(val repository: VideoCrewRepository) {
 
     @Bean
-    fun defaultVideoCrewService():VideoCrewService = DefaultVideoCrewService(repository)
+    fun defaultVideoCrewService(): VideoCrewService = DefaultVideoCrewService(repository)
 }

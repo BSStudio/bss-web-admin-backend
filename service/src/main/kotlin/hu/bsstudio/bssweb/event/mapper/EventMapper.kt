@@ -22,14 +22,4 @@ class EventMapper {
             name = model.name,
         )
     }
-
-    fun modelToEntity(model: Event): EventEntity {
-        return EventEntity(
-            id = model.id,
-            name = model.name,
-            description = model.description,
-            date = model.date,
-            archived = model.archived,
-        )
-    }
 }

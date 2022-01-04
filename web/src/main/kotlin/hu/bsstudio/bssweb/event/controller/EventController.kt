@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/event")
-class EventController(val service: EventService) {
+class EventController(private val service: EventService) {
 
     @GetMapping
     fun findAllEvent(): ResponseEntity<List<Event>> {
