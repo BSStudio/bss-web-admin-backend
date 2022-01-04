@@ -1,8 +1,10 @@
 import {videoEndpoints} from "./endpoints/video.endpoints";
+import truncateAll from "./database/truncate-all";
+import {dbUtils} from "./database";
 
 describe('GET /api/video', () => {
-    beforeEach(() => {
-        // clear db
+    beforeEach(async () => {
+        await truncateAll()
     })
 
     test("should return empty", async () => {
@@ -16,7 +18,7 @@ describe('GET /api/video', () => {
 
     test.skip("should return paginated results", async () => {
         expect.assertions(4)
-        // todo add 3 videos
+        await dbUtils.addVideos([])
 
         const response1 = await videoEndpoints.getAllVideos(0, 2)
         const response2 = await videoEndpoints.getAllVideos(1, 2)

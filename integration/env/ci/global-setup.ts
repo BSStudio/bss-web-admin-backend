@@ -23,7 +23,7 @@ export default async function (): Promise<void[]> {
 
   const baseUrl = {
     app: `http://${app.getHost()}:${app.getMappedPort(8080)}`,
-    db: `jdbc:postgresql://${db.getHost()}:${db.getMappedPort(5432)}/postgres?currentSchema=bss_web`,
+    db: `postgresql://postgres:postgres@${db.getHost()}:${db.getMappedPort(5432)}/postgres`,
   }
 
   // use the file system to expose the baseUrls for TestEnvironments

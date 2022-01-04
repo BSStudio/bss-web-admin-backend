@@ -6,7 +6,7 @@ export default class TestEnvironment extends NodeEnvironment {
 
     this.global.baseUrl = {
       app: 'http://localhost:8080',
-      db: 'jdbc:postgresql://localhost:5432/postgres?currentSchema=bss_web',
+      db: 'postgresql://postgres:postgres@localhost:5432/postgres',
     }
 
     return Promise.resolve()
