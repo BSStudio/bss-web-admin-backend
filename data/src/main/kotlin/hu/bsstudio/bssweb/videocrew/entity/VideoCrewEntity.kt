@@ -8,7 +8,7 @@ import javax.persistence.IdClass
 import javax.persistence.Table
 
 @Entity
-@IdClass(value = VideoCrewEntity::class)
+@IdClass(VideoCrewEntity::class)
 @Table(name = "crew")
 data class VideoCrewEntity(
     @Id

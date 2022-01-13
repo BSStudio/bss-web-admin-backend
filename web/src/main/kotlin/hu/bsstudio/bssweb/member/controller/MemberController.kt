@@ -22,13 +22,13 @@ class MemberController(val service: MemberService) {
 
     @GetMapping
     fun getAllMembers(): ResponseEntity<List<Member>> {
-        return service.getAllMembers()
+        return service.findAllMembers()
             .let { ResponseEntity.ok(it) }
     }
 
     @PostMapping
     fun createMember(@RequestBody member: CreateMember): ResponseEntity<Member> {
-        return service.createMember(member)
+        return service.insertMember(member)
             .let { ResponseEntity(it, HttpStatus.CREATED) }
     }
 
@@ -44,15 +44,15 @@ class MemberController(val service: MemberService) {
     @PutMapping("/archive")
     fun archiveMembers(
         @RequestParam memberIds: List<String>,
-        @RequestParam unArchive: Boolean
+        @RequestParam archive: Boolean = true
     ): ResponseEntity<List<String>> {
-        return service.archiveMembers(memberIds, unArchive)
+        return service.archiveMembers(memberIds, archive)
             .let { ResponseEntity.ok(it) }
     }
 
     @GetMapping("/{memberId}")
     fun getMemberById(@PathVariable memberId: String): ResponseEntity<Member> {
-        return service.getMemberById(memberId)
+        return service.findMemberById(memberId)
             .let { ResponseEntity.of(it) }
     }
 

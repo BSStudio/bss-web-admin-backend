@@ -8,25 +8,26 @@ import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import java.util.Optional
 
-class DefaultMemberService(val repository: MemberRepository) : MemberService {
+class DefaultMemberService(
+    private val repository: MemberRepository,
+    private val mapper: MemberMapper,
+) : MemberService {
 
-    internal val mapper: MemberMapper = MemberMapper()
-
-    override fun getAllMembers(): List<Member> {
+    override fun findAllMembers(): List<Member> {
         return repository.findAll()
             .map(mapper::entityToModel)
     }
 
-    override fun createMember(createMember: CreateMember): Member {
+    override fun insertMember(createMember: CreateMember): Member {
         return createMember
             .let(mapper::modelToEntity)
             .let(repository::save)
             .let(mapper::entityToModel)
     }
 
-    override fun archiveMembers(memberIds: List<String>, unArchive: Boolean): List<String> {
+    override fun archiveMembers(memberIds: List<String>, archive: Boolean): List<String> {
         return repository.findAllById(memberIds)
-            .map { it.copy(archived = !unArchive) }
+            .map { it.copy(archived = archive) }
             .map(repository::save)
             .map(MemberEntity::id)
     }
@@ -38,7 +39,7 @@ class DefaultMemberService(val repository: MemberRepository) : MemberService {
             .map(mapper::entityToModel)
     }
 
-    override fun getMemberById(memberIds: String): Optional<Member> {
+    override fun findMemberById(memberIds: String): Optional<Member> {
         return repository.findById(memberIds)
             .map(mapper::entityToModel)
     }

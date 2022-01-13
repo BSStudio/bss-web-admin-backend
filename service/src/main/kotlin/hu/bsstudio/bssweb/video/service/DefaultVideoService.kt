@@ -2,7 +2,6 @@ package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.entity.VideoEntity
-import hu.bsstudio.bssweb.video.mapper.DetailedVideoMapper
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -16,11 +15,9 @@ import java.util.stream.Collectors
 
 class DefaultVideoService(
     private val repository: VideoRepository,
-    private val detailedRepository: DetailedVideoRepository
+    private val detailedRepository: DetailedVideoRepository,
+    private val mapper: VideoMapper,
 ) : VideoService {
-
-    internal var mapper: VideoMapper = VideoMapper()
-    internal var detailedMapper: DetailedVideoMapper = DetailedVideoMapper()
 
     override fun findAllVideos(page: Int, size: Int): List<Video> {
         return repository.findAll(PageRequest.of(page, size))
@@ -36,30 +33,30 @@ class DefaultVideoService(
             .let(mapper::entityToModel)
     }
 
-    override fun archiveVideos(videoIds: List<String>, unArchive: Boolean): List<String> {
+    override fun archiveVideos(videoIds: List<String>, archive: Boolean): List<String> {
         return repository.findAllById(videoIds)
-            .map { it.copy(archived = !unArchive) }
+            .map { it.copy(archived = archive) }
             .map(repository::save)
             .map(VideoEntity::id)
     }
 
     override fun changeVideoVisibility(videoIds: List<String>, visible: Boolean): List<String> {
-        return detailedRepository.findAllById(videoIds)
+        return repository.findAllById(videoIds)
             .map { it.copy(visible = visible) }
-            .map(detailedRepository::save)
-            .map(DetailedVideoEntity::id)
+            .map(repository::save)
+            .map(VideoEntity::id)
     }
 
     override fun findVideoById(videoId: String): Optional<DetailedVideo> {
         return detailedRepository.findById(videoId)
-            .map(detailedMapper::entityToModel)
+            .map(mapper::entityToModel)
     }
 
     override fun updateVideo(videoId: String, updateVideo: UpdateVideo): Optional<DetailedVideo> {
         return detailedRepository.findById(videoId)
             .map { updateVideo(it, updateVideo) }
             .map(detailedRepository::save)
-            .map(detailedMapper::entityToModel)
+            .map(mapper::entityToModel)
     }
 
     override fun deleteVideoById(videoId: String) {

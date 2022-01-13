@@ -11,7 +11,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "videos")
-class DetailedVideoEntity(
+data class DetailedVideoEntity(
     @Id
     override var id: String,
     override var title: String,
@@ -24,15 +24,4 @@ class DetailedVideoEntity(
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "video_id")
     var videoCrew: List<VideoCrewEntity> = listOf(),
-) : SimpleVideoEntity {
-    fun copy(
-        id: String = this.id,
-        title: String = this.title,
-        description: String = this.description,
-        videoUrl: String? = this.videoUrl,
-        thumbnailUrl: String? = this.thumbnailUrl,
-        uploadedAt: LocalDate = this.uploadedAt,
-        visible: Boolean = this.visible,
-        archived: Boolean = this.archived,
-    ) = DetailedVideoEntity(id, title, description, videoUrl, thumbnailUrl, uploadedAt, visible, archived)
-}
+) : SimpleVideoEntity

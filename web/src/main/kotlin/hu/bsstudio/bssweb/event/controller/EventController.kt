@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.event.controller
 
 import hu.bsstudio.bssweb.event.model.CreateEvent
+import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.service.EventService
@@ -35,14 +36,14 @@ class EventController(private val service: EventService) {
     @PutMapping("/archive")
     fun archiveEvents(
         @RequestParam eventIds: List<String>,
-        @RequestParam unArchive: Boolean
+        @RequestParam archive: Boolean = true
     ): ResponseEntity<List<String>> {
-        return service.archiveEvents(eventIds, unArchive)
+        return service.archiveEvents(eventIds, archive)
             .let { ResponseEntity.ok(it) }
     }
 
     @GetMapping("/{eventId}")
-    fun findEventById(@PathVariable eventId: String): ResponseEntity<Event> {
+    fun findEventById(@PathVariable eventId: String): ResponseEntity<DetailedEvent> {
         return service.findEventById(eventId)
             .let { ResponseEntity.of(it) }
     }
@@ -51,7 +52,7 @@ class EventController(private val service: EventService) {
     fun updateEvent(
         @PathVariable eventId: String,
         @RequestBody updateEvent: UpdateEvent
-    ): ResponseEntity<Event> {
+    ): ResponseEntity<DetailedEvent> {
         return service.updateEvent(eventId, updateEvent)
             .let { ResponseEntity.of(it) }
     }

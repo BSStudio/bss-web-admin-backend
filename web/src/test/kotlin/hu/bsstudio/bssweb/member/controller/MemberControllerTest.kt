@@ -29,7 +29,7 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should retrieve all members`() {
-        every { mockService.getAllMembers() } returns MEMBER_LIST
+        every { mockService.findAllMembers() } returns MEMBER_LIST
 
         val response = underTest.getAllMembers()
 
@@ -39,7 +39,7 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should retrieve a single member`() {
-        every { mockService.getMemberById(ID) } returns Optional.of(MEMBER_1)
+        every { mockService.findMemberById(ID) } returns Optional.of(MEMBER_1)
 
         val response = underTest.getMemberById(ID)
 
@@ -49,7 +49,7 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should retrieve a not found if member was not found`() {
-        every { mockService.getMemberById(ID) } returns Optional.empty()
+        every { mockService.findMemberById(ID) } returns Optional.empty()
 
         val response = underTest.getMemberById(ID)
 
@@ -69,7 +69,7 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should return created on create`() {
-        every { mockService.createMember(CREATE_MEMBER) } returns MEMBER_1
+        every { mockService.insertMember(CREATE_MEMBER) } returns MEMBER_1
 
         val response = underTest.createMember(CREATE_MEMBER)
 
@@ -84,6 +84,17 @@ internal class MemberControllerTest {
         every { mockService.archiveMembers(memberIds, unArchive) } returns memberIds
 
         val response = underTest.archiveMembers(memberIds, unArchive)
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).isEqualTo(memberIds)
+    }
+
+    @Test
+    internal fun `should return ok and archived Ids with default value`() {
+        val memberIds = listOf(ID)
+        every { mockService.archiveMembers(memberIds, true) } returns memberIds
+
+        val response = underTest.archiveMembers(memberIds)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).isEqualTo(memberIds)

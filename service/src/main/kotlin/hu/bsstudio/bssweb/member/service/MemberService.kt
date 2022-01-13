@@ -6,10 +6,10 @@ import hu.bsstudio.bssweb.member.model.UpdateMember
 import java.util.Optional
 
 interface MemberService {
-    fun getAllMembers(): List<Member>
-    fun createMember(createMember: CreateMember): Member
-    fun archiveMembers(memberIds: List<String>, unArchive: Boolean): List<String>
-    fun removeMember(memberId: String)
-    fun getMemberById(memberIds: String): Optional<Member>
+    fun findAllMembers(): List<Member>
+    fun insertMember(createMember: CreateMember): Member
+    fun archiveMembers(memberIds: List<String>, archive: Boolean = true): List<String>
+    fun findMemberById(memberIds: String): Optional<Member>
     fun updateMember(memberId: String, updateMember: UpdateMember): Optional<Member>
+    fun removeMember(memberId: String)
 }

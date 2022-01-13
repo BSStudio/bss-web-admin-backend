@@ -9,7 +9,7 @@ import java.util.Optional
 interface VideoService {
     fun findAllVideos(page: Int, size: Int): List<Video>
     fun insertVideo(createVideo: CreateVideo): Video
-    fun archiveVideos(videoIds: List<String>, unArchive: Boolean): List<String>
+    fun archiveVideos(videoIds: List<String>, archive: Boolean = true): List<String>
     fun changeVideoVisibility(videoIds: List<String>, visible: Boolean): List<String>
     fun findVideoById(videoId: String): Optional<DetailedVideo>
     fun updateVideo(videoId: String, updateVideo: UpdateVideo): Optional<DetailedVideo>

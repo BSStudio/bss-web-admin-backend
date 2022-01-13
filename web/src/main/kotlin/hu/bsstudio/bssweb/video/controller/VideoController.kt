@@ -36,9 +36,9 @@ class VideoController(private val service: VideoService) {
     @PutMapping("/archive")
     fun archiveVideos(
         @RequestParam videoIds: List<String>,
-        @RequestParam unArchive: Boolean
+        @RequestParam archive: Boolean = true
     ): ResponseEntity<List<String>> {
-        return service.archiveVideos(videoIds, unArchive)
+        return service.archiveVideos(videoIds, archive)
             .let { ResponseEntity.ok(it) }
     }
 

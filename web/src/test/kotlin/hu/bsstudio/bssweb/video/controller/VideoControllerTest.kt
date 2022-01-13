@@ -52,10 +52,21 @@ internal class VideoControllerTest {
     @Test
     internal fun archiveVideos() {
         val videoIds = listOf(VIDEO_ID)
-        val unArchive = false
-        every { mockService.archiveVideos(videoIds, unArchive) } returns videoIds
+        val archive = false
+        every { mockService.archiveVideos(videoIds, archive) } returns videoIds
 
-        val response = this.underTest.archiveVideos(videoIds, unArchive)
+        val response = this.underTest.archiveVideos(videoIds, archive)
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).isEqualTo(videoIds)
+    }
+
+    @Test
+    internal fun archiveVideos2() {
+        val videoIds = listOf(VIDEO_ID)
+        every { mockService.archiveVideos(videoIds, true) } returns videoIds
+
+        val response = this.underTest.archiveVideos(videoIds)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).isEqualTo(videoIds)
