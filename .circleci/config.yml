@@ -86,6 +86,11 @@ jobs:
             - integration/node_modules
           key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
       - run:
+          name: Lint integration test
+          command: npm run lint
+          working_directory: integration
+      - run:
+          name: Run integration test
           command: npm run test:ci -- --ci
           working_directory: integration
           environment:

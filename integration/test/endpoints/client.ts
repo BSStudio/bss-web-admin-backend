@@ -1,5 +1,5 @@
-import axios from "axios";
+import axios from 'axios'
 
 export const client = axios.create({
-    baseURL: globalThis.baseUrl.app
-});
+  baseURL: globalThis.baseUrl.app,
+})

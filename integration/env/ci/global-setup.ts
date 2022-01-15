@@ -1,4 +1,4 @@
-import {DockerComposeEnvironment, StartedDockerComposeEnvironment, Wait} from 'testcontainers'
+import { DockerComposeEnvironment, Wait } from 'testcontainers'
 import * as fs from 'fs/promises'
 import mkdirp = require('mkdirp')
 import * as path from 'path'
@@ -8,10 +8,7 @@ const BUILD_CONTEXT = './..'
 const COMPOSE_FILE = 'docker-compose.ci.yml'
 
 export default async function (): Promise<void[]> {
-  const dockerComposeEnvironment = await new DockerComposeEnvironment(
-    BUILD_CONTEXT,
-    COMPOSE_FILE
-  )
+  const dockerComposeEnvironment = await new DockerComposeEnvironment(BUILD_CONTEXT, COMPOSE_FILE)
     .withWaitStrategy('app_1', Wait.forHealthCheck())
     .withWaitStrategy('db_1', Wait.forHealthCheck())
     .up()
@@ -28,9 +25,7 @@ export default async function (): Promise<void[]> {
 
   // use the file system to expose the baseUrls for TestEnvironments
   mkdirp.sync(jestTempDir)
-  return Promise.all(
-      Object.entries(baseUrl).map(([filename, content]) => writeToTempFile(filename, content))
-  )
+  return Promise.all(Object.entries(baseUrl).map(([filename, content]) => writeToTempFile(filename, content)))
 }
 
 function writeToTempFile(fileName: string, content: string): Promise<void> {

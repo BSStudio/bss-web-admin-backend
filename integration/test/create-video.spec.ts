@@ -1,5 +1,3 @@
-describe('POST /api/video', () => {
-
-    test.todo('should create video')
-
-});
+describe('pOST /api/video', () => {
+  it.todo('should create video')
+})

@@ -1,6 +1,8 @@
-import {StartedDockerComposeEnvironment} from "testcontainers";
+import { StartedDockerComposeEnvironment } from 'testcontainers'
 
 declare global {
-    var dockerComposeEnvironment: StartedDockerComposeEnvironment;
-    var baseUrl: { app: string, db: string };
+  /* eslint-disable no-var */
+  var dockerComposeEnvironment: StartedDockerComposeEnvironment
+  var baseUrl: { app: string; db: string }
+  /* eslint-enable no-var */
 }

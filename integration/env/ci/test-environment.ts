@@ -4,7 +4,6 @@ import * as path from 'path'
 import jestTempDir from './jest-temp-dir'
 
 export default class TestEnvironment extends NodeEnvironment {
-
   private static readTempFile(name: string): Promise<string> {
     return fs.readFile(path.join(jestTempDir, name), 'utf8')
   }
