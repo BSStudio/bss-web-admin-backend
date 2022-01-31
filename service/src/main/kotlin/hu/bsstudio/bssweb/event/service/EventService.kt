@@ -5,12 +5,13 @@ import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import java.util.Optional
+import java.util.UUID
 
 interface EventService {
     fun findAllEvent(): List<Event>
     fun insertEvent(createEvent: CreateEvent): Event
-    fun archiveEvents(eventIds: List<String>, archived: Boolean = true): List<String>
-    fun findEventById(eventId: String): Optional<DetailedEvent>
-    fun updateEvent(eventId: String, updateEvent: UpdateEvent): Optional<DetailedEvent>
-    fun removeEvent(eventId: String)
+    fun changeVisibility(eventIds: List<UUID>, visible: Boolean = true): List<UUID>
+    fun findEventById(eventId: UUID): Optional<DetailedEvent>
+    fun updateEvent(eventId: UUID, updateEvent: UpdateEvent): Optional<DetailedEvent>
+    fun removeEvent(eventId: UUID)
 }

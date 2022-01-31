@@ -9,20 +9,21 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/videoCrew")
 class VideoCrewController(private val service: VideoCrewService) {
 
     @PostMapping
-    fun addPosition(@RequestParam videoId: String, @RequestParam position: String, @RequestParam memberId: String): ResponseEntity<List<SimpleCrew>> {
+    fun addPosition(@RequestParam videoId: UUID, @RequestParam position: String, @RequestParam memberId: UUID): ResponseEntity<List<SimpleCrew>> {
         return VideoCrew(videoId, position, memberId)
             .let(service::addPosition)
             .let { ResponseEntity.ok(it) }
     }
 
     @DeleteMapping
-    fun removePosition(@RequestParam videoId: String, @RequestParam position: String, @RequestParam memberId: String): ResponseEntity<List<SimpleCrew>> {
+    fun removePosition(@RequestParam videoId: UUID, @RequestParam position: String, @RequestParam memberId: UUID): ResponseEntity<List<SimpleCrew>> {
         return VideoCrew(videoId, position, memberId)
             .let(service::removePosition)
             .let { ResponseEntity.ok(it) }

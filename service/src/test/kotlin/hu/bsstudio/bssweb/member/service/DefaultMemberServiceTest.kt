@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.Optional
+import java.util.UUID
 
 internal class DefaultMemberServiceTest {
 
@@ -142,12 +143,12 @@ internal class DefaultMemberServiceTest {
     }
 
     private companion object {
-        private const val memberId1 = "memberId"
-        private val memberEntity1 = MemberEntity(memberId1, "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)
+        private val memberId1 = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val memberEntity1 = MemberEntity(memberId1, "url", "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)
         private val memberEntityList = listOf(memberEntity1)
-        private val member1 = Member(memberId1, "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)
+        private val member1 = Member(memberId1, "url", "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)
         private val memberList = listOf(member1)
-        private val createMember = CreateMember(memberId1, "name")
-        private val updateMember = UpdateMember("updatedName", "updatedDescription", null, LocalDate.of(2022, 2, 2), "updatedRole", MemberStatus.ALUMNI, true)
+        private val createMember = CreateMember("url", "name")
+        private val updateMember = UpdateMember("updatedUrl", "updatedName", "updatedDescription", "imageUrl", LocalDate.of(2022, 2, 2), "updatedRole", MemberStatus.ALUMNI, true)
     }
 }

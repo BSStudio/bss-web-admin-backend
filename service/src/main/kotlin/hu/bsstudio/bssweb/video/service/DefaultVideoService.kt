@@ -11,6 +11,7 @@ import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.video.repository.VideoRepository
 import org.springframework.data.domain.PageRequest
 import java.util.Optional
+import java.util.UUID
 import java.util.stream.Collectors
 
 class DefaultVideoService(
@@ -33,45 +34,36 @@ class DefaultVideoService(
             .let(mapper::entityToModel)
     }
 
-    override fun archiveVideos(videoIds: List<String>, archive: Boolean): List<String> {
-        return repository.findAllById(videoIds)
-            .map { it.copy(archived = archive) }
-            .map(repository::save)
-            .map(VideoEntity::id)
-    }
-
-    override fun changeVideoVisibility(videoIds: List<String>, visible: Boolean): List<String> {
+    override fun changeVideoVisibility(videoIds: List<UUID>, visible: Boolean): List<UUID> {
         return repository.findAllById(videoIds)
             .map { it.copy(visible = visible) }
             .map(repository::save)
             .map(VideoEntity::id)
     }
 
-    override fun findVideoById(videoId: String): Optional<DetailedVideo> {
+    override fun findVideoById(videoId: UUID): Optional<DetailedVideo> {
         return detailedRepository.findById(videoId)
             .map(mapper::entityToModel)
     }
 
-    override fun updateVideo(videoId: String, updateVideo: UpdateVideo): Optional<DetailedVideo> {
+    override fun updateVideo(videoId: UUID, updateVideo: UpdateVideo): Optional<DetailedVideo> {
         return detailedRepository.findById(videoId)
             .map { updateVideo(it, updateVideo) }
             .map(detailedRepository::save)
             .map(mapper::entityToModel)
     }
 
-    override fun deleteVideoById(videoId: String) {
-        repository.deleteById(videoId)
-    }
+    override fun deleteVideoById(videoId: UUID) = repository.deleteById(videoId)
 
     private fun updateVideo(videoEntity: DetailedVideoEntity, updateVideo: UpdateVideo): DetailedVideoEntity {
         return videoEntity.copy(
+            url = updateVideo.url,
             title = updateVideo.title,
             description = updateVideo.description,
             videoUrl = updateVideo.videoUrl,
             thumbnailUrl = updateVideo.thumbnailUrl,
             uploadedAt = updateVideo.uploadedAt,
             visible = updateVideo.visible,
-            archived = updateVideo.archived,
         )
     }
 }

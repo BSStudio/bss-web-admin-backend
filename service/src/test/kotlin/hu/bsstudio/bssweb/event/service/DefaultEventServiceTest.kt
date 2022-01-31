@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.util.Optional
+import java.util.UUID
 
 internal class DefaultEventServiceTest {
 
@@ -62,11 +63,11 @@ internal class DefaultEventServiceTest {
     internal fun `should archive event`() {
         val eventIds = listOf(eventId1)
         every { mockRepository.findAllById(eventIds) } returns listOf(eventEntity1)
-        val updatedEventEntity = eventEntity1.copy(archived = true)
+        val updatedEventEntity = eventEntity1.copy(visible = true)
         every { mockRepository.save(updatedEventEntity) } returns updatedEventEntity
         every { mockMapper.entityToModel(updatedEventEntity) } returns event1
 
-        val response = underTest.archiveEvents(eventIds)
+        val response = underTest.changeVisibility(eventIds)
 
         assertThat(response).isEqualTo(listOf(eventId1))
     }
@@ -75,11 +76,11 @@ internal class DefaultEventServiceTest {
     internal fun `should archive event with implicit archive flag`() {
         val eventIds = listOf(eventId1)
         every { mockRepository.findAllById(eventIds) } returns listOf(eventEntity1)
-        val updatedEventEntity = eventEntity1.copy(archived = true)
+        val updatedEventEntity = eventEntity1.copy(visible = true)
         every { mockRepository.save(updatedEventEntity) } returns updatedEventEntity
         every { mockMapper.entityToModel(updatedEventEntity) } returns event1
 
-        val response = underTest.archiveEvents(eventIds, true)
+        val response = underTest.changeVisibility(eventIds, true)
 
         assertThat(response).isEqualTo(listOf(eventId1))
     }
@@ -116,17 +117,19 @@ internal class DefaultEventServiceTest {
     internal fun `should update event`() {
         every { mockDetailedRepository.findById(eventId1) } returns Optional.of(detailedEventEntity)
         val updatedEntity = detailedEventEntity.copy(
-            name = updateEvent.name,
+            url = updateEvent.url,
+            title = updateEvent.title,
             description = updateEvent.description,
             date = updateEvent.date,
-            archived = updateEvent.archived,
+            visible = updateEvent.visible,
         )
         every { mockDetailedRepository.save(updatedEntity) } returns updatedEntity
         val updatedDetailedEvent = detailedEvent.copy(
-            name = updateEvent.name,
+            url = updateEvent.url,
+            title = updateEvent.title,
             description = updateEvent.description,
             date = updateEvent.date,
-            archived = updateEvent.archived,
+            visible = updateEvent.visible,
         )
         every { mockMapper.entityToModel(updatedEntity) } returns updatedDetailedEvent
 
@@ -143,14 +146,14 @@ internal class DefaultEventServiceTest {
     }
 
     private companion object {
-        private const val eventId1 = "id1"
-        private val event1 = Event(eventId1, "name", "description", LocalDate.of(2022, 1, 1), false)
+        private val eventId1 = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val event1 = Event(eventId1, "url", "name", "description", LocalDate.of(2022, 1, 1), false)
         private val eventList = listOf(event1)
-        private val eventEntity1 = EventEntity(eventId1, "name")
+        private val eventEntity1 = EventEntity(eventId1, "url", "title")
         private val eventEntityList = listOf(eventEntity1)
-        private val createEvent = CreateEvent(eventId1, "name")
-        private val updateEvent = UpdateEvent("updatedName", "updatedDescription", LocalDate.of(2022, 2, 2), true)
-        private val detailedEvent = DetailedEvent(eventId1, "name", "description", LocalDate.of(2022, 1, 1), false, listOf())
-        private val detailedEventEntity = DetailedEventEntity(eventId1, "name", "description", LocalDate.of(2022, 1, 1), false, listOf())
+        private val createEvent = CreateEvent("url", "title")
+        private val updateEvent = UpdateEvent("updatedUrl", "updatedTitle", "updatedDescription", LocalDate.of(2022, 2, 2), true)
+        private val detailedEvent = DetailedEvent(eventId1, "url", "title", "description", LocalDate.of(2022, 1, 1), false, listOf())
+        private val detailedEventEntity = DetailedEventEntity(eventId1, "url", "title", "description", LocalDate.of(2022, 1, 1), false, listOf())
     }
 }

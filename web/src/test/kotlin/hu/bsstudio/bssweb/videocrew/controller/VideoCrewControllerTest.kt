@@ -10,6 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import java.util.UUID
 
 internal class VideoCrewControllerTest {
 
@@ -44,11 +45,11 @@ internal class VideoCrewControllerTest {
     }
 
     private companion object {
-        private const val VIDEO_ID = "videoId"
+        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
         private const val POSITION = "position"
-        private const val MEMBER_ID = "memberId"
+        private val MEMBER_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
         private val VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION, MEMBER_ID)
-        private val SIMPLE_CREW = SimpleCrew(VIDEO_ID, POSITION)
+        private val SIMPLE_CREW = SimpleCrew(POSITION, MEMBER_ID)
         private val VIDEO_CREW_LIST = listOf(SIMPLE_CREW)
     }
 }

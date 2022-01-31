@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 import java.util.Optional
+import java.util.UUID
 
 internal class EventControllerTest {
 
@@ -46,29 +47,6 @@ internal class EventControllerTest {
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
         assertThat(response.body).isEqualTo(EVENT_1)
-    }
-
-    @Test
-    internal fun archiveEvents() {
-        val eventIds = listOf(EVENT_ID)
-        val unArchive = false
-        every { mockService.archiveEvents(listOf(EVENT_ID), false) } returns eventIds
-
-        val response = underTest.archiveEvents(eventIds, unArchive)
-
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(eventIds)
-    }
-
-    @Test
-    internal fun archiveEvents2() {
-        val eventIds = listOf(EVENT_ID)
-        every { mockService.archiveEvents(listOf(EVENT_ID), true) } returns eventIds
-
-        val response = underTest.archiveEvents(eventIds)
-
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(eventIds)
     }
 
     @Test
@@ -119,11 +97,11 @@ internal class EventControllerTest {
     }
 
     private companion object {
-        private const val EVENT_ID = "id"
-        private val EVENT_1 = Event(EVENT_ID, "name", "description", LocalDate.of(2022, 1, 1), false)
-        private val CREATE_EVENT = CreateEvent(EVENT_ID, "name")
-        private val DETAILED_EVENT_1 = DetailedEvent(EVENT_ID, "name", "description", LocalDate.of(2022, 1, 1), false, listOf())
-        private val UPDATE_EVENT = UpdateEvent("name", "description", LocalDate.of(2022, 1, 1), false)
+        private val EVENT_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val EVENT_1 = Event(id = EVENT_ID, url = "url", title = "title", description = "description", date = LocalDate.of(2022, 1, 1), visible = false)
+        private val CREATE_EVENT = CreateEvent(url = "url", title = "title")
+        private val DETAILED_EVENT_1 = DetailedEvent(id = EVENT_ID, url = "url", title = "title", description = "description", date = LocalDate.of(2022, 1, 1), visible = false, videos = listOf())
+        private val UPDATE_EVENT = UpdateEvent(url = "url", title = "title", description = "description", date = LocalDate.of(2022, 1, 1), visible = false)
         private val EVENT_LIST = listOf(EVENT_1)
     }
 }

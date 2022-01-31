@@ -15,6 +15,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.util.UUID
 
 internal class EventMapperTest {
 
@@ -25,7 +26,9 @@ internal class EventMapperTest {
     @BeforeEach
     internal fun setUp() {
         MockKAnnotations.init(this)
+        val idGenerator = { ID }
         underTest = EventMapper(mockVideoMapper)
+        underTest = EventMapper(mockVideoMapper, idGenerator)
     }
 
     @Test
@@ -51,20 +54,21 @@ internal class EventMapperTest {
     }
 
     private companion object {
-        private const val ID = "ID"
-        private const val NAME = "NAME"
+        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private const val URL = "URL"
+        private const val TITLE = "TITLE"
         private const val DESCRIPTION = "DESCRIPTION"
         private val DATE = LocalDate.of(2021, 1, 1)
-        private const val ARCHIVED = true
-        private val ENTITY = EventEntity(ID, NAME, DESCRIPTION, DATE, ARCHIVED)
-        private val MODEL = Event(ID, NAME, DESCRIPTION, DATE, ARCHIVED)
-        private val VIDEO_ENTITY = VideoEntity("id", "title")
+        private const val VISIBLE = true
+        private val ENTITY = EventEntity(ID, URL, TITLE, DESCRIPTION, DATE, VISIBLE)
+        private val MODEL = Event(ID, URL, TITLE, DESCRIPTION, DATE, VISIBLE)
+        private val VIDEO_ENTITY = VideoEntity(id = ID, url = URL, title = TITLE)
         private val VIDEO_ENTITIES = listOf(VIDEO_ENTITY)
-        private val VIDEO = Video("id", "title", LocalDate.of(2022, 1, 1), true, false)
+        private val VIDEO = Video(ID, URL, TITLE, LocalDate.of(2022, 1, 1), true)
         private val VIDEOS = listOf(VIDEO)
-        private val DETAILED_ENTITY = DetailedEventEntity(ID, NAME, DESCRIPTION, DATE, ARCHIVED, VIDEO_ENTITIES)
-        private val DETAILED_MODEL = DetailedEvent(ID, NAME, DESCRIPTION, DATE, ARCHIVED, VIDEOS)
-        private val CREATE_EVENT = CreateEvent(ID, NAME)
-        private val CREATED_ENTITY = EventEntity(ID, NAME)
+        private val DETAILED_ENTITY = DetailedEventEntity(ID, URL, TITLE, DESCRIPTION, DATE, VISIBLE, VIDEO_ENTITIES)
+        private val DETAILED_MODEL = DetailedEvent(ID, URL, TITLE, DESCRIPTION, DATE, VISIBLE, VIDEOS)
+        private val CREATE_EVENT = CreateEvent(URL, TITLE)
+        private val CREATED_ENTITY = EventEntity(id = ID, url = URL, title = TITLE)
     }
 }

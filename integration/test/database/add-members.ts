@@ -4,8 +4,10 @@ export type MemberStatus = 'ALUMNI' | 'ACTIVE_ALUMNI' | 'MEMBER' | 'MEMBER_CANDI
 
 export interface MemberEntity {
   id: string
+  url: string
   name: string
-  imageUrl: string | null
+  description: string
+  imageUrl: string
   joinedAt: string
   role: string
   status: MemberStatus

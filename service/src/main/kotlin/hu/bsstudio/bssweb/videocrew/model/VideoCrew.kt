@@ -1,7 +1,9 @@
 package hu.bsstudio.bssweb.videocrew.model
 
+import java.util.UUID
+
 data class VideoCrew(
-    val videoId: String,
+    val videoId: UUID,
     val position: String,
-    val memberId: String,
+    val memberId: UUID,
 )

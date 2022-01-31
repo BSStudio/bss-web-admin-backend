@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/video")
@@ -33,33 +34,24 @@ class VideoController(private val service: VideoService) {
             .let { ResponseEntity(it, HttpStatus.CREATED) }
     }
 
-    @PutMapping("/archive")
-    fun archiveVideos(
-        @RequestParam videoIds: List<String>,
-        @RequestParam archive: Boolean = true
-    ): ResponseEntity<List<String>> {
-        return service.archiveVideos(videoIds, archive)
-            .let { ResponseEntity.ok(it) }
-    }
-
     @PutMapping("/visible")
     fun changeVideoVisibility(
-        @RequestParam videoIds: List<String>,
+        @RequestParam videoIds: List<UUID>,
         @RequestParam visible: Boolean
-    ): ResponseEntity<List<String>> {
+    ): ResponseEntity<List<UUID>> {
         return service.changeVideoVisibility(videoIds, visible)
             .let { ResponseEntity.ok(it) }
     }
 
     @GetMapping("/{videoId}")
-    fun getVideo(@PathVariable videoId: String): ResponseEntity<DetailedVideo> {
+    fun getVideo(@PathVariable videoId: UUID): ResponseEntity<DetailedVideo> {
         return service.findVideoById(videoId)
             .let { ResponseEntity.of(it) }
     }
 
     @PutMapping("/{videoId}")
     fun updateVideo(
-        @PathVariable videoId: String,
+        @PathVariable videoId: UUID,
         @RequestBody updateVideo: UpdateVideo
     ): ResponseEntity<DetailedVideo> {
         return service.updateVideo(videoId, updateVideo)
@@ -67,7 +59,7 @@ class VideoController(private val service: VideoService) {
     }
 
     @DeleteMapping("/{videoId}")
-    fun deleteVideo(@PathVariable videoId: String) {
+    fun deleteVideo(@PathVariable videoId: UUID) {
         service.deleteVideoById(videoId)
     }
 }

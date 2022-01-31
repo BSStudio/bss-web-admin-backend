@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/event")
@@ -33,24 +33,15 @@ class EventController(private val service: EventService) {
             .let { ResponseEntity(it, HttpStatus.CREATED) }
     }
 
-    @PutMapping("/archive")
-    fun archiveEvents(
-        @RequestParam eventIds: List<String>,
-        @RequestParam archive: Boolean = true
-    ): ResponseEntity<List<String>> {
-        return service.archiveEvents(eventIds, archive)
-            .let { ResponseEntity.ok(it) }
-    }
-
     @GetMapping("/{eventId}")
-    fun findEventById(@PathVariable eventId: String): ResponseEntity<DetailedEvent> {
+    fun findEventById(@PathVariable eventId: UUID): ResponseEntity<DetailedEvent> {
         return service.findEventById(eventId)
             .let { ResponseEntity.of(it) }
     }
 
     @PutMapping("/{eventId}")
     fun updateEvent(
-        @PathVariable eventId: String,
+        @PathVariable eventId: UUID,
         @RequestBody updateEvent: UpdateEvent
     ): ResponseEntity<DetailedEvent> {
         return service.updateEvent(eventId, updateEvent)
@@ -58,7 +49,7 @@ class EventController(private val service: EventService) {
     }
 
     @DeleteMapping("/{eventId}")
-    fun deleteEvent(@PathVariable eventId: String) {
+    fun deleteEvent(@PathVariable eventId: UUID) {
         service.removeEvent(eventId)
     }
 }

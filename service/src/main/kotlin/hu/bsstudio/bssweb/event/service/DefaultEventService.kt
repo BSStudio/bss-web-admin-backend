@@ -10,6 +10,7 @@ import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.event.repository.EventRepository
 import java.util.Optional
+import java.util.UUID
 
 class DefaultEventService(
     private val repository: EventRepository,
@@ -29,33 +30,34 @@ class DefaultEventService(
             .let(mapper::entityToModel)
     }
 
-    override fun archiveEvents(eventIds: List<String>, archived: Boolean): List<String> {
+    override fun changeVisibility(eventIds: List<UUID>, visible: Boolean): List<UUID> {
         return repository.findAllById(eventIds)
-            .map { it.copy(archived = archived) }
+            .map { it.copy(visible = visible) }
             .map(repository::save)
             .map(EventEntity::id)
     }
 
-    override fun findEventById(eventId: String): Optional<DetailedEvent> {
+    override fun findEventById(eventId: UUID): Optional<DetailedEvent> {
         return detailedRepository.findById(eventId)
             .map(mapper::entityToModel)
     }
 
-    override fun updateEvent(eventId: String, updateEvent: UpdateEvent): Optional<DetailedEvent> {
+    override fun updateEvent(eventId: UUID, updateEvent: UpdateEvent): Optional<DetailedEvent> {
         return detailedRepository.findById(eventId)
             .map { updateEvent(it, updateEvent) }
             .map(detailedRepository::save)
             .map(mapper::entityToModel)
     }
 
-    override fun removeEvent(eventId: String) = repository.deleteById(eventId)
+    override fun removeEvent(eventId: UUID) = repository.deleteById(eventId)
 
     private fun updateEvent(eventEntity: DetailedEventEntity, updateEvent: UpdateEvent): DetailedEventEntity {
         return eventEntity.copy(
-            name = updateEvent.name,
+            url = updateEvent.url,
+            title = updateEvent.title,
             description = updateEvent.description,
             date = updateEvent.date,
-            archived = updateEvent.archived,
+            visible = updateEvent.visible,
         )
     }
 }

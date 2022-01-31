@@ -7,6 +7,7 @@ import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import java.util.Optional
+import java.util.UUID
 
 class DefaultMemberService(
     private val repository: MemberRepository,
@@ -25,28 +26,26 @@ class DefaultMemberService(
             .let(mapper::entityToModel)
     }
 
-    override fun archiveMembers(memberIds: List<String>, archive: Boolean): List<String> {
+    override fun archiveMembers(memberIds: List<UUID>, archive: Boolean): List<UUID> {
         return repository.findAllById(memberIds)
             .map { it.copy(archived = archive) }
             .map(repository::save)
             .map(MemberEntity::id)
     }
 
-    override fun updateMember(memberId: String, updateMember: UpdateMember): Optional<Member> {
+    override fun updateMember(memberId: UUID, updateMember: UpdateMember): Optional<Member> {
         return repository.findById(memberId)
             .map { updateMember(it, updateMember) }
             .map(repository::save)
             .map(mapper::entityToModel)
     }
 
-    override fun findMemberById(memberIds: String): Optional<Member> {
+    override fun findMemberById(memberIds: UUID): Optional<Member> {
         return repository.findById(memberIds)
             .map(mapper::entityToModel)
     }
 
-    override fun removeMember(memberId: String) {
-        repository.deleteById(memberId)
-    }
+    override fun removeMember(memberId: UUID) = repository.deleteById(memberId)
 
     private fun updateMember(memberEntity: MemberEntity, updateMember: UpdateMember): MemberEntity {
         return memberEntity.copy(

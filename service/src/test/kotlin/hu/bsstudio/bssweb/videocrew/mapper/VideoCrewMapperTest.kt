@@ -6,6 +6,7 @@ import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.util.UUID
 
 internal class VideoCrewMapperTest {
 
@@ -31,9 +32,9 @@ internal class VideoCrewMapperTest {
     }
 
     private companion object {
-        private const val videoId = "videoId"
+        private val videoId = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
         private const val position = "position"
-        private const val memberId = "memberId"
+        private val memberId = UUID.fromString("11234567-0123-0123-0123-0123456789AB")
         private val videoCrew = VideoCrew(videoId, position, memberId)
         private val videoCrewEntity = VideoCrewEntity(videoId, position, memberId)
         private val simpleCrew = SimpleCrew(position, memberId)

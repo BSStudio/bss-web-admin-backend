@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @RestController
 @RequestMapping("/api/member")
@@ -34,7 +35,7 @@ class MemberController(val service: MemberService) {
 
     @PutMapping("/{memberId}")
     fun updateMember(
-        @PathVariable memberId: String,
+        @PathVariable memberId: UUID,
         @RequestBody updateMember: UpdateMember
     ): ResponseEntity<Member> {
         return service.updateMember(memberId, updateMember)
@@ -43,21 +44,21 @@ class MemberController(val service: MemberService) {
 
     @PutMapping("/archive")
     fun archiveMembers(
-        @RequestParam memberIds: List<String>,
+        @RequestParam memberIds: List<UUID>,
         @RequestParam archive: Boolean = true
-    ): ResponseEntity<List<String>> {
+    ): ResponseEntity<List<UUID>> {
         return service.archiveMembers(memberIds, archive)
             .let { ResponseEntity.ok(it) }
     }
 
     @GetMapping("/{memberId}")
-    fun getMemberById(@PathVariable memberId: String): ResponseEntity<Member> {
+    fun getMemberById(@PathVariable memberId: UUID): ResponseEntity<Member> {
         return service.findMemberById(memberId)
             .let { ResponseEntity.of(it) }
     }
 
     @DeleteMapping("/{memberId}")
-    fun removeMember(@PathVariable memberId: String) {
+    fun removeMember(@PathVariable memberId: UUID) {
         service.removeMember(memberId)
     }
 }

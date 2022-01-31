@@ -1,12 +1,10 @@
 import { videoEndpoints } from './endpoints/video.endpoints'
 import truncateAll from './database/truncate-all'
 import { dbUtils } from './database'
-import { createVideoEntity } from './database/add-videos'
+import { videoEntity } from './database/add-videos'
 
 describe('get /api/video', () => {
-  beforeEach(async () => {
-    await truncateAll()
-  })
+  beforeEach(async () => await truncateAll())
 
   it('should return empty', async () => {
     expect.assertions(2)
@@ -20,9 +18,9 @@ describe('get /api/video', () => {
   it('should return paginated results', async () => {
     expect.assertions(4)
     await dbUtils.addVideos([
-      createVideoEntity('id1', 'title1', 'vidUrl1', 'thumbUrl1'),
-      createVideoEntity('id2', 'title2', 'vidUrl2', 'thumbUrl2'),
-      createVideoEntity('id3', 'title3', 'vidUrl3', 'thumbUrl3'),
+      videoEntity('01234567-0123-0123-0123-0123456789AB', 'url1', 'title1'),
+      videoEntity('11234567-0123-0123-0123-0123456789AB', 'url2', 'title2'),
+      videoEntity('21234567-0123-0123-0123-0123456789AB', 'url3', 'title3'),
     ])
 
     const response1 = await videoEndpoints.getAllVideos(0, 2)

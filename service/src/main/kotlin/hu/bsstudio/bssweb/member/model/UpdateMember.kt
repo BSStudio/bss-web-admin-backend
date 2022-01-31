@@ -4,9 +4,10 @@ import hu.bsstudio.bssweb.member.common.MemberStatus
 import java.time.LocalDate
 
 data class UpdateMember(
+    val url: String,
     val name: String,
     val description: String,
-    val imageUrl: String?,
+    val imageUrl: String,
     val joinedAt: LocalDate,
     val role: String,
     val status: MemberStatus,

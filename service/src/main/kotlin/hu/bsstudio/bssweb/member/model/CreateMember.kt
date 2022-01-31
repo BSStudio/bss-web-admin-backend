@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.member.model
 
 data class CreateMember(
-    val id: String,
+    val url: String,
     val name: String,
 )

@@ -2,44 +2,44 @@ import { Client } from 'pg'
 
 export interface VideoEntity {
   id: string
+  url: string
   title: string
   description: string
   video_url: string | null
   thumbnail_url: string | null
   uploaded_at: string
   visible: boolean
-  archived: boolean
 }
 
-export function createVideoEntity(
+export function videoEntity(
   id: string,
+  url: string,
   title: string,
-  video_url: string,
-  thumbnail_url: string,
   description = '',
-  uploaded_at = '2022-1-1',
-  visible = true,
-  archived = false
+  video_url = '',
+  thumbnail_url = '',
+  uploaded_at = '2022-01-01',
+  visible = false
 ): VideoEntity {
   return {
     id,
+    url,
     title,
     description,
     video_url,
     thumbnail_url,
     uploaded_at,
     visible,
-    archived,
   }
 }
 
 function insertVideoQuery(videos: VideoEntity[]) {
   return (
-    'INSERT INTO bss_web.videos (id, title, description, video_url, thumbnail_url, uploaded_at, visible, archived) VALUES ' +
+    'INSERT INTO bss_web.video (id, url, title, description, video_url, thumbnail_url, uploaded_at, visible) VALUES ' +
     videos
       .map(
         (video) =>
-          `('${video.id}', '${video.title}', '${video.description}', '${video.video_url}', '${video.thumbnail_url}', '${video.uploaded_at}', '${video.visible}', '${video.archived}')`
+          `('${video.id}', '${video.url}', '${video.title}', '${video.description}', '${video.video_url}', '${video.thumbnail_url}', '${video.uploaded_at}', '${video.visible}')`
       )
       .join(',')
   )

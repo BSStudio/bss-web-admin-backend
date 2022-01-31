@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.util.UUID
 
 internal class MemberMapperTest {
 
@@ -15,7 +16,9 @@ internal class MemberMapperTest {
 
     @BeforeEach
     internal fun setUp() {
+        val idGenerator = { ID }
         underTest = MemberMapper()
+        underTest = MemberMapper(idGenerator)
     }
 
     @Test
@@ -33,7 +36,8 @@ internal class MemberMapperTest {
     }
 
     private companion object {
-        private const val ID = "id"
+        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private const val URL = "url"
         private const val NAME = "name"
         private const val DESCRIPTION = "description"
         private const val IMAGE_URL = "imageUrl"
@@ -41,9 +45,9 @@ internal class MemberMapperTest {
         private const val ROLE = "role"
         private val STATUS = MemberStatus.MEMBER
         private const val ARCHIVED = false
-        private val entity = MemberEntity(ID, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
-        private val model = Member(ID, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
-        private val createMember = CreateMember(ID, NAME)
-        private val createdEntity = MemberEntity(ID, NAME)
+        private val entity = MemberEntity(ID, URL, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
+        private val model = Member(ID, URL, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
+        private val createMember = CreateMember(URL, NAME)
+        private val createdEntity = MemberEntity(id = ID, url = URL, name = NAME)
     }
 }

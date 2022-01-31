@@ -5,13 +5,13 @@ import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import java.util.Optional
+import java.util.UUID
 
 interface VideoService {
     fun findAllVideos(page: Int, size: Int): List<Video>
     fun insertVideo(createVideo: CreateVideo): Video
-    fun archiveVideos(videoIds: List<String>, archive: Boolean = true): List<String>
-    fun changeVideoVisibility(videoIds: List<String>, visible: Boolean): List<String>
-    fun findVideoById(videoId: String): Optional<DetailedVideo>
-    fun updateVideo(videoId: String, updateVideo: UpdateVideo): Optional<DetailedVideo>
-    fun deleteVideoById(videoId: String)
+    fun changeVideoVisibility(videoIds: List<UUID>, visible: Boolean): List<UUID>
+    fun findVideoById(videoId: UUID): Optional<DetailedVideo>
+    fun updateVideo(videoId: UUID, updateVideo: UpdateVideo): Optional<DetailedVideo>
+    fun deleteVideoById(videoId: UUID)
 }

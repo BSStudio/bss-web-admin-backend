@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import java.time.LocalDate
 import java.util.Optional
+import java.util.UUID
 
 internal class DefaultVideoServiceTest {
 
@@ -61,32 +62,6 @@ internal class DefaultVideoServiceTest {
         val response = underTest.insertVideo(createVideo)
 
         Assertions.assertThat(response).isEqualTo(video1)
-    }
-
-    @Test
-    internal fun `should archive video`() {
-        val videoIds = listOf(videoId1)
-        every { mockRepository.findAllById(videoIds) } returns listOf(videoEntity1)
-        val updatedVideoEntity = videoEntity1.copy(archived = true)
-        every { mockRepository.save(updatedVideoEntity) } returns updatedVideoEntity
-        every { mockMapper.entityToModel(updatedVideoEntity) } returns video1
-
-        val response = underTest.archiveVideos(videoIds)
-
-        Assertions.assertThat(response).isEqualTo(listOf(videoId1))
-    }
-
-    @Test
-    internal fun `should archive video with implicit archive flag`() {
-        val videoIds = listOf(videoId1)
-        every { mockRepository.findAllById(videoIds) } returns listOf(videoEntity1)
-        val updatedVideoEntity = videoEntity1.copy(archived = true)
-        every { mockRepository.save(updatedVideoEntity) } returns updatedVideoEntity
-        every { mockMapper.entityToModel(updatedVideoEntity) } returns video1
-
-        val response = underTest.archiveVideos(videoIds, true)
-
-        Assertions.assertThat(response).isEqualTo(listOf(videoId1))
     }
 
     @Test
@@ -134,23 +109,23 @@ internal class DefaultVideoServiceTest {
     internal fun `should update video`() {
         every { mockDetailedRepository.findById(videoId1) } returns Optional.of(detailedVideoEntity1)
         val updatedDetailedEntity = detailedVideoEntity1.copy(
+            url = updateVideo.url,
             title = updateVideo.title,
             description = updateVideo.description,
             videoUrl = updateVideo.videoUrl,
             thumbnailUrl = updateVideo.thumbnailUrl,
             uploadedAt = updateVideo.uploadedAt,
             visible = updateVideo.visible,
-            archived = updateVideo.archived,
         )
         every { mockDetailedRepository.save(updatedDetailedEntity) } returns updatedDetailedEntity
         val updatedVideo = detailedVideo1.copy(
+            url = updateVideo.url,
             title = updateVideo.title,
             description = updateVideo.description,
             videoUrl = updateVideo.videoUrl,
             thumbnailUrl = updateVideo.thumbnailUrl,
             uploadedAt = updateVideo.uploadedAt,
             visible = updateVideo.visible,
-            archived = updateVideo.archived,
         )
         every { mockMapper.entityToModel(updatedDetailedEntity) } returns updatedVideo
 
@@ -167,14 +142,14 @@ internal class DefaultVideoServiceTest {
     }
 
     private companion object {
-        private const val videoId1 = "videoId1"
-        private val videoEntity1 = VideoEntity(videoId1, "title", LocalDate.of(2022, 1, 1), visible = true, archived = false)
+        private val videoId1 = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val videoEntity1 = VideoEntity(videoId1, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
         private val videoEntityList = listOf(videoEntity1)
-        private val video1 = Video(videoId1, "title", LocalDate.of(2022, 1, 1), visible = true, archived = false)
+        private val video1 = Video(videoId1, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
         private val videoList = listOf(video1)
-        private val createVideo = CreateVideo(videoId1, "title")
-        private val detailedVideoEntity1 = DetailedVideoEntity(videoId1, "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, archived = false, videoCrew = listOf())
-        private val detailedVideo1 = DetailedVideo(videoId1, "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, archived = false, crew = listOf())
-        private val updateVideo = UpdateVideo("updatedTitle", "updatedDescription", "updatedVideoUrl", "updatedThumbnailUrl", LocalDate.of(2022, 2, 2), visible = false, archived = true)
+        private val createVideo = CreateVideo("url", "title")
+        private val detailedVideoEntity1 = DetailedVideoEntity(videoId1, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
+        private val detailedVideo1 = DetailedVideo(videoId1, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
+        private val updateVideo = UpdateVideo("updatedUrl", "updatedTitle", "updatedDescription", "updatedVideoUrl", "updatedThumbnailUrl", LocalDate.of(2022, 2, 2), visible = false)
     }
 }

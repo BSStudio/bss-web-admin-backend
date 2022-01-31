@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.eventvideo.entity
 
 import java.io.Serializable
+import java.util.UUID
 import javax.persistence.Entity
 import javax.persistence.Id
 import javax.persistence.IdClass
@@ -11,7 +12,7 @@ import javax.persistence.Table
 @Table(name = "event_video")
 data class EventVideoEntity(
     @Id
-    var eventId: String,
+    var eventId: UUID,
     @Id
-    var videoId: String
+    var videoId: UUID
 ) : Serializable

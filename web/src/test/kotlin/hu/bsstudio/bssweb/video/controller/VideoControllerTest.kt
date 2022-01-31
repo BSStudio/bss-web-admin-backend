@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 import java.util.Optional
+import java.util.UUID
 
 internal class VideoControllerTest {
 
@@ -47,29 +48,6 @@ internal class VideoControllerTest {
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
         assertThat(response.body).isEqualTo(VIDEO)
-    }
-
-    @Test
-    internal fun archiveVideos() {
-        val videoIds = listOf(VIDEO_ID)
-        val archive = false
-        every { mockService.archiveVideos(videoIds, archive) } returns videoIds
-
-        val response = this.underTest.archiveVideos(videoIds, archive)
-
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(videoIds)
-    }
-
-    @Test
-    internal fun archiveVideos2() {
-        val videoIds = listOf(VIDEO_ID)
-        every { mockService.archiveVideos(videoIds, true) } returns videoIds
-
-        val response = this.underTest.archiveVideos(videoIds)
-
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(videoIds)
     }
 
     @Test
@@ -132,11 +110,11 @@ internal class VideoControllerTest {
     }
 
     private companion object {
-        private const val VIDEO_ID = "videoId"
-        private val VIDEO = Video(VIDEO_ID, "title", LocalDate.of(2022, 1, 1), true, false)
+        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val VIDEO = Video(id = VIDEO_ID, url = "url", title = "title", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)
         private val VIDEO_LIST = listOf(VIDEO)
-        private val CREATE_VIDEO = CreateVideo(VIDEO_ID, "title")
-        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, "title", "description", null, null, LocalDate.of(2022, 1, 1), true, false, listOf())
-        private val UPDATE_VIDEO = UpdateVideo("title", "description", null, null, LocalDate.of(2022, 1, 1), true, false)
+        private val CREATE_VIDEO = CreateVideo(url = "url", title = "title")
+        private val DETAILED_VIDEO = DetailedVideo(id = VIDEO_ID, url = "url", title = "title", "description", "videoUrl", "thumbnailUrl", uploadedAt = LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
+        private val UPDATE_VIDEO = UpdateVideo(url = "url", title = "title", "description", "videoUrl", "thumbnailUrl", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)
     }
 }

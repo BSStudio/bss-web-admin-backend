@@ -2,33 +2,38 @@ import { client } from './client'
 
 export interface Video {
   id: string
+  url: string
   title: string
   uploadedAt: string
   visible: boolean
-  archived: boolean
 }
 export interface CreateVideo {
-  id: string
+  url: string
   title: string
 }
 export interface UpdateVideo {
+  url: string
   title: string
   description: string
   videoUrl: string | null
   thumbnailUrl: string | null
   uploadedAt: string
   visible: boolean
-  archived: boolean
 }
 export interface DetailedVideo {
   id: string
+  url: string
   title: string
-  uploadedAt: string
-  visible: boolean
-  archived: boolean
   description: string
   videoUrl: string | null
   thumbnailUrl: string | null
+  uploadedAt: string
+  visible: boolean
+  crew: SimpleCrew[]
+}
+
+interface SimpleCrew {
+  position: string
 }
 
 export const videoEndpoints = {
@@ -38,14 +43,9 @@ export const videoEndpoints = {
   createVideo(createVideo: CreateVideo | null) {
     return client.post<Video>('/api/video', createVideo)
   },
-  archiveVideos(videoIds: string[], unArchive: boolean) {
-    return client.put<string[]>('/api/video/archive', null, {
-      params: { videoIds, unArchive },
-    })
-  },
   changeVideoVisibility(videoIds: string[], visible: boolean) {
     return client.put<string[]>('/api/video/visible', null, {
-      params: { videoIds, visible },
+      params: { videoIds: videoIds.join(','), visible: `${visible}` },
     })
   },
   updateVideo(videoId: string, updateVideo: UpdateVideo) {

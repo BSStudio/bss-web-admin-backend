@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 import java.util.Optional
+import java.util.UUID
 
 internal class MemberControllerTest {
 
@@ -108,10 +109,11 @@ internal class MemberControllerTest {
     }
 
     companion object {
-        private const val ID = "id1"
+        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
         private const val NAME = "name1"
-        private val CREATE_MEMBER = CreateMember(ID, NAME)
+        private val CREATE_MEMBER = CreateMember("url", NAME)
         private val UPDATE_MEMBER = UpdateMember(
+            url = "url",
             name = NAME,
             description = "description",
             imageUrl = "imageUrl",
@@ -122,6 +124,7 @@ internal class MemberControllerTest {
         )
         private val MEMBER_1 = Member(
             id = ID,
+            url = "url",
             name = NAME,
             description = "description",
             imageUrl = "imageUrl",
@@ -130,16 +133,6 @@ internal class MemberControllerTest {
             archived = false,
             joinedAt = LocalDate.EPOCH
         )
-        private val MEMBER_2 = Member(
-            id = "id2",
-            name = "name2",
-            description = "description",
-            imageUrl = "imageUrl",
-            role = "role",
-            status = MemberStatus.MEMBER,
-            archived = false,
-            joinedAt = LocalDate.EPOCH
-        )
-        private val MEMBER_LIST = listOf(MEMBER_1, MEMBER_2)
+        private val MEMBER_LIST = listOf(MEMBER_1)
     }
 }
