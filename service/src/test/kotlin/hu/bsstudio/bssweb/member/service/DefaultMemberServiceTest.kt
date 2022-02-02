@@ -110,6 +110,7 @@ internal class DefaultMemberServiceTest {
     internal fun `should update member`() {
         every { mockRepository.findById(memberId1) } returns Optional.of(memberEntity1)
         val updatedEntity = memberEntity1.copy(
+            url = updateMember.url,
             name = updateMember.name,
             description = updateMember.description,
             imageUrl = updateMember.imageUrl,
@@ -120,6 +121,7 @@ internal class DefaultMemberServiceTest {
         )
         every { mockRepository.save(updatedEntity) } returns updatedEntity
         val updatedMember = member1.copy(
+            url = updateMember.url,
             name = updateMember.name,
             description = updateMember.description,
             imageUrl = updateMember.imageUrl,

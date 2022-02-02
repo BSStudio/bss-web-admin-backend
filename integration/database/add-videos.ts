@@ -5,31 +5,33 @@ export interface VideoEntity {
   url: string
   title: string
   description: string
-  video_url: string | null
-  thumbnail_url: string | null
+  video_url: string
+  thumbnail_url: string
   uploaded_at: string
   visible: boolean
 }
 
-export function videoEntity(
-  id: string,
-  url: string,
-  title: string,
-  description = '',
-  video_url = '',
-  thumbnail_url = '',
-  uploaded_at = '2022-01-01',
-  visible = false
-): VideoEntity {
+interface CreateVideoEntity {
+  id: string
+  url: string
+  title: string
+  description?: string
+  video_url?: string
+  thumbnail_url?: string
+  uploaded_at?: string
+  visible?: boolean
+}
+
+export function videoEntity(createEntity: CreateVideoEntity): VideoEntity {
   return {
-    id,
-    url,
-    title,
-    description,
-    video_url,
-    thumbnail_url,
-    uploaded_at,
-    visible,
+    id: createEntity.id || '',
+    url: createEntity.url || '',
+    title: createEntity.title || '',
+    description: createEntity.description || '',
+    video_url: createEntity.video_url || '',
+    thumbnail_url: createEntity.thumbnail_url || '',
+    uploaded_at: createEntity.uploaded_at || '2022-01-01',
+    visible: createEntity.visible || false,
   }
 }
 

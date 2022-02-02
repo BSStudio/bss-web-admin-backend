@@ -1,7 +1,7 @@
-import { dbUtils } from './database'
-import { videoEntity } from './database/add-videos'
-import truncateAll from './database/truncate-all'
-import { DetailedVideo, UpdateVideo, videoEndpoints } from './endpoints/video.endpoints'
+import { dbUtils } from '../../database'
+import { videoEntity } from '../../database/add-videos'
+import truncateAll from '../../database/truncate-all'
+import { DetailedVideo, UpdateVideo, VideoEndpoint } from '../../endpoints/video.endpoints'
 
 describe('put /api/video/{videoId}', () => {
   beforeEach(async () => await truncateAll())
@@ -10,7 +10,16 @@ describe('put /api/video/{videoId}', () => {
   it('should update video', async () => {
     expect.assertions(2)
     await dbUtils.addVideos([
-      videoEntity(id, 'url', 'title', 'description', 'videoUrl', 'thumbnailUrl', '2022-01-01', false),
+      videoEntity({
+        id,
+        url: 'url',
+        title: 'title',
+        description: 'description',
+        video_url: 'videoUrl',
+        thumbnail_url: 'thumbnailUrl',
+        uploaded_at: '2022-01-01',
+        visible: false,
+      }),
     ])
 
     const updateVideo: UpdateVideo = {
@@ -22,7 +31,7 @@ describe('put /api/video/{videoId}', () => {
       uploadedAt: '2000-01-01',
       visible: true,
     }
-    const response = await videoEndpoints.updateVideo(id, updateVideo)
+    const response = await VideoEndpoint.updateVideo(id, updateVideo)
 
     const expectedVideo: DetailedVideo = {
       id,

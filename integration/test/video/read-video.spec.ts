@@ -1,7 +1,7 @@
-import { DetailedVideo, videoEndpoints } from './endpoints/video.endpoints'
-import truncateAll from './database/truncate-all'
-import { dbUtils } from './database'
-import { videoEntity } from './database/add-videos'
+import { DetailedVideo, VideoEndpoint } from '../../endpoints/video.endpoints'
+import truncateAll from '../../database/truncate-all'
+import { dbUtils } from '../../database'
+import { videoEntity } from '../../database/add-videos'
 
 describe('get /api/video/{videoId}', () => {
   beforeEach(async () => await truncateAll())
@@ -13,7 +13,7 @@ describe('get /api/video/{videoId}', () => {
   it('should return empty', async () => {
     expect.assertions(2)
 
-    const response = await videoEndpoints.getVideo(id)
+    const response = await VideoEndpoint.getVideo(id)
 
     expect(response.status).toBe(404)
     expect(response.data).toBe('')
@@ -21,9 +21,9 @@ describe('get /api/video/{videoId}', () => {
 
   it('should return detailed video', async () => {
     expect.assertions(2)
-    await dbUtils.addVideos([videoEntity(id, url, title)])
+    await dbUtils.addVideos([videoEntity({ id, url, title })])
 
-    const response1 = await videoEndpoints.getVideo(id)
+    const response1 = await VideoEndpoint.getVideo(id)
 
     const expectedDetailedVideo: DetailedVideo = {
       id,

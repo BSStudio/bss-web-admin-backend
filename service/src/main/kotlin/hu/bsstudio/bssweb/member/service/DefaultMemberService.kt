@@ -49,6 +49,7 @@ class DefaultMemberService(
 
     private fun updateMember(memberEntity: MemberEntity, updateMember: UpdateMember): MemberEntity {
         return memberEntity.copy(
+            url = updateMember.url,
             name = updateMember.name,
             description = updateMember.description,
             imageUrl = updateMember.imageUrl,
