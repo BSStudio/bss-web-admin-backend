@@ -35,17 +35,14 @@ export function videoEntity(createEntity: CreateVideoEntity): VideoEntity {
   }
 }
 
-function insertVideoQuery(videos: VideoEntity[]) {
-  return (
-    'INSERT INTO bss_web.video (id, url, title, description, video_url, thumbnail_url, uploaded_at, visible) VALUES ' +
-    videos
-      .map(
-        (video) =>
-          `('${video.id}', '${video.url}', '${video.title}', '${video.description}', '${video.video_url}', '${video.thumbnail_url}', '${video.uploaded_at}', '${video.visible}')`
-      )
-      .join(',')
-  )
-}
+const insertVideoQuery = (videos: VideoEntity[]) =>
+  'INSERT INTO bss_web.video (id, url, title, description, video_url, thumbnail_url, uploaded_at, visible) VALUES ' +
+  videos
+    .map(
+      (video) =>
+        `('${video.id}', '${video.url}', '${video.title}', '${video.description}', '${video.video_url}', '${video.thumbnail_url}', '${video.uploaded_at}', '${video.visible}')`
+    )
+    .join(',')
 
 export default async function (videos: VideoEntity[]) {
   const client = await pool.connect()

@@ -29,17 +29,14 @@ export function eventEntity(createEventEntity: CreateEventEntity): EventEntity {
   }
 }
 
-function insertEventQuery(events: EventEntity[]) {
-  return (
-    'INSERT INTO bss_web.event (id, url, title, description, date, visible) VALUES ' +
-    events
-      .map(
-        (event) =>
-          `('${event.id}', '${event.url}', '${event.title}', '${event.description}', '${event.date}', '${event.visible}')`
-      )
-      .join(',')
-  )
-}
+const insertEventQuery = (events: EventEntity[]) =>
+  'INSERT INTO bss_web.event (id, url, title, description, date, visible) VALUES ' +
+  events
+    .map(
+      (event) =>
+        `('${event.id}', '${event.url}', '${event.title}', '${event.description}', '${event.date}', '${event.visible}')`
+    )
+    .join(',')
 
 export default async function (events: EventEntity[]) {
   const client = await pool.connect()
