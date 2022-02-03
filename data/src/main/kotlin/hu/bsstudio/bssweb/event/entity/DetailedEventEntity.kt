@@ -7,6 +7,7 @@ import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
+import javax.persistence.JoinTable
 import javax.persistence.OneToMany
 import javax.persistence.Table
 
@@ -21,6 +22,10 @@ data class DetailedEventEntity(
     var date: LocalDate = LocalDate.now(),
     var visible: Boolean = false,
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "event_id")
+    @JoinTable(
+        name = "event_video",
+        joinColumns = [JoinColumn(name = "event_id")],
+        inverseJoinColumns = [JoinColumn(name = "video_id")]
+    )
     var videos: List<VideoEntity> = listOf(),
 )

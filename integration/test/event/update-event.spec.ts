@@ -7,7 +7,7 @@ describe('put /api/event/{eventId}', () => {
 
   const id = '01234567-0123-0123-0123-0123456789ab'
 
-  it.skip('should return ok and updated detailed event', async () => {
+  it('should return ok and updated detailed event', async () => {
     expect.assertions(2)
     await dbUtils.addEvents([
       eventEntity({

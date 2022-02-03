@@ -1,5 +1,5 @@
 import { dbUtils } from '../../database'
-import { Event, EventEndpoint } from '../../endpoints/event.endpoint'
+import { EventEndpoint } from '../../endpoints/event.endpoint'
 import { eventEntity } from '../../database/add-events'
 
 describe('post /api/event', () => {
