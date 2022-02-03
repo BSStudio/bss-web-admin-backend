@@ -1,9 +1,11 @@
-import { dbUtils } from '../../database'
+import { DbUtils } from '../../database'
 import { EventEndpoint } from '../../endpoints/event.endpoint'
-import { eventEntity } from '../../database/add-events'
+import { eventEntity } from '../../database/event.queries'
 
 describe('delete /api/event/{eventId}', () => {
-  beforeEach(async () => await dbUtils.truncateAll())
+  const dbUtils = new DbUtils()
+  beforeEach(async () => await dbUtils.beforeEach())
+  afterAll(async () => await dbUtils.afterAll())
 
   const id = '01234567-0123-0123-0123-0123456789ab'
 

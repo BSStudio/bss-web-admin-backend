@@ -1,9 +1,11 @@
-import { dbUtils } from '../../database'
+import { DbUtils } from '../../database'
 import { Member, MemberEndpoint, UpdateMember } from '../../endpoints/member.endpoint'
-import { memberEntity } from '../../database/add-members'
+import { memberEntity } from '../../database/member.queries'
 
 describe('put /api/member/{memberId}', () => {
-  beforeEach(async () => await dbUtils.truncateAll())
+  const dbUtils = new DbUtils()
+  beforeEach(async () => await dbUtils.beforeEach())
+  afterAll(async () => await dbUtils.afterAll())
 
   const id = '01234567-0123-0123-0123-0123456789ab'
 

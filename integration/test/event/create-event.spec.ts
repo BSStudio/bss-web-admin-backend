@@ -1,9 +1,11 @@
-import { dbUtils } from '../../database'
+import { DbUtils } from '../../database'
 import { EventEndpoint } from '../../endpoints/event.endpoint'
-import { eventEntity } from '../../database/add-events'
+import { eventEntity } from '../../database/event.queries'
 
 describe('post /api/event', () => {
-  beforeEach(async () => await dbUtils.truncateAll())
+  const dbUtils = new DbUtils()
+  beforeEach(async () => await dbUtils.beforeEach())
+  afterAll(async () => await dbUtils.afterAll())
   const url = 'url'
   const title = 'title'
   it('should create a new event', async () => {

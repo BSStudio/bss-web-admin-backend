@@ -1,9 +1,11 @@
-import { dbUtils } from '../../database'
-import { eventEntity } from '../../database/add-events'
+import { DbUtils } from '../../database'
+import { eventEntity } from '../../database/event.queries'
 import { DetailedEvent, EventEndpoint } from '../../endpoints/event.endpoint'
 
 describe('get /api/event/{eventId}', () => {
-  beforeEach(async () => await dbUtils.truncateAll())
+  const dbUtils = new DbUtils()
+  beforeEach(async () => await dbUtils.beforeEach())
+  afterAll(async () => await dbUtils.afterAll())
 
   const id = '01234567-0123-0123-0123-0123456789ab'
 

@@ -1,10 +1,11 @@
 import { VideoEndpoint } from '../../endpoints/video.endpoint'
-import truncateAll from '../../database/truncate-all'
-import { dbUtils } from '../../database'
-import { videoEntity } from '../../database/add-videos'
+import { videoEntity } from '../../database/video.queries'
+import { DbUtils } from '../../database'
 
 describe('get /api/video', () => {
-  beforeEach(async () => await truncateAll())
+  const dbUtils = new DbUtils()
+  beforeEach(async () => await dbUtils.beforeEach())
+  afterAll(async () => await dbUtils.afterAll())
 
   it('should return ok and empty array', async () => {
     expect.assertions(2)

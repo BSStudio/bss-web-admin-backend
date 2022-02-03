@@ -1,10 +1,12 @@
-import { dbUtils } from '../../database'
+import { DbUtils } from '../../database'
 import { VideoCrewEndpoint } from '../../endpoints/video-crew.endpoint'
-import { memberEntity } from '../../database/add-members'
-import { videoEntity } from '../../database/add-videos'
+import { memberEntity } from '../../database/member.queries'
+import { videoEntity } from '../../database/video.queries'
 
 describe('post /api/videoCrew', () => {
-  beforeEach(async () => await dbUtils.truncateAll())
+  const dbUtils = new DbUtils()
+  beforeEach(async () => await dbUtils.beforeEach())
+  afterAll(async () => await dbUtils.afterAll())
 
   const memberId = '01234567-0123-0123-0123-0123456789ab'
   const videoId = '11234567-0123-0123-0123-0123456789ab'

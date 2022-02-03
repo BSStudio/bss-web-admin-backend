@@ -1,10 +1,11 @@
 import { DetailedVideo, VideoEndpoint } from '../../endpoints/video.endpoint'
-import truncateAll from '../../database/truncate-all'
-import { dbUtils } from '../../database'
-import { videoEntity } from '../../database/add-videos'
+import { DbUtils } from '../../database'
+import { videoEntity } from '../../database/video.queries'
 
 describe('get /api/video/{videoId}', () => {
-  beforeEach(async () => await truncateAll())
+  const dbUtils = new DbUtils()
+  beforeEach(async () => await dbUtils.beforeEach())
+  afterAll(async () => await dbUtils.afterAll())
 
   const id = '01234567-0123-0123-0123-0123456789ab'
   const url = 'url'

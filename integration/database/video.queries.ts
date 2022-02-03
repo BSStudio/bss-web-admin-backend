@@ -1,5 +1,3 @@
-import { pool } from './pool'
-
 export interface VideoEntity {
   id: string
   url: string
@@ -35,17 +33,14 @@ export function videoEntity(createEntity: CreateVideoEntity): VideoEntity {
   }
 }
 
-const insertVideoQuery = (videos: VideoEntity[]) =>
-  'INSERT INTO bss_web.video (id, url, title, description, video_url, thumbnail_url, uploaded_at, visible) VALUES ' +
-  videos
-    .map(
-      (video) =>
-        `('${video.id}', '${video.url}', '${video.title}', '${video.description}', '${video.video_url}', '${video.thumbnail_url}', '${video.uploaded_at}', '${video.visible}')`
-    )
-    .join(',')
-
-export default async function (videos: VideoEntity[]) {
-  const client = await pool.connect()
-  await client.query(insertVideoQuery(videos))
-  await client.release()
+export function insertVideoQuery(videos: VideoEntity[]) {
+  return (
+    'INSERT INTO bss_web.video (id, url, title, description, video_url, thumbnail_url, uploaded_at, visible) VALUES ' +
+    videos
+      .map(
+        (video) =>
+          `('${video.id}', '${video.url}', '${video.title}', '${video.description}', '${video.video_url}', '${video.thumbnail_url}', '${video.uploaded_at}', '${video.visible}')`
+      )
+      .join(',')
+  )
 }

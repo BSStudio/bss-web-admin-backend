@@ -1,5 +1,3 @@
-import { pool } from './pool'
-
 export interface EventEntity {
   id: string
   url: string
@@ -29,17 +27,14 @@ export function eventEntity(createEventEntity: CreateEventEntity): EventEntity {
   }
 }
 
-const insertEventQuery = (events: EventEntity[]) =>
-  'INSERT INTO bss_web.event (id, url, title, description, date, visible) VALUES ' +
-  events
-    .map(
-      (event) =>
-        `('${event.id}', '${event.url}', '${event.title}', '${event.description}', '${event.date}', '${event.visible}')`
-    )
-    .join(',')
-
-export default async function (events: EventEntity[]) {
-  const client = await pool.connect()
-  await client.query(insertEventQuery(events))
-  await client.release()
+export function eventQueries(events: EventEntity[]) {
+  return (
+    'INSERT INTO bss_web.event (id, url, title, description, date, visible) VALUES ' +
+    events
+      .map(
+        (event) =>
+          `('${event.id}', '${event.url}', '${event.title}', '${event.description}', '${event.date}', '${event.visible}')`
+      )
+      .join(',')
+  )
 }

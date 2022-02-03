@@ -1,5 +1,3 @@
-import { pool } from './pool'
-
 export type MemberStatus = 'ALUMNI' | 'ACTIVE_ALUMNI' | 'MEMBER' | 'MEMBER_CANDIDATE' | 'MEMBER_CANDIDATE_CANDIDATE'
 
 export interface MemberEntity {
@@ -40,17 +38,14 @@ export function memberEntity(createEntity: CreateMemberEntity): MemberEntity {
   }
 }
 
-const createQuery = (members: MemberEntity[]) =>
-  'INSERT INTO bss_web.member (id, url, name, description, image_url, joined_at, role, status, archived) VALUES ' +
-  members
-    .map(
-      (member) =>
-        `('${member.id}', '${member.url}', '${member.name}', '${member.description}', '${member.image_url}', '${member.joined_at}', '${member.role}', '${member.status}', '${member.archived}')`
-    )
-    .join(',')
-
-export default async function (members: MemberEntity[]) {
-  const client = await pool.connect()
-  await client.query(createQuery(members))
-  await client.release()
+export function insertMemberQuery(members: MemberEntity[]) {
+  return (
+    'INSERT INTO bss_web.member (id, url, name, description, image_url, joined_at, role, status, archived) VALUES ' +
+    members
+      .map(
+        (member) =>
+          `('${member.id}', '${member.url}', '${member.name}', '${member.description}', '${member.image_url}', '${member.joined_at}', '${member.role}', '${member.status}', '${member.archived}')`
+      )
+      .join(',')
+  )
 }

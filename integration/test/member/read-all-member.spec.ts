@@ -1,9 +1,11 @@
-import { dbUtils } from '../../database'
+import { DbUtils } from '../../database'
 import { Member, MemberEndpoint } from '../../endpoints/member.endpoint'
-import { memberEntity } from '../../database/add-members'
+import { memberEntity } from '../../database/member.queries'
 
 describe('get /api/member', () => {
-  beforeEach(async () => await dbUtils.truncateAll())
+  const dbUtils = new DbUtils()
+  beforeEach(async () => await dbUtils.beforeEach())
+  afterAll(async () => await dbUtils.afterAll())
 
   it('should read all members', async () => {
     expect.assertions(4)
