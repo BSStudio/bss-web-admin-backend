@@ -110,7 +110,7 @@ internal class VideoControllerTest {
     }
 
     private companion object {
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private val VIDEO = Video(id = VIDEO_ID, url = "url", title = "title", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)
         private val VIDEO_LIST = listOf(VIDEO)
         private val CREATE_VIDEO = CreateVideo(url = "url", title = "title")

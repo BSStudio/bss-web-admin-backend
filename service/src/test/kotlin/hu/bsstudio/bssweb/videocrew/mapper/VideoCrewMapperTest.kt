@@ -32,9 +32,9 @@ internal class VideoCrewMapperTest {
     }
 
     private companion object {
-        private val videoId = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val videoId = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val position = "position"
-        private val memberId = UUID.fromString("11234567-0123-0123-0123-0123456789AB")
+        private val memberId = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
         private val videoCrew = VideoCrew(videoId, position, memberId)
         private val videoCrewEntity = VideoCrewEntity(videoId, position, memberId)
         private val simpleCrew = SimpleCrew(position, memberId)

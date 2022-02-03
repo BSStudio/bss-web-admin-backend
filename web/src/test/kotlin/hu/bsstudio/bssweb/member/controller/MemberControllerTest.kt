@@ -109,7 +109,7 @@ internal class MemberControllerTest {
     }
 
     companion object {
-        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val NAME = "name1"
         private val CREATE_MEMBER = CreateMember("url", NAME)
         private val UPDATE_MEMBER = UpdateMember(

@@ -142,7 +142,7 @@ internal class DefaultVideoServiceTest {
     }
 
     private companion object {
-        private val videoId1 = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val videoId1 = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private val videoEntity1 = VideoEntity(videoId1, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
         private val videoEntityList = listOf(videoEntity1)
         private val video1 = Video(videoId1, "url", "title", LocalDate.of(2022, 1, 1), visible = true)

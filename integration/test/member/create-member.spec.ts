@@ -1,11 +1,11 @@
 import { dbUtils } from '../../database'
-import { CreateMember, MemberEndpoint } from '../../endpoints/member.endpoints'
+import { CreateMember, MemberEndpoint } from '../../endpoints/member.endpoint'
 import { memberEntity } from '../../database/add-members'
 
 describe('post /api/member', () => {
   beforeEach(async () => await dbUtils.truncateAll())
 
-  const id = '01234567-0123-0123-0123-0123456789AB'
+  const id = '01234567-0123-0123-0123-0123456789ab'
   const url = 'url'
   const name = 'name'
 

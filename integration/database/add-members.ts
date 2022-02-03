@@ -1,4 +1,4 @@
-import { Client } from 'pg'
+import { pool } from './pool'
 
 export type MemberStatus = 'ALUMNI' | 'ACTIVE_ALUMNI' | 'MEMBER' | 'MEMBER_CANDIDATE' | 'MEMBER_CANDIDATE_CANDIDATE'
 
@@ -53,8 +53,7 @@ function createQuery(members: MemberEntity[]) {
 }
 
 export default async function (members: MemberEntity[]) {
-  const client = new Client({ connectionString: globalThis.baseUrl.db })
-  await client.connect()
+  const client = await pool.connect()
   await client.query(createQuery(members))
-  await client.end()
+  await client.release()
 }

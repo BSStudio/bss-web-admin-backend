@@ -54,7 +54,7 @@ internal class EventMapperTest {
     }
 
     private companion object {
-        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val URL = "URL"
         private const val TITLE = "TITLE"
         private const val DESCRIPTION = "DESCRIPTION"

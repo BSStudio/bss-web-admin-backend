@@ -34,7 +34,7 @@ export class MemberEndpoint {
   static getAllMembers() {
     return this.client.get<Member[]>('/api/member')
   }
-  static createMember(createMember: CreateMember | null) {
+  static createMember(createMember: CreateMember) {
     return this.client.post<Member>('/api/member', createMember)
   }
   static archiveMembers(memberIds: string[], archive: boolean) {

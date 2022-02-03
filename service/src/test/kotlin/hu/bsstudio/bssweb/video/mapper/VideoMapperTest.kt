@@ -56,7 +56,7 @@ internal class VideoMapperTest {
     }
 
     private companion object {
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val URL = "url"
         private const val TITLE = "title"
         private const val DESCRIPTION = "description"
@@ -64,9 +64,9 @@ internal class VideoMapperTest {
         private const val THUMBNAIL_URL = "thumbnailUrl"
         private val UPLOADED_AT = LocalDate.of(2022, 1, 1)
         private const val VISIBLE = true
-        private val CREW_ENTITY = VideoCrewEntity(VIDEO_ID, "position", UUID.fromString("01234567-0123-0123-0123-0123456789AB"))
+        private val CREW_ENTITY = VideoCrewEntity(VIDEO_ID, "position", UUID.fromString("01234567-0123-0123-0123-0123456789ab"))
         private val VIDEO_CREW = listOf(CREW_ENTITY)
-        private val CREW_MODEL = SimpleCrew("position", UUID.fromString("01234567-0123-0123-0123-0123456789AB"))
+        private val CREW_MODEL = SimpleCrew("position", UUID.fromString("01234567-0123-0123-0123-0123456789ab"))
         private val CREW = listOf(CREW_MODEL)
         private val videoEntity = VideoEntity(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
         private val video = Video(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)

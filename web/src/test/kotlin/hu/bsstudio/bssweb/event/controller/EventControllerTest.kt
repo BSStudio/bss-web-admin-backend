@@ -97,7 +97,7 @@ internal class EventControllerTest {
     }
 
     private companion object {
-        private val EVENT_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val EVENT_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private val EVENT_1 = Event(id = EVENT_ID, url = "url", title = "title", description = "description", date = LocalDate.of(2022, 1, 1), visible = false)
         private val CREATE_EVENT = CreateEvent(url = "url", title = "title")
         private val DETAILED_EVENT_1 = DetailedEvent(id = EVENT_ID, url = "url", title = "title", description = "description", date = LocalDate.of(2022, 1, 1), visible = false, videos = listOf())

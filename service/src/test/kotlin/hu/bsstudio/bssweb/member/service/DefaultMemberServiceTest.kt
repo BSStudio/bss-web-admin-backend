@@ -145,7 +145,7 @@ internal class DefaultMemberServiceTest {
     }
 
     private companion object {
-        private val memberId1 = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val memberId1 = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private val memberEntity1 = MemberEntity(memberId1, "url", "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)
         private val memberEntityList = listOf(memberEntity1)
         private val member1 = Member(memberId1, "url", "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)

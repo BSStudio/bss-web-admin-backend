@@ -1,4 +1,4 @@
-import { Client } from 'pg'
+import { pool } from './pool'
 
 export interface VideoEntity {
   id: string
@@ -48,8 +48,7 @@ function insertVideoQuery(videos: VideoEntity[]) {
 }
 
 export default async function (videos: VideoEntity[]) {
-  const client = await new Client({ connectionString: globalThis.baseUrl.db })
-  await client.connect()
+  const client = await pool.connect()
   await client.query(insertVideoQuery(videos))
-  await client.end()
+  await client.release()
 }

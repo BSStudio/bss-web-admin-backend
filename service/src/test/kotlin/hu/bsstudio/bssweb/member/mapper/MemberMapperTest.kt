@@ -36,7 +36,7 @@ internal class MemberMapperTest {
     }
 
     private companion object {
-        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val URL = "url"
         private const val NAME = "name"
         private const val DESCRIPTION = "description"

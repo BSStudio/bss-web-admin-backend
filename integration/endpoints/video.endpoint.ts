@@ -41,7 +41,7 @@ export class VideoEndpoint {
   static getAllVideos(page: number, size: number) {
     return this.client.get<Video[]>('/api/video', { params: { page, size } })
   }
-  static createVideo(createVideo: CreateVideo | null) {
+  static createVideo(createVideo: CreateVideo) {
     return this.client.post<Video>('/api/video', createVideo)
   }
   static changeVideoVisibility(videoIds: string[], visible: boolean) {

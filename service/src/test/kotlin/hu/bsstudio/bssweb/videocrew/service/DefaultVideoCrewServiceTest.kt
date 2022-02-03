@@ -54,11 +54,11 @@ internal class DefaultVideoCrewServiceTest {
     }
 
     private companion object {
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val POSITION_1 = "position1"
         private const val POSITION_2 = "position2"
-        private val MEMBER_ID_1 = UUID.fromString("11234567-0123-0123-0123-0123456789AB")
-        private val MEMBER_ID_2 = UUID.fromString("21234567-0123-0123-0123-0123456789AB")
+        private val MEMBER_ID_1 = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
+        private val MEMBER_ID_2 = UUID.fromString("21234567-0123-0123-0123-0123456789ab")
         private val videoCrew1 = VideoCrew(VIDEO_ID, POSITION_1, MEMBER_ID_1)
         private val simpleVideoCrew1 = SimpleCrew(POSITION_1, MEMBER_ID_1)
         private val simpleVideoCrew2 = SimpleCrew(POSITION_2, MEMBER_ID_2)

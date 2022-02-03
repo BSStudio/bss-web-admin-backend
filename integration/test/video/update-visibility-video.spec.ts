@@ -1,4 +1,4 @@
-import { VideoEndpoint } from '../../endpoints/video.endpoints'
+import { VideoEndpoint } from '../../endpoints/video.endpoint'
 import { dbUtils } from '../../database'
 import { videoEntity } from '../../database/add-videos'
 
@@ -8,7 +8,7 @@ describe('put /api/video/visible', () => {
   const id1 = '01234567-0123-0123-0123-0123456789ab'
   const id2 = '11234567-0123-0123-0123-0123456789ab'
 
-  it('should make video visible', async () => {
+  it('should return ok and updated ids when videos were changed to visible', async () => {
     expect.assertions(4)
     await dbUtils.addVideos([
       videoEntity({ id: id1, url: 'url1', title: 'title1' }),
@@ -24,7 +24,7 @@ describe('put /api/video/visible', () => {
     expect(getResponse1.data.visible).toBe(true)
     expect(getResponse2.data.visible).toBe(true)
   })
-  it('should make video invisible', async () => {
+  it('should return ok and updated ids when videos were changed to invisible', async () => {
     expect.assertions(4)
     await dbUtils.addVideos([
       videoEntity({ id: id1, url: 'url1', title: 'title1', visible: false }),

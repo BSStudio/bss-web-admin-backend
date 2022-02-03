@@ -1,17 +1,48 @@
-import { Client } from 'pg'
+import { pool } from './pool'
 
 export interface EventEntity {
   id: string
-  name: string
+  url: string
+  title: string
   description: string
   date: string
-  archived: boolean
+  visible: boolean
+}
+
+export interface CreateEventEntity {
+  id: string
+  url: string
+  title: string
+  description?: string
+  date?: string
+  visible?: boolean
+}
+
+export function eventEntity(createEventEntity: CreateEventEntity): EventEntity {
+  return {
+    id: createEventEntity.id,
+    url: createEventEntity.url,
+    title: createEventEntity.title,
+    description: createEventEntity.description || '',
+    date: createEventEntity.date || '2022-01-01',
+    visible: createEventEntity.visible || false,
+  }
+}
+
+function insertEventQuery(events: EventEntity[]) {
+  return (
+    'INSERT INTO bss_web.event (id, url, title, description, date, visible) VALUES ' +
+    events
+      .map(
+        (event) =>
+          `('${event.id}', '${event.url}', '${event.title}', '${event.description}', '${event.date}', '${event.visible}')`
+      )
+      .join(',')
+  )
 }
 
 export default async function (events: EventEntity[]) {
-  const client = new Client({ connectionString: globalThis.baseUrl.db })
-  await client.connect()
-  // todo
-  await Promise.all(events.map((event) => client.query(`${event}`)))
-  await client.end()
+  const client = await pool.connect()
+  await client.query(insertEventQuery(events))
+  await client.release()
 }

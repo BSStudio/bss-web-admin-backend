@@ -45,9 +45,9 @@ internal class VideoCrewControllerTest {
     }
 
     private companion object {
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val POSITION = "position"
-        private val MEMBER_ID = UUID.fromString("01234567-0123-0123-0123-0123456789AB")
+        private val MEMBER_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private val VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION, MEMBER_ID)
         private val SIMPLE_CREW = SimpleCrew(POSITION, MEMBER_ID)
         private val VIDEO_CREW_LIST = listOf(SIMPLE_CREW)

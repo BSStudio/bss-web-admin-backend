@@ -1,5 +1,5 @@
 import { dbUtils } from '../../database'
-import { Member, MemberEndpoint, UpdateMember } from '../../endpoints/member.endpoints'
+import { Member, MemberEndpoint, UpdateMember } from '../../endpoints/member.endpoint'
 import { memberEntity } from '../../database/add-members'
 
 describe('put /api/member/{memberId}', () => {
