@@ -87,8 +87,10 @@ jobs:
           key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
       - run:
           name: Lint integration test
-          command: npm run lint
+          command: npm run lint -- -f=junit -o ./out/eslint/report.xml
           working_directory: integration
+      - store_test_results:
+          path: integration/out/eslint
   integration-test:
     machine:
       image: ubuntu-2004:202107-02
@@ -111,7 +113,7 @@ jobs:
           environment:
             DEBUG: testcontainers
       - store_test_results:
-          path: integration/out
+          path: integration/out/jest
 workflows:
   version: 2
   all:
