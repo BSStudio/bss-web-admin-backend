@@ -1,7 +1,7 @@
 import { DbUtils } from '../../database'
 import { eventEntity } from '../../database/event.queries'
 import { videoEntity } from '../../database/video.queries'
-import { DetailedEvent, EventEndpoint } from '../../endpoints/event.endpoint'
+import { DetailedEvent } from '../../endpoints/event.endpoint'
 import { EventVideoEndpoint } from '../../endpoints/event-video.endpoint'
 
 describe('post /api/eventVideo?eventId={eventId}&videoId={videoId}', () => {
