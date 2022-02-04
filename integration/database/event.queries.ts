@@ -27,7 +27,7 @@ export function eventEntity(createEventEntity: CreateEventEntity): EventEntity {
   }
 }
 
-export function eventQueries(events: EventEntity[]) {
+export function insertEventQuery(events: EventEntity[]) {
   return (
     'INSERT INTO bss_web.event (id, url, title, description, date, visible) VALUES ' +
     events
