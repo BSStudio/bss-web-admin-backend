@@ -155,36 +155,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Video'
-  /api/video/archive:
-    put:
-      summary: "Archive videos"
-      description: "Archive videos"
-      tags:
-        - Video
-      parameters:
-        - name: videoIds
-          in: query
-          required: true
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: unarchive
-          in: query
-          description: Defaults to false if no value was provided
-          schema:
-            type: boolean
-            nullable: false
-      responses:
-        200:
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
   /api/video/visible:
     put:
       summary: "Change video visibility"
@@ -482,10 +452,10 @@ components:
     CreateMember:
       type: object
       required:
-        - id
+        - url
         - name
       properties:
-        id:
+        url:
           type: string
           nullable: false
         name:
@@ -494,54 +464,65 @@ components:
     UpdateMember:
       type: object
       properties:
+        url:
+          type: string
+          nullable: false
         name:
           type: string
-          nullable: true
+          nullable: false
         description:
           type: string
-          nullable: true
+          nullable: false
         imageUrl:
           type: string
+          nullable: false
         joinedAt:
           type: string
-          nullable: true
+          nullable: false
         role:
           type: string
-          nullable: true
+          nullable: false
         status:
           $ref: '#/components/schemas/Status'
         archived:
           type: string
-          nullable: true
+          nullable: false
     Member:
       type: object
       properties:
         id:
           type: string
           nullable: false
+        url:
+          type: string
+          nullable: false
         name:
           type: string
-          nullable: true
+          nullable: false
         description:
           type: string
-          nullable: true
+          nullable: false
         imageUrl:
           type: string
+          nullable: false
         joinedAt:
           type: string
-          nullable: true
+          nullable: false
         role:
           type: string
-          nullable: true
+          nullable: false
         status:
           $ref: '#/components/schemas/Status'
         archived:
           type: string
-          nullable: true
+          nullable: false
     CreateVideo:
       type: object
+      required:
+        - url
+        - title
       properties:
-        id:
+        url:
           type: string
           nullable: false
         title:
@@ -550,6 +531,9 @@ components:
     UpdateVideo:
       type: object
       properties:
+        url:
+          type: string
+          nullable: false
         title:
           type: string
           nullable: false
@@ -558,10 +542,10 @@ components:
           nullable: false
         videoUrl:
           type: string
-          nullable: true
+          nullable: false
         thumbnailUrl:
           type: string
-          nullable: true
+          nullable: false
         uploadedAt:
           type: string
           format: date
@@ -569,13 +553,13 @@ components:
         visible:
           type: boolean
           nullable: false
-        archived:
-          type: boolean
-          nullable: false
     Video:
       type: object
       properties:
         id:
+          type: string
+          nullable: false
+        url:
           type: string
           nullable: false
         title:
@@ -586,9 +570,6 @@ components:
           format: date
           nullable: false
         visible:
-          type: boolean
-          nullable: false
-        archived:
           type: boolean
           nullable: false
     DetailedVideo:
@@ -601,7 +582,17 @@ components:
               nullable: false
             videoUrl:
               type: string
-              nullable: true
+              nullable: false
             thumbnailUrl:
               type: string
-              nullable: true
+              nullable: false
+            crew:
+              type: array
+              items:
+                $ref: '#/components/schemas/SimpleCrew'
+    SimpleCrew:
+      type: object
+      properties:
+        position:
+          type: string
+          nullable: false

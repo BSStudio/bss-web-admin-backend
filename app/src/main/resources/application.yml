@@ -5,3 +5,4 @@ springdoc:
   swagger-ui:
     url: /open-api.yaml
     display-request-duration: true
+    use-root-path: true
