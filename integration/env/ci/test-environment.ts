@@ -1,5 +1,5 @@
 import * as fs from 'fs/promises'
-import NodeEnvironment = require('jest-environment-node')
+import NodeEnvironment from 'jest-environment-node'
 import * as path from 'path'
 import jestTempDir from './jest-temp-dir'
 
