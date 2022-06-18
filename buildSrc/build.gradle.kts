@@ -6,9 +6,9 @@ repositories {
     gradlePluginPortal()
 }
 
-extra["springBootVersion"] = "2.6.2"
+extra["springBootVersion"] = "2.7.0"
 extra["springDependencyManagement"] = "1.0.11.RELEASE"
-extra["gradleKtlintVersion"] = "10.2.1"
+extra["gradleKtlintVersion"] = "10.3.0"
 extra["kotlinVersion"] = "1.6.10"
 
 dependencies {
