@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   lint:
     docker:
-      - image: cimg/openjdk:11.0.13
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
       - restore_cache:
@@ -15,7 +15,7 @@ jobs:
       - run: ./gradlew ktlintCheck --parallel
   test:
     docker:
-      - image: cimg/openjdk:11.0.13
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
       - restore_cache:
@@ -40,7 +40,7 @@ jobs:
           path: data/build/reports
   coverage:
     docker:
-      - image: cimg/openjdk:11.0.13
+      - image: cimg/openjdk:17.0
     steps:
       - checkout
       - restore_cache:
@@ -62,7 +62,7 @@ jobs:
   docker-build:
     working_directory: ~/project
     machine:
-      image: ubuntu-2004:202111-02
+      image: ubuntu-2204:2022.04.1
       docker_layer_caching: true
     steps:
       - checkout
@@ -72,7 +72,7 @@ jobs:
             docker build .
   lint-integration-test:
     machine:
-      image: ubuntu-2004:202107-02
+      image: ubuntu-2204:2022.04.1
     steps:
       - checkout
       - restore_cache:
@@ -97,7 +97,7 @@ jobs:
           path: integration/out/eslint
   integration-test:
     machine:
-      image: ubuntu-2004:202107-02
+      image: ubuntu-2204:2022.04.1
     steps:
       - checkout
       - restore_cache:

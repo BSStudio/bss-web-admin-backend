@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-slim as build
+FROM openjdk:17-jdk-slim as build
 # cache dependencies
 COPY ./gradlew                    ./
 COPY ./settings.gradle.kts        ./
