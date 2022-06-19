@@ -71,8 +71,8 @@ jobs:
           command: |
             docker build .
   lint-integration-test:
-    machine:
-      image: ubuntu-2204:2022.04.1
+    docker:
+     - image: cimg/node:16.15
     steps:
       - checkout
       - restore_cache:
