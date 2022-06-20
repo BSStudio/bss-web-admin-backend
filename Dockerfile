@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-slim as build
+FROM openjdk:20-jdk-slim as build
 # cache dependencies
 COPY ./gradlew                  ./
 COPY ./settings.gradle.kts      ./
@@ -15,7 +15,7 @@ COPY ./ ./
 ARG BUILD_ARG="bootJar --parallel"
 RUN ./gradlew $BUILD_ARG
 
-FROM openjdk:17-jdk-slim as app
+FROM openjdk:20-jdk-slim as app
 ARG BOOT_JAR=/app/build/libs/*.jar
 COPY --from=build $BOOT_JAR ./app.jar
 ENTRYPOINT ["java","-jar","./app.jar"]
