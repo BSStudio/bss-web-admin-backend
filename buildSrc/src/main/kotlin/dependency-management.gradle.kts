@@ -7,6 +7,7 @@ repositories {
     mavenCentral()
 }
 
+// todo get version from libs.version.toml
 extra["springCloudVersion"] = "2021.0.3"
 extra["mockkVersion"] = "1.12.2"
 
