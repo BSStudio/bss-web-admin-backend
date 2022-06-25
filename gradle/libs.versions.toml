@@ -1,6 +1,6 @@
 [versions]
 mockk = "1.12.2"
-springdoc = "1.6.3"
+springdoc = "1.6.9"
 springBoot = "2.7.1"
 springCloud = "2021.0.3"
 kotlin = "1.6.10"
