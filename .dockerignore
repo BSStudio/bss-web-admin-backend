@@ -99,7 +99,6 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 ### Docker template
-.dockerignore
 Dockerfile
 docker-compose.yml
 
