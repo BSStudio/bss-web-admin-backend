@@ -5,7 +5,7 @@ springBoot = "2.7.1"
 springCloud = "2021.0.3"
 kotlin = "1.6.10"
 gradleKtlintPlugin = "10.3.0"
-springDependencyManagementPlugin = "1.0.11.RELEASE"
+springDependencyManagementPlugin = "1.0.12.RELEASE"
 
 [libraries]
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
