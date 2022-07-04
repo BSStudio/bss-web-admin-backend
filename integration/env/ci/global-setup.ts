@@ -9,8 +9,8 @@ const COMPOSE_FILE = 'docker-compose.ci.yml'
 
 export default async function (): Promise<void[]> {
   const dockerComposeEnvironment = await new DockerComposeEnvironment(BUILD_CONTEXT, COMPOSE_FILE)
-    .withWaitStrategy('app_1', Wait.forHealthCheck())
-    .withWaitStrategy('db_1', Wait.forHealthCheck())
+    .withWaitStrategy('app-1', Wait.forHealthCheck())
+    .withWaitStrategy('db-1', Wait.forHealthCheck())
     .up()
 
   globalThis.dockerComposeEnvironment = dockerComposeEnvironment
