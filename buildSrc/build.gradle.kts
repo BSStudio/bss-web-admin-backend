@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.plugin.ktlint)
     implementation(kotlin("allopen"))
     implementation(kotlin("gradle-plugin"))
+    // required for kotlin plugin jpa
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("noarg"))
