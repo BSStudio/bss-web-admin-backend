@@ -161,5 +161,7 @@ workflows:
       - test
       - coverage
       - docker-build
+      - docker-build-war
       - integration-test
+      - integration-test-war
       - lint-integration-test
