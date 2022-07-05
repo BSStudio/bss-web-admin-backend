@@ -70,6 +70,17 @@ jobs:
           name: Build application Docker image
           command: |
             docker build .
+  docker-build-war:
+    working_directory: ~/project
+    machine:
+      image: ubuntu-2204:2022.04.1
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build . -f war.Dockerfile
   lint-integration-test:
     docker:
      - image: cimg/node:16.15
@@ -116,6 +127,30 @@ jobs:
           working_directory: integration
           environment:
             DEBUG: testcontainers
+      - store_test_results:
+          path: integration/out/jest
+  integration-test-war:
+    machine:
+      image: ubuntu-2204:2022.04.1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - run:
+          command: npm install --no-fund --no-audit
+          working_directory: integration
+      - save_cache:
+          paths:
+            - integration/node_modules
+          key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - run:
+          name: Run integration test
+          command: npm run test:ci -- --ci
+          working_directory: integration
+          environment:
+            DEBUG: testcontainers
+            DOCKER_COMPOSE_FILE_NAME: docker-compose.war.ci.yml
       - store_test_results:
           path: integration/out/jest
 workflows:

@@ -100,6 +100,7 @@ gradle-app.setting
 
 ### Docker template
 Dockerfile
+*.Dockerfile
 docker-compose.yml
 
 ### Git template
