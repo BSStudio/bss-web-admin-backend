@@ -126,7 +126,7 @@ jobs:
           command: npm run test:ci -- --ci
           working_directory: integration
           environment:
-            DEBUG: testcontainers
+            DEBUG: testcontainers*
       - store_test_results:
           path: integration/out/jest
   integration-test-war:
@@ -149,7 +149,7 @@ jobs:
           command: npm run test:ci -- --ci
           working_directory: integration
           environment:
-            DEBUG: testcontainers
+            DEBUG: testcontainers*
             DOCKER_COMPOSE_FILE_NAME: docker-compose.war.ci.yml
       - store_test_results:
           path: integration/out/jest
