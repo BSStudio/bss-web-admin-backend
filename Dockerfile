@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-alpine as build
+FROM eclipse-temurin:17-alpine as build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                  ./
