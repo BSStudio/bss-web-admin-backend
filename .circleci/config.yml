@@ -1,18 +1,15 @@
 version: 2.1
 commands:
-  save_gradle_cache:
+  init_gradle:
     steps:
+      - checkout
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - run: ./gradlew
       - save_cache:
           paths:
             - ~/.gradle/wrapper
           key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-  load_gradle_cache:
-    steps:
-      - restore_cache:
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-  download_gradle_dependencies:
-    steps:
-      - run: ./gradlew
   store_gradle_reports:
     steps:
       - store_artifacts:
@@ -23,17 +20,19 @@ commands:
           path: service/build/reports
       - store_artifacts:
           path: data/build/reports
-  save_npm_cache:
+  init_npm:
     steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - run:
+          command: npm install --no-fund --no-audit
+          working_directory: integration
       - save_cache:
           paths:
             - integration/node_modules
           key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
-  load_npm_cache:
-    steps:
-      - restore_cache:
-          keys:
-            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
 executors:
   jdk:
     docker:
@@ -46,21 +45,13 @@ jobs:
     docker:
       - image: cimg/openjdk:17.0
     steps:
-      - checkout
-      - load_gradle_cache
-      - run: ./gradlew
-      - save_gradle_cache
+      - init_gradle
       - run: ./gradlew ktlintCheck --parallel
   test:
     executor: jdk
     steps:
-      - checkout
-      - load_gradle_cache
-      - download_gradle_dependencies
-      - save_gradle_cache
-      - run: 
-          name: Run test and test report
-          command: ./gradlew jacocoTestReport --parallel
+      - init_gradle
+      - run: ./gradlew jacocoTestReport --parallel
       - store_test_results:
           path: web/build/test-results
       - store_test_results:
@@ -69,10 +60,7 @@ jobs:
   coverage:
     executor: jdk
     steps:
-      - checkout
-      - load_gradle_cache
-      - download_gradle_dependencies
-      - save_gradle_cache
+      - init_gradle
       - run:
           name: "Run test and test coverage"
           command: ./gradlew jacocoTestCoverageVerification --parallel
@@ -91,12 +79,7 @@ jobs:
   lint-integration-test:
     executor: node
     steps:
-      - checkout
-      - load_npm_cache
-      - run:
-          command: npm install --no-fund --no-audit
-          working_directory: integration
-      - save_npm_cache
+      - init_npm
       - run:
           name: Write lint report for integration test
           command: npm run lint -- -f=junit -o ./out/eslint/report.xml
@@ -111,12 +94,7 @@ jobs:
     machine:
       image: ubuntu-2204:2022.04.1
     steps:
-      - checkout
-      - load_npm_cache
-      - run:
-          command: npm install --no-fund --no-audit
-          working_directory: integration
-      - save_npm_cache
+      - init_npm
       - run:
           name: Run integration test
           command: npm run test:ci -- --ci
@@ -126,7 +104,6 @@ jobs:
       - store_test_results:
           path: integration/out/jest
 workflows:
-  version: 2
   all:
     jobs:
       - lint
