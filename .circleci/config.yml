@@ -1,30 +1,46 @@
 version: 2.1
+commands:
+  save_gradle_cache:
+    steps:
+      - save_cache:
+          paths:
+            - ~/.gradle/wrapper
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+  load_gradle_cache:
+    steps:
+      - restore_cache:
+          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+  download_gradle_dependencies:
+    steps:
+      - run: ./gradlew
+  store_gradle_reports:
+    steps:
+      - store_artifacts:
+          path: app/build/reports
+      - store_artifacts:
+          path: web/build/reports
+      - store_artifacts:
+          path: service/build/reports
+      - store_artifacts:
+          path: data/build/reports
 jobs:
   lint:
     docker:
       - image: cimg/openjdk:17.0
     steps:
       - checkout
-      - restore_cache:
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - load_gradle_cache
       - run: ./gradlew
-      - save_cache:
-          paths:
-            - ~/.gradle/wrapper
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_gradle_cache
       - run: ./gradlew ktlintCheck --parallel
   test:
     docker:
       - image: cimg/openjdk:17.0
     steps:
       - checkout
-      - restore_cache:
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - run: ./gradlew
-      - save_cache:
-          paths:
-            - ~/.gradle/wrapper
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - load_gradle_cache
+      - download_gradle_dependencies
+      - save_gradle_cache
       - run: ./gradlew jacocoTestReport --parallel
       - store_test_results:
           path: web/build/test-results
@@ -43,13 +59,9 @@ jobs:
       - image: cimg/openjdk:17.0
     steps:
       - checkout
-      - restore_cache:
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - run: ./gradlew
-      - save_cache:
-          paths:
-            - ~/.gradle/wrapper
-          key: v1-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - load_gradle_cache
+      - download_gradle_dependencies
+      - save_gradle_cache
       - run: ./gradlew jacocoTestCoverageVerification --parallel
       - store_artifacts:
           path: app/build/reports
@@ -70,6 +82,17 @@ jobs:
           name: Build application Docker image
           command: |
             docker build .
+  docker-build-war:
+    working_directory: ~/project
+    machine:
+      image: ubuntu-2204:2022.04.1
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Build application Docker image
+          command: |
+            docker build . -f war.Dockerfile
   lint-integration-test:
     docker:
      - image: cimg/node:16.15
@@ -115,7 +138,31 @@ jobs:
           command: npm run test:ci -- --ci
           working_directory: integration
           environment:
-            DEBUG: testcontainers
+            DEBUG: testcontainers*
+      - store_test_results:
+          path: integration/out/jest
+  integration-test-war:
+    machine:
+      image: ubuntu-2204:2022.04.1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - run:
+          command: npm install --no-fund --no-audit
+          working_directory: integration
+      - save_cache:
+          paths:
+            - integration/node_modules
+          key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - run:
+          name: Run integration test
+          command: npm run test:ci -- --ci
+          working_directory: integration
+          environment:
+            DEBUG: testcontainers*
+            DOCKER_COMPOSE_FILE_NAME: docker-compose.war.ci.yml
       - store_test_results:
           path: integration/out/jest
 workflows:
@@ -126,5 +173,7 @@ workflows:
       - test
       - coverage
       - docker-build
+      - docker-build-war
       - integration-test
+      - integration-test-war
       - lint-integration-test
