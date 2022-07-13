@@ -81,12 +81,10 @@ jobs:
     steps:
       - init_npm
       - run:
-          name: Write lint report for integration test
-          command: npm run lint -- -f=junit -o ./out/eslint/report.xml
-          working_directory: integration
-      - run:
           name: Lint integration test
-          command: npm run lint
+          command: |
+            npm run lint -- -f=junit -o ./out/eslint/report.xml
+            npm run lint
           working_directory: integration
       - store_test_results:
           path: integration/out/eslint
