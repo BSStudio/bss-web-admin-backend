@@ -41,19 +41,14 @@ jobs:
       - load_gradle_cache
       - download_gradle_dependencies
       - save_gradle_cache
-      - run: ./gradlew jacocoTestReport --parallel
+      - run: 
+          name: Run test and test report
+          command: ./gradlew jacocoTestReport --parallel
       - store_test_results:
           path: web/build/test-results
       - store_test_results:
           path: service/build/test-results
-      - store_artifacts:
-          path: app/build/reports
-      - store_artifacts:
-          path: web/build/reports
-      - store_artifacts:
-          path: service/build/reports
-      - store_artifacts:
-          path: data/build/reports
+      - store_gradle_reports
   coverage:
     docker:
       - image: cimg/openjdk:17.0
@@ -62,15 +57,10 @@ jobs:
       - load_gradle_cache
       - download_gradle_dependencies
       - save_gradle_cache
-      - run: ./gradlew jacocoTestCoverageVerification --parallel
-      - store_artifacts:
-          path: app/build/reports
-      - store_artifacts:
-          path: web/build/reports
-      - store_artifacts:
-          path: service/build/reports
-      - store_artifacts:
-          path: data/build/reports
+      - run:
+          name: "Run test and test coverage"
+          command: ./gradlew jacocoTestCoverageVerification --parallel
+      - store_gradle_reports
   docker-build:
     working_directory: ~/project
     machine:
