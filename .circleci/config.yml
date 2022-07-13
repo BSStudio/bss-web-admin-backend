@@ -23,6 +23,24 @@ commands:
           path: service/build/reports
       - store_artifacts:
           path: data/build/reports
+  save_npm_cache:
+    steps:
+      - save_cache:
+          paths:
+            - integration/node_modules
+          key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+  load_npm_cache:
+    steps:
+      - restore_cache:
+          keys:
+            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+executors:
+  jdk:
+    docker:
+      - image: cimg/openjdk:17.0
+  node:
+    docker:
+      - image: cimg/node:16.15
 jobs:
   lint:
     docker:
@@ -34,8 +52,7 @@ jobs:
       - save_gradle_cache
       - run: ./gradlew ktlintCheck --parallel
   test:
-    docker:
-      - image: cimg/openjdk:17.0
+    executor: jdk
     steps:
       - checkout
       - load_gradle_cache
@@ -50,8 +67,7 @@ jobs:
           path: service/build/test-results
       - store_gradle_reports
   coverage:
-    docker:
-      - image: cimg/openjdk:17.0
+    executor: jdk
     steps:
       - checkout
       - load_gradle_cache
@@ -73,20 +89,14 @@ jobs:
           command: |
             docker build .
   lint-integration-test:
-    docker:
-     - image: cimg/node:16.15
+    executor: node
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - load_npm_cache
       - run:
           command: npm install --no-fund --no-audit
           working_directory: integration
-      - save_cache:
-          paths:
-            - integration/node_modules
-          key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - save_npm_cache
       - run:
           name: Write lint report for integration test
           command: npm run lint -- -f=junit -o ./out/eslint/report.xml
@@ -102,16 +112,11 @@ jobs:
       image: ubuntu-2204:2022.04.1
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - load_npm_cache
       - run:
           command: npm install --no-fund --no-audit
           working_directory: integration
-      - save_cache:
-          paths:
-            - integration/node_modules
-          key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+      - save_npm_cache
       - run:
           name: Run integration test
           command: npm run test:ci -- --ci
