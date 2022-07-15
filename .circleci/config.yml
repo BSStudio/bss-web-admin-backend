@@ -72,7 +72,7 @@ jobs:
             docker build .
   lint-integration-test:
     docker:
-     - image: cimg/node:16.15
+     - image: cimg/node:16.16
     steps:
       - checkout
       - restore_cache:
