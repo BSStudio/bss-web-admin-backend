@@ -133,7 +133,7 @@ workflows:
       - integration-test
       - lint-integration-test
       - docker-build
-#      - docker-push:
+      - docker-push
 #          filters:
 #            branches:
 #              only:
