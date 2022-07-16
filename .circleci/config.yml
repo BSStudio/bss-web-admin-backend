@@ -133,8 +133,15 @@ workflows:
       - integration-test
       - lint-integration-test
       - docker-build
-      - docker-push
-#          filters:
-#            branches:
-#              only:
-#                - main
+      - docker-push:
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - lint
+            - test
+            - coverage
+            - integration-test
+            - lint-integration-test
+            - docker-build
