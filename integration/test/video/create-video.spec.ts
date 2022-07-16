@@ -12,18 +12,19 @@ describe('post /api/video', () => {
   const title = 'title'
 
   it('should return ok and created video', async () => {
-    expect.assertions(7)
+    expect.assertions(2)
 
     const createVideo: CreateVideo = { url, title }
     const response = await VideoEndpoint.createVideo(createVideo)
 
     expect(response.status).toBe(201)
-    expect(typeof response.data.id).toBe('string')
-    expect(response.data.url).toStrictEqual(url)
-    expect(response.data.title).toStrictEqual(title)
-    expect(response.data.visible).toBe(false)
-    expect(response.data.uploadedAt).toStrictEqual(new Date().toISOString().split('T')[0])
-    expect(response.data.title).toStrictEqual(title)
+    expect(response.data).toMatchObject({
+      id: expect.stringMatching(/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/),
+      url,
+      title,
+      visible: false,
+      uploadedAt: new Date().toISOString().split('T')[0],
+    })
   })
   it('should return internal server error when url already exist', async () => {
     expect.assertions(1)
