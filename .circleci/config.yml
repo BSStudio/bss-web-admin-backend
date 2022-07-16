@@ -33,6 +33,26 @@ commands:
           paths:
             - integration/node_modules
           key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
+  docker_build:
+    steps:
+      - checkout
+      - restore_cache:
+          key: v2-docker-image-{{ .Branch }}
+      - run:
+          name: Restore cache
+          command: |
+            set +o pipefail
+            docker load -i ~/caches/image.tar | true
+      - run: docker build . --tag app
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p ~/caches
+            docker save -o ~/caches/image.tar app
+      - save_cache:
+          paths:
+            - ~/cache/image.tar
+          key: v2-docker-image-{{ .Branch }}-{{ epoch }}
 executors:
   jdk:
     docker:
@@ -68,14 +88,6 @@ jobs:
           name: "Run test and test coverage"
           command: ./gradlew jacocoTestCoverageVerification --parallel
       - store_gradle_reports
-  docker-build:
-    executor: ubuntu-docker
-    steps:
-      - checkout
-      - run:
-          name: Build application Docker image
-          command: |
-            docker build .
   lint-integration-test:
     executor: node
     steps:
@@ -100,12 +112,25 @@ jobs:
             DEBUG: testcontainers*
       - store_test_results:
           path: integration/out/jest
+  docker-build:
+    executor: ubuntu-docker
+    steps:
+      - docker_build
+  docker-push:
+    executor: ubuntu-docker
+    steps:
+      - docker_build
 workflows:
   all:
     jobs:
       - lint
       - test
       - coverage
-      - docker-build
       - integration-test
       - lint-integration-test
+      - docker-build
+#      - docker-push:
+#          filters:
+#            branches:
+#              only:
+#                - main
