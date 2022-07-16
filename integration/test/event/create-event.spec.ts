@@ -9,17 +9,19 @@ describe('post /api/event', () => {
   const url = 'url'
   const title = 'title'
   it('should create a new event', async () => {
-    expect.assertions(7)
+    expect.assertions(2)
 
     const response = await EventEndpoint.createEvent({ url, title })
 
     expect(response.status).toBe(201)
-    expect(typeof response.data.id).toBe('string')
-    expect(response.data.url).toBe(url)
-    expect(response.data.title).toBe(title)
-    expect(response.data.description).toBe('')
-    expect(response.data.date).toBe(new Date().toISOString().split('T')[0])
-    expect(response.data.visible).toBe(false)
+    expect(response.data).toMatchObject({
+      id: expect.stringMatching(/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/),
+      url,
+      title,
+      description: '',
+      date: new Date().toISOString().split('T')[0],
+      visible: false,
+    })
   })
   it('should not create a new event with an existing url', async () => {
     expect.assertions(1)
