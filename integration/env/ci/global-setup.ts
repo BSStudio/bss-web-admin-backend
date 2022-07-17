@@ -15,8 +15,8 @@ export default async function (): Promise<void[]> {
 
   globalThis.dockerComposeEnvironment = dockerComposeEnvironment
 
-  const app = dockerComposeEnvironment.getContainer('app_1')
-  const db = dockerComposeEnvironment.getContainer('db_1')
+  const app = dockerComposeEnvironment.getContainer('app-1')
+  const db = dockerComposeEnvironment.getContainer('db-1')
 
   const baseUrl = {
     app: `http://${app.getHost()}:${app.getMappedPort(8080)}`,

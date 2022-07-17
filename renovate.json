@@ -1,5 +1,46 @@
 {
   "extends": [
-    "config:base"
-  ]
+    ":autodetectPinVersions",
+    ":automergeDisabled",
+    ":dependencyDashboard",
+    ":disableRateLimiting",
+    ":enableVulnerabilityAlertsWithLabel(security)",
+    ":ignoreModulesAndTests",
+    ":ignoreUnstable",
+    ":label(dependencies)",
+    ":maintainLockFilesMonthly",
+    ":semanticPrefixFixDepsChoreOthers",
+    ":separateMajorReleases",
+    ":timezone(Europe/Dublin)",
+    "schedule:weekends",
+    "workarounds:all"
+  ],
+  "packageRules": [
+    {
+      "description": "Add `javascript` label for npm updates and run `npmDedupe` after run.",
+      "matchManagers": ["npm"],
+      "addLabels": ["javascript"],
+      "postUpdateOptions": ["npmDedupe"]
+    },
+    {
+      "description": "Add `docker` label for Dockerfile or docker-compose related updates.",
+      "matchManagers": ["docker-compose", "dockerfile"],
+      "addLabels": ["docker"]
+    },
+    {
+      "description": "Group all minor and patch updates together for npm and gradle.",
+      "matchManagers": ["npm", "gradle-wrapper"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    },
+    {
+      "description": "Group all minor and patch updates together for docker.",
+      "matchManagers": ["docker-compose", "dockerfile"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    }
+  ],
+  "rebaseWhen": "conflicted"
 }

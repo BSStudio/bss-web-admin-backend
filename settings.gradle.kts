@@ -1,2 +1,2 @@
-rootProject.name = "bss-web-admin"
+rootProject.name = "bss-web-admin-backend"
 include("app", "web", "service", "data")

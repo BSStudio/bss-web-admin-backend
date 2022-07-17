@@ -1,0 +1,16 @@
+[versions]
+mockk = "1.12.4"
+springdoc = "1.6.9"
+springBoot = "2.7.1"
+springCloud = "2021.0.3"
+gradleKtlintPlugin = "10.3.0"
+springDependencyManagementPlugin = "1.0.12.RELEASE"
+
+[libraries]
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+springCloud = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloud" }
+springdocOpenapiUi = { module = "org.springdoc:springdoc-openapi-ui", version.ref = "springdoc" }
+
+plugin-springBoot = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
+plugin-springDependencyManagement = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "springDependencyManagementPlugin" }
+plugin-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "gradleKtlintPlugin" }
