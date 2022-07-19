@@ -5,28 +5,25 @@ import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.service.VideoService
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class VideoControllerTest {
 
     @MockK
     private lateinit var mockService: VideoService
+    @InjectMockKs
     private lateinit var underTest: VideoController
-
-    @BeforeEach
-    internal fun setUp() {
-        MockKAnnotations.init(this)
-        this.underTest = VideoController(mockService)
-    }
 
     @Test
     internal fun getAllVideos() {
