@@ -35,11 +35,41 @@ export interface DetailedVideo {
 interface SimpleCrew {
   position: string
 }
+interface Sort {
+  empty: boolean
+  sorted: boolean
+  unsorted: boolean
+}
+interface Pageable {
+  offset: number
+  pageNumber: number
+  pageSize: number
+  paged: boolean
+  sort: Sort
+}
+interface Page<T> {
+  content: T[]
+  empty: boolean
+  first: boolean
+  last: boolean
+  number: number
+  numberOfElements: number
+  pageable: Pageable
+  size: 1
+  sort: Sort
+  totalElements: number
+  totalPages: 0
+}
+interface PageableRequestParam {
+  size?: number
+  page?: number
+  sort?: string
+}
 
 export class VideoEndpoint {
   static client = client
-  static getAllVideos(page: number, size: number) {
-    return this.client.get<Video[]>('/api/video', { params: { page, size } })
+  static getAllVideos(pageable: PageableRequestParam) {
+    return this.client.get<Page<Video>>('/api/video', { params: { ...pageable } })
   }
   static createVideo(createVideo: CreateVideo) {
     return this.client.post<Video>('/api/video', createVideo)

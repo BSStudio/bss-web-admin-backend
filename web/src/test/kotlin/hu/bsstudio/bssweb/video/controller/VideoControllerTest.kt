@@ -5,39 +5,36 @@ import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.service.VideoService
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class VideoControllerTest {
 
     @MockK
     private lateinit var mockService: VideoService
+    @InjectMockKs
     private lateinit var underTest: VideoController
-
-    @BeforeEach
-    internal fun setUp() {
-        MockKAnnotations.init(this)
-        this.underTest = VideoController(mockService)
-    }
 
     @Test
     internal fun getAllVideos() {
-        val page = 0
-        val size = 10
-        every { mockService.findAllVideos(page, size) } returns VIDEO_LIST
+        every { mockService.findAllVideos(PAGEABLE) } returns PAGED_VIDEOS
 
-        val response = this.underTest.getAllVideos(page, size)
+        val response = this.underTest.getAllVideos(PAGEABLE)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(VIDEO_LIST)
+        assertThat(response.body).isEqualTo(PAGED_VIDEOS)
     }
 
     @Test
@@ -110,9 +107,10 @@ internal class VideoControllerTest {
     }
 
     private companion object {
+        private val PAGEABLE = Pageable.unpaged()
         private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private val VIDEO = Video(id = VIDEO_ID, url = "url", title = "title", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)
-        private val VIDEO_LIST = listOf(VIDEO)
+        private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
         private val CREATE_VIDEO = CreateVideo(url = "url", title = "title")
         private val DETAILED_VIDEO = DetailedVideo(id = VIDEO_ID, url = "url", title = "title", "description", "videoUrl", "thumbnailUrl", uploadedAt = LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
         private val UPDATE_VIDEO = UpdateVideo(url = "url", title = "title", "description", "videoUrl", "thumbnailUrl", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)

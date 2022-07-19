@@ -9,18 +9,20 @@ import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.video.repository.VideoRepository
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class DefaultVideoServiceTest {
 
     @MockK
@@ -32,25 +34,17 @@ internal class DefaultVideoServiceTest {
     @MockK
     private lateinit var mockMapper: VideoMapper
 
+    @InjectMockKs
     private lateinit var underTest: DefaultVideoService
-
-    @BeforeEach
-    fun setUp() {
-        MockKAnnotations.init(this)
-        underTest = DefaultVideoService(mockRepository, mockDetailedRepository, mockMapper)
-    }
 
     @Test
     internal fun `should return all videos`() {
-        val page = 0
-        val size = 10
-
-        every { mockRepository.findAll(PageRequest.of(0, 10)) } returns PageImpl(videoEntityList)
+        every { mockRepository.findAll(pageable) } returns PageImpl(videoEntityList)
         every { mockMapper.entityToModel(videoEntity1) } returns video1
 
-        val response = underTest.findAllVideos(page, size)
+        val response = underTest.findAllVideos(pageable)
 
-        Assertions.assertThat(response).isEqualTo(videoList)
+        Assertions.assertThat(response).isEqualTo(pagedVideos)
     }
 
     @Test
@@ -142,11 +136,12 @@ internal class DefaultVideoServiceTest {
     }
 
     private companion object {
+        private val pageable = Pageable.unpaged()
         private val videoId1 = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private val videoEntity1 = VideoEntity(videoId1, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
         private val videoEntityList = listOf(videoEntity1)
         private val video1 = Video(videoId1, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
-        private val videoList = listOf(video1)
+        private val pagedVideos = PageImpl(listOf(video1))
         private val createVideo = CreateVideo("url", "title")
         private val detailedVideoEntity1 = DetailedVideoEntity(videoId1, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
         private val detailedVideo1 = DetailedVideo(videoId1, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())

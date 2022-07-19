@@ -114,6 +114,7 @@ paths:
                 type: string
   /api/video:
     get:
+      # todo update
       summary: "Read all video (paginated)"
       description: "Read all video (paginated)"
       tags:
