@@ -9,36 +9,30 @@ import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.video.repository.VideoRepository
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class DefaultVideoServiceTest {
 
     @MockK
     private lateinit var mockRepository: VideoRepository
-
     @MockK
     private lateinit var mockDetailedRepository: DetailedVideoRepository
-
     @MockK
     private lateinit var mockMapper: VideoMapper
-
+    @InjectMockKs
     private lateinit var underTest: DefaultVideoService
-
-    @BeforeEach
-    fun setUp() {
-        MockKAnnotations.init(this)
-        underTest = DefaultVideoService(mockRepository, mockDetailedRepository, mockMapper)
-    }
 
     @Test
     internal fun `should return all videos`() {

@@ -3,19 +3,18 @@ package hu.bsstudio.bssweb.videocrew.mapper
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class VideoCrewMapperTest {
 
+    @InjectMockKs
     private lateinit var underTest: VideoCrewMapper
-
-    @BeforeEach
-    internal fun setUp() {
-        underTest = VideoCrewMapper()
-    }
 
     @Test
     internal fun `should map entity to model`() {

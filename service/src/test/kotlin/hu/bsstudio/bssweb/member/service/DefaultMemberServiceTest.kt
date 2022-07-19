@@ -7,29 +7,26 @@ import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.repository.MemberRepository
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class DefaultMemberServiceTest {
 
     @MockK
     private lateinit var mockRepository: MemberRepository
     @MockK
     private lateinit var mockMapper: MemberMapper
+    @InjectMockKs
     private lateinit var underTest: DefaultMemberService
-
-    @BeforeEach
-    fun setUp() {
-        MockKAnnotations.init(this)
-        underTest = DefaultMemberService(mockRepository, mockMapper)
-    }
 
     @Test
     internal fun `should return all members`() {

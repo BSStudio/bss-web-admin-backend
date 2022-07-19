@@ -5,28 +5,24 @@ import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class DefaultVideoCrewServiceTest {
 
     @MockK
     private lateinit var mockRepository: VideoCrewRepository
     @MockK
     private lateinit var mockMapper: VideoCrewMapper
-
+    @InjectMockKs
     private lateinit var underTest: DefaultVideoCrewService
-
-    @BeforeEach
-    fun setUp() {
-        MockKAnnotations.init(this)
-        underTest = DefaultVideoCrewService(mockRepository, mockMapper)
-    }
 
     @Test
     internal fun `should add position to video`() {
