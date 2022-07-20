@@ -3,40 +3,39 @@ package hu.bsstudio.bssweb.videocrew.mapper
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class VideoCrewMapperTest {
 
+    @InjectMockKs
     private lateinit var underTest: VideoCrewMapper
-
-    @BeforeEach
-    internal fun setUp() {
-        underTest = VideoCrewMapper()
-    }
 
     @Test
     internal fun `should map entity to model`() {
-        val result = underTest.modelToEntity(videoCrew)
+        val result = underTest.modelToEntity(VIDEO_CREW)
 
-        assertThat(result).isEqualTo(videoCrewEntity)
+        assertThat(result).isEqualTo(VIDEO_CREW_ENTITY)
     }
 
     @Test
     internal fun `should map model to entity`() {
-        val result = underTest.entityToModel(videoCrewEntity)
+        val result = underTest.entityToModel(VIDEO_CREW_ENTITY)
 
-        assertThat(result).isEqualTo(simpleCrew)
+        assertThat(result).isEqualTo(SIMPLE_CREW)
     }
 
     private companion object {
-        private val videoId = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private const val position = "position"
-        private val memberId = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
-        private val videoCrew = VideoCrew(videoId, position, memberId)
-        private val videoCrewEntity = VideoCrewEntity(videoId, position, memberId)
-        private val simpleCrew = SimpleCrew(position, memberId)
+        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private const val POSITION = "position"
+        private val MEMBER_ID = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
+        private val VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION, MEMBER_ID)
+        private val VIDEO_CREW_ENTITY = VideoCrewEntity(VIDEO_ID, POSITION, MEMBER_ID)
+        private val SIMPLE_CREW = SimpleCrew(POSITION, MEMBER_ID)
     }
 }

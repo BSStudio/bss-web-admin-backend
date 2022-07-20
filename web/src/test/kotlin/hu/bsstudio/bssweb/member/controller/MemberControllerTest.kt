@@ -5,28 +5,25 @@ import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.service.MemberService
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class MemberControllerTest {
 
     @MockK
     private lateinit var mockService: MemberService
+    @InjectMockKs
     private lateinit var underTest: MemberController
-
-    @BeforeEach
-    internal fun setUp() {
-        MockKAnnotations.init(this)
-        underTest = MemberController(mockService)
-    }
 
     @Test
     internal fun `should retrieve all members`() {

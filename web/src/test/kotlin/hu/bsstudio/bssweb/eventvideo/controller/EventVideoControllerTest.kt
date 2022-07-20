@@ -2,29 +2,25 @@ package hu.bsstudio.bssweb.eventvideo.controller
 
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.eventvideo.service.EventVideoService
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class EventVideoControllerTest {
 
     @MockK
     private lateinit var mockService: EventVideoService
-
+    @InjectMockKs
     private lateinit var underTest: EventVideoController
-
-    @BeforeEach
-    fun setUp() {
-        MockKAnnotations.init(this)
-        underTest = EventVideoController(mockService)
-    }
 
     @Test
     fun addVideoToEvent() {

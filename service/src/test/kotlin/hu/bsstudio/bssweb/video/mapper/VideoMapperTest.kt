@@ -34,25 +34,25 @@ internal class VideoMapperTest {
 
     @Test
     internal fun `should map entity model to model`() {
-        val result = underTest.entityToModel(videoEntity)
+        val result = underTest.entityToModel(VIDEO_ENTITY)
 
-        assertThat(result).isEqualTo(video)
+        assertThat(result).isEqualTo(VIDEO)
     }
 
     @Test
     internal fun `should map detailed entity to detailed model`() {
         every { mockVideoCrewMapper.entityToModel(CREW_ENTITY) } returns CREW_MODEL
 
-        val result = underTest.entityToModel(detailedVideoEntity)
+        val result = underTest.entityToModel(DETAILED_VIDEO_ENTITY)
 
-        assertThat(result).isEqualTo(detailedVideo)
+        assertThat(result).isEqualTo(DETAILED_VIDEO)
     }
 
     @Test
     internal fun `should map map model to entity`() {
-        val result = underTest.modelToEntity(createVideo)
+        val result = underTest.modelToEntity(CREATE_VIDEO)
 
-        assertThat(result).isEqualTo(createdVideoEntity)
+        assertThat(result).isEqualTo(CREATED_VIDEO_ENTITY)
     }
 
     private companion object {
@@ -68,11 +68,11 @@ internal class VideoMapperTest {
         private val VIDEO_CREW = listOf(CREW_ENTITY)
         private val CREW_MODEL = SimpleCrew("position", UUID.fromString("01234567-0123-0123-0123-0123456789ab"))
         private val CREW = listOf(CREW_MODEL)
-        private val videoEntity = VideoEntity(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
-        private val video = Video(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
-        private val detailedVideoEntity = DetailedVideoEntity(VIDEO_ID, URL, TITLE, DESCRIPTION, VIDEO_URL, THUMBNAIL_URL, UPLOADED_AT, VISIBLE, VIDEO_CREW)
-        private val detailedVideo = DetailedVideo(VIDEO_ID, URL, TITLE, DESCRIPTION, VIDEO_URL, THUMBNAIL_URL, UPLOADED_AT, VISIBLE, CREW)
-        private val createVideo = CreateVideo(URL, TITLE)
-        private val createdVideoEntity = VideoEntity(id = VIDEO_ID, url = URL, title = TITLE)
+        private val VIDEO_ENTITY = VideoEntity(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
+        private val VIDEO = Video(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
+        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, URL, TITLE, DESCRIPTION, VIDEO_URL, THUMBNAIL_URL, UPLOADED_AT, VISIBLE, VIDEO_CREW)
+        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, URL, TITLE, DESCRIPTION, VIDEO_URL, THUMBNAIL_URL, UPLOADED_AT, VISIBLE, CREW)
+        private val CREATE_VIDEO = CreateVideo(URL, TITLE)
+        private val CREATED_VIDEO_ENTITY = VideoEntity(id = VIDEO_ID, url = URL, title = TITLE)
     }
 }
