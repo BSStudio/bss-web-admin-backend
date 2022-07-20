@@ -26,27 +26,27 @@ internal class DefaultVideoCrewServiceTest {
 
     @Test
     internal fun `should add position to video`() {
-        every { mockMapper.modelToEntity(videoCrew1) } returns videoCrewEntity1
-        every { mockMapper.entityToModel(videoCrewEntity1) } returns simpleVideoCrew1
-        every { mockMapper.entityToModel(videoCrewEntity2) } returns simpleVideoCrew2
-        every { mockRepository.save(videoCrewEntity1) } returns videoCrewEntity1
-        every { mockRepository.findAllByVideoId(VIDEO_ID) } returns listOf(videoCrewEntity1, videoCrewEntity2)
+        every { mockMapper.modelToEntity(VIDEO_CREW) } returns VIDEO_CREW_ENTITY_1
+        every { mockMapper.entityToModel(VIDEO_CREW_ENTITY_1) } returns SIMPLE_VIDEO_CREW_1
+        every { mockMapper.entityToModel(VIDEO_CREW_ENTITY_2) } returns SIMPLE_VIDEO_CREW_2
+        every { mockRepository.save(VIDEO_CREW_ENTITY_1) } returns VIDEO_CREW_ENTITY_1
+        every { mockRepository.findAllByVideoId(VIDEO_ID) } returns listOf(VIDEO_CREW_ENTITY_1, VIDEO_CREW_ENTITY_2)
 
-        val result = underTest.addPosition(videoCrew1)
+        val result = underTest.addPosition(VIDEO_CREW)
 
-        assertThat(result).isEqualTo(listOf(simpleVideoCrew1, simpleVideoCrew2))
+        assertThat(result).isEqualTo(listOf(SIMPLE_VIDEO_CREW_1, SIMPLE_VIDEO_CREW_2))
     }
 
     @Test
     internal fun `should remove position from video`() {
-        every { mockMapper.modelToEntity(videoCrew1) } returns videoCrewEntity1
-        every { mockMapper.entityToModel(videoCrewEntity2) } returns simpleVideoCrew2
-        every { mockRepository.deleteById(videoCrewEntity1) } returns Unit
-        every { mockRepository.findAllByVideoId(VIDEO_ID) } returns listOf(videoCrewEntity2)
+        every { mockMapper.modelToEntity(VIDEO_CREW) } returns VIDEO_CREW_ENTITY_1
+        every { mockMapper.entityToModel(VIDEO_CREW_ENTITY_2) } returns SIMPLE_VIDEO_CREW_2
+        every { mockRepository.deleteById(VIDEO_CREW_ENTITY_1) } returns Unit
+        every { mockRepository.findAllByVideoId(VIDEO_ID) } returns listOf(VIDEO_CREW_ENTITY_2)
 
-        val result = underTest.removePosition(videoCrew1)
+        val result = underTest.removePosition(VIDEO_CREW)
 
-        assertThat(result).isEqualTo(listOf(simpleVideoCrew2))
+        assertThat(result).isEqualTo(listOf(SIMPLE_VIDEO_CREW_2))
     }
 
     private companion object {
@@ -55,10 +55,10 @@ internal class DefaultVideoCrewServiceTest {
         private const val POSITION_2 = "position2"
         private val MEMBER_ID_1 = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
         private val MEMBER_ID_2 = UUID.fromString("21234567-0123-0123-0123-0123456789ab")
-        private val videoCrew1 = VideoCrew(VIDEO_ID, POSITION_1, MEMBER_ID_1)
-        private val simpleVideoCrew1 = SimpleCrew(POSITION_1, MEMBER_ID_1)
-        private val simpleVideoCrew2 = SimpleCrew(POSITION_2, MEMBER_ID_2)
-        private val videoCrewEntity1 = VideoCrewEntity(VIDEO_ID, POSITION_1, MEMBER_ID_1)
-        private val videoCrewEntity2 = VideoCrewEntity(VIDEO_ID, POSITION_2, MEMBER_ID_2)
+        private val VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION_1, MEMBER_ID_1)
+        private val SIMPLE_VIDEO_CREW_1 = SimpleCrew(POSITION_1, MEMBER_ID_1)
+        private val SIMPLE_VIDEO_CREW_2 = SimpleCrew(POSITION_2, MEMBER_ID_2)
+        private val VIDEO_CREW_ENTITY_1 = VideoCrewEntity(VIDEO_ID, POSITION_1, MEMBER_ID_1)
+        private val VIDEO_CREW_ENTITY_2 = VideoCrewEntity(VIDEO_ID, POSITION_2, MEMBER_ID_2)
     }
 }
