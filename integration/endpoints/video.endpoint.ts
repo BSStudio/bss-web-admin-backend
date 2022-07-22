@@ -55,10 +55,10 @@ interface Page<T> {
   number: number
   numberOfElements: number
   pageable: Pageable
-  size: 1
+  size: number
   sort: Sort
   totalElements: number
-  totalPages: 0
+  totalPages: number
 }
 interface PageableRequestParam {
   size?: number
@@ -68,7 +68,7 @@ interface PageableRequestParam {
 
 export class VideoEndpoint {
   static client = client
-  static getAllVideos(pageable: PageableRequestParam) {
+  static getAllVideos(pageable?: PageableRequestParam) {
     return this.client.get<Page<Video>>('/api/video', { params: { ...pageable } })
   }
   static createVideo(createVideo: CreateVideo) {
