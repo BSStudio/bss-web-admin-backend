@@ -114,7 +114,6 @@ paths:
                 type: string
   /api/video:
     get:
-      # todo update
       summary: "Read all video (paginated)"
       description: "Read all video (paginated)"
       tags:
@@ -122,23 +121,33 @@ paths:
       parameters:
         - name: size
           in: query
-          required: true
+          required: false
           schema:
             type: integer
-            default: 50
         - name: page
           in: query
-          required: true
+          required: false
           schema:
             type: integer
-            default: 0
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         200:
           description: "OK"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Video'
+                allOf:
+                  - $ref: "#/components/schemas/Page"
+                  - type: object
+                    properties:
+                      content:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Video"
     post:
       summary: "Create video"
       description: "Create video"
@@ -471,6 +480,51 @@ paths:
                 type: object
 components:
   schemas:
+    Sort:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    Pageable:
+      type: object
+      properties:
+        offset:
+          type: integer
+        pageNumber:
+          type: integer
+        pageSize:
+          type: integer
+        paged:
+          type: boolean
+        sort:
+          $ref: "#/components/schemas/Sort"
+    Page:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+        numberOfElements:
+          type: integer
+        pageable:
+          $ref: "#/components/schemas/Pageable"
+        size:
+          type: integer
+        sort:
+          $ref: "#/components/schemas/Sort"
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
     Status:
       type: string
       nullable: false
@@ -579,6 +633,9 @@ components:
         id:
           type: string
           nullable: false
+        url:
+          type: string
+          nullable: false
         title:
           type: string
           nullable: false
@@ -587,9 +644,6 @@ components:
           format: date
           nullable: false
         visible:
-          type: boolean
-          nullable: false
-        archived:
           type: boolean
           nullable: false
     DetailedVideo:
