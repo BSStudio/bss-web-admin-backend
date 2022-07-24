@@ -1,9 +1,28 @@
-import { VideoEndpoint } from '../../endpoints/video.endpoint'
+import { Video, VideoEndpoint } from '../../endpoints/video.endpoint'
 import { videoEntity } from '../../database/video.queries'
 import { DbUtils } from '../../database'
 
 describe('get /api/video', () => {
   const dbUtils = new DbUtils()
+  const defaultVideo = { uploadedAt: '2022-01-01', visible: false }
+  const video1: Video = {
+    id: '01234567-0123-0123-0123-0123456789ab',
+    title: 'title1',
+    url: 'url1',
+    ...defaultVideo,
+  }
+  const video2: Video = {
+    id: '11234567-0123-0123-0123-0123456789ab',
+    title: 'title2',
+    url: 'url2',
+    ...defaultVideo,
+  }
+  const video3: Video = {
+    id: '21234567-0123-0123-0123-0123456789ab',
+    title: 'title3',
+    url: 'url3',
+    ...defaultVideo,
+  }
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())
 
@@ -104,22 +123,7 @@ describe('get /api/video', () => {
 
     expect(response1.status).toBe(200)
     expect(response1.data).toStrictEqual({
-      content: [
-        {
-          id: '21234567-0123-0123-0123-0123456789ab',
-          title: 'title3',
-          uploadedAt: '2022-01-01',
-          url: 'url3',
-          visible: false,
-        },
-        {
-          id: '11234567-0123-0123-0123-0123456789ab',
-          title: 'title2',
-          uploadedAt: '2022-01-01',
-          url: 'url2',
-          visible: false,
-        },
-      ],
+      content: [video3, video2],
       empty: false,
       first: true,
       last: false,
@@ -145,15 +149,7 @@ describe('get /api/video', () => {
 
     expect(response2.status).toBe(200)
     expect(response2.data).toStrictEqual({
-      content: [
-        {
-          id: '01234567-0123-0123-0123-0123456789ab',
-          title: 'title1',
-          uploadedAt: '2022-01-01',
-          url: 'url1',
-          visible: false,
-        },
-      ],
+      content: [video1],
       empty: false,
       first: false,
       last: true,
@@ -187,22 +183,7 @@ describe('get /api/video', () => {
 
     expect(response1.status).toBe(200)
     expect(response1.data).toStrictEqual({
-      content: [
-        {
-          id: '01234567-0123-0123-0123-0123456789ab',
-          title: 'title1',
-          uploadedAt: '2022-01-01',
-          url: 'url1',
-          visible: false,
-        },
-        {
-          id: '11234567-0123-0123-0123-0123456789ab',
-          title: 'title2',
-          uploadedAt: '2022-01-01',
-          url: 'url2',
-          visible: false,
-        },
-      ],
+      content: [video1, video2],
       empty: false,
       first: true,
       last: false,
@@ -224,15 +205,7 @@ describe('get /api/video', () => {
 
     expect(response2.status).toBe(200)
     expect(response2.data).toStrictEqual({
-      content: [
-        {
-          id: '21234567-0123-0123-0123-0123456789ab',
-          title: 'title3',
-          uploadedAt: '2022-01-01',
-          url: 'url3',
-          visible: false,
-        },
-      ],
+      content: [video3],
       empty: false,
       first: false,
       last: true,
