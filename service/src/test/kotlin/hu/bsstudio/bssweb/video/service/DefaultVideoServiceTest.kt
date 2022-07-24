@@ -39,112 +39,112 @@ internal class DefaultVideoServiceTest {
 
     @Test
     internal fun `should return all videos`() {
-        every { mockRepository.findAll(pageable) } returns PageImpl(videoEntityList)
-        every { mockMapper.entityToModel(videoEntity1) } returns video1
+        every { mockRepository.findAll(PAGEABLE) } returns PageImpl(VIDEO_ENTITY_LIST)
+        every { mockMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
 
-        val response = underTest.findAllVideos(pageable)
+        val response = underTest.findAllVideos(PAGEABLE)
 
-        Assertions.assertThat(response).isEqualTo(pagedVideos)
+        Assertions.assertThat(response).isEqualTo(PAGED_VIDEOS)
     }
 
     @Test
     internal fun `should insert new video`() {
-        every { mockMapper.modelToEntity(createVideo) } returns videoEntity1
-        every { mockRepository.save(videoEntity1) } returns videoEntity1
-        every { mockMapper.entityToModel(videoEntity1) } returns video1
+        every { mockMapper.modelToEntity(CREATE_VIDEO) } returns VIDEO_ENTITY
+        every { mockRepository.save(VIDEO_ENTITY) } returns VIDEO_ENTITY
+        every { mockMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
 
-        val response = underTest.insertVideo(createVideo)
+        val response = underTest.insertVideo(CREATE_VIDEO)
 
-        Assertions.assertThat(response).isEqualTo(video1)
+        Assertions.assertThat(response).isEqualTo(VIDEO)
     }
 
     @Test
     internal fun `should change video visibility`() {
-        val videoIds = listOf(videoId1)
-        every { mockRepository.findAllById(videoIds) } returns listOf(videoEntity1)
-        val updatedVideoEntity = videoEntity1.copy(visible = false)
+        val videoIds = listOf(VIDEO_ID)
+        every { mockRepository.findAllById(videoIds) } returns listOf(VIDEO_ENTITY)
+        val updatedVideoEntity = VIDEO_ENTITY.copy(visible = false)
         every { mockRepository.save(updatedVideoEntity) } returns updatedVideoEntity
-        every { mockMapper.entityToModel(updatedVideoEntity) } returns video1
+        every { mockMapper.entityToModel(updatedVideoEntity) } returns VIDEO
 
         val response = underTest.changeVideoVisibility(videoIds, false)
 
-        Assertions.assertThat(response).isEqualTo(listOf(videoId1))
+        Assertions.assertThat(response).isEqualTo(listOf(VIDEO_ID))
     }
 
     @Test
     internal fun `should find video by id`() {
-        every { mockDetailedRepository.findById(videoId1) } returns Optional.of(detailedVideoEntity1)
-        every { mockMapper.entityToModel(detailedVideoEntity1) } returns detailedVideo1
+        every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_ENTITY)
+        every { mockMapper.entityToModel(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO
 
-        val response = underTest.findVideoById(videoId1)
+        val response = underTest.findVideoById(VIDEO_ID)
 
-        Assertions.assertThat(response).isEqualTo(Optional.of(detailedVideo1))
+        Assertions.assertThat(response).isEqualTo(Optional.of(DETAILED_VIDEO))
     }
 
     @Test
     internal fun `should return empty if video was not found`() {
-        every { mockDetailedRepository.findById(videoId1) } returns Optional.empty()
+        every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.empty()
 
-        val response = underTest.findVideoById(videoId1)
+        val response = underTest.findVideoById(VIDEO_ID)
 
         Assertions.assertThat(response).isEqualTo(Optional.empty<Video>())
     }
 
     @Test
     internal fun `should not update video if id was not found`() {
-        every { mockDetailedRepository.findById(videoId1) } returns Optional.empty()
+        every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.empty()
 
-        val response = underTest.updateVideo(videoId1, updateVideo)
+        val response = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
         Assertions.assertThat(response).isEqualTo(Optional.empty<Video>())
     }
 
     @Test
     internal fun `should update video`() {
-        every { mockDetailedRepository.findById(videoId1) } returns Optional.of(detailedVideoEntity1)
-        val updatedDetailedEntity = detailedVideoEntity1.copy(
-            url = updateVideo.url,
-            title = updateVideo.title,
-            description = updateVideo.description,
-            videoUrl = updateVideo.videoUrl,
-            thumbnailUrl = updateVideo.thumbnailUrl,
-            uploadedAt = updateVideo.uploadedAt,
-            visible = updateVideo.visible,
+        every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_ENTITY)
+        val updatedDetailedEntity = DETAILED_VIDEO_ENTITY.copy(
+            url = UPDATE_VIDEO.url,
+            title = UPDATE_VIDEO.title,
+            description = UPDATE_VIDEO.description,
+            videoUrl = UPDATE_VIDEO.videoUrl,
+            thumbnailUrl = UPDATE_VIDEO.thumbnailUrl,
+            uploadedAt = UPDATE_VIDEO.uploadedAt,
+            visible = UPDATE_VIDEO.visible,
         )
         every { mockDetailedRepository.save(updatedDetailedEntity) } returns updatedDetailedEntity
-        val updatedVideo = detailedVideo1.copy(
-            url = updateVideo.url,
-            title = updateVideo.title,
-            description = updateVideo.description,
-            videoUrl = updateVideo.videoUrl,
-            thumbnailUrl = updateVideo.thumbnailUrl,
-            uploadedAt = updateVideo.uploadedAt,
-            visible = updateVideo.visible,
+        val updatedVideo = DETAILED_VIDEO.copy(
+            url = UPDATE_VIDEO.url,
+            title = UPDATE_VIDEO.title,
+            description = UPDATE_VIDEO.description,
+            videoUrl = UPDATE_VIDEO.videoUrl,
+            thumbnailUrl = UPDATE_VIDEO.thumbnailUrl,
+            uploadedAt = UPDATE_VIDEO.uploadedAt,
+            visible = UPDATE_VIDEO.visible,
         )
         every { mockMapper.entityToModel(updatedDetailedEntity) } returns updatedVideo
 
-        val response = underTest.updateVideo(videoId1, updateVideo)
+        val response = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
         Assertions.assertThat(response).isEqualTo(Optional.of(updatedVideo))
     }
 
     @Test
     internal fun `should remove entity by id`() {
-        every { mockRepository.deleteById(videoId1) } returns Unit
+        every { mockRepository.deleteById(VIDEO_ID) } returns Unit
 
-        underTest.deleteVideoById(videoId1)
+        underTest.deleteVideoById(VIDEO_ID)
     }
 
     private companion object {
-        private val pageable = Pageable.unpaged()
-        private val videoId1 = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private val videoEntity1 = VideoEntity(videoId1, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
-        private val videoEntityList = listOf(videoEntity1)
-        private val video1 = Video(videoId1, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
-        private val pagedVideos = PageImpl(listOf(video1))
-        private val createVideo = CreateVideo("url", "title")
-        private val detailedVideoEntity1 = DetailedVideoEntity(videoId1, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
-        private val detailedVideo1 = DetailedVideo(videoId1, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
-        private val updateVideo = UpdateVideo("updatedUrl", "updatedTitle", "updatedDescription", "updatedVideoUrl", "updatedThumbnailUrl", LocalDate.of(2022, 2, 2), visible = false)
+        private val PAGEABLE = Pageable.unpaged()
+        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val VIDEO_ENTITY = VideoEntity(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
+        private val VIDEO_ENTITY_LIST = listOf(VIDEO_ENTITY)
+        private val VIDEO = Video(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
+        private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
+        private val CREATE_VIDEO = CreateVideo("url", "title")
+        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
+        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
+        private val UPDATE_VIDEO = UpdateVideo("updatedUrl", "updatedTitle", "updatedDescription", "updatedVideoUrl", "updatedThumbnailUrl", LocalDate.of(2022, 2, 2), visible = false)
     }
 }
