@@ -14,8 +14,6 @@ commands:
           key: v2-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
   store_gradle_reports:
     steps:
-      - codecov/upload:
-          file: "web/build/test-results"
       - store_artifacts:
           path: app/build/reports
       - store_artifacts:
@@ -94,6 +92,10 @@ jobs:
           name: "Run test and test coverage"
           command: ./gradlew jacocoTestCoverageVerification --parallel
       - store_gradle_reports
+      - codecov/upload:
+          file: "web/build/test-results"
+      - codecov/upload:
+          file: "service/build/test-results"
   lint-integration-test:
     executor: node
     steps:
