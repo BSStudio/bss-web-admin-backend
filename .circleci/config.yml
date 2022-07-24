@@ -14,7 +14,8 @@ commands:
           key: v2-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
   store_gradle_reports:
     steps:
-      - codecov/upload
+      - codecov/upload:
+          file: "web/build/test-results"
       - store_artifacts:
           path: app/build/reports
       - store_artifacts:
