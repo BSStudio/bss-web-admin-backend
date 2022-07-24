@@ -23,16 +23,16 @@ internal class MemberMapperTest {
 
     @Test
     internal fun `should map entity to model`() {
-        val result = underTest.entityToModel(entity)
+        val result = underTest.entityToModel(ENTITY)
 
-        assertThat(result).isEqualTo(model)
+        assertThat(result).isEqualTo(MODEL)
     }
 
     @Test
     internal fun `should map model to entity`() {
-        val result = underTest.modelToEntity(createMember)
+        val result = underTest.modelToEntity(CREATE_MEMBER)
 
-        assertThat(result).isEqualTo(createdEntity)
+        assertThat(result).isEqualTo(CREATED_ENTITY)
     }
 
     private companion object {
@@ -45,9 +45,9 @@ internal class MemberMapperTest {
         private const val ROLE = "role"
         private val STATUS = MemberStatus.MEMBER
         private const val ARCHIVED = false
-        private val entity = MemberEntity(ID, URL, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
-        private val model = Member(ID, URL, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
-        private val createMember = CreateMember(URL, NAME)
-        private val createdEntity = MemberEntity(id = ID, url = URL, name = NAME)
+        private val ENTITY = MemberEntity(ID, URL, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
+        private val MODEL = Member(ID, URL, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
+        private val CREATE_MEMBER = CreateMember(URL, NAME)
+        private val CREATED_ENTITY = MemberEntity(id = ID, url = URL, name = NAME)
     }
 }

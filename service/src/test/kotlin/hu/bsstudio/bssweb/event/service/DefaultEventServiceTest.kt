@@ -9,151 +9,145 @@ import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.event.repository.EventRepository
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class DefaultEventServiceTest {
 
     @MockK
     private lateinit var mockRepository: EventRepository
-
     @MockK
     private lateinit var mockDetailedRepository: DetailedEventRepository
-
     @MockK
     private lateinit var mockMapper: EventMapper
-
+    @InjectMockKs
     private lateinit var underTest: DefaultEventService
-
-    @BeforeEach
-    internal fun setUp() {
-        MockKAnnotations.init(this)
-        underTest = DefaultEventService(mockRepository, mockDetailedRepository, mockMapper)
-    }
 
     @Test
     internal fun `should return all events`() {
-        every { mockRepository.findAll() } returns eventEntityList
-        every { mockMapper.entityToModel(eventEntity1) } returns event1
+        every { mockRepository.findAll() } returns EVENT_ENTITY_LIST
+        every { mockMapper.entityToModel(EVENT_ENTITY) } returns EVENT
 
         val response = underTest.findAllEvent()
 
-        assertThat(response).isEqualTo(eventList)
+        assertThat(response).isEqualTo(EVENT_LIST)
     }
 
     @Test
     internal fun `should insert new event`() {
-        every { mockMapper.modelToEntity(createEvent) } returns eventEntity1
-        every { mockRepository.save(eventEntity1) } returns eventEntity1
-        every { mockMapper.entityToModel(eventEntity1) } returns event1
+        every { mockMapper.modelToEntity(CREATE_EVENT) } returns EVENT_ENTITY
+        every { mockRepository.save(EVENT_ENTITY) } returns EVENT_ENTITY
+        every { mockMapper.entityToModel(EVENT_ENTITY) } returns EVENT
 
-        val response = underTest.insertEvent(createEvent)
+        val response = underTest.insertEvent(CREATE_EVENT)
 
-        assertThat(response).isEqualTo(event1)
+        assertThat(response).isEqualTo(EVENT)
     }
 
     @Test
     internal fun `should archive event`() {
-        val eventIds = listOf(eventId1)
-        every { mockRepository.findAllById(eventIds) } returns listOf(eventEntity1)
-        val updatedEventEntity = eventEntity1.copy(visible = true)
+        val eventIds = listOf(EVENT_ID)
+        every { mockRepository.findAllById(eventIds) } returns listOf(EVENT_ENTITY)
+        val updatedEventEntity = EVENT_ENTITY.copy(visible = true)
         every { mockRepository.save(updatedEventEntity) } returns updatedEventEntity
-        every { mockMapper.entityToModel(updatedEventEntity) } returns event1
+        every { mockMapper.entityToModel(updatedEventEntity) } returns EVENT
 
         val response = underTest.changeVisibility(eventIds)
 
-        assertThat(response).isEqualTo(listOf(eventId1))
+        assertThat(response).isEqualTo(listOf(EVENT_ID))
     }
 
     @Test
     internal fun `should archive event with implicit archive flag`() {
-        val eventIds = listOf(eventId1)
-        every { mockRepository.findAllById(eventIds) } returns listOf(eventEntity1)
-        val updatedEventEntity = eventEntity1.copy(visible = true)
+        val eventIds = listOf(EVENT_ID)
+        every { mockRepository.findAllById(eventIds) } returns listOf(EVENT_ENTITY)
+        val updatedEventEntity = EVENT_ENTITY.copy(visible = true)
         every { mockRepository.save(updatedEventEntity) } returns updatedEventEntity
-        every { mockMapper.entityToModel(updatedEventEntity) } returns event1
+        every { mockMapper.entityToModel(updatedEventEntity) } returns EVENT
 
         val response = underTest.changeVisibility(eventIds, true)
 
-        assertThat(response).isEqualTo(listOf(eventId1))
+        assertThat(response).isEqualTo(listOf(EVENT_ID))
     }
 
     @Test
     internal fun `should find event by id`() {
-        every { mockDetailedRepository.findById(eventId1) } returns Optional.of(detailedEventEntity)
-        every { mockMapper.entityToModel(detailedEventEntity) } returns detailedEvent
+        every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_ENTITY)
+        every { mockMapper.entityToModel(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT
 
-        val response = underTest.findEventById(eventId1)
+        val response = underTest.findEventById(EVENT_ID)
 
-        assertThat(response).isEqualTo(Optional.of(detailedEvent))
+        assertThat(response).isEqualTo(Optional.of(DETAILED_EVENT))
     }
 
     @Test
     internal fun `should return empty if event was not found`() {
-        every { mockDetailedRepository.findById(eventId1) } returns Optional.empty()
+        every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.empty()
 
-        val response = underTest.findEventById(eventId1)
+        val response = underTest.findEventById(EVENT_ID)
 
         assertThat(response).isEqualTo(Optional.empty<DetailedEvent>())
     }
 
     @Test
     internal fun `should not update event if id was not found`() {
-        every { mockDetailedRepository.findById(eventId1) } returns Optional.empty()
+        every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.empty()
 
-        val response = underTest.updateEvent(eventId1, updateEvent)
+        val response = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
         assertThat(response).isEqualTo(Optional.empty<DetailedEvent>())
     }
 
     @Test
     internal fun `should update event`() {
-        every { mockDetailedRepository.findById(eventId1) } returns Optional.of(detailedEventEntity)
-        val updatedEntity = detailedEventEntity.copy(
-            url = updateEvent.url,
-            title = updateEvent.title,
-            description = updateEvent.description,
-            date = updateEvent.date,
-            visible = updateEvent.visible,
+        every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_ENTITY)
+        val updatedEntity = DETAILED_EVENT_ENTITY.copy(
+            url = UPDATE_EVENT.url,
+            title = UPDATE_EVENT.title,
+            description = UPDATE_EVENT.description,
+            date = UPDATE_EVENT.date,
+            visible = UPDATE_EVENT.visible,
         )
         every { mockDetailedRepository.save(updatedEntity) } returns updatedEntity
-        val updatedDetailedEvent = detailedEvent.copy(
-            url = updateEvent.url,
-            title = updateEvent.title,
-            description = updateEvent.description,
-            date = updateEvent.date,
-            visible = updateEvent.visible,
+        val updatedDetailedEvent = DETAILED_EVENT.copy(
+            url = UPDATE_EVENT.url,
+            title = UPDATE_EVENT.title,
+            description = UPDATE_EVENT.description,
+            date = UPDATE_EVENT.date,
+            visible = UPDATE_EVENT.visible,
         )
         every { mockMapper.entityToModel(updatedEntity) } returns updatedDetailedEvent
 
-        val response = underTest.updateEvent(eventId1, updateEvent)
+        val response = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
         assertThat(response).isEqualTo(Optional.of(updatedDetailedEvent))
     }
 
     @Test
     internal fun `should remove entity by id`() {
-        every { mockRepository.deleteById(eventId1) } returns Unit
+        every { mockRepository.deleteById(EVENT_ID) } returns Unit
 
-        underTest.removeEvent(eventId1)
+        underTest.removeEvent(EVENT_ID)
     }
 
     private companion object {
-        private val eventId1 = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private val event1 = Event(eventId1, "url", "name", "description", LocalDate.of(2022, 1, 1), false)
-        private val eventList = listOf(event1)
-        private val eventEntity1 = EventEntity(eventId1, "url", "title")
-        private val eventEntityList = listOf(eventEntity1)
-        private val createEvent = CreateEvent("url", "title")
-        private val updateEvent = UpdateEvent("updatedUrl", "updatedTitle", "updatedDescription", LocalDate.of(2022, 2, 2), true)
-        private val detailedEvent = DetailedEvent(eventId1, "url", "title", "description", LocalDate.of(2022, 1, 1), false, listOf())
-        private val detailedEventEntity = DetailedEventEntity(eventId1, "url", "title", "description", LocalDate.of(2022, 1, 1), false, listOf())
+        private val EVENT_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val EVENT = Event(EVENT_ID, "url", "name", "description", LocalDate.of(2022, 1, 1), false)
+        private val EVENT_LIST = listOf(EVENT)
+        private val EVENT_ENTITY = EventEntity(EVENT_ID, "url", "title")
+        private val EVENT_ENTITY_LIST = listOf(EVENT_ENTITY)
+        private val CREATE_EVENT = CreateEvent("url", "title")
+        private val UPDATE_EVENT = UpdateEvent("updatedUrl", "updatedTitle", "updatedDescription", LocalDate.of(2022, 2, 2), true)
+        private val DETAILED_EVENT = DetailedEvent(EVENT_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), false, listOf())
+        private val DETAILED_EVENT_ENTITY = DetailedEventEntity(EVENT_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), false, listOf())
     }
 }

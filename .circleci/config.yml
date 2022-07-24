@@ -1,4 +1,6 @@
 version: 2.1
+orbs: 
+  codecov: codecov/codecov@3.2.3
 commands:
   init_gradle:
     steps:
@@ -90,6 +92,7 @@ jobs:
           name: "Run test and test coverage"
           command: ./gradlew jacocoTestCoverageVerification --parallel
       - store_gradle_reports
+      - codecov/upload
   lint-integration-test:
     executor: node
     steps:
