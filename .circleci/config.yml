@@ -92,10 +92,7 @@ jobs:
           name: "Run test and test coverage"
           command: ./gradlew jacocoTestCoverageVerification --parallel
       - store_gradle_reports
-      - codecov/upload:
-          file: "web/build/test-results"
-      - codecov/upload:
-          file: "service/build/test-results"
+      - codecov/upload
   lint-integration-test:
     executor: node
     steps:
