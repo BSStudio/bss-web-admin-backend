@@ -4,6 +4,9 @@ import { DbUtils } from '../../database'
 
 describe('get /api/video', () => {
   const dbUtils = new DbUtils()
+  const videoEntity1 = videoEntity({ id: '01234567-0123-0123-0123-0123456789ab', url: 'url1', title: 'title1' })
+  const videoEntity2 = videoEntity({ id: '11234567-0123-0123-0123-0123456789ab', url: 'url2', title: 'title2' })
+  const videoEntity3 = videoEntity({ id: '21234567-0123-0123-0123-0123456789ab', url: 'url3', title: 'title3' })
   const defaultVideo = { uploadedAt: '2022-01-01', visible: false }
   const video1: Video = {
     id: '01234567-0123-0123-0123-0123456789ab',
@@ -112,11 +115,7 @@ describe('get /api/video', () => {
 
   it('should return ok and paginated videos', async () => {
     expect.assertions(4)
-    await dbUtils.addVideos([
-      videoEntity({ id: '01234567-0123-0123-0123-0123456789ab', url: 'url1', title: 'title1' }),
-      videoEntity({ id: '11234567-0123-0123-0123-0123456789ab', url: 'url2', title: 'title2' }),
-      videoEntity({ id: '21234567-0123-0123-0123-0123456789ab', url: 'url3', title: 'title3' }),
-    ])
+    await dbUtils.addVideos([videoEntity1, videoEntity2, videoEntity3])
 
     const response1 = await VideoEndpoint.getAllVideos({ page: 0, size: 2, sort: 'url,desc' })
     const response2 = await VideoEndpoint.getAllVideos({ page: 1, size: 2, sort: 'url,desc' })
@@ -172,11 +171,7 @@ describe('get /api/video', () => {
 
   it('should return ok and paginated videos sorted by url', async () => {
     expect.assertions(4)
-    await dbUtils.addVideos([
-      videoEntity({ id: '01234567-0123-0123-0123-0123456789ab', url: 'url1', title: 'title1' }),
-      videoEntity({ id: '11234567-0123-0123-0123-0123456789ab', url: 'url2', title: 'title2' }),
-      videoEntity({ id: '21234567-0123-0123-0123-0123456789ab', url: 'url3', title: 'title3' }),
-    ])
+    await dbUtils.addVideos([videoEntity1, videoEntity2, videoEntity3])
 
     const response1 = await VideoEndpoint.getAllVideos({ page: 0, size: 2 })
     const response2 = await VideoEndpoint.getAllVideos({ page: 1, size: 2 })
