@@ -1,4 +1,5 @@
 import { client } from './client'
+import { Page, PageableRequestParam } from '../interface'
 
 export interface Video {
   id: string
@@ -31,39 +32,8 @@ export interface DetailedVideo {
   visible: boolean
   crew: SimpleCrew[]
 }
-
 interface SimpleCrew {
   position: string
-}
-interface Sort {
-  empty: boolean
-  sorted: boolean
-  unsorted: boolean
-}
-interface Pageable {
-  offset: number
-  pageNumber: number
-  pageSize: number
-  paged: boolean
-  sort: Sort
-}
-interface Page<T> {
-  content: T[]
-  empty: boolean
-  first: boolean
-  last: boolean
-  number: number
-  numberOfElements: number
-  pageable: Pageable
-  size: number
-  sort: Sort
-  totalElements: number
-  totalPages: number
-}
-interface PageableRequestParam {
-  size?: number
-  page?: number
-  sort?: string
 }
 
 export class VideoEndpoint {

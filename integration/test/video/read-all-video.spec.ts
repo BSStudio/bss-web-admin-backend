@@ -38,7 +38,7 @@ describe('get /api/video', () => {
   it('should respond without pagination params and should have page size 20 by default', async () => {
     expect.assertions(2)
 
-    const response = await VideoEndpoint.getAllVideos({})
+    const response = await VideoEndpoint.getAllVideos()
 
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual({
