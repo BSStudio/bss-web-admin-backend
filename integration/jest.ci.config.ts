@@ -6,6 +6,7 @@ const config: Config.InitialOptions = {
   testEnvironment: require.resolve('./env/ci/test-environment.ts'),
   globalSetup: require.resolve('./env/ci/global-setup.ts'),
   globalTeardown: require.resolve('./env/ci/global-teardown.ts'),
+  maxWorkers: 1,
 }
 
 export default config

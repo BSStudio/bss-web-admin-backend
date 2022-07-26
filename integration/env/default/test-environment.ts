@@ -1,4 +1,4 @@
-import NodeEnvironment = require('jest-environment-node')
+import NodeEnvironment from 'jest-environment-node'
 
 export default class TestEnvironment extends NodeEnvironment {
   async setup(): Promise<void> {

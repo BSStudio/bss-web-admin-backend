@@ -31,7 +31,7 @@
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
-    "test": "jest --runInBand",
-    "test:ci": "jest --runInBand --config=jest.ci.config.ts"
+    "test": "jest",
+    "test:ci": "jest --config=jest.ci.config.ts"
   }
 }

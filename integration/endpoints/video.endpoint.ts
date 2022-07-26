@@ -1,4 +1,5 @@
 import { client } from './client'
+import { Page, PageableRequestParam } from '../interface'
 
 export interface Video {
   id: string
@@ -31,15 +32,14 @@ export interface DetailedVideo {
   visible: boolean
   crew: SimpleCrew[]
 }
-
 interface SimpleCrew {
   position: string
 }
 
 export class VideoEndpoint {
   static client = client
-  static getAllVideos(page: number, size: number) {
-    return this.client.get<Video[]>('/api/video', { params: { page, size } })
+  static getAllVideos(pageable?: PageableRequestParam) {
+    return this.client.get<Page<Video>>('/api/video', { params: { ...pageable } })
   }
   static createVideo(createVideo: CreateVideo) {
     return this.client.post<Video>('/api/video', createVideo)

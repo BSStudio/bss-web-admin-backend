@@ -17,7 +17,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
@@ -27,24 +27,24 @@ internal class DefaultVideoServiceTest {
 
     @MockK
     private lateinit var mockRepository: VideoRepository
+
     @MockK
     private lateinit var mockDetailedRepository: DetailedVideoRepository
+
     @MockK
     private lateinit var mockMapper: VideoMapper
+
     @InjectMockKs
     private lateinit var underTest: DefaultVideoService
 
     @Test
     internal fun `should return all videos`() {
-        val page = 0
-        val size = 10
-
-        every { mockRepository.findAll(PageRequest.of(0, 10)) } returns PageImpl(VIDEO_ENTITY_LIST)
+        every { mockRepository.findAll(PAGEABLE) } returns PageImpl(VIDEO_ENTITY_LIST)
         every { mockMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
 
-        val response = underTest.findAllVideos(page, size)
+        val response = underTest.findAllVideos(PAGEABLE)
 
-        Assertions.assertThat(response).isEqualTo(VIDEO_LIST)
+        Assertions.assertThat(response).isEqualTo(PAGED_VIDEOS)
     }
 
     @Test
@@ -136,11 +136,12 @@ internal class DefaultVideoServiceTest {
     }
 
     private companion object {
+        private val PAGEABLE = Pageable.unpaged()
         private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private val VIDEO_ENTITY = VideoEntity(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
         private val VIDEO_ENTITY_LIST = listOf(VIDEO_ENTITY)
         private val VIDEO = Video(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
-        private val VIDEO_LIST = listOf(VIDEO)
+        private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
         private val CREATE_VIDEO = CreateVideo("url", "title")
         private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
         private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
