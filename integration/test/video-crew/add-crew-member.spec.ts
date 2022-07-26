@@ -20,7 +20,7 @@ describe('post /api/videoCrew', () => {
 
     const response = await VideoCrewEndpoint.addVideoCrewMember(videoId, memberId, position1)
 
-    expect(response.status).toBe(200)
+    expect(response.status).toBe(201)
     expect(response.data).toStrictEqual([{ memberId, position: position1 }])
   })
 
@@ -32,9 +32,9 @@ describe('post /api/videoCrew', () => {
     const response1 = await VideoCrewEndpoint.addVideoCrewMember(videoId, memberId, position1)
     const response2 = await VideoCrewEndpoint.addVideoCrewMember(videoId, memberId, position2)
 
-    expect(response1.status).toBe(200)
+    expect(response1.status).toBe(201)
     expect(response1.data).toStrictEqual([{ memberId, position: position1 }])
-    expect(response2.status).toBe(200)
+    expect(response2.status).toBe(201)
     expect(response2.data).toStrictEqual([
       { memberId, position: position1 },
       { memberId, position: position2 },

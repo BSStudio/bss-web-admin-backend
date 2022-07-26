@@ -27,7 +27,7 @@ internal class VideoCrewControllerTest {
 
         val response = this.underTest.addPosition(VIDEO_ID, POSITION, MEMBER_ID)
 
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
         assertThat(response.body).isEqualTo(VIDEO_CREW_LIST)
     }
 
