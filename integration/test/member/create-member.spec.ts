@@ -12,21 +12,23 @@ describe('post /api/member', () => {
   const name = 'name'
 
   it('should create a new member', async () => {
-    expect.assertions(10)
+    expect.assertions(2)
 
     const createMember: CreateMember = { url, name }
     const response = await MemberEndpoint.createMember(createMember)
 
     expect(response.status).toBe(201)
-    expect(typeof response.data.id).toBe('string')
-    expect(response.data.url).toBe(url)
-    expect(response.data.name).toBe(name)
-    expect(response.data.description).toBe('')
-    expect(response.data.imageUrl).toBe('')
-    expect(response.data.joinedAt).toBe(new Date().toISOString().split('T')[0])
-    expect(response.data.role).toBe('')
-    expect(response.data.status).toBe('MEMBER_CANDIDATE_CANDIDATE')
-    expect(response.data.archived).toBe(false)
+    expect(response.data).toMatchObject({
+      id: expect.stringMatching(/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/),
+      url,
+      name,
+      description: '',
+      imageUrl: '',
+      joinedAt: new Date().toISOString().split('T')[0],
+      role: '',
+      status: 'MEMBER_CANDIDATE_CANDIDATE',
+      archived: false,
+    })
   })
   it('should not create a new member when url already exist', async () => {
     expect.assertions(1)

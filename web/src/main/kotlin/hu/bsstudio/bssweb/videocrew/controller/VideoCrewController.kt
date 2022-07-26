@@ -3,6 +3,7 @@ package hu.bsstudio.bssweb.videocrew.controller
 import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import hu.bsstudio.bssweb.videocrew.service.VideoCrewService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -19,7 +20,7 @@ class VideoCrewController(private val service: VideoCrewService) {
     fun addPosition(@RequestParam videoId: UUID, @RequestParam position: String, @RequestParam memberId: UUID): ResponseEntity<List<SimpleCrew>> {
         return VideoCrew(videoId, position, memberId)
             .let(service::addPosition)
-            .let { ResponseEntity.ok(it) }
+            .let { ResponseEntity.status(HttpStatus.CREATED).body(it) }
     }
 
     @DeleteMapping

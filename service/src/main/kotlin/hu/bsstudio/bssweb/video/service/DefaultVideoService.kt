@@ -9,10 +9,10 @@ import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.video.repository.VideoRepository
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import java.util.Optional
 import java.util.UUID
-import java.util.stream.Collectors
 
 class DefaultVideoService(
     private val repository: VideoRepository,
@@ -20,11 +20,9 @@ class DefaultVideoService(
     private val mapper: VideoMapper,
 ) : VideoService {
 
-    override fun findAllVideos(page: Int, size: Int): List<Video> {
-        return repository.findAll(PageRequest.of(page, size))
-            .get()
+    override fun findAllVideos(pageable: Pageable): Page<Video> {
+        return repository.findAll(pageable)
             .map(mapper::entityToModel)
-            .collect(Collectors.toList())
     }
 
     override fun insertVideo(createVideo: CreateVideo): Video {

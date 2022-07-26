@@ -1,7 +1,7 @@
 [versions]
 mockk = "1.12.4"
 springdoc = "1.6.9"
-springBoot = "2.7.1"
+springBoot = "2.7.2"
 springCloud = "2021.0.3"
 gradleKtlintPlugin = "10.3.0"
 springDependencyManagementPlugin = "1.0.12.RELEASE"

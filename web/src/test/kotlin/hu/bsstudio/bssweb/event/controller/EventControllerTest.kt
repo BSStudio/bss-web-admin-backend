@@ -5,29 +5,25 @@ import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.service.EventService
-import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
+@ExtendWith(MockKExtension::class)
 internal class EventControllerTest {
 
     @MockK
     private lateinit var mockService: EventService
-
+    @InjectMockKs
     private lateinit var underTest: EventController
-
-    @BeforeEach
-    internal fun setUp() {
-        MockKAnnotations.init(this)
-        this.underTest = EventController(mockService)
-    }
 
     @Test
     internal fun findAllEvent() {

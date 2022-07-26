@@ -5,6 +5,8 @@ import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.service.VideoService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -23,8 +25,8 @@ import java.util.UUID
 class VideoController(private val service: VideoService) {
 
     @GetMapping
-    fun getAllVideos(@RequestParam page: Int, @RequestParam size: Int): ResponseEntity<List<Video>> {
-        return service.findAllVideos(page, size)
+    fun getAllVideos(pageable: Pageable): ResponseEntity<Page<Video>> {
+        return service.findAllVideos(pageable)
             .let { ResponseEntity.ok(it) }
     }
 

@@ -33,6 +33,10 @@ val excluded = setOf(
 tasks.jacocoTestReport {
     // tests are required to run before generating the report
     dependsOn(tasks.test)
+    // require xml report
+    reports {
+        xml.required.set(true)
+    }
     // exclude excluded packages from test report
     classDirectories.setFrom(
         files(
