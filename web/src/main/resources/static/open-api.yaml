@@ -305,12 +305,14 @@ paths:
           schema:
             type: string
       responses:
-        200:
-          description: "OK"
+        201:
+          description: "Created"
           content:
             application/json:
               schema:
-                type: object
+                type: array
+                items:
+                  $ref: "#/components/schemas/SimpleCrew"
     delete:
       summary: "Delete position with member to the video"
       description: "Delete position with member to the video"
@@ -338,7 +340,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: array
+                items:
+                  $ref: "#/components/schemas/SimpleCrew"
   /api/event:
     get:
       summary: "Read all event"
@@ -351,32 +355,26 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
     post:
       summary: "Create event"
       description: "Create event"
       tags:
         - Event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEvent"
       responses:
         201:
           description: "Created"
           content:
             application/json:
               schema:
-                type: object
-  /api/event/archive:
-    put:
-      summary: "Archive event"
-      description: "Archive event"
-      tags:
-        - Event
-      responses:
-        201:
-          description: "Created"
-          content:
-            application/json:
-              schema:
-                type: object
+                $ref: "#/components/schemas/Event"
   /api/event/{eventId}:
     get:
       summary: "Read one event"
@@ -396,7 +394,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: "#/components/schemas/DetailedEvent"
     put:
       summary: "Update event"
       description: "Update event"
@@ -415,7 +413,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                $ref: "#/components/schemas/DetailedEvent"
     delete:
       summary: "Delete event"
       description: "Delete event"
@@ -431,23 +429,32 @@ paths:
       responses:
         200:
           description: "OK"
-          content:
-            application/json:
-              schema:
-                type: object
   /api/eventVideo:
     put:
       summary: "Add video to event"
       description: "Add video to event"
       tags:
         - EventVideo
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: videoId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         200:
           description: "OK"
           content:
             application/json:
               schema:
-                type: object
+                $ref: "#/components/schemas/DetailedEvent"
   /api/eventVideo/{eventId}/{videoId}:
     delete:
       summary: "Delete video from event"
@@ -470,10 +477,6 @@ paths:
       responses:
         200:
           description: "OK"
-          content:
-            application/json:
-              schema:
-                type: object
 components:
   schemas:
     Sort:
@@ -598,7 +601,7 @@ components:
     CreateVideo:
       type: object
       properties:
-        id:
+        url:
           type: string
           nullable: false
         title:
@@ -662,3 +665,70 @@ components:
             thumbnailUrl:
               type: string
               nullable: true
+    SimpleCrew:
+      type: object
+      properties:
+        position:
+          type: string
+        memberId:
+          type: string
+          format: uuid
+    CreateEvent:
+      type: object
+      properties:
+        url:
+          type: string
+        title:
+          type: string
+    DetailedEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        visible:
+          type: boolean
+        videos:
+          type: array
+          items:
+            $ref: "#/components/schemas/Video"
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        visible:
+          type: boolean
+    UpdateEvent:
+      type: object
+      properties:
+        url:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        visible:
+          type: boolean
