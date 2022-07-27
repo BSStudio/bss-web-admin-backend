@@ -3,6 +3,7 @@ import * as fs from 'fs/promises'
 import mkdirp = require('mkdirp')
 import * as path from 'path'
 import jestTempDir from './jest-temp-dir'
+import('dotenv/config')
 
 const BUILD_CONTEXT = './..'
 const COMPOSE_FILE = process.env.DOCKER_COMPOSE_FILE_NAME || 'docker-compose.ci.yml'

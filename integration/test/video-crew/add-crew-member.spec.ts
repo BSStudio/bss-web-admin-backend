@@ -22,7 +22,7 @@ describe('post /api/videoCrew', () => {
 
     expect(response.status).toBe(201)
     expect(response.data).toStrictEqual([{ memberId, position: position1 }])
-  }, 8000)
+  })
 
   it('should return all crew members under the video after adding a position', async () => {
     expect.assertions(4)
@@ -39,5 +39,5 @@ describe('post /api/videoCrew', () => {
       { memberId, position: position1 },
       { memberId, position: position2 },
     ])
-  }, 8000)
+  })
 })
