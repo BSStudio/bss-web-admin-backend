@@ -17,6 +17,7 @@ ARG BUILD_ARG="bootWar --parallel"
 RUN ./gradlew $BUILD_ARG
 
 FROM tomcat:jre17
+RUN apt-get install curl
 ARG BUILD_ROOT=/usr/src/app
 ARG BOOT_WAR=$BUILD_ROOT/app/build/libs/*.war
 COPY --from=build $BOOT_WAR $CATALINA_HOME/webapps/ROOT.war
