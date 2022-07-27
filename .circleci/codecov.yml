@@ -3,3 +3,6 @@ coverage:
     project:
       default:
         target: 100
+codecov:
+  notify:
+    wait_for_ci: false
