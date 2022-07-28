@@ -130,7 +130,7 @@ jobs:
       - init_npm
       - run:
           name: Run integration test
-          command: npm run test:ci -- --ci --testTimeout 8000
+          command: npm run test:ci -- --ci --testTimeout 10000
           working_directory: integration
           environment:
             DEBUG: testcontainers*
