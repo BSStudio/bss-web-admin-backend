@@ -39,7 +39,7 @@ commands:
     steps:
       - checkout
       - restore_cache:
-          key: v2-docker-image-{{ .Branch }}
+          key: v3-docker-image-{{ .Branch }}
       - run:
           name: Restore cache
           command: |
@@ -50,11 +50,11 @@ commands:
           name: Save Docker image layer cache
           command: |
             mkdir -p ~/caches
-            docker save -o ~/caches/image.tar $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
+            docker save -o ~/caches/image.tar $DOCKERHUB_USERNAME/$IMAGE_NAME:<<parameters.tag>>
       - save_cache:
           paths:
             - ~/cache/image.tar
-          key: v2-docker-image-{{ .Branch }}-{{ epoch }}
+          key: v3-docker-image-{{ .Branch }}-{{ checksum <<parameters.filename>> }}
     parameters:
       tag:
         type: string
@@ -130,7 +130,7 @@ jobs:
       - init_npm
       - run:
           name: Run integration test
-          command: npm run test:ci -- --ci --testTimeout 10000
+          command: npm run test:ci -- --ci --testTimeout 12000
           working_directory: integration
           environment:
             DEBUG: testcontainers*
