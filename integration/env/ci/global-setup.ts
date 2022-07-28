@@ -3,9 +3,10 @@ import * as fs from 'fs/promises'
 import mkdirp = require('mkdirp')
 import * as path from 'path'
 import jestTempDir from './jest-temp-dir'
+import('dotenv/config')
 
 const BUILD_CONTEXT = './..'
-const COMPOSE_FILE = 'docker-compose.ci.yml'
+const COMPOSE_FILE = process.env.DOCKER_COMPOSE_FILE_NAME || 'docker-compose.ci.yml'
 
 export default async function (): Promise<void[]> {
   const dockerComposeEnvironment = await new DockerComposeEnvironment(BUILD_CONTEXT, COMPOSE_FILE)

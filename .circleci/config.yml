@@ -29,7 +29,7 @@ commands:
           keys:
             - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
       - run:
-          command: npm install --no-fund --no-audit
+          command: npm clean-install --no-fund --no-audit
           working_directory: integration
       - save_cache:
           paths:
@@ -39,22 +39,29 @@ commands:
     steps:
       - checkout
       - restore_cache:
-          key: v2-docker-image-{{ .Branch }}
+          key: v3-docker-image-{{ .Branch }}
       - run:
           name: Restore cache
           command: |
             set +o pipefail
             docker load -i ~/caches/image.tar | true
-      - run: docker build . --tag $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
+      - run: docker build . --file <<parameters.filename>> --tag $DOCKERHUB_USERNAME/$IMAGE_NAME:<<parameters.tag>>
       - run:
           name: Save Docker image layer cache
           command: |
             mkdir -p ~/caches
-            docker save -o ~/caches/image.tar $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
+            docker save -o ~/caches/image.tar $DOCKERHUB_USERNAME/$IMAGE_NAME:<<parameters.tag>>
       - save_cache:
           paths:
             - ~/cache/image.tar
-          key: v2-docker-image-{{ .Branch }}-{{ epoch }}
+          key: v3-docker-image-{{ .Branch }}-{{ checksum <<parameters.filename>> }}
+    parameters:
+      tag:
+        type: string
+        default: latest
+      filename:
+        type: string
+        default: Dockerfile
 executors:
   jdk:
     docker:
@@ -117,10 +124,29 @@ jobs:
             DEBUG: testcontainers*
       - store_test_results:
           path: integration/out/jest
+  integration-test-war:
+    executor: ubuntu-docker
+    steps:
+      - init_npm
+      - run:
+          name: Run integration test
+          command: npm run test:ci -- --ci --testTimeout 20000
+          working_directory: integration
+          environment:
+            DEBUG: testcontainers*
+            DOCKER_COMPOSE_FILE_NAME: docker-compose.war.ci.yml
+      - store_test_results:
+          path: integration/out/jest
   docker-build:
     executor: ubuntu-docker
     steps:
       - docker_build
+  docker-build-war:
+    executor: ubuntu-docker
+    steps:
+      - docker_build:
+          tag: war
+          filename: war.Dockerfile
   docker-push:
     executor: ubuntu-docker
     steps:
@@ -134,8 +160,10 @@ workflows:
       - test
       - coverage
       - integration-test
+      - integration-test-war
       - lint-integration-test
       - docker-build
+      - docker-build-war
       - docker-push:
           filters:
             branches:

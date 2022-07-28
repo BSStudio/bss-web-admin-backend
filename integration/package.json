@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "axios": "0.27.2",
+    "dotenv": "16.0.1",
     "pg": "8.7.3 "
   },
   "devDependencies": {
@@ -10,8 +11,8 @@
     "@types/jest": "28.1.6",
     "@types/mkdirp": "1.0.2",
     "@types/node": "ts3.7",
-    "@types/rimraf": "3.0.2",
     "@types/pg": "8.6.5",
+    "@types/rimraf": "3.0.2",
     "@typescript-eslint/eslint-plugin": "5.30.7",
     "@typescript-eslint/parser": "5.30.7",
     "eslint": "8.20.0",
