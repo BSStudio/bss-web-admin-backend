@@ -29,7 +29,7 @@ commands:
           keys:
             - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
       - run:
-          command: npm install --no-fund --no-audit
+          command: npm clean-install --no-fund --no-audit
           working_directory: integration
       - save_cache:
           paths:
@@ -130,7 +130,7 @@ jobs:
       - init_npm
       - run:
           name: Run integration test
-          command: npm run test:ci -- --ci
+          command: npm run test:ci -- --ci --testTimeout 8000
           working_directory: integration
           environment:
             DEBUG: testcontainers*
