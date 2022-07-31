@@ -8,12 +8,18 @@ services:
       - "127.0.0.1:8080:8080"
     depends_on:
       - db
+      - influx
     environment:
-      spring.datasource.url: jdbc:postgresql://db:5432/postgres?currentSchema=bss_web
-      spring.datasource.username: postgres
-      spring.datasource.password: postgres
-      spring.datasource.driver-class-name: org.postgresql.Driver
-      spring.jpa.open-in-view: false
+      spring.datasource.url: "jdbc:postgresql://db:5432/postgres?currentSchema=bss_web"
+      spring.datasource.username: "postgres"
+      spring.datasource.password: "postgres"
+      spring.datasource.driver-class-name: "org.postgresql.Driver"
+      management.metrics.export.influx.uri: "http://influx:8086"
+      management.metrics.export.influx.token: "token"
+      management.metrics.export.influx.org: "org"
+      management.metrics.export.influx.user-name: "user"
+      management.metrics.export.influx.password: "password"
+      management.metrics.export.influx.bucket: "bucket"
   db:
     image: postgres:alpine
     environment:
@@ -22,3 +28,14 @@ services:
       - "127.0.0.1:5432:5432"
     volumes:
       - "./db:/docker-entrypoint-initdb.d"
+  influx:
+    image: "influxdb:alpine"
+    ports:
+      - "127.0.0.1:8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: "setup"
+      DOCKER_INFLUXDB_INIT_USERNAME: "user"
+      DOCKER_INFLUXDB_INIT_PASSWORD: "password"
+      DOCKER_INFLUXDB_INIT_ORG: "org"
+      DOCKER_INFLUXDB_INIT_BUCKET: "bucket"
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "token"
