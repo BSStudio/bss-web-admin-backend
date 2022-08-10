@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class MemberServiceConfig(val repository: MemberRepository) {
+class MemberServiceConfig(private val repository: MemberRepository) {
 
     @Bean
     fun memberService(memberMapper: MemberMapper): MemberService {

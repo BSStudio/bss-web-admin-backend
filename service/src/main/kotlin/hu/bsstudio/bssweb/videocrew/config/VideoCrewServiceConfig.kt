@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class VideoCrewServiceConfig(val repository: VideoCrewRepository) {
+class VideoCrewServiceConfig(private val repository: VideoCrewRepository) {
 
     @Bean
     fun defaultVideoCrewService(videoCrewMapper: VideoCrewMapper): VideoCrewService {

@@ -13,7 +13,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.PageImpl
@@ -44,7 +44,7 @@ internal class DefaultVideoServiceTest {
 
         val response = underTest.findAllVideos(PAGEABLE)
 
-        Assertions.assertThat(response).isEqualTo(PAGED_VIDEOS)
+        assertThat(response).isEqualTo(PAGED_VIDEOS)
     }
 
     @Test
@@ -55,7 +55,7 @@ internal class DefaultVideoServiceTest {
 
         val response = underTest.insertVideo(CREATE_VIDEO)
 
-        Assertions.assertThat(response).isEqualTo(VIDEO)
+        assertThat(response).isEqualTo(VIDEO)
     }
 
     @Test
@@ -68,7 +68,7 @@ internal class DefaultVideoServiceTest {
 
         val response = underTest.changeVideoVisibility(videoIds, false)
 
-        Assertions.assertThat(response).isEqualTo(listOf(VIDEO_ID))
+        assertThat(response).isEqualTo(listOf(VIDEO_ID))
     }
 
     @Test
@@ -78,7 +78,7 @@ internal class DefaultVideoServiceTest {
 
         val response = underTest.findVideoById(VIDEO_ID)
 
-        Assertions.assertThat(response).isEqualTo(Optional.of(DETAILED_VIDEO))
+        assertThat(response).hasValue(DETAILED_VIDEO)
     }
 
     @Test
@@ -87,7 +87,7 @@ internal class DefaultVideoServiceTest {
 
         val response = underTest.findVideoById(VIDEO_ID)
 
-        Assertions.assertThat(response).isEqualTo(Optional.empty<Video>())
+        assertThat(response).isEmpty
     }
 
     @Test
@@ -96,7 +96,7 @@ internal class DefaultVideoServiceTest {
 
         val response = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
-        Assertions.assertThat(response).isEqualTo(Optional.empty<Video>())
+        assertThat(response).isEmpty
     }
 
     @Test
@@ -125,7 +125,7 @@ internal class DefaultVideoServiceTest {
 
         val response = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
-        Assertions.assertThat(response).isEqualTo(Optional.of(updatedVideo))
+        assertThat(response).hasValue(updatedVideo)
     }
 
     @Test
