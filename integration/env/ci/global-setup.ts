@@ -12,6 +12,7 @@ export default async function (): Promise<void[]> {
   const dockerComposeEnvironment = await new DockerComposeEnvironment(BUILD_CONTEXT, COMPOSE_FILE)
     .withWaitStrategy('app_1', Wait.forHealthCheck())
     .withWaitStrategy('db_1', Wait.forHealthCheck())
+    .withWaitStrategy('influx_1', Wait.forHealthCheck())
     .up()
 
   globalThis.dockerComposeEnvironment = dockerComposeEnvironment
