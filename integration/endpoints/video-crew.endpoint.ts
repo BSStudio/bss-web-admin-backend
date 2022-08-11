@@ -6,7 +6,7 @@ export interface SimpleCrew {
 }
 
 export class VideoCrewEndpoint {
-  static client = client
+  private static client = client
   static addVideoCrewMember(videoId: string, memberId: string, position: string) {
     return this.client.post<SimpleCrew[]>('/api/videoCrew', null, { params: { videoId, memberId, position } })
   }
