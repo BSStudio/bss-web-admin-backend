@@ -11,7 +11,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
@@ -35,7 +35,7 @@ internal class DefaultMemberServiceTest {
 
         val response = underTest.findAllMembers()
 
-        Assertions.assertThat(response).isEqualTo(MEMBER_LIST)
+        assertThat(response).isEqualTo(MEMBER_LIST)
     }
 
     @Test
@@ -46,7 +46,7 @@ internal class DefaultMemberServiceTest {
 
         val response = underTest.insertMember(CREATE_MEMBER)
 
-        Assertions.assertThat(response).isEqualTo(MEMBER)
+        assertThat(response).isEqualTo(MEMBER)
     }
 
     @Test
@@ -59,7 +59,7 @@ internal class DefaultMemberServiceTest {
 
         val response = underTest.archiveMembers(memberIds)
 
-        Assertions.assertThat(response).isEqualTo(listOf(MEMBER_ID))
+        assertThat(response).isEqualTo(listOf(MEMBER_ID))
     }
 
     @Test
@@ -72,7 +72,7 @@ internal class DefaultMemberServiceTest {
 
         val response = underTest.archiveMembers(memberIds, true)
 
-        Assertions.assertThat(response).isEqualTo(listOf(MEMBER_ID))
+        assertThat(response).isEqualTo(listOf(MEMBER_ID))
     }
 
     @Test
@@ -82,7 +82,7 @@ internal class DefaultMemberServiceTest {
 
         val response = underTest.findMemberById(MEMBER_ID)
 
-        Assertions.assertThat(response).isEqualTo(Optional.of(MEMBER))
+        assertThat(response).hasValue(MEMBER)
     }
 
     @Test
@@ -91,7 +91,7 @@ internal class DefaultMemberServiceTest {
 
         val response = underTest.findMemberById(MEMBER_ID)
 
-        Assertions.assertThat(response).isEqualTo(Optional.empty<Member>())
+        assertThat(response).isEmpty
     }
 
     @Test
@@ -100,7 +100,7 @@ internal class DefaultMemberServiceTest {
 
         val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        Assertions.assertThat(response).isEqualTo(Optional.empty<Member>())
+        assertThat(response).isEmpty
     }
 
     @Test
@@ -131,7 +131,7 @@ internal class DefaultMemberServiceTest {
 
         val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        Assertions.assertThat(response).isEqualTo(Optional.of(updatedMember))
+        assertThat(response).hasValue(updatedMember)
     }
 
     @Test

@@ -16,6 +16,8 @@ tags:
     description: "REST operations for events"
   - name: EventVideo
     description: "REST operations for event videos"
+  - name: Metrics
+    description: "REST operations for metrics"
 paths:
   /api/member:
     get:
@@ -477,6 +479,19 @@ paths:
       responses:
         200:
           description: "OK"
+  /api/metrics:
+    get:
+      summary: "Read metrics"
+      description: "Read metrics"
+      tags:
+        - Metrics
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BssMetrics"
 components:
   schemas:
     Sort:
@@ -732,3 +747,12 @@ components:
           format: date
         visible:
           type: boolean
+    BssMetrics:
+      type: object
+      properties:
+        videoCount:
+          type: integer
+        eventCount:
+          type: integer
+        memberCount:
+          type: integer

@@ -34,7 +34,7 @@ export interface UpdateEvent {
 }
 
 export class EventEndpoint {
-  static client = client
+  private static client = client
   static getAllEvents() {
     return this.client.get<Event[]>('/api/event')
   }

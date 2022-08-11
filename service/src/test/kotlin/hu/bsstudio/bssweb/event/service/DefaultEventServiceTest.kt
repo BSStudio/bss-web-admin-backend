@@ -86,7 +86,7 @@ internal class DefaultEventServiceTest {
 
         val response = underTest.findEventById(EVENT_ID)
 
-        assertThat(response).isEqualTo(Optional.of(DETAILED_EVENT))
+        assertThat(response).hasValue(DETAILED_EVENT)
     }
 
     @Test
@@ -95,7 +95,7 @@ internal class DefaultEventServiceTest {
 
         val response = underTest.findEventById(EVENT_ID)
 
-        assertThat(response).isEqualTo(Optional.empty<DetailedEvent>())
+        assertThat(response).isEmpty
     }
 
     @Test
@@ -104,7 +104,7 @@ internal class DefaultEventServiceTest {
 
         val response = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
-        assertThat(response).isEqualTo(Optional.empty<DetailedEvent>())
+        assertThat(response).isEmpty
     }
 
     @Test
@@ -129,7 +129,7 @@ internal class DefaultEventServiceTest {
 
         val response = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
-        assertThat(response).isEqualTo(Optional.of(updatedDetailedEvent))
+        assertThat(response).hasValue(updatedDetailedEvent)
     }
 
     @Test

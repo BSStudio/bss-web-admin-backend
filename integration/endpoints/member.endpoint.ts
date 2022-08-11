@@ -30,7 +30,7 @@ export interface UpdateMember {
 }
 
 export class MemberEndpoint {
-  static client = client
+  private static client = client
   static getAllMembers() {
     return this.client.get<Member[]>('/api/member')
   }
