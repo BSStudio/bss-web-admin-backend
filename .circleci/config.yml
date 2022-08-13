@@ -65,7 +65,7 @@ commands:
 executors:
   jdk:
     docker:
-      - image: cimg/openjdk:17.0
+      - image: cimg/openjdk:18.0
   node:
     docker:
       - image: cimg/node:16.16
