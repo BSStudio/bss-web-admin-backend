@@ -1,5 +1,5 @@
 [versions]
-mockk = "1.12.5"
+mockk = "1.12.7"
 springdoc = "1.6.10"
 springBoot = "2.7.3"
 springCloud = "2021.0.3"
