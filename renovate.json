@@ -28,8 +28,15 @@
       "addLabels": ["docker"]
     },
     {
-      "description": "Group all minor and patch updates together for npm and gradle.",
-      "matchManagers": ["npm", "gradle-wrapper"],
+      "description": "Group all minor and patch updates together for npm.",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    },
+    {
+      "description": "Group all minor and patch updates together for gradle.",
+      "matchManagers": ["gradle"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch"
