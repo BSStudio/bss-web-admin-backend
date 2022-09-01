@@ -21,7 +21,7 @@ services:
       management.metrics.export.influx.password: "password"
       management.metrics.export.influx.bucket: "bucket"
   db:
-    image: postgres:alpine
+    image: "postgres:9.6.24-alpine"
     environment:
       POSTGRES_PASSWORD: "postgres"
     ports:
@@ -29,7 +29,7 @@ services:
     volumes:
       - "./db:/docker-entrypoint-initdb.d"
   influx:
-    image: "influxdb:alpine"
+    image: "influxdb:2.4.0-alpine"
     ports:
       - "127.0.0.1:8086:8086"
     environment:
