@@ -1,3 +1,5 @@
+CREATE EXTENSION pgcrypto;
+
 CREATE SCHEMA bss_web;
 
 CREATE TABLE bss_web.status
