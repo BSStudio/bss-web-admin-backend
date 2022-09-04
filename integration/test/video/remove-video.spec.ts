@@ -1,6 +1,5 @@
-import { VideoEndpoint } from '../../endpoints/video.endpoint'
-import { DbUtils } from '../../database'
-import { videoEntity } from '../../database/video.queries'
+import { DbUtils, videoEntity } from '../../database'
+import { VideoEndpoint } from '../../endpoints'
 
 describe('delete /api/video/{videoId}', () => {
   const dbUtils = new DbUtils()

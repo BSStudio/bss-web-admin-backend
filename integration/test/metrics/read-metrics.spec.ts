@@ -1,8 +1,5 @@
-import { DbUtils } from '../../database'
-import { memberEntity } from '../../database/member.queries'
-import { videoEntity } from '../../database/video.queries'
-import { eventEntity } from '../../database/event.queries'
-import { BssMetrics, MetricsEndpoint } from '../../endpoints/metrics.endpoint'
+import { DbUtils, eventEntity, memberEntity, videoEntity } from '../../database'
+import { BssMetrics, MetricsEndpoint } from '../../endpoints'
 
 describe('get /api/metrics', () => {
   const dbUtils = new DbUtils()

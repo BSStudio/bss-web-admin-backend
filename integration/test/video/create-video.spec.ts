@@ -1,6 +1,6 @@
-import { CreateVideo, VideoEndpoint } from '../../endpoints/video.endpoint'
-import { DbUtils } from '../../database'
-import { videoEntity } from '../../database/video.queries'
+import { DbUtils, videoEntity } from '../../database'
+import { CreateVideo, VideoEndpoint } from '../../endpoints'
+import { UUID_REGEX, dateToday } from '../../util'
 
 describe('post /api/video', () => {
   const dbUtils = new DbUtils()
@@ -19,11 +19,11 @@ describe('post /api/video', () => {
 
     expect(response.status).toBe(201)
     expect(response.data).toMatchObject({
-      id: expect.stringMatching(/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/),
+      id: expect.stringMatching(UUID_REGEX) as string,
       url,
       title,
       visible: false,
-      uploadedAt: new Date().toISOString().split('T')[0],
+      uploadedAt: dateToday(),
     })
   })
   it('should return internal server error when url already exist', async () => {

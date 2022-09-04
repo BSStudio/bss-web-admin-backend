@@ -1,8 +1,5 @@
-import { DbUtils } from '../../database'
-import { eventEntity } from '../../database/event.queries'
-import { videoEntity } from '../../database/video.queries'
-import { DetailedEvent } from '../../endpoints/event.endpoint'
-import { EventVideoEndpoint } from '../../endpoints/event-video.endpoint'
+import { DbUtils, eventEntity, videoEntity } from '../../database'
+import { DetailedEvent, EventVideoEndpoint } from '../../endpoints'
 
 describe('post /api/eventVideo?eventId={eventId}&videoId={videoId}', () => {
   const dbUtils = new DbUtils()
