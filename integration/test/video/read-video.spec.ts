@@ -1,6 +1,5 @@
-import { DetailedVideo, VideoEndpoint } from '../../endpoints/video.endpoint'
-import { DbUtils } from '../../database'
-import { videoEntity } from '../../database/video.queries'
+import { DbUtils, videoEntity } from '../../database'
+import { DetailedVideo, VideoEndpoint } from '../../endpoints'
 
 describe('get /api/video/{videoId}', () => {
   const dbUtils = new DbUtils()

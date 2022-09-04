@@ -1,6 +1,5 @@
-import { DbUtils } from '../../database'
-import { Member, MemberEndpoint, UpdateMember } from '../../endpoints/member.endpoint'
-import { memberEntity } from '../../database/member.queries'
+import { DbUtils, memberEntity } from '../../database'
+import { Member, MemberEndpoint, UpdateMember } from '../../endpoints'
 
 describe('put /api/member/{memberId}', () => {
   const dbUtils = new DbUtils()

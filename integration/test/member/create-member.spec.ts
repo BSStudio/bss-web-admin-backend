@@ -1,6 +1,6 @@
-import { DbUtils } from '../../database'
-import { CreateMember, MemberEndpoint } from '../../endpoints/member.endpoint'
-import { memberEntity } from '../../database/member.queries'
+import { DbUtils, memberEntity } from '../../database'
+import { CreateMember, MemberEndpoint } from '../../endpoints'
+import { DATE_TODAY, UUID_REGEX } from '../../util'
 
 describe('post /api/member', () => {
   const dbUtils = new DbUtils()
@@ -19,12 +19,12 @@ describe('post /api/member', () => {
 
     expect(response.status).toBe(201)
     expect(response.data).toMatchObject({
-      id: expect.stringMatching(/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/),
+      id: expect.stringMatching(UUID_REGEX) as string,
       url,
       name,
       description: '',
       imageUrl: '',
-      joinedAt: new Date().toISOString().split('T')[0],
+      joinedAt: DATE_TODAY,
       role: '',
       status: 'MEMBER_CANDIDATE_CANDIDATE',
       archived: false,
