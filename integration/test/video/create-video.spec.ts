@@ -1,6 +1,6 @@
 import { DbUtils, videoEntity } from '../../database'
 import { CreateVideo, VideoEndpoint } from '../../endpoints'
-import { DATE_TODAY, UUID_REGEX } from '../../util'
+import { UUID_REGEX, dateToday } from '../../util'
 
 describe('post /api/video', () => {
   const dbUtils = new DbUtils()
@@ -23,7 +23,7 @@ describe('post /api/video', () => {
       url,
       title,
       visible: false,
-      uploadedAt: DATE_TODAY,
+      uploadedAt: dateToday(),
     })
   })
   it('should return internal server error when url already exist', async () => {

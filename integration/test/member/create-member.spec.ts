@@ -1,6 +1,6 @@
 import { DbUtils, memberEntity } from '../../database'
 import { CreateMember, MemberEndpoint } from '../../endpoints'
-import { DATE_TODAY, UUID_REGEX } from '../../util'
+import { UUID_REGEX, dateToday } from '../../util'
 
 describe('post /api/member', () => {
   const dbUtils = new DbUtils()
@@ -24,7 +24,7 @@ describe('post /api/member', () => {
       name,
       description: '',
       imageUrl: '',
-      joinedAt: DATE_TODAY,
+      joinedAt: dateToday(),
       role: '',
       status: 'MEMBER_CANDIDATE_CANDIDATE',
       archived: false,

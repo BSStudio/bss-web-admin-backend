@@ -1,6 +1,6 @@
 import { DbUtils, eventEntity } from '../../database'
 import { EventEndpoint } from '../../endpoints'
-import { DATE_TODAY, UUID_REGEX } from '../../util'
+import { UUID_REGEX, dateToday } from '../../util'
 
 describe('post /api/event', () => {
   const dbUtils = new DbUtils()
@@ -19,7 +19,7 @@ describe('post /api/event', () => {
       url,
       title,
       description: '',
-      date: DATE_TODAY,
+      date: dateToday(),
       visible: false,
     })
   })
