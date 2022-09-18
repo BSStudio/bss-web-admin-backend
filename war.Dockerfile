@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-alpine as build
+FROM eclipse-temurin:17.0.4.1_1-jdk-alpine as build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                  ./
@@ -16,7 +16,7 @@ COPY ./ ./
 ARG BUILD_ARG="bootWar --parallel"
 RUN ./gradlew $BUILD_ARG
 
-FROM tomcat:9-jre17
+FROM tomcat:9.0.65-jre17-temurin-jammy as app
 RUN apt-get install curl
 ARG BUILD_ROOT=/usr/src/app
 ARG BOOT_WAR=$BUILD_ROOT/app/build/libs/*.war

@@ -141,7 +141,7 @@ internal class DefaultEventServiceTest {
 
     private companion object {
         private val EVENT_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private val EVENT = Event(EVENT_ID, "url", "name", "description", LocalDate.of(2022, 1, 1), false)
+        private val EVENT = Event(EVENT_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), false)
         private val EVENT_LIST = listOf(EVENT)
         private val EVENT_ENTITY = EventEntity(EVENT_ID, "url", "title")
         private val EVENT_ENTITY_LIST = listOf(EVENT_ENTITY)
