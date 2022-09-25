@@ -9,7 +9,7 @@ gradleKtlintPlugin = "11.0.0"
 springDependencyManagementPlugin = "1.0.14.RELEASE"
 
 [libraries]
-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk = { module = "io.mockk:mockk-jvm", version.ref = "mockk" }
 springCloud = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloud" }
 springdocOpenapiUi = { module = "org.springdoc:springdoc-openapi-ui", version.ref = "springdoc" }
 
