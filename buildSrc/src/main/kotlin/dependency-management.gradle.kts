@@ -8,7 +8,7 @@ repositories {
 }
 
 extra["springCloudVersion"] = "2021.0.4"
-extra["mockkVersion"] = "1.12.8"
+extra["mockkVersion"] = "1.13.1"
 
 dependencyManagement {
     imports {

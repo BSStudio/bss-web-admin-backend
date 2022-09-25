@@ -8,7 +8,7 @@ dependencies {
         exclude(module = "mockito-core") // require developers to use mockk
         exclude(module = "hamcrest")     // require developers to use assertJ
     }
-    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+    testImplementation("io.mockk:mockk-jvm:${property("mockkVersion")}")
 }
 
 tasks.test {
