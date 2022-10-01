@@ -1,6 +1,6 @@
 [versions]
 # update in buildSrc/src/main/kotlin/dependency-management.gradle.kts
-mockk = "1.13.1"
+mockk = "1.13.2"
 springdoc = "1.6.11"
 springBoot = "2.7.4"
 # update in buildSrc/src/main/kotlin/dependency-management.gradle.kts
