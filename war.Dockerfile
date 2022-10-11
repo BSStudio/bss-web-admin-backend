@@ -16,7 +16,7 @@ COPY ./ ./
 ARG BUILD_ARG="bootWar --parallel"
 RUN ./gradlew $BUILD_ARG
 
-FROM tomcat:9.0.67-jre17-temurin-jammy as app
+FROM tomcat:9.0.68-jre17-temurin-jammy as app
 RUN apt-get install curl
 ARG BUILD_ROOT=/usr/src/app
 ARG BOOT_WAR=$BUILD_ROOT/app/build/libs/*.war
