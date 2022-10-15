@@ -1,15 +1,15 @@
 FROM eclipse-temurin:17.0.4.1_1-jdk-alpine as build
 WORKDIR /usr/src/app
 # cache dependencies
-COPY ./gradlew                  ./
-COPY ./settings.gradle.kts      ./
-COPY ./gradle                   ./gradle/
-COPY ./buildSrc/src             ./buildSrc/src/
-COPY ./buildSrc/*.gradle.kts    ./buildSrc/
-COPY ./web/build.gradle.kts     ./web/
-COPY ./service/build.gradle.kts ./service/
-COPY ./data/build.gradle.kts    ./data/
-COPY ./app/build.gradle.kts     ./app/
+COPY ./gradlew                         ./
+COPY ./settings.gradle.kts             ./
+COPY ./gradle                          ./gradle/
+COPY ./buildSrc/src                    ./buildSrc/src/
+COPY ./buildSrc/*.gradle.kts           ./buildSrc/
+COPY ./server/build.gradle.kts         ./server/
+COPY ./server/web/build.gradle.kts     ./server/web/
+COPY ./server/service/build.gradle.kts ./server/service/
+COPY ./server/data/build.gradle.kts    ./server/data/
 RUN ./gradlew
 # build
 COPY ./ ./
