@@ -134,7 +134,7 @@ jobs:
           working_directory: integration
           environment:
             DEBUG: testcontainers*
-            DOCKER_COMPOSE_FILE_NAME: docker-compose.war.ci.yml
+            DOCKER_COMPOSE_FILE_NAME: docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml
       - store_test_results:
           path: integration/out/jest
   docker-build:

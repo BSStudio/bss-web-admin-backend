@@ -6,7 +6,7 @@ import jestTempDir from './jest-temp-dir'
 import('dotenv/config')
 
 const BUILD_CONTEXT = './..'
-const COMPOSE_FILE = process.env.DOCKER_COMPOSE_FILE_NAME || 'docker-compose.ci.yml'
+const COMPOSE_FILE = process.env.DOCKER_COMPOSE_FILE_NAME?.split(',') || ['docker-compose.yml', 'docker-compose.ci.yml']
 
 export default async function (): Promise<void[]> {
   const dockerComposeEnvironment = await new DockerComposeEnvironment(BUILD_CONTEXT, COMPOSE_FILE)

@@ -5,6 +5,12 @@ services:
       context: "./"
     ports:
       - "127.0.0.1:8080:8080"
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     depends_on:
       - db
       - influx
@@ -25,6 +31,12 @@ services:
       POSTGRES_PASSWORD: "postgres"
     ports:
       - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: "pg_isready -q"
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     volumes:
       - "./db:/docker-entrypoint-initdb.d"
   influx:
