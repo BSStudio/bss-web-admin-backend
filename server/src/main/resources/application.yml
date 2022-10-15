@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: BSS Web admin API
+  jpa:
+    open-in-view: false
+springdoc:
+  swagger-ui:
+    url: /open-api.yaml
+    display-request-duration: true
+    use-root-path: true
