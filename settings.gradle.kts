@@ -1,2 +1,7 @@
 rootProject.name = "bss-web-admin-backend"
-include("app", "web", "service", "data")
+include(
+    "server",
+    "server:web",
+    "server:service",
+    "server:data"
+)

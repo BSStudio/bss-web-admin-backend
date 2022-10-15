@@ -4,6 +4,6 @@ plugins {
 }
 
 dependencies {
-    api(project(":web"))
+    api(project(":server:web"))
     runtimeOnly("io.micrometer:micrometer-registry-influx")
 }
