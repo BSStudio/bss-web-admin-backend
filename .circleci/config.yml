@@ -1,6 +1,6 @@
 version: 2.1
 orbs: 
-  codecov: codecov/codecov@3.2.3
+  codecov: codecov/codecov@3.2.4
 commands:
   init_gradle:
     steps:
@@ -68,7 +68,7 @@ executors:
       - image: cimg/openjdk:17.0
   node:
     docker:
-      - image: cimg/node:16.17
+      - image: cimg/node:16.18
   ubuntu-docker:
     environment:
       IMAGE_NAME: bss-web-admin-backend
