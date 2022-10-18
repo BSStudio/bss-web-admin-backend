@@ -2,7 +2,7 @@ import { DbUtils, memberEntity } from '../../database'
 import { CreateMember, MemberEndpoint } from '../../endpoints'
 import { UUID_REGEX, dateToday } from '../../util'
 
-describe('post /api/member', () => {
+describe('post /api/v1/member', () => {
   const dbUtils = new DbUtils()
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())

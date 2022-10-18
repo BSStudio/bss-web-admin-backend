@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/videoCrew")
+@RequestMapping("/api/v1/videoCrew")
 class VideoCrewController(private val service: VideoCrewService) {
 
     @PostMapping
