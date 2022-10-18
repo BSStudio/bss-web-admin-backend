@@ -3,5 +3,7 @@ include(
     "server",
     "server:web",
     "server:service",
-    "server:data"
+    "server:model",
+    "server:data",
+    "server:common"
 )
