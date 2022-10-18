@@ -5,6 +5,7 @@ springdoc = "1.6.11"
 springBoot = "2.7.4"
 # update in buildSrc/src/main/kotlin/dependency-management.gradle.kts
 springCloud = "2021.0.4"
+springCloudContractPlugin = "3.1.4"
 gradleKtlintPlugin = "11.0.0"
 springDependencyManagementPlugin = "1.0.14.RELEASE"
 
@@ -15,4 +16,5 @@ springdocOpenapiUi = { module = "org.springdoc:springdoc-openapi-ui", version.re
 
 plugin-springBoot = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
 plugin-springDependencyManagement = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "springDependencyManagementPlugin" }
+plugin-springCloudContract = { module = "gradle.plugin.org.springframework.cloud:spring-cloud-contract-gradle-plugin", version.ref = "springCloudContractPlugin" }
 plugin-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "gradleKtlintPlugin" }

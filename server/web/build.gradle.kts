@@ -1,6 +1,7 @@
 plugins {
     id("spring-module-conventions")
     id("testing-conventions")
+    id("contract-testing-conventions")
     id("ktlint-conventions")
 }
 
