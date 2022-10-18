@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
     api(project(":server:data"))
+    api(project(":server:model"))
     implementation("org.springframework:spring-context")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
 }
