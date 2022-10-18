@@ -1,66 +1,50 @@
 package hu.bsstudio.bssweb.member.controller
 
+import hu.bsstudio.bssweb.member.api.MemberApi
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.service.MemberService
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/v1/member")
-class MemberController(val service: MemberService) {
+class MemberController(val service: MemberService) : MemberApi {
 
-    @GetMapping
-    fun getAllMembers(): ResponseEntity<List<Member>> {
+    override fun getAllMembers(): ResponseEntity<List<Member>> {
         return service.findAllMembers()
             .let { ResponseEntity.ok(it) }
     }
 
-    @PostMapping
-    fun createMember(@RequestBody member: CreateMember): ResponseEntity<Member> {
+    override fun createMember(member: CreateMember): ResponseEntity<Member> {
         return service.insertMember(member)
-            .let { ResponseEntity(it, HttpStatus.CREATED) }
+            .let { ResponseEntity.created(locationUri(it.id)).body(it) }
     }
 
-    @PutMapping("/{memberId}")
-    fun updateMember(
-        @PathVariable memberId: UUID,
-        @RequestBody updateMember: UpdateMember
-    ): ResponseEntity<Member> {
+    override fun updateMember(memberId: UUID, updateMember: UpdateMember): ResponseEntity<Member> {
         return service.updateMember(memberId, updateMember)
             .let { ResponseEntity.of(it) }
     }
 
-    @PutMapping("/archive")
-    fun archiveMembers(
-        @RequestParam memberIds: List<UUID>,
-        @RequestParam archive: Boolean = true
-    ): ResponseEntity<List<UUID>> {
+    override fun archiveMembers(memberIds: List<UUID>, archive: Boolean): ResponseEntity<List<UUID>> {
         return service.archiveMembers(memberIds, archive)
             .let { ResponseEntity.ok(it) }
     }
 
-    @GetMapping("/{memberId}")
-    fun getMemberById(@PathVariable memberId: UUID): ResponseEntity<Member> {
+    override fun getMemberById(memberId: UUID): ResponseEntity<Member> {
         return service.findMemberById(memberId)
             .let { ResponseEntity.of(it) }
     }
 
-    @DeleteMapping("/{memberId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun removeMember(@PathVariable memberId: UUID) {
+    override fun removeMember(memberId: UUID): ResponseEntity<Void> {
         service.removeMember(memberId)
+        return ResponseEntity.noContent().build()
     }
+
+    private fun locationUri(id: UUID) = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(id)
+        .toUri()
 }
