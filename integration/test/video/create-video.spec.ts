@@ -2,7 +2,7 @@ import { DbUtils, videoEntity } from '../../database'
 import { CreateVideo, VideoEndpoint } from '../../endpoints'
 import { UUID_REGEX, dateToday } from '../../util'
 
-describe('post /api/video', () => {
+describe('post /api/v1/video', () => {
   const dbUtils = new DbUtils()
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())

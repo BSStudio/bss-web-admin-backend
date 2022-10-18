@@ -1,7 +1,7 @@
 import { DbUtils, eventEntity } from '../../database'
 import { DetailedEvent, EventEndpoint } from '../../endpoints'
 
-describe('get /api/event/{eventId}', () => {
+describe('get /api/v1/event/{eventId}', () => {
   const dbUtils = new DbUtils()
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())

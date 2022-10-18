@@ -9,6 +9,6 @@ export interface BssMetrics {
 export class MetricsEndpoint {
   private static client = client
   static getMetrics() {
-    return this.client.get<BssMetrics>('/api/metrics')
+    return this.client.get<BssMetrics>('/api/v1/metrics')
   }
 }

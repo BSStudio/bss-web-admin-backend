@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/event")
+@RequestMapping("/api/v1/event")
 class EventController(private val service: EventService) {
 
     @GetMapping
