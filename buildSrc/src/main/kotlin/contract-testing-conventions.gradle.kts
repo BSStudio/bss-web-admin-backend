@@ -8,7 +8,7 @@ plugins {
 
 contracts {
     testMode.set(TestMode.MOCKMVC)
-    baseClassForTests.set("hu.bsstudio.bssweb")
+    packageWithBaseClasses.set("hu.bsstudio.bssweb.**.contract")
     generatedTestJavaSourcesDir.set(project.file("/generatedContracts"))
 }
 
