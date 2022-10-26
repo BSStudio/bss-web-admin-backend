@@ -21,8 +21,8 @@ class EventVideoController(private val service: EventVideoService) {
     }
 
     @DeleteMapping
-    fun removeVideoFromEvent(@RequestParam eventId: UUID, @RequestParam videoId: UUID): ResponseEntity<Unit> {
+    fun removeVideoFromEvent(@RequestParam eventId: UUID, @RequestParam videoId: UUID): ResponseEntity<DetailedEvent> {
         return service.removeVideoFromEvent(eventId, videoId)
-            .let { ResponseEntity.ok().build() }
+            .let { ResponseEntity.of(it) }
     }
 }
