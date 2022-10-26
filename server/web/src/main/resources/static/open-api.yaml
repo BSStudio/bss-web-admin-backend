@@ -439,13 +439,13 @@ paths:
         - EventVideo
       parameters:
         - name: eventId
-          in: path
+          in: query
           required: true
           schema:
             type: string
             format: uuid
         - name: videoId
-          in: path
+          in: query
           required: true
           schema:
             type: string
@@ -457,7 +457,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DetailedEvent"
-  /api/v1/eventVideo/{eventId}/{videoId}:
     delete:
       summary: "Delete video from event"
       description: "Delete video from event"
@@ -465,13 +464,13 @@ paths:
         - EventVideo
       parameters:
         - name: eventId
-          in: path
+          in: query
           required: true
           schema:
             type: string
             format: uuid
         - name: videoId
-          in: path
+          in: query
           required: true
           schema:
             type: string
@@ -479,6 +478,10 @@ paths:
       responses:
         200:
           description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailedEvent"
   /api/v1/metrics:
     get:
       summary: "Read metrics"

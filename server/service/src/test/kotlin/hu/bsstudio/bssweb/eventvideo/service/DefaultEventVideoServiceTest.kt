@@ -38,8 +38,11 @@ internal class DefaultEventVideoServiceTest {
     @Test
     fun removeVideoFromEvent() {
         every { mockRepository.deleteById(EVENT_VIDEO_ENTITY) } returns Unit
+        every { mockEventService.findEventById(EVENT_ID) } returns Optional.of(DETAILED_EVENT)
 
-        underTest.removeVideoFromEvent(EVENT_ID, VIDEO_ID)
+        val response = underTest.removeVideoFromEvent(EVENT_ID, VIDEO_ID)
+
+        assertThat(response).hasValue(DETAILED_EVENT)
     }
 
     private companion object {

@@ -7,6 +7,6 @@ export class EventVideoEndpoint {
     return this.client.post<DetailedEvent>('/api/v1/eventVideo', null, { params: { eventId, videoId } })
   }
   static removeEventToVideo(eventId: string, videoId: string) {
-    return this.client.delete('/api/v1/eventVideo', { params: { eventId, videoId } })
+    return this.client.delete<DetailedEvent>('/api/v1/eventVideo', { params: { eventId, videoId } })
   }
 }
