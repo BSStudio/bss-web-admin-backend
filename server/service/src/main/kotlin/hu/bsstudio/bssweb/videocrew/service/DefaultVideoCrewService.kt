@@ -1,28 +1,33 @@
 package hu.bsstudio.bssweb.videocrew.service
 
+import hu.bsstudio.bssweb.video.model.DetailedVideo
+import hu.bsstudio.bssweb.video.service.VideoService
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
-import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
+import java.util.Optional
 
 class DefaultVideoCrewService(
     private val repository: VideoCrewRepository,
-    private val mapper: VideoCrewMapper
+    private val videoService: VideoService,
+    private val mapper: VideoCrewMapper,
 ) : VideoCrewService {
 
-    override fun addPosition(videoCrew: VideoCrew): List<SimpleCrew> {
-        videoCrew
-            .let(mapper::modelToEntity)
-            .let(repository::save)
-        return repository.findAllByVideoId(videoCrew.videoId)
-            .map(mapper::entityToModel)
+    override fun getPositions(): List<String> {
+        return repository.getPositions().sorted()
     }
 
-    override fun removePosition(videoCrew: VideoCrew): List<SimpleCrew> {
-        videoCrew
+    override fun addPosition(videoCrew: VideoCrew): Optional<DetailedVideo> {
+        return videoCrew
+            .let(mapper::modelToEntity)
+            .let(repository::save)
+            .run { videoService.findVideoById(videoCrew.videoId) }
+    }
+
+    override fun removePosition(videoCrew: VideoCrew): Optional<DetailedVideo> {
+        return videoCrew
             .let(mapper::modelToEntity)
             .let(repository::deleteById)
-        return repository.findAllByVideoId(videoCrew.videoId)
-            .map(mapper::entityToModel)
+            .run { videoService.findVideoById(videoCrew.videoId) }
     }
 }
