@@ -8,9 +8,9 @@ export interface SimpleCrew {
 export class VideoCrewEndpoint {
   private static client = client
   static addVideoCrewMember(videoId: string, memberId: string, position: string) {
-    return this.client.post<SimpleCrew[]>('/api/videoCrew', null, { params: { videoId, memberId, position } })
+    return this.client.post<SimpleCrew[]>('/api/v1/videoCrew', null, { params: { videoId, memberId, position } })
   }
   static removeVideoCrewMember(videoId: string, memberId: string, position: string) {
-    return this.client.delete<SimpleCrew[]>('/api/videoCrew', { params: { videoId, memberId, position } })
+    return this.client.delete<SimpleCrew[]>('/api/v1/videoCrew', { params: { videoId, memberId, position } })
   }
 }

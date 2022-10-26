@@ -1,7 +1,7 @@
 import { DbUtils, memberEntity, videoEntity } from '../../database'
 import { VideoCrewEndpoint } from '../../endpoints'
 
-describe('delete /api/videoCrew', () => {
+describe('delete /api/v1/videoCrew', () => {
   const dbUtils = new DbUtils()
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())
