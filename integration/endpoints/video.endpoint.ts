@@ -38,7 +38,10 @@ interface SimpleCrew {
 
 export class VideoEndpoint {
   private static client = client
-  static getAllVideos(pageable?: PageableRequestParam) {
+  static getAllVideos() {
+    return this.client.get<Page<Video>>('/api/video')
+  }
+  static getAllVideosPaginated(pageable?: PageableRequestParam) {
     return this.client.get<Page<Video>>('/api/video', { params: { ...pageable } })
   }
   static createVideo(createVideo: CreateVideo) {

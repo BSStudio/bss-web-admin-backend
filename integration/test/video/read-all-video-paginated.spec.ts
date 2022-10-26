@@ -19,16 +19,41 @@ describe('get /api/video', () => {
     url: 'url2',
     ...defaultVideo,
   }
+  const video3: Video = {
+    id: '21234567-0123-0123-0123-0123456789ab',
+    title: 'title3',
+    url: 'url3',
+    ...defaultVideo,
+  }
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())
 
   it('should return ok and empty array', async () => {
     expect.assertions(2)
 
-    const response = await VideoEndpoint.getAllVideos()
+    const response = await VideoEndpoint.getAllVideosPaginated({ page: 0, size: 1 })
 
     expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual([])
+    expect(response.data).toStrictEqual({
+      content: [],
+      empty: true,
+      first: true,
+      last: true,
+      number: 0,
+      numberOfElements: 0,
+      pageable: {
+        offset: 0,
+        pageNumber: 0,
+        pageSize: 1,
+        paged: true,
+        sort: { empty: true, sorted: false, unsorted: true },
+        unpaged: false,
+      },
+      size: 1,
+      sort: { empty: true, sorted: false, unsorted: true },
+      totalElements: 0,
+      totalPages: 0,
+    })
   })
 
   it('should respond without pagination params and should have page size 20 by default', async () => {

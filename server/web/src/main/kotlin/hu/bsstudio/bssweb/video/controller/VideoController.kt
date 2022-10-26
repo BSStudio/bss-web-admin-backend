@@ -24,7 +24,7 @@ import java.util.UUID
 @RequestMapping("/api/video")
 class VideoController(private val service: VideoService) {
 
-    @GetMapping
+    @GetMapping("/all")
     fun getAllVideos(): ResponseEntity<List<Video>> {
         return service.findAllVideos()
             .let { ResponseEntity.ok(it) }
