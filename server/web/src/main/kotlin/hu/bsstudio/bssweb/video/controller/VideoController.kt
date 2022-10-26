@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/video")
+@RequestMapping("/api/v1/video")
 class VideoController(private val service: VideoService) {
 
     @GetMapping("/all")

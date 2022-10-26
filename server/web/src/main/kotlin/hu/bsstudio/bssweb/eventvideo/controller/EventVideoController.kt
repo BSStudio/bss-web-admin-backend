@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/eventVideo")
+@RequestMapping("/api/v1/eventVideo")
 class EventVideoController(private val service: EventVideoService) {
 
     @PostMapping
