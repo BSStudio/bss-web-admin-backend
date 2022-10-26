@@ -25,6 +25,12 @@ import java.util.UUID
 class VideoController(private val service: VideoService) {
 
     @GetMapping
+    fun getAllVideos(): ResponseEntity<List<Video>> {
+        return service.findAllVideos()
+            .let { ResponseEntity.ok(it) }
+    }
+
+    @GetMapping
     fun getAllVideos(pageable: Pageable): ResponseEntity<Page<Video>> {
         return service.findAllVideos(pageable)
             .let { ResponseEntity.ok(it) }

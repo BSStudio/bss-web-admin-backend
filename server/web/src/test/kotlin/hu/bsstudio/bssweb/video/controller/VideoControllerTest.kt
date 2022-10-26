@@ -29,6 +29,16 @@ internal class VideoControllerTest {
 
     @Test
     internal fun getAllVideos() {
+        every { mockService.findAllVideos() } returns listOf(VIDEO)
+
+        val response = this.underTest.getAllVideos()
+
+        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).isEqualTo(listOf(VIDEO))
+    }
+
+    @Test
+    internal fun getAllVideosPaged() {
         every { mockService.findAllVideos(PAGEABLE) } returns PAGED_VIDEOS
 
         val response = this.underTest.getAllVideos(PAGEABLE)
