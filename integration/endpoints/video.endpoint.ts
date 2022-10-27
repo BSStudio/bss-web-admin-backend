@@ -16,8 +16,8 @@ export interface UpdateVideo {
   url: string
   title: string
   description: string
-  videoUrl: string | null
-  thumbnailUrl: string | null
+  videoUrl: string
+  thumbnailUrl: string
   uploadedAt: string
   visible: boolean
 }
@@ -26,8 +26,8 @@ export interface DetailedVideo {
   url: string
   title: string
   description: string
-  videoUrl: string | null
-  thumbnailUrl: string | null
+  videoUrl: string
+  thumbnailUrl: string
   uploadedAt: string
   visible: boolean
   crew: SimpleCrew[]
