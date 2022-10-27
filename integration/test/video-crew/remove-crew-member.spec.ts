@@ -1,5 +1,5 @@
 import { DbUtils, memberEntity, videoEntity } from '../../database'
-import { VideoCrewEndpoint } from '../../endpoints'
+import { DetailedVideo, VideoCrewEndpoint } from '../../endpoints'
 
 describe('delete /api/v1/videoCrew', () => {
   const dbUtils = new DbUtils()
@@ -13,14 +13,26 @@ describe('delete /api/v1/videoCrew', () => {
 
   it('should remove a crew member from a video', async () => {
     expect.assertions(2)
+    const videoEntity1 = videoEntity({ id: video_id, url: 'url', title: 'title' })
+    await dbUtils.addVideos([videoEntity1])
     await dbUtils.addMembers([memberEntity({ id: member_id, url: 'url', name: 'Bence Csik' })])
-    await dbUtils.addVideos([videoEntity({ id: video_id, url: 'url', title: 'title' })])
     await dbUtils.addVideoCrew([{ video_id, member_id, position }])
     await dbUtils.addVideoCrew([{ video_id, member_id, position: otherPosition }])
 
     const response = await VideoCrewEndpoint.removeVideoCrewMember(video_id, member_id, position)
 
+    const expected: DetailedVideo = {
+      id: videoEntity1.id,
+      url: videoEntity1.url,
+      title: videoEntity1.title,
+      description: videoEntity1.description,
+      videoUrl: videoEntity1.video_url,
+      thumbnailUrl: videoEntity1.thumbnail_url,
+      uploadedAt: videoEntity1.uploaded_at,
+      visible: videoEntity1.visible,
+      crew: [{ memberId: member_id, position: otherPosition }],
+    }
     expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual([{ memberId: member_id, position: otherPosition }])
+    expect(response.data).toStrictEqual(expected)
   })
 })
