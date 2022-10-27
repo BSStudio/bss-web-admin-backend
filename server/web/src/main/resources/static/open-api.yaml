@@ -285,7 +285,7 @@ paths:
                 items:
                   type: string
   /api/v1/videoCrew:
-    post:
+    put:
       summary: "Add position with member to the video"
       description: "Add position with member to the video"
       tags:
@@ -307,14 +307,14 @@ paths:
           schema:
             type: string
       responses:
-        201:
-          description: "Created"
+        200:
+          description: "OK"
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/SimpleCrew"
+                $ref: '#/components/schemas/DetailedVideo'
+        404:
+          description: "Not found"
     delete:
       summary: "Delete position with member to the video"
       description: "Delete position with member to the video"
@@ -342,9 +342,9 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/SimpleCrew"
+                $ref: '#/components/schemas/DetailedVideo'
+        404:
+          description: "Not found"
   /api/v1/event:
     get:
       summary: "Read all event"
@@ -683,6 +683,10 @@ components:
             thumbnailUrl:
               type: string
               nullable: true
+            crew:
+              type: array
+              items:
+                $ref: "#/components/schemas/SimpleCrew"
     SimpleCrew:
       type: object
       properties:

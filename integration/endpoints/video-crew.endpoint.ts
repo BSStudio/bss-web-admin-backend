@@ -1,16 +1,15 @@
 import { client } from './client'
-
-export interface SimpleCrew {
-  memberId: string
-  position: string
-}
+import { DetailedVideo } from './video.endpoint'
 
 export class VideoCrewEndpoint {
   private static client = client
+  static getPositions() {
+    return this.client.get<string[]>('/api/v1/videoCrew/position')
+  }
   static addVideoCrewMember(videoId: string, memberId: string, position: string) {
-    return this.client.post<SimpleCrew[]>('/api/v1/videoCrew', null, { params: { videoId, memberId, position } })
+    return this.client.put<DetailedVideo>('/api/v1/videoCrew', null, { params: { videoId, memberId, position } })
   }
   static removeVideoCrewMember(videoId: string, memberId: string, position: string) {
-    return this.client.delete<SimpleCrew[]>('/api/v1/videoCrew', { params: { videoId, memberId, position } })
+    return this.client.delete<DetailedVideo>('/api/v1/videoCrew', { params: { videoId, memberId, position } })
   }
 }

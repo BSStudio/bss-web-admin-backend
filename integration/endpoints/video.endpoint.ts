@@ -16,8 +16,8 @@ export interface UpdateVideo {
   url: string
   title: string
   description: string
-  videoUrl: string | null
-  thumbnailUrl: string | null
+  videoUrl: string
+  thumbnailUrl: string
   uploadedAt: string
   visible: boolean
 }
@@ -26,20 +26,21 @@ export interface DetailedVideo {
   url: string
   title: string
   description: string
-  videoUrl: string | null
-  thumbnailUrl: string | null
+  videoUrl: string
+  thumbnailUrl: string
   uploadedAt: string
   visible: boolean
   crew: SimpleCrew[]
 }
 interface SimpleCrew {
   position: string
+  memberId: string
 }
 
 export class VideoEndpoint {
   private static client = client
   static getAllVideos() {
-    return this.client.get<Page<Video>>('/api/v1/video/all')
+    return this.client.get<Video[]>('/api/v1/video/all')
   }
   static getAllVideosPaginated(pageable?: PageableRequestParam) {
     return this.client.get<Page<Video>>('/api/v1/video', { params: { ...pageable } })

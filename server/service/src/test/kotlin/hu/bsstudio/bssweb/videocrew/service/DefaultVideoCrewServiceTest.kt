@@ -1,5 +1,7 @@
 package hu.bsstudio.bssweb.videocrew.service
 
+import hu.bsstudio.bssweb.video.model.DetailedVideo
+import hu.bsstudio.bssweb.video.service.VideoService
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
@@ -12,6 +14,8 @@ import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import java.time.LocalDate
+import java.util.Optional
 import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
@@ -21,44 +25,60 @@ internal class DefaultVideoCrewServiceTest {
     private lateinit var mockRepository: VideoCrewRepository
     @MockK
     private lateinit var mockMapper: VideoCrewMapper
+    @MockK
+    private lateinit var mockVideoService: VideoService
     @InjectMockKs
     private lateinit var underTest: DefaultVideoCrewService
 
     @Test
+    internal fun `should return all positions sorted`() {
+        every { mockRepository.getPositions() } returns setOf("POSITION_2", "POSITION_1")
+
+        val result = underTest.getPositions()
+
+        assertThat(result).isEqualTo(listOf("POSITION_1", "POSITION_2"))
+    }
+
+    @Test
     internal fun `should add position to video`() {
         every { mockMapper.modelToEntity(VIDEO_CREW) } returns VIDEO_CREW_ENTITY_1
-        every { mockMapper.entityToModel(VIDEO_CREW_ENTITY_1) } returns SIMPLE_VIDEO_CREW_1
-        every { mockMapper.entityToModel(VIDEO_CREW_ENTITY_2) } returns SIMPLE_VIDEO_CREW_2
         every { mockRepository.save(VIDEO_CREW_ENTITY_1) } returns VIDEO_CREW_ENTITY_1
-        every { mockRepository.findAllByVideoId(VIDEO_ID) } returns listOf(VIDEO_CREW_ENTITY_1, VIDEO_CREW_ENTITY_2)
+        every { mockVideoService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO)
 
         val result = underTest.addPosition(VIDEO_CREW)
 
-        assertThat(result).isEqualTo(listOf(SIMPLE_VIDEO_CREW_1, SIMPLE_VIDEO_CREW_2))
+        assertThat(result).hasValue(DETAILED_VIDEO)
     }
 
     @Test
     internal fun `should remove position from video`() {
         every { mockMapper.modelToEntity(VIDEO_CREW) } returns VIDEO_CREW_ENTITY_1
-        every { mockMapper.entityToModel(VIDEO_CREW_ENTITY_2) } returns SIMPLE_VIDEO_CREW_2
         every { mockRepository.deleteById(VIDEO_CREW_ENTITY_1) } returns Unit
-        every { mockRepository.findAllByVideoId(VIDEO_ID) } returns listOf(VIDEO_CREW_ENTITY_2)
+        every { mockVideoService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_EMPTY)
 
         val result = underTest.removePosition(VIDEO_CREW)
 
-        assertThat(result).isEqualTo(listOf(SIMPLE_VIDEO_CREW_2))
+        assertThat(result).hasValue(DETAILED_VIDEO_EMPTY)
     }
 
     private companion object {
         private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val POSITION_1 = "position1"
-        private const val POSITION_2 = "position2"
         private val MEMBER_ID_1 = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
-        private val MEMBER_ID_2 = UUID.fromString("21234567-0123-0123-0123-0123456789ab")
         private val VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION_1, MEMBER_ID_1)
-        private val SIMPLE_VIDEO_CREW_1 = SimpleCrew(POSITION_1, MEMBER_ID_1)
-        private val SIMPLE_VIDEO_CREW_2 = SimpleCrew(POSITION_2, MEMBER_ID_2)
         private val VIDEO_CREW_ENTITY_1 = VideoCrewEntity(VIDEO_ID, POSITION_1, MEMBER_ID_1)
-        private val VIDEO_CREW_ENTITY_2 = VideoCrewEntity(VIDEO_ID, POSITION_2, MEMBER_ID_2)
+        private val SIMPLE_VIDEO_CREW = SimpleCrew(POSITION_1, MEMBER_ID_1)
+        private val DETAILED_VIDEO = DetailedVideo(
+            id = VIDEO_ID,
+            url = "url",
+            title = "title",
+            description = "description",
+            visible = true,
+            videoUrl = "videoUrl",
+            thumbnailUrl = "thumbnailUrl",
+            uploadedAt = LocalDate.of(2022, 1, 1),
+            crew = listOf(SIMPLE_VIDEO_CREW)
+        )
+        private val DETAILED_VIDEO_EMPTY = DETAILED_VIDEO.copy(crew = listOf())
     }
 }
