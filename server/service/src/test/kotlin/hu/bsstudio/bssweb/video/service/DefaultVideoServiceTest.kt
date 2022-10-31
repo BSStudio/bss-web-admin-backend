@@ -151,6 +151,6 @@ internal class DefaultVideoServiceTest {
         private val CREATE_VIDEO = CreateVideo("url", "title")
         private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
         private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
-        private val UPDATE_VIDEO = UpdateVideo("updatedUrl", "updatedTitle", "updatedDescription", "updatedVideoUrl", "updatedThumbnailUrl", LocalDate.of(2022, 2, 2), visible = false)
+        private val UPDATE_VIDEO = UpdateVideo("updatedUrl", "updatedTitle", "updatedDescription", LocalDate.of(2022, 2, 2), visible = false)
     }
 }

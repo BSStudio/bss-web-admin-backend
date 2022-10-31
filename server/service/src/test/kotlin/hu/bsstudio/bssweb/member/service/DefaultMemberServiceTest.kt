@@ -146,6 +146,6 @@ internal class DefaultMemberServiceTest {
         private val MEMBER = Member(MEMBER_ID, url = "url", name = "name", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
         private val MEMBER_LIST = listOf(MEMBER)
         private val CREATE_MEMBER = CreateMember("url", name = "name")
-        private val UPDATE_MEMBER = UpdateMember("updatedUrl", name = "updatedName", description = "updatedDescription", imageUrl = "imageUrl", LocalDate.of(2022, 2, 2), role = "updatedRole", MemberStatus.ALUMNI, true)
+        private val UPDATE_MEMBER = UpdateMember("updatedUrl", name = "updatedName", description = "updatedDescription", LocalDate.of(2022, 2, 2), role = "updatedRole", MemberStatus.ALUMNI, true)
     }
 }
