@@ -57,7 +57,7 @@ CREATE TABLE bss_web.event
     id          UUID PRIMARY KEY             DEFAULT gen_random_uuid(),
     url         VARCHAR(250) UNIQUE NOT NULL,
     title       VARCHAR(250) UNIQUE NOT NULL,
-    description VARCHAR(250)        NOT NULL DEFAULT '',
+    description VARCHAR(2000)       NOT NULL DEFAULT '',
     date        DATE                NOT NULL DEFAULT current_date,
     visible     BOOLEAN             NOT NULL DEFAULT FALSE,
     CONSTRAINT url_not_empty CHECK (trim(url) != '') ,
