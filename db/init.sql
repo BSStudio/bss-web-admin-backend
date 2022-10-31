@@ -34,7 +34,7 @@ CREATE TABLE bss_web.video
     id            UUID PRIMARY KEY             DEFAULT gen_random_uuid(),
     url           VARCHAR(250) UNIQUE NOT NULL,
     title         VARCHAR(250) UNIQUE NOT NULL,
-    description   VARCHAR(250)        NOT NULL DEFAULT '',
+    description   VARCHAR(2000)       NOT NULL DEFAULT '',
     video_url     VARCHAR(250)        NOT NULL DEFAULT '',
     thumbnail_url VARCHAR(250)        NOT NULL DEFAULT '',
     uploaded_at   DATE                NOT NULL DEFAULT current_date,
