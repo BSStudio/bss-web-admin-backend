@@ -19,7 +19,7 @@ tags:
   - name: Metrics
     description: "REST operations for metrics"
 paths:
-  /api/member:
+  /api/v1/member:
     get:
       summary: "Read all member"
       description: "Read all member"
@@ -51,7 +51,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Member'
-  /api/member/{memberId}:
+  /api/v1/member/{memberId}:
     put:
       summary: "Update member"
       description: "Update member"
@@ -110,7 +110,7 @@ paths:
       responses:
         200:
           description: "OK"
-  /api/video:
+  /api/v1/video:
     get:
       summary: "Read all video (paginated)"
       description: "Read all video (paginated)"
@@ -163,7 +163,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Video'
-  /api/video/archive:
+  /api/v1/video/archive:
     put:
       summary: "Archive videos"
       description: "Archive videos"
@@ -193,7 +193,7 @@ paths:
                 type: array
                 items:
                   type: string
-  /api/video/visible:
+  /api/v1/video/visible:
     put:
       summary: "Change video visibility"
       description: "Change video visibility"
@@ -222,7 +222,7 @@ paths:
                 type: array
                 items:
                   type: string
-  /api/video/{videoId}:
+  /api/v1/video/{videoId}:
     put:
       summary: "Update video"
       description: "Update video"
@@ -284,8 +284,8 @@ paths:
                 type: array
                 items:
                   type: string
-  /api/videoCrew:
-    post:
+  /api/v1/videoCrew:
+    put:
       summary: "Add position with member to the video"
       description: "Add position with member to the video"
       tags:
@@ -307,14 +307,14 @@ paths:
           schema:
             type: string
       responses:
-        201:
-          description: "Created"
+        200:
+          description: "OK"
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/SimpleCrew"
+                $ref: '#/components/schemas/DetailedVideo'
+        404:
+          description: "Not found"
     delete:
       summary: "Delete position with member to the video"
       description: "Delete position with member to the video"
@@ -342,10 +342,10 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/SimpleCrew"
-  /api/event:
+                $ref: '#/components/schemas/DetailedVideo'
+        404:
+          description: "Not found"
+  /api/v1/event:
     get:
       summary: "Read all event"
       description: "Read all event"
@@ -377,7 +377,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Event"
-  /api/event/{eventId}:
+  /api/v1/event/{eventId}:
     get:
       summary: "Read one event"
       description: "Read one event"
@@ -431,7 +431,7 @@ paths:
       responses:
         200:
           description: "OK"
-  /api/eventVideo:
+  /api/v1/eventVideo:
     put:
       summary: "Add video to event"
       description: "Add video to event"
@@ -439,13 +439,13 @@ paths:
         - EventVideo
       parameters:
         - name: eventId
-          in: path
+          in: query
           required: true
           schema:
             type: string
             format: uuid
         - name: videoId
-          in: path
+          in: query
           required: true
           schema:
             type: string
@@ -457,7 +457,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DetailedEvent"
-  /api/eventVideo/{eventId}/{videoId}:
     delete:
       summary: "Delete video from event"
       description: "Delete video from event"
@@ -465,13 +464,13 @@ paths:
         - EventVideo
       parameters:
         - name: eventId
-          in: path
+          in: query
           required: true
           schema:
             type: string
             format: uuid
         - name: videoId
-          in: path
+          in: query
           required: true
           schema:
             type: string
@@ -479,7 +478,11 @@ paths:
       responses:
         200:
           description: "OK"
-  /api/metrics:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailedEvent"
+  /api/v1/metrics:
     get:
       summary: "Read metrics"
       description: "Read metrics"
@@ -680,6 +683,10 @@ components:
             thumbnailUrl:
               type: string
               nullable: true
+            crew:
+              type: array
+              items:
+                $ref: "#/components/schemas/SimpleCrew"
     SimpleCrew:
       type: object
       properties:

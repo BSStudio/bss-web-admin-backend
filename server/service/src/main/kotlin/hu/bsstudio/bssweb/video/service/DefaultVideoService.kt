@@ -20,6 +20,11 @@ class DefaultVideoService(
     private val mapper: VideoMapper,
 ) : VideoService {
 
+    override fun findAllVideos(): List<Video> {
+        return repository.findAll()
+            .map(mapper::entityToModel)
+    }
+
     override fun findAllVideos(pageable: Pageable): Page<Video> {
         return repository.findAll(pageable)
             .map(mapper::entityToModel)

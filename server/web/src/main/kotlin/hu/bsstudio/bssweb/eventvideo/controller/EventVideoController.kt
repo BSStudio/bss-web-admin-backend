@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/eventVideo")
+@RequestMapping("/api/v1/eventVideo")
 class EventVideoController(private val service: EventVideoService) {
 
     @PostMapping
@@ -21,8 +21,8 @@ class EventVideoController(private val service: EventVideoService) {
     }
 
     @DeleteMapping
-    fun removeVideoFromEvent(@RequestParam eventId: UUID, @RequestParam videoId: UUID): ResponseEntity<Unit> {
+    fun removeVideoFromEvent(@RequestParam eventId: UUID, @RequestParam videoId: UUID): ResponseEntity<DetailedEvent> {
         return service.removeVideoFromEvent(eventId, videoId)
-            .let { ResponseEntity.ok().build() }
+            .let { ResponseEntity.of(it) }
     }
 }

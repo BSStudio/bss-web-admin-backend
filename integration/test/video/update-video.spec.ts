@@ -1,7 +1,7 @@
 import { DbUtils, videoEntity } from '../../database'
 import { DetailedVideo, UpdateVideo, VideoEndpoint } from '../../endpoints'
 
-describe('put /api/video/{videoId}', () => {
+describe('put /api/v1/video/{videoId}', () => {
   const dbUtils = new DbUtils()
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())

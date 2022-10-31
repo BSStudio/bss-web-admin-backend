@@ -10,6 +10,7 @@ import java.util.Optional
 import java.util.UUID
 
 interface VideoService {
+    fun findAllVideos(): List<Video>
     fun findAllVideos(pageable: Pageable): Page<Video>
     fun insertVideo(createVideo: CreateVideo): Video
     fun changeVideoVisibility(videoIds: List<UUID>, visible: Boolean): List<UUID>
