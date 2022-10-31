@@ -1,7 +1,7 @@
 import { DbUtils, eventEntity, videoEntity } from '../../database'
-import { EventVideoEndpoint } from '../../endpoints'
+import { DetailedEvent, EventVideoEndpoint } from '../../endpoints'
 
-describe('delete /api/eventVideo?eventId={eventId}&videoId={videoId}', () => {
+describe('delete /api/v1/eventVideo?eventId={eventId}&videoId={videoId}', () => {
   const dbUtils = new DbUtils()
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())
@@ -11,13 +11,18 @@ describe('delete /api/eventVideo?eventId={eventId}&videoId={videoId}', () => {
 
   it('should return ok and empty body', async () => {
     expect.assertions(2)
-    await dbUtils.addEvents([eventEntity({ id: eventId, url: 'url', title: 'title' })])
+    const eventEntity1 = eventEntity({ id: eventId, url: 'url', title: 'title' })
+    await dbUtils.addEvents([eventEntity1])
     await dbUtils.addVideos([videoEntity({ id: videoId, url: 'url', title: 'title' })])
     await dbUtils.addEventVideos([{ event_id: eventId, video_id: videoId }])
 
     const response = await EventVideoEndpoint.removeEventToVideo(eventId, videoId)
 
+    const expectedDetailedEvent: DetailedEvent = {
+      ...eventEntity1,
+      videos: [],
+    }
     expect(response.status).toBe(200)
-    expect(response.data).toBe('')
+    expect(response.data).toStrictEqual(expectedDetailedEvent)
   })
 })

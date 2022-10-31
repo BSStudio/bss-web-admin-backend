@@ -34,11 +34,12 @@ internal class EventVideoControllerTest {
 
     @Test
     fun removeVideoFromEvent() {
-        every { mockService.removeVideoFromEvent(EVENT_ID, VIDEO_ID) } returns Unit
+        every { mockService.removeVideoFromEvent(EVENT_ID, VIDEO_ID) } returns Optional.of(DETAILED_EVENT)
 
         val response = underTest.removeVideoFromEvent(EVENT_ID, VIDEO_ID)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(response.body).isEqualTo(DETAILED_EVENT)
     }
 
     private companion object {

@@ -1,13 +1,13 @@
 [versions]
 # update in buildSrc/src/main/kotlin/dependency-management.gradle.kts
 mockk = "1.13.2"
-springdoc = "1.6.11"
-springBoot = "2.7.4"
+springdoc = "1.6.12"
+springBoot = "2.7.5"
 # update in buildSrc/src/main/kotlin/dependency-management.gradle.kts
 springCloud = "2021.0.4"
 springCloudContractPlugin = "3.1.4"
 gradleKtlintPlugin = "11.0.0"
-springDependencyManagementPlugin = "1.0.14.RELEASE"
+springDependencyManagementPlugin = "1.1.0"
 
 [libraries]
 mockk = { module = "io.mockk:mockk-jvm", version.ref = "mockk" }

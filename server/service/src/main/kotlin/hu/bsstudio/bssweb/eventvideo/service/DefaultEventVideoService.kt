@@ -19,8 +19,9 @@ class DefaultEventVideoService(
             .let(eventService::findEventById)
     }
 
-    override fun removeVideoFromEvent(eventId: UUID, videoId: UUID) {
+    override fun removeVideoFromEvent(eventId: UUID, videoId: UUID): Optional<DetailedEvent> {
         return EventVideoEntity(eventId = eventId, videoId = videoId)
             .let(repository::deleteById)
+            .run { eventService.findEventById(eventId) }
     }
 }

@@ -39,6 +39,16 @@ internal class DefaultVideoServiceTest {
 
     @Test
     internal fun `should return all videos`() {
+        every { mockRepository.findAll() } returns listOf(VIDEO_ENTITY)
+        every { mockMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
+
+        val response = underTest.findAllVideos()
+
+        assertThat(response).isEqualTo(listOf(VIDEO))
+    }
+
+    @Test
+    internal fun `should return all videos paged`() {
         every { mockRepository.findAll(PAGEABLE) } returns PageImpl(VIDEO_ENTITY_LIST)
         every { mockMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
 

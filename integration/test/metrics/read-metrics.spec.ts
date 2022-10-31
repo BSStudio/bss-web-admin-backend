@@ -1,7 +1,7 @@
 import { DbUtils, eventEntity, memberEntity, videoEntity } from '../../database'
 import { BssMetrics, MetricsEndpoint } from '../../endpoints'
 
-describe('get /api/metrics', () => {
+describe('get /api/v1/metrics', () => {
   const dbUtils = new DbUtils()
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())

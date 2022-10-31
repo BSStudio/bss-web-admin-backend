@@ -1,7 +1,7 @@
 import { DbUtils, memberEntity } from '../../database'
 import { MemberEndpoint } from '../../endpoints'
 
-describe('put /api/member/archive', () => {
+describe('put /api/v1/member/archive', () => {
   const dbUtils = new DbUtils()
   beforeEach(async () => await dbUtils.beforeEach())
   afterAll(async () => await dbUtils.afterAll())

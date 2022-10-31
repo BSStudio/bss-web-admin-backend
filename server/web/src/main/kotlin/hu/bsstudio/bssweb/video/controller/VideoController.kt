@@ -21,8 +21,14 @@ import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/video")
+@RequestMapping("/api/v1/video")
 class VideoController(private val service: VideoService) {
+
+    @GetMapping("/all")
+    fun getAllVideos(): ResponseEntity<List<Video>> {
+        return service.findAllVideos()
+            .let { ResponseEntity.ok(it) }
+    }
 
     @GetMapping
     fun getAllVideos(pageable: Pageable): ResponseEntity<Page<Video>> {
