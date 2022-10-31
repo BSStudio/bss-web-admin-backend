@@ -60,8 +60,6 @@ internal class VideoMapperTest {
         private const val URL = "url"
         private const val TITLE = "title"
         private const val DESCRIPTION = "description"
-        private const val VIDEO_URL = "videoUrl"
-        private const val THUMBNAIL_URL = "thumbnailUrl"
         private val UPLOADED_AT = LocalDate.of(2022, 1, 1)
         private const val VISIBLE = true
         private val CREW_ENTITY = VideoCrewEntity(VIDEO_ID, "position", VIDEO_ID)
@@ -70,8 +68,8 @@ internal class VideoMapperTest {
         private val CREW = listOf(CREW_MODEL)
         private val VIDEO_ENTITY = VideoEntity(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
         private val VIDEO = Video(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
-        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, URL, TITLE, DESCRIPTION, VIDEO_URL, THUMBNAIL_URL, UPLOADED_AT, VISIBLE, VIDEO_CREW)
-        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, URL, TITLE, DESCRIPTION, VIDEO_URL, THUMBNAIL_URL, UPLOADED_AT, VISIBLE, CREW)
+        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, URL, TITLE, DESCRIPTION, UPLOADED_AT, VISIBLE, VIDEO_CREW)
+        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, URL, TITLE, DESCRIPTION, UPLOADED_AT, VISIBLE, CREW)
         private val CREATE_VIDEO = CreateVideo(URL, TITLE)
         private val CREATED_VIDEO_ENTITY = VideoEntity(id = VIDEO_ID, url = URL, title = TITLE)
     }

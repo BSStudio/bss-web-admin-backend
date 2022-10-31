@@ -116,8 +116,6 @@ internal class DefaultVideoServiceTest {
             url = UPDATE_VIDEO.url,
             title = UPDATE_VIDEO.title,
             description = UPDATE_VIDEO.description,
-            videoUrl = UPDATE_VIDEO.videoUrl,
-            thumbnailUrl = UPDATE_VIDEO.thumbnailUrl,
             uploadedAt = UPDATE_VIDEO.uploadedAt,
             visible = UPDATE_VIDEO.visible,
         )
@@ -126,8 +124,6 @@ internal class DefaultVideoServiceTest {
             url = UPDATE_VIDEO.url,
             title = UPDATE_VIDEO.title,
             description = UPDATE_VIDEO.description,
-            videoUrl = UPDATE_VIDEO.videoUrl,
-            thumbnailUrl = UPDATE_VIDEO.thumbnailUrl,
             uploadedAt = UPDATE_VIDEO.uploadedAt,
             visible = UPDATE_VIDEO.visible,
         )
@@ -153,8 +149,8 @@ internal class DefaultVideoServiceTest {
         private val VIDEO = Video(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
         private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
         private val CREATE_VIDEO = CreateVideo("url", "title")
-        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
-        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
+        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
+        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
         private val UPDATE_VIDEO = UpdateVideo("updatedUrl", "updatedTitle", "updatedDescription", "updatedVideoUrl", "updatedThumbnailUrl", LocalDate.of(2022, 2, 2), visible = false)
     }
 }

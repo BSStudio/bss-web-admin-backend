@@ -52,7 +52,6 @@ class DefaultMemberService(
             url = updateMember.url,
             name = updateMember.name,
             description = updateMember.description,
-            imageUrl = updateMember.imageUrl,
             joinedAt = updateMember.joinedAt,
             role = updateMember.role,
             status = updateMember.status,

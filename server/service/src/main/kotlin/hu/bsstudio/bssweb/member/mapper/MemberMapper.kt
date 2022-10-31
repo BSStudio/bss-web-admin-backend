@@ -13,7 +13,6 @@ class MemberMapper(private val idGenerator: () -> UUID = UUID::randomUUID) {
             url = entity.url,
             name = entity.name,
             description = entity.description,
-            imageUrl = entity.imageUrl,
             joinedAt = entity.joinedAt,
             role = entity.role,
             status = entity.status,

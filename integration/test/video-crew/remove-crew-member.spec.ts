@@ -21,18 +21,15 @@ describe('delete /api/v1/videoCrew', () => {
 
     const response = await VideoCrewEndpoint.removeVideoCrewMember(video_id, member_id, position)
 
-    const expected: DetailedVideo = {
+    expect(response.status).toBe(200)
+    expect(response.data).toStrictEqual<DetailedVideo>({
       id: videoEntity1.id,
       url: videoEntity1.url,
       title: videoEntity1.title,
       description: videoEntity1.description,
-      videoUrl: videoEntity1.video_url,
-      thumbnailUrl: videoEntity1.thumbnail_url,
       uploadedAt: videoEntity1.uploaded_at,
       visible: videoEntity1.visible,
       crew: [{ memberId: member_id, position: otherPosition }],
-    }
-    expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual(expected)
+    })
   })
 })

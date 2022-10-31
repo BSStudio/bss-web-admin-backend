@@ -20,14 +20,13 @@ describe('get /api/v1/member/{memberId}', () => {
       url: entity1.url,
       name: entity1.name,
       description: entity1.description,
-      imageUrl: entity1.image_url,
       joinedAt: entity1.joined_at,
       role: entity1.role,
       status: entity1.status,
       archived: entity1.archived,
     }
     expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual(expectedMember1)
+    expect(response.data).toStrictEqual<Member>(expectedMember1)
   })
   it('should not find member', async () => {
     expect.assertions(1)
