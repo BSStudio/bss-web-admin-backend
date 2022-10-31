@@ -6,7 +6,6 @@ export interface Member {
   url: string
   name: string
   description: string
-  imageUrl: string
   joinedAt: string
   role: string
   status: MemberStatus
@@ -22,7 +21,6 @@ export interface UpdateMember {
   url: string
   name: string
   description: string
-  imageUrl: string
   joinedAt: string
   role: string
   status: MemberStatus

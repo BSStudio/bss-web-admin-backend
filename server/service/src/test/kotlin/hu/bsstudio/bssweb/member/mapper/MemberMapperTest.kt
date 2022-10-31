@@ -40,13 +40,12 @@ internal class MemberMapperTest {
         private const val URL = "url"
         private const val NAME = "name"
         private const val DESCRIPTION = "description"
-        private const val IMAGE_URL = "imageUrl"
         private val JOINED_AT = LocalDate.of(2022, 1, 1)
         private const val ROLE = "role"
         private val STATUS = MemberStatus.MEMBER
         private const val ARCHIVED = false
-        private val ENTITY = MemberEntity(ID, URL, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
-        private val MODEL = Member(ID, URL, NAME, DESCRIPTION, IMAGE_URL, JOINED_AT, ROLE, STATUS, ARCHIVED)
+        private val ENTITY = MemberEntity(ID, URL, NAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
+        private val MODEL = Member(ID, URL, NAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
         private val CREATE_MEMBER = CreateMember(URL, NAME)
         private val CREATED_ENTITY = MemberEntity(id = ID, url = URL, name = NAME)
     }

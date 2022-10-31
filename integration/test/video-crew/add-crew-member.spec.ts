@@ -26,16 +26,14 @@ describe('post /api/v1/videoCrew', () => {
       url: videoEntity1.url,
       title: videoEntity1.title,
       description: videoEntity1.description,
-      videoUrl: videoEntity1.video_url,
-      thumbnailUrl: videoEntity1.thumbnail_url,
       uploadedAt: videoEntity1.uploaded_at,
       visible: videoEntity1.visible,
       crew: [{ memberId, position: position1 }],
     }
     expect(response1.status).toBe(200)
-    expect(response1.data).toStrictEqual(expected)
+    expect(response1.data).toStrictEqual<DetailedVideo>(expected)
     expect(response2.status).toBe(200)
-    expect(response2.data).toStrictEqual({
+    expect(response2.data).toStrictEqual<DetailedVideo>({
       ...expected,
       crew: [
         { memberId, position: position1 },

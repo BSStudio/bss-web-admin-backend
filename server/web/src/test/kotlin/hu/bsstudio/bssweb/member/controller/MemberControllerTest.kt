@@ -124,7 +124,6 @@ internal class MemberControllerTest {
             url = "url",
             name = NAME,
             description = "description",
-            imageUrl = "imageUrl",
             role = "role",
             status = MemberStatus.MEMBER,
             archived = false,

@@ -63,8 +63,6 @@ class DefaultVideoService(
             url = updateVideo.url,
             title = updateVideo.title,
             description = updateVideo.description,
-            videoUrl = updateVideo.videoUrl,
-            thumbnailUrl = updateVideo.thumbnailUrl,
             uploadedAt = updateVideo.uploadedAt,
             visible = updateVideo.visible,
         )

@@ -17,7 +17,6 @@ describe('put /api/v1/member/{memberId}', () => {
       url: 'updatedUrl',
       name: 'updatedName',
       description: 'updatedDescription',
-      imageUrl: 'updatedImageUrl',
       joinedAt: '1997-01-01',
       role: 'updatedRole',
       status: 'ALUMNI',
@@ -27,6 +26,6 @@ describe('put /api/v1/member/{memberId}', () => {
 
     const expectedMember: Member = { id, ...updateMember }
     expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual(expectedMember)
+    expect(response.data).toStrictEqual<Member>(expectedMember)
   })
 })

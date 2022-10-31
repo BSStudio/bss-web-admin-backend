@@ -18,8 +18,6 @@ data class DetailedVideoEntity(
     var url: String,
     var title: String,
     var description: String = "",
-    var videoUrl: String = "",
-    var thumbnailUrl: String = "",
     var uploadedAt: LocalDate = LocalDate.now(),
     var visible: Boolean = false,
     @OneToMany(fetch = FetchType.EAGER)

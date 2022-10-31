@@ -15,7 +15,6 @@ data class MemberEntity(
     var url: String,
     var name: String,
     var description: String = "",
-    var imageUrl: String = "",
     var joinedAt: LocalDate = LocalDate.now(),
     var role: String = "",
     @Enumerated(EnumType.STRING)

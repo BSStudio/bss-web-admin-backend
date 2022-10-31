@@ -74,8 +74,6 @@ internal class DefaultVideoCrewServiceTest {
             title = "title",
             description = "description",
             visible = true,
-            videoUrl = "videoUrl",
-            thumbnailUrl = "thumbnailUrl",
             uploadedAt = LocalDate.of(2022, 1, 1),
             crew = listOf(SIMPLE_VIDEO_CREW)
         )

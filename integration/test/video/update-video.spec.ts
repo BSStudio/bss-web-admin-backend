@@ -15,8 +15,6 @@ describe('put /api/v1/video/{videoId}', () => {
         url: 'url',
         title: 'title',
         description: 'description',
-        video_url: 'videoUrl',
-        thumbnail_url: 'thumbnailUrl',
         uploaded_at: '2022-01-01',
         visible: false,
       }),
@@ -26,25 +24,20 @@ describe('put /api/v1/video/{videoId}', () => {
       url: 'updatedUrl',
       title: 'updatedTitle',
       description: 'updatedDescription',
-      videoUrl: 'updatedVideoUrl',
-      thumbnailUrl: 'updatedThumbnailUrl',
       uploadedAt: '2000-01-01',
       visible: true,
     }
     const response = await VideoEndpoint.updateVideo(id, updateVideo)
 
-    const expectedVideo: DetailedVideo = {
+    expect(response.status).toBe(200)
+    expect(response.data).toStrictEqual<DetailedVideo>({
       id,
       url: updateVideo.url,
       title: updateVideo.title,
       description: updateVideo.description,
-      videoUrl: updateVideo.videoUrl,
-      thumbnailUrl: updateVideo.thumbnailUrl,
       uploadedAt: updateVideo.uploadedAt,
       visible: updateVideo.visible,
       crew: [],
-    }
-    expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual(expectedVideo)
+    })
   })
 })
