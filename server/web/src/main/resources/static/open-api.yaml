@@ -568,26 +568,24 @@ components:
       properties:
         name:
           type: string
-          nullable: true
+          nullable: false
         url:
           type: string
-          nullable: true
+          nullable: false
         description:
           type: string
-          nullable: true
-        imageUrl:
-          type: string
+          nullable: false
         joinedAt:
           type: string
-          nullable: true
+          nullable: false
         role:
           type: string
-          nullable: true
+          nullable: false
         status:
           $ref: '#/components/schemas/Status'
         archived:
           type: boolean
-          nullable: true
+          nullable: false
     Member:
       type: object
       properties:
@@ -599,23 +597,21 @@ components:
           nullable: false
         name:
           type: string
-          nullable: true
+          nullable: false
         description:
           type: string
-          nullable: true
-        imageUrl:
-          type: string
+          nullable: false
         joinedAt:
           type: string
-          nullable: true
+          nullable: false
         role:
           type: string
-          nullable: true
+          nullable: false
         status:
           $ref: '#/components/schemas/Status'
         archived:
           type: boolean
-          nullable: true
+          nullable: false
     CreateVideo:
       type: object
       properties:
@@ -634,12 +630,6 @@ components:
         description:
           type: string
           nullable: false
-        videoUrl:
-          type: string
-          nullable: true
-        thumbnailUrl:
-          type: string
-          nullable: true
         uploadedAt:
           type: string
           format: date
@@ -677,12 +667,6 @@ components:
             description:
               type: string
               nullable: false
-            videoUrl:
-              type: string
-              nullable: true
-            thumbnailUrl:
-              type: string
-              nullable: true
             crew:
               type: array
               items:
