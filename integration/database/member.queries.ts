@@ -5,7 +5,6 @@ export interface MemberEntity {
   url: string
   name: string
   description: string
-  image_url: string
   joined_at: string
   role: string
   status: MemberStatus
@@ -17,7 +16,6 @@ interface CreateMemberEntity {
   url: string
   name: string
   description?: string
-  image_url?: string
   joined_at?: string
   role?: string
   status?: MemberStatus
@@ -30,7 +28,6 @@ export function memberEntity(createEntity: CreateMemberEntity): MemberEntity {
     url: createEntity.url || '',
     name: createEntity.name,
     description: createEntity.description || '',
-    image_url: createEntity.image_url || '',
     joined_at: createEntity.joined_at || '2022-01-01',
     role: createEntity.role || '',
     status: createEntity.status || 'MEMBER_CANDIDATE_CANDIDATE',
@@ -40,11 +37,11 @@ export function memberEntity(createEntity: CreateMemberEntity): MemberEntity {
 
 export function insertMemberQuery(members: MemberEntity[]) {
   return (
-    'INSERT INTO bss_web.member (id, url, name, description, image_url, joined_at, role, status, archived) VALUES ' +
+    'INSERT INTO bss_web.member (id, url, name, description, joined_at, role, status, archived) VALUES ' +
     members
       .map(
         (member) =>
-          `('${member.id}', '${member.url}', '${member.name}', '${member.description}', '${member.image_url}', '${member.joined_at}', '${member.role}', '${member.status}', '${member.archived}')`
+          `('${member.id}', '${member.url}', '${member.name}', '${member.description}', '${member.joined_at}', '${member.role}', '${member.status}', '${member.archived}')`
       )
       .join(',')
   )

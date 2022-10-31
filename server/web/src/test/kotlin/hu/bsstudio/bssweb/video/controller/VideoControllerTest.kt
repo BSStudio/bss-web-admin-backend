@@ -122,7 +122,7 @@ internal class VideoControllerTest {
         private val VIDEO = Video(id = VIDEO_ID, url = "url", title = "title", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)
         private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
         private val CREATE_VIDEO = CreateVideo(url = "url", title = "title")
-        private val DETAILED_VIDEO = DetailedVideo(id = VIDEO_ID, url = "url", title = "title", "description", "videoUrl", "thumbnailUrl", uploadedAt = LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
-        private val UPDATE_VIDEO = UpdateVideo(url = "url", title = "title", "description", "videoUrl", "thumbnailUrl", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)
+        private val DETAILED_VIDEO = DetailedVideo(id = VIDEO_ID, url = "url", title = "title", "description", uploadedAt = LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
+        private val UPDATE_VIDEO = UpdateVideo(url = "url", title = "title", "description", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)
     }
 }

@@ -20,12 +20,11 @@ CREATE TABLE bss_web.member
     url         VARCHAR(250) UNIQUE NOT NULL,
     name        VARCHAR(250) UNIQUE NOT NULL,
     description VARCHAR(2000)       NOT NULL DEFAULT '',
-    image_url   VARCHAR(250)        NOT NULL DEFAULT '',
     joined_at   DATE                NOT NULL DEFAULT current_date,
     role        VARCHAR(250)        NOT NULL DEFAULT '',
     status      VARCHAR(250)        NOT NULL DEFAULT 'MEMBER_CANDIDATE_CANDIDATE' REFERENCES bss_web.status (name),
     archived    BOOLEAN             NOT NULL DEFAULT FALSE,
-    CONSTRAINT url_not_empty CHECK (trim(url) != '') ,
+    CONSTRAINT url_not_empty CHECK (trim(url) != ''),
     CONSTRAINT name_not_empty CHECK (trim(name) != '')
 );
 
@@ -35,8 +34,6 @@ CREATE TABLE bss_web.video
     url           VARCHAR(250) UNIQUE NOT NULL,
     title         VARCHAR(250) UNIQUE NOT NULL,
     description   VARCHAR(2000)       NOT NULL DEFAULT '',
-    video_url     VARCHAR(250)        NOT NULL DEFAULT '',
-    thumbnail_url VARCHAR(250)        NOT NULL DEFAULT '',
     uploaded_at   DATE                NOT NULL DEFAULT current_date,
     visible       BOOLEAN             NOT NULL DEFAULT FALSE,
     CONSTRAINT url_not_empty CHECK (trim(url) != '') ,

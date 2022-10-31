@@ -7,7 +7,6 @@ data class UpdateMember(
     val url: String,
     val name: String,
     val description: String,
-    val imageUrl: String,
     val joinedAt: LocalDate,
     val role: String,
     val status: MemberStatus,

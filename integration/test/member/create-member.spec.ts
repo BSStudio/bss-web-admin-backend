@@ -1,5 +1,5 @@
 import { DbUtils, memberEntity } from '../../database'
-import { CreateMember, MemberEndpoint } from '../../endpoints'
+import { CreateMember, Member, MemberEndpoint } from '../../endpoints'
 import { UUID_REGEX, dateToday } from '../../util'
 
 describe('post /api/v1/member', () => {
@@ -18,12 +18,11 @@ describe('post /api/v1/member', () => {
     const response = await MemberEndpoint.createMember(createMember)
 
     expect(response.status).toBe(201)
-    expect(response.data).toMatchObject({
+    expect(response.data).toMatchObject<Member>({
       id: expect.stringMatching(UUID_REGEX) as string,
       url,
       name,
       description: '',
-      imageUrl: '',
       joinedAt: dateToday(),
       role: '',
       status: 'MEMBER_CANDIDATE_CANDIDATE',

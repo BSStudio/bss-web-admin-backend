@@ -110,7 +110,6 @@ internal class DefaultMemberServiceTest {
             url = UPDATE_MEMBER.url,
             name = UPDATE_MEMBER.name,
             description = UPDATE_MEMBER.description,
-            imageUrl = UPDATE_MEMBER.imageUrl,
             joinedAt = UPDATE_MEMBER.joinedAt,
             role = UPDATE_MEMBER.role,
             status = UPDATE_MEMBER.status,
@@ -121,7 +120,6 @@ internal class DefaultMemberServiceTest {
             url = UPDATE_MEMBER.url,
             name = UPDATE_MEMBER.name,
             description = UPDATE_MEMBER.description,
-            imageUrl = UPDATE_MEMBER.imageUrl,
             joinedAt = UPDATE_MEMBER.joinedAt,
             role = UPDATE_MEMBER.role,
             status = UPDATE_MEMBER.status,
@@ -143,11 +141,11 @@ internal class DefaultMemberServiceTest {
 
     private companion object {
         private val MEMBER_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private val MEMBER_ENTITY = MemberEntity(MEMBER_ID, "url", "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)
+        private val MEMBER_ENTITY = MemberEntity(MEMBER_ID, url = "url", name = "name", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
         private val MEMBER_ENTITY_LIST = listOf(MEMBER_ENTITY)
-        private val MEMBER = Member(MEMBER_ID, "url", "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)
+        private val MEMBER = Member(MEMBER_ID, url = "url", name = "name", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
         private val MEMBER_LIST = listOf(MEMBER)
-        private val CREATE_MEMBER = CreateMember("url", "name")
-        private val UPDATE_MEMBER = UpdateMember("updatedUrl", "updatedName", "updatedDescription", "imageUrl", LocalDate.of(2022, 2, 2), "updatedRole", MemberStatus.ALUMNI, true)
+        private val CREATE_MEMBER = CreateMember("url", name = "name")
+        private val UPDATE_MEMBER = UpdateMember("updatedUrl", name = "updatedName", description = "updatedDescription", LocalDate.of(2022, 2, 2), role = "updatedRole", MemberStatus.ALUMNI, true)
     }
 }
