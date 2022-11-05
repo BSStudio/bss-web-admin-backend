@@ -7,7 +7,7 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudVersion"] = "2021.0.4"
+extra["springCloudVersion"] = "2021.0.5"
 extra["mockkVersion"] = "1.13.2"
 
 dependencyManagement {
