@@ -4,7 +4,7 @@ mockk = "1.13.2"
 springdoc = "1.6.12"
 springBoot = "2.7.5"
 # update in buildSrc/src/main/kotlin/dependency-management.gradle.kts
-springCloud = "2021.0.4"
+springCloud = "2021.0.5"
 gradleKtlintPlugin = "11.0.0"
 springDependencyManagementPlugin = "1.1.0"
 
