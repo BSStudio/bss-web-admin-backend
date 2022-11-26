@@ -2,7 +2,7 @@
 # update in buildSrc/src/main/kotlin/testing-convations.gradle.kts
 mockk = "1.13.2"
 springdoc = "1.6.13"
-springBoot = "2.7.6"
+springBoot = "3.0.0"
 # update in buildSrc/src/main/kotlin/dependency-management.gradle.kts
 springCloud = "2021.0.5"
 gradleKtlintPlugin = "11.0.0"
