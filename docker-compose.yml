@@ -19,12 +19,12 @@ services:
       spring.datasource.username: "postgres"
       spring.datasource.password: "postgres"
       spring.datasource.driver-class-name: "org.postgresql.Driver"
-      management.metrics.export.influx.uri: "http://influx:8086"
-      management.metrics.export.influx.token: "token"
-      management.metrics.export.influx.org: "org"
-      management.metrics.export.influx.user-name: "user"
-      management.metrics.export.influx.password: "password"
-      management.metrics.export.influx.bucket: "bucket"
+      management.influx.metrics.export.uri: "http://influx:8086"
+      management.influx.metrics.export.token: "token"
+      management.influx.metrics.export.org: "org"
+      management.influx.metrics.export.user-name: "user"
+      management.influx.metrics.export.password: "password"
+      management.influx.metrics.export.bucket: "bucket"
   db:
     image: "postgres:15.1-alpine3.16"
     environment:
