@@ -4,6 +4,10 @@ plugins {
     war
 }
 
+tasks.getByName<Jar>("jar") {
+    enabled = false
+}
+
 dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
