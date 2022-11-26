@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.video.entity
 
 import java.util.UUID
-import javax.persistence.MappedSuperclass
+import jakarta.persistence.MappedSuperclass
 
 @MappedSuperclass
 interface SimpleVideoEntity {
