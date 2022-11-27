@@ -71,9 +71,9 @@ workflows:
       - docker/publish:
           deploy: false
           use-buildkit: true
-          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: csikb/$CIRCLE_PROJECT_REPONAME
       - docker/publish:
           deploy: false
           use-buildkit: true
           dockerfile: war.Dockerfile
-          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+          image: csikb/$CIRCLE_PROJECT_REPONAME
