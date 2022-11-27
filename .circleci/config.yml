@@ -28,3 +28,4 @@ workflows:
           run-command: test:ci -- --ci
           test-results-for: jest
           version: 18.12.1
+      - docker/hadolint
