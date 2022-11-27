@@ -8,6 +8,21 @@ executors:
   jdk:
     docker:
       - image: cimg/openjdk:17.0.5
+jobs:
+  gradle_test:
+    executor: jdk
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run: ./gradlew test --parallel
+      - gradle/collect_test_results:
+          reports_path: server/web/build/reports/
+          test_results_path: server/web/build/test-results/
+      - gradle/collect_test_results:
+          reports_path: server/service/build/reports/
+          test_results_path: server/service/build/test-results/
+      - codecov/upload
 workflows:
   app:
     jobs:
@@ -27,6 +42,7 @@ workflows:
           app-dir: ~/project/integration
           npm-run: lint
           version: 18.12.1
+      - gradle_test
       - node/test:
           app-dir: ~/project/integration
           run-command: test:ci
