@@ -14,6 +14,7 @@ jobs:
     steps:
       - checkout
       - gradle/with_cache:
+          deps_checksum_file: build.gradle.kts
           steps:
             - run: ./gradlew test --parallel
       - gradle/collect_test_results:
@@ -28,15 +29,19 @@ workflows:
     jobs:
       - gradle/run:
           command: ktlintCheck --parallel
+          deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
           command: jacocoTestCoverageVerification --parallel
+          deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
           command: bootJar --parallel
+          deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
           command: bootWar --parallel
+          deps_checksum_file: build.gradle.kts
           executor: jdk
       - node/run:
           app-dir: ~/project/integration
