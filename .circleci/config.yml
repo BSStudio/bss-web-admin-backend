@@ -9,27 +9,19 @@ executors:
     docker:
       - image: cimg/openjdk:17.0.5
 workflows:
-  gradle_lint:
+  gradle:
     jobs:
       - gradle/run:
           command: ktlintCheck --parallel
           executor: jdk
-  gradle_test:
-    jobs:
       - gradle/test:
           executor: jdk
-  gradle_coverage:
-    jobs:
       - gradle/run:
           command: jacocoTestCoverageVerification --parallel
           executor: jdk
-  gradle_build_jar:
-    jobs:
       - gradle/run:
           command: bootJar --parallel
           executor: jdk
-  gradle_build_war:
-    jobs:
       - gradle/run:
           command: bootWar --parallel
           executor: jdk
