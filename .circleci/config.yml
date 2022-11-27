@@ -25,7 +25,7 @@ workflows:
           executor: jdk
       - node/test:
           app-dir: ~/project/integration
-          run-command: test:ci -- --ci
+          run-command: test:ci
           test-results-for: jest
           version: 18.12.1
       - docker/hadolint:
