@@ -9,6 +9,7 @@ const BUILD_CONTEXT = './..'
 const COMPOSE_FILE = process.env.DOCKER_COMPOSE_FILE_NAME?.split(',') || ['docker-compose.yml', 'docker-compose.ci.yml']
 
 export default async function (): Promise<void[]> {
+  console.log(COMPOSE_FILE)
   const dockerComposeEnvironment = await new DockerComposeEnvironment(BUILD_CONTEXT, COMPOSE_FILE)
     .withWaitStrategy('app_1', Wait.forHealthCheck())
     .withWaitStrategy('db_1', Wait.forHealthCheck())
