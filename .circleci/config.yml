@@ -26,6 +26,10 @@ workflows:
       - node/test:
           app-dir: ~/project/integration
           run-command: test:ci
+          setup:
+            - setup_remote_docker:
+                docker_layer_caching: true
+                version: 20.10.18
           test-results-for: jest
           version: 18.12.1
       - docker/hadolint:
