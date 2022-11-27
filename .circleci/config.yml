@@ -23,6 +23,10 @@ workflows:
       - gradle/run:
           command: bootWar --parallel
           executor: jdk
+      - node/run:
+          app-dir: ~/project/integration
+          npm-run: lint
+          version: 18.12.1
       - node/test:
           app-dir: ~/project/integration
           run-command: test:ci
