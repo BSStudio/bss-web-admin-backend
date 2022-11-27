@@ -18,7 +18,7 @@ COPY ./ ./
 ARG BUILD_ARG="bootWar --parallel"
 RUN ./gradlew $BUILD_ARG
 
-FROM tomcat:9.0.68-jre17-temurin-jammy as app
+FROM tomcat:10.1.2-jre17-temurin-jammy as app
 ARG BUILD_ROOT=/usr/src/app
 ARG BOOT_WAR=$BUILD_ROOT/server/build/libs/*.war
 COPY --from=build $BOOT_WAR $CATALINA_HOME/webapps/ROOT.war
