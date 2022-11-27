@@ -1,178 +1,35 @@
 version: 2.1
 orbs: 
   codecov: codecov/codecov@3.2.4
-commands:
-  init_gradle:
-    steps:
-      - checkout
-      - restore_cache:
-          key: v2-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - run: ./gradlew --build-cache
-      - save_cache:
-          paths:
-            - ~/.gradle/wrapper
-          key: v2-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-  store_gradle_reports:
-    steps:
-      - store_artifacts:
-          path: server/build/reports
-      - store_artifacts:
-          path: server/web/build/reports
-      - store_artifacts:
-          path: server/service/build/reports
-      - store_artifacts:
-          path: server/data/build/reports
-  init_npm:
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
-      - run:
-          command: npm clean-install --no-fund --no-audit
-          working_directory: integration
-      - save_cache:
-          paths:
-            - integration/node_modules
-          key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
-  docker_build:
-    steps:
-      - checkout
-      - restore_cache:
-          key: v3-docker-image-{{ .Branch }}
-      - run:
-          name: Restore cache
-          command: |
-            set +o pipefail
-            docker load -i ~/caches/image.tar | true
-      - run: docker build . --file <<parameters.filename>> --tag $DOCKERHUB_USERNAME/$IMAGE_NAME:<<parameters.tag>>
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            mkdir -p ~/caches
-            docker save -o ~/caches/image.tar $DOCKERHUB_USERNAME/$IMAGE_NAME:<<parameters.tag>>
-      - save_cache:
-          paths:
-            - ~/cache/image.tar
-          key: v3-docker-image-{{ .Branch }}-{{ checksum <<parameters.filename>> }}
-    parameters:
-      tag:
-        type: string
-        default: latest
-      filename:
-        type: string
-        default: Dockerfile
+  node: circleci/node@5.0.3
+  gradle: circleci/gradle@3.0.0
+  docker: circleci/docker@2.1.4
 executors:
   jdk:
     docker:
-      - image: cimg/openjdk:17.0
-  node:
-    docker:
-      - image: cimg/node:16.18
-  ubuntu-docker:
-    environment:
-      IMAGE_NAME: bss-web-admin-backend
-    machine:
-      image: ubuntu-2204:2022.04.1
-      docker_layer_caching: true
-jobs:
-  lint:
-    executor: jdk
-    steps:
-      - init_gradle
-      - run: ./gradlew ktlintCheck --parallel
-  test:
-    executor: jdk
-    steps:
-      - init_gradle
-      - run: ./gradlew jacocoTestReport --parallel
-      - store_test_results:
-          path: web/build/test-results
-      - store_test_results:
-          path: service/build/test-results
-      - store_gradle_reports
-  coverage:
-    executor: jdk
-    steps:
-      - init_gradle
-      - run:
-          name: "Run test and test coverage"
-          command: ./gradlew jacocoTestCoverageVerification --parallel
-      - store_gradle_reports
-      - codecov/upload
-  lint-integration-test:
-    executor: node
-    steps:
-      - init_npm
-      - run:
-          name: Lint integration test
-          command: |
-            npm run lint -- -f=junit -o ./out/eslint/report.xml
-            npm run lint
-          working_directory: integration
-      - store_test_results:
-          path: integration/out/eslint
-  integration-test:
-    executor: ubuntu-docker
-    steps:
-      - init_npm
-      - run:
-          name: Run integration test
-          command: npm run test:ci -- --ci
-          working_directory: integration
-          environment:
-            DEBUG: testcontainers*
-      - store_test_results:
-          path: integration/out/jest
-  integration-test-war:
-    executor: ubuntu-docker
-    steps:
-      - init_npm
-      - run:
-          name: Run integration test
-          command: npm run test:ci -- --ci --testTimeout 20000
-          working_directory: integration
-          environment:
-            DEBUG: testcontainers*
-            DOCKER_COMPOSE_FILE_NAME: docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml
-      - store_test_results:
-          path: integration/out/jest
-  docker-build:
-    executor: ubuntu-docker
-    steps:
-      - docker_build
-  docker-build-war:
-    executor: ubuntu-docker
-    steps:
-      - docker_build:
-          tag: war
-          filename: war.Dockerfile
-  docker-push:
-    executor: ubuntu-docker
-    steps:
-      - docker_build
-      - run: echo "$DOCKERHUB_ACCESS_TOKEN" | docker login --username $DOCKERHUB_USERNAME --password-stdin
-      - run: docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
+      - image: cimg/openjdk:17.0.5
 workflows:
-  all:
+  gradle_lint:
     jobs:
-      - lint
-      - test
-      - coverage
-      - integration-test
-      - integration-test-war
-      - lint-integration-test
-      - docker-build
-      - docker-build-war
-      - docker-push:
-          filters:
-            branches:
-              only:
-                - main
-          requires:
-            - lint
-            - test
-            - coverage
-            - integration-test
-            - lint-integration-test
-            - docker-build
+      - gradle/run:
+          command: ktlintCheck --parallel
+          executor: jdk
+  gradle_test:
+    jobs:
+      - gradle/test:
+          executor: jdk
+  gradle_coverage:
+    jobs:
+      - gradle/run:
+          command: jacocoTestCoverageVerification --parallel
+          executor: jdk
+  gradle_build_jar:
+    jobs:
+      - gradle/run:
+          command: bootJar --parallel
+          executor: jdk
+  gradle_build_war:
+    jobs:
+      - gradle/run:
+          command: bootWar --parallel
+          executor: jdk
