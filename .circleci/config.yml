@@ -9,12 +9,10 @@ executors:
     docker:
       - image: cimg/openjdk:17.0.5
 workflows:
-  gradle:
+  app:
     jobs:
       - gradle/run:
           command: ktlintCheck --parallel
-          executor: jdk
-      - gradle/test:
           executor: jdk
       - gradle/run:
           command: jacocoTestCoverageVerification --parallel
@@ -25,3 +23,8 @@ workflows:
       - gradle/run:
           command: bootWar --parallel
           executor: jdk
+      - node/test:
+          app-dir: ~/project/integration
+          run-command: test:ci -- --ci
+          test-results-for: jest
+          version: 18.12.1
