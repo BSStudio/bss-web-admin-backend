@@ -68,3 +68,12 @@ workflows:
           version: 18.12.1
       - docker/hadolint:
           dockerfiles: Dockerfile:war.Dockerfile
+      - docker/publish:
+          deploy: false
+          use-buildkit: true
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
+      - docker/publish:
+          deploy: false
+          use-buildkit: true
+          dockerfile: war.Dockerfile
+          image: $CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
