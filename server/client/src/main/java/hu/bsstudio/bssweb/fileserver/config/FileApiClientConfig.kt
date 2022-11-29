@@ -6,5 +6,4 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @EnableFeignClients(clients = [FileApiClient::class])
-class FileApiClientConfig {
-}
+class FileApiClientConfig

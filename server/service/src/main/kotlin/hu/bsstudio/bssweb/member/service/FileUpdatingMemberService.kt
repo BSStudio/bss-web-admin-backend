@@ -1,13 +1,14 @@
 package hu.bsstudio.bssweb.member.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
+import hu.bsstudio.bssweb.fileserver.model.FileUpdate
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
-import hu.bsstudio.bssweb.fileserver.model.FileUpdate
 import hu.bsstudio.bssweb.member.model.UpdateMember
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
-class FileUpdatingMemberService(private val server: MemberService, private val fileClient: FileApiClient): MemberService {
+class FileUpdatingMemberService(private val server: MemberService, private val fileClient: FileApiClient) : MemberService {
 
     override fun findAllMembers(): List<Member> {
         return this.server.findAllMembers()

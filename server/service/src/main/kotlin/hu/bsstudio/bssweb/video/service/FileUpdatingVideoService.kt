@@ -2,10 +2,14 @@ package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
 import hu.bsstudio.bssweb.fileserver.model.FileUpdate
-import hu.bsstudio.bssweb.video.model.*
+import hu.bsstudio.bssweb.video.model.CreateVideo
+import hu.bsstudio.bssweb.video.model.DetailedVideo
+import hu.bsstudio.bssweb.video.model.UpdateVideo
+import hu.bsstudio.bssweb.video.model.Video
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 class FileUpdatingVideoService(private val service: VideoService, private val fileClient: FileApiClient) : VideoService {
     override fun findAllVideos(): List<Video> {
@@ -31,7 +35,7 @@ class FileUpdatingVideoService(private val service: VideoService, private val fi
 
     override fun updateVideo(videoId: UUID, updateVideo: UpdateVideo): Optional<DetailedVideo> {
         return this.service.updateVideo(videoId, updateVideo)
-                .map { this.fileClient.updateVideoFolder(FileUpdate(it.id, it.url)) ; it }
+            .map { this.fileClient.updateVideoFolder(FileUpdate(it.id, it.url)) ; it }
     }
 
     override fun deleteVideoById(videoId: UUID) {
