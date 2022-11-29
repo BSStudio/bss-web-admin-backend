@@ -1,12 +1,13 @@
 package hu.bsstudio.bssweb.video.service
 
-import hu.bsstudio.bssweb.video.client.VideoFileClient
+import hu.bsstudio.bssweb.fileserver.client.FileApiClient
+import hu.bsstudio.bssweb.fileserver.model.FileUpdate
 import hu.bsstudio.bssweb.video.model.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import java.util.*
 
-class FileUpdatingVideoService(private val service: VideoService, private val fileClient: VideoFileClient) : VideoService {
+class FileUpdatingVideoService(private val service: VideoService, private val fileClient: FileApiClient) : VideoService {
     override fun findAllVideos(): List<Video> {
         return this.service.findAllVideos()
     }
@@ -17,7 +18,7 @@ class FileUpdatingVideoService(private val service: VideoService, private val fi
 
     override fun insertVideo(createVideo: CreateVideo): Video {
         return this.service.insertVideo(createVideo)
-            .also { this.fileClient.createFile(VideoFile(it.id, it.url)) }
+            .also { this.fileClient.createVideoFolder(FileUpdate(it.id, it.url)) }
     }
 
     override fun changeVideoVisibility(videoIds: List<UUID>, visible: Boolean): List<UUID> {
@@ -30,7 +31,7 @@ class FileUpdatingVideoService(private val service: VideoService, private val fi
 
     override fun updateVideo(videoId: UUID, updateVideo: UpdateVideo): Optional<DetailedVideo> {
         return this.service.updateVideo(videoId, updateVideo)
-                .map { this.fileClient.updateFile(VideoFile(it.id, it.url)) ; it }
+                .map { this.fileClient.updateVideoFolder(FileUpdate(it.id, it.url)) ; it }
     }
 
     override fun deleteVideoById(videoId: UUID) {

@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.video.config
 
-import hu.bsstudio.bssweb.video.client.VideoFileClient
+import hu.bsstudio.bssweb.fileserver.client.FileApiClient
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.video.repository.VideoRepository
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration
 class VideoServiceConfig(
     private val videoRepository: VideoRepository,
     private val detailedRepository: DetailedVideoRepository,
-    private val fileClient: VideoFileClient
+    private val fileClient: FileApiClient
 ) {
 
     @Bean
