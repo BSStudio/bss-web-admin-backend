@@ -1,8 +1,9 @@
 package hu.bsstudio.bssweb.videocrew.controller
 
+import hu.bsstudio.bssweb.member.model.SimpleMember
 import hu.bsstudio.bssweb.video.model.DetailedVideo
-import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
+import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import hu.bsstudio.bssweb.videocrew.service.VideoCrewService
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -36,7 +37,7 @@ internal class VideoCrewControllerTest {
 
     @Test
     internal fun addPosition() {
-        every { mockService.addPosition(VIDEO_CREW) } returns Optional.of(DETAILED_VIDEO)
+        every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
         val response = this.underTest.addPosition(VIDEO_ID, POSITION, MEMBER_ID)
 
@@ -46,7 +47,7 @@ internal class VideoCrewControllerTest {
 
     @Test
     internal fun addPositionEmpty() {
-        every { mockService.addPosition(VIDEO_CREW) } returns Optional.empty()
+        every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
         val response = this.underTest.addPosition(VIDEO_ID, POSITION, MEMBER_ID)
 
@@ -56,7 +57,7 @@ internal class VideoCrewControllerTest {
 
     @Test
     internal fun removePosition() {
-        every { mockService.removePosition(VIDEO_CREW) } returns Optional.of(DETAILED_VIDEO)
+        every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
         val response = this.underTest.removePosition(VIDEO_ID, POSITION, MEMBER_ID)
 
@@ -66,7 +67,7 @@ internal class VideoCrewControllerTest {
 
     @Test
     internal fun removePositionEmpty() {
-        every { mockService.removePosition(VIDEO_CREW) } returns Optional.empty()
+        every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
         val response = this.underTest.removePosition(VIDEO_ID, POSITION, MEMBER_ID)
 
@@ -78,8 +79,9 @@ internal class VideoCrewControllerTest {
         private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val POSITION = "position1"
         private val MEMBER_ID = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
-        private val VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION, MEMBER_ID)
-        private val SIMPLE_VIDEO_CREW = SimpleCrew(POSITION, MEMBER_ID)
+        private val MEMBER = SimpleMember(MEMBER_ID, "name")
+        private val VIDEO_CREW_REQUEST = VideoCrewRequest(VIDEO_ID, POSITION, MEMBER_ID)
+        private val SIMPLE_VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION, MEMBER)
         private val DETAILED_VIDEO = DetailedVideo(
             id = VIDEO_ID,
             url = "url",

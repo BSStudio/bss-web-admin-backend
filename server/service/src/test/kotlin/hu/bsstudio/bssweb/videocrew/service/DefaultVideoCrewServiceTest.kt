@@ -1,12 +1,13 @@
 package hu.bsstudio.bssweb.videocrew.service
 
+import hu.bsstudio.bssweb.member.model.SimpleMember
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.service.VideoService
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
-import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
+import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -16,7 +17,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultVideoCrewServiceTest {
@@ -65,10 +67,11 @@ internal class DefaultVideoCrewServiceTest {
         private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
         private const val POSITION_1 = "position1"
         private val MEMBER_ID_1 = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
-        private val VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION_1, MEMBER_ID_1)
+        private val VIDEO_CREW = VideoCrewRequest(VIDEO_ID, POSITION_1, MEMBER_ID_1)
         private val VIDEO_CREW_ENTITY_ID_1 = VideoCrewEntityId(VIDEO_ID, POSITION_1, MEMBER_ID_1)
         private val VIDEO_CREW_ENTITY_1 = VideoCrewEntity(id = VIDEO_CREW_ENTITY_ID_1)
-        private val SIMPLE_VIDEO_CREW = SimpleCrew(POSITION_1, MEMBER_ID_1)
+        private val MEMBER = SimpleMember(MEMBER_ID_1, "name")
+        private val SIMPLE_VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION_1, MEMBER)
         private val DETAILED_VIDEO = DetailedVideo(
             id = VIDEO_ID,
             url = "url",
