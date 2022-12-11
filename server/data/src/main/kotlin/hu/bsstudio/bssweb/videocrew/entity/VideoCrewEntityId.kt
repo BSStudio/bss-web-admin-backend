@@ -3,7 +3,7 @@ package hu.bsstudio.bssweb.videocrew.entity
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import java.io.Serializable
-import java.util.*
+import java.util.UUID
 
 @Embeddable
 data class VideoCrewEntityId(

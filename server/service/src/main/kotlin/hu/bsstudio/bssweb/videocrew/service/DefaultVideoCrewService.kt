@@ -5,7 +5,7 @@ import hu.bsstudio.bssweb.video.service.VideoService
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
-import java.util.*
+import java.util.Optional
 
 class DefaultVideoCrewService(
     private val repository: VideoCrewRepository,

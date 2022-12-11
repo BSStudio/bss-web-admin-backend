@@ -43,7 +43,7 @@ internal class DefaultVideoCrewServiceTest {
     internal fun `should add position to video`() {
         every { mockMapper.modelToEntity(VIDEO_CREW) } returns VIDEO_CREW_ENTITY
         every { mockRepository.save(VIDEO_CREW_ENTITY) } returns VIDEO_CREW_ENTITY
-        every { VIDEO_CREW.videoId } returns  VIDEO_ID
+        every { VIDEO_CREW.videoId } returns VIDEO_ID
         every { mockVideoService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO)
 
         val result = underTest.addPosition(VIDEO_CREW)
@@ -55,7 +55,7 @@ internal class DefaultVideoCrewServiceTest {
     internal fun `should remove position from video`() {
         every { mockMapper.modelToId(VIDEO_CREW) } returns VIDEO_CREW_ENTITY_ID
         every { mockRepository.deleteById(VIDEO_CREW_ENTITY_ID) } returns Unit
-        every { VIDEO_CREW.videoId } returns  VIDEO_ID
+        every { VIDEO_CREW.videoId } returns VIDEO_ID
         every { mockVideoService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_OTHER)
 
         val result = underTest.removePosition(VIDEO_CREW)
