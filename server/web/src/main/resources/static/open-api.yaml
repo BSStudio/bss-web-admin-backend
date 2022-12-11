@@ -497,7 +497,6 @@ paths:
                 $ref: "#/components/schemas/BssMetrics"
 components:
   schemas:
-    # todo
     Sort:
       type: object
       properties:
@@ -671,15 +670,24 @@ components:
             crew:
               type: array
               items:
-                $ref: "#/components/schemas/SimpleCrew"
-    SimpleCrew:
+                $ref: "#/components/schemas/VideoCrew"
+    VideoCrew:
       type: object
       properties:
         position:
           type: string
-        memberId:
+        videoId:
           type: string
           format: uuid
+        member:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+              format: uuid
     CreateEvent:
       type: object
       properties:
