@@ -26,11 +26,17 @@ export interface DetailedVideo {
   description: string
   uploadedAt: string
   visible: boolean
-  crew: SimpleCrew[]
+  crew: VideoCrew[]
 }
-interface SimpleCrew {
+interface VideoCrew {
+  videoId: string
   position: string
-  memberId: string
+  member: SimpleMember
+}
+
+interface SimpleMember {
+    id: string
+    name: string
 }
 
 export class VideoEndpoint {
