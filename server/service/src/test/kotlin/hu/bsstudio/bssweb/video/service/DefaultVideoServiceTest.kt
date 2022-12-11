@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -143,7 +144,7 @@ internal class DefaultVideoServiceTest {
 
     private companion object {
         private val PAGEABLE = Pageable.unpaged()
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val VIDEO_ID = mockk<UUID>()
         private val VIDEO_ENTITY = VideoEntity(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
         private val VIDEO_ENTITY_LIST = listOf(VIDEO_ENTITY)
         private val VIDEO = Video(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)

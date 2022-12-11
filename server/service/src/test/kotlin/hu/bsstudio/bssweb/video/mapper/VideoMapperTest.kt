@@ -14,11 +14,12 @@ import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 internal class VideoMapperTest {
 
@@ -59,7 +60,7 @@ internal class VideoMapperTest {
     }
 
     private companion object {
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val VIDEO_ID = mockk<UUID>()
         private val MEMBER_ID = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
         private const val URL = "url"
         private const val TITLE = "title"

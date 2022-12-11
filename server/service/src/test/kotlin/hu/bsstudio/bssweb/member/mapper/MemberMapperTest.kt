@@ -6,6 +6,7 @@ import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.SimpleMember
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -45,7 +46,7 @@ internal class MemberMapperTest {
     }
 
     private companion object {
-        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val ID = mockk<UUID>()
         private const val URL = "url"
         private const val NAME = "name"
         private const val DESCRIPTION = "description"

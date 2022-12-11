@@ -11,6 +11,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -140,12 +141,12 @@ internal class DefaultMemberServiceTest {
     }
 
     private companion object {
-        private val MEMBER_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val MEMBER_ID = mockk<UUID>()
         private val MEMBER_ENTITY = MemberEntity(MEMBER_ID, url = "url", name = "name", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
         private val MEMBER_ENTITY_LIST = listOf(MEMBER_ENTITY)
         private val MEMBER = Member(MEMBER_ID, url = "url", name = "name", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
         private val MEMBER_LIST = listOf(MEMBER)
-        private val CREATE_MEMBER = CreateMember("url", name = "name")
+        private val CREATE_MEMBER = mockk<CreateMember>()
         private val UPDATE_MEMBER = UpdateMember("updatedUrl", name = "updatedName", description = "updatedDescription", LocalDate.of(2022, 2, 2), role = "updatedRole", MemberStatus.ALUMNI, true)
     }
 }

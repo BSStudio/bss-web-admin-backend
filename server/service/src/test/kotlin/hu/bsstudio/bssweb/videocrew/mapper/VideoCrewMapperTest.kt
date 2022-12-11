@@ -12,6 +12,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -50,7 +51,7 @@ internal class VideoCrewMapperTest {
     }
 
     private companion object {
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val VIDEO_ID = mockk<UUID>()
         private const val POSITION = "position"
         private val MEMBER_ID = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
         private val MEMBER = SimpleMember(MEMBER_ID, "name")
