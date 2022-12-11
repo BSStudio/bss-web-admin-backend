@@ -28,7 +28,13 @@ describe('post /api/v1/videoCrew', () => {
       description: videoEntity1.description,
       uploadedAt: videoEntity1.uploaded_at,
       visible: videoEntity1.visible,
-      crew: [{ memberId, position: position1 }],
+      crew: [
+        {
+          videoId: videoEntity1.id,
+          position: position1,
+          member: { id: memberEntity1.id, name: memberEntity1.name },
+        },
+      ],
     }
     expect(response1.status).toBe(200)
     expect(response1.data).toStrictEqual<DetailedVideo>(expected)
@@ -36,8 +42,16 @@ describe('post /api/v1/videoCrew', () => {
     expect(response2.data).toStrictEqual<DetailedVideo>({
       ...expected,
       crew: [
-        { memberId, position: position1 },
-        { memberId, position: position2 },
+        {
+          videoId: videoEntity1.id,
+          position: position1,
+          member: { id: memberEntity1.id, name: memberEntity1.name },
+        },
+        {
+          videoId: videoEntity1.id,
+          position: position2,
+          member: { id: memberEntity1.id, name: memberEntity1.name },
+        },
       ],
     })
   })

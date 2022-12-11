@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.videocrew.controller
 
 import hu.bsstudio.bssweb.video.model.DetailedVideo
-import hu.bsstudio.bssweb.videocrew.model.VideoCrew
+import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import hu.bsstudio.bssweb.videocrew.service.VideoCrewService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -24,14 +24,14 @@ class VideoCrewController(private val service: VideoCrewService) {
 
     @PutMapping
     fun addPosition(@RequestParam videoId: UUID, @RequestParam position: String, @RequestParam memberId: UUID): ResponseEntity<DetailedVideo> {
-        return VideoCrew(videoId, position, memberId)
+        return VideoCrewRequest(videoId, position, memberId)
             .let(service::addPosition)
             .let { ResponseEntity.of(it) }
     }
 
     @DeleteMapping
     fun removePosition(@RequestParam videoId: UUID, @RequestParam position: String, @RequestParam memberId: UUID): ResponseEntity<DetailedVideo> {
-        return VideoCrew(videoId, position, memberId)
+        return VideoCrewRequest(videoId, position, memberId)
             .let(service::removePosition)
             .let { ResponseEntity.of(it) }
     }

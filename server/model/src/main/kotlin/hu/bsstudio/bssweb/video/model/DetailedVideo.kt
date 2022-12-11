@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.video.model
 
-import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
+import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import java.time.LocalDate
 import java.util.UUID
 
@@ -11,5 +11,5 @@ data class DetailedVideo(
     val description: String,
     val uploadedAt: LocalDate,
     val visible: Boolean,
-    val crew: List<SimpleCrew>
+    val crew: List<VideoCrew>
 )

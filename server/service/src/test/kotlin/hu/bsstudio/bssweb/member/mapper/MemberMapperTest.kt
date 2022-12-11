@@ -2,8 +2,11 @@ package hu.bsstudio.bssweb.member.mapper
 
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.entity.MemberEntity
+import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
+import hu.bsstudio.bssweb.member.model.SimpleMember
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -29,6 +32,13 @@ internal class MemberMapperTest {
     }
 
     @Test
+    internal fun `should map simple entity to model`() {
+        val result = underTest.entityToModel(SIMPLE_ENTITY)
+
+        assertThat(result).isEqualTo(SIMPLE_MODEL)
+    }
+
+    @Test
     internal fun `should map model to entity`() {
         val result = underTest.modelToEntity(CREATE_MEMBER)
 
@@ -36,7 +46,7 @@ internal class MemberMapperTest {
     }
 
     private companion object {
-        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val ID = mockk<UUID>()
         private const val URL = "url"
         private const val NAME = "name"
         private const val DESCRIPTION = "description"
@@ -48,5 +58,7 @@ internal class MemberMapperTest {
         private val MODEL = Member(ID, URL, NAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
         private val CREATE_MEMBER = CreateMember(URL, NAME)
         private val CREATED_ENTITY = MemberEntity(id = ID, url = URL, name = NAME)
+        private val SIMPLE_ENTITY = SimpleMemberEntity(ID, NAME)
+        private val SIMPLE_MODEL = SimpleMember(ID, NAME)
     }
 }
