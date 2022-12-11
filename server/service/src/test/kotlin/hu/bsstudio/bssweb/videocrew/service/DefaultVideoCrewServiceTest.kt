@@ -3,6 +3,7 @@ package hu.bsstudio.bssweb.videocrew.service
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.service.VideoService
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
+import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
@@ -15,8 +16,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
-import java.util.Optional
-import java.util.UUID
+import java.util.*
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultVideoCrewServiceTest {
@@ -52,8 +52,8 @@ internal class DefaultVideoCrewServiceTest {
 
     @Test
     internal fun `should remove position from video`() {
-        every { mockMapper.modelToEntity(VIDEO_CREW) } returns VIDEO_CREW_ENTITY_1
-        every { mockRepository.deleteById(VIDEO_CREW_ENTITY_1) } returns Unit
+        every { mockMapper.modelToId(VIDEO_CREW) } returns VIDEO_CREW_ENTITY_ID_1
+        every { mockRepository.deleteById(VIDEO_CREW_ENTITY_ID_1) } returns Unit
         every { mockVideoService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_EMPTY)
 
         val result = underTest.removePosition(VIDEO_CREW)
@@ -66,7 +66,8 @@ internal class DefaultVideoCrewServiceTest {
         private const val POSITION_1 = "position1"
         private val MEMBER_ID_1 = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
         private val VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION_1, MEMBER_ID_1)
-        private val VIDEO_CREW_ENTITY_1 = VideoCrewEntity(VIDEO_ID, POSITION_1, MEMBER_ID_1)
+        private val VIDEO_CREW_ENTITY_ID_1 = VideoCrewEntityId(VIDEO_ID, POSITION_1, MEMBER_ID_1)
+        private val VIDEO_CREW_ENTITY_1 = VideoCrewEntity(id = VIDEO_CREW_ENTITY_ID_1)
         private val SIMPLE_VIDEO_CREW = SimpleCrew(POSITION_1, MEMBER_ID_1)
         private val DETAILED_VIDEO = DetailedVideo(
             id = VIDEO_ID,

@@ -5,7 +5,7 @@ import hu.bsstudio.bssweb.video.service.VideoService
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
-import java.util.Optional
+import java.util.*
 
 class DefaultVideoCrewService(
     private val repository: VideoCrewRepository,
@@ -13,9 +13,7 @@ class DefaultVideoCrewService(
     private val mapper: VideoCrewMapper,
 ) : VideoCrewService {
 
-    override fun getPositions(): List<String> {
-        return repository.getPositions().sorted()
-    }
+    override fun getPositions() = repository.getPositions().sorted()
 
     override fun addPosition(videoCrew: VideoCrew): Optional<DetailedVideo> {
         return videoCrew
@@ -26,7 +24,7 @@ class DefaultVideoCrewService(
 
     override fun removePosition(videoCrew: VideoCrew): Optional<DetailedVideo> {
         return videoCrew
-            .let(mapper::modelToEntity)
+            .let(mapper::modelToId)
             .let(repository::deleteById)
             .run { videoService.findVideoById(videoCrew.videoId) }
     }
