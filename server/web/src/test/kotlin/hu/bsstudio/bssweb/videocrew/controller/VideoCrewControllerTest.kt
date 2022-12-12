@@ -37,7 +37,7 @@ internal class VideoCrewControllerTest {
     internal fun addPosition() {
         every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
-        val response = this.underTest.addPosition(VIDEO_ID, POSITION, MEMBER_ID)
+        val response = this.underTest.addPosition(VIDEO_CREW_REQUEST)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).isEqualTo(DETAILED_VIDEO)
@@ -47,7 +47,7 @@ internal class VideoCrewControllerTest {
     internal fun addPositionEmpty() {
         every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
-        val response = this.underTest.addPosition(VIDEO_ID, POSITION, MEMBER_ID)
+        val response = this.underTest.addPosition(VIDEO_CREW_REQUEST)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
         assertThat(response.body).isEqualTo(null)
@@ -57,7 +57,7 @@ internal class VideoCrewControllerTest {
     internal fun removePosition() {
         every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
-        val response = this.underTest.removePosition(VIDEO_ID, POSITION, MEMBER_ID)
+        val response = this.underTest.removePosition(VIDEO_CREW_REQUEST)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(response.body).isEqualTo(DETAILED_VIDEO)
@@ -67,7 +67,7 @@ internal class VideoCrewControllerTest {
     internal fun removePositionEmpty() {
         every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
-        val response = this.underTest.removePosition(VIDEO_ID, POSITION, MEMBER_ID)
+        val response = this.underTest.removePosition(VIDEO_CREW_REQUEST)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
         assertThat(response.body).isEqualTo(null)
