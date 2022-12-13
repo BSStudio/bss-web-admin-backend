@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.member.controller
 
-import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
@@ -9,11 +8,11 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
-import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
@@ -37,12 +36,12 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should retrieve a single member`() {
-        every { mockService.findMemberById(ID) } returns Optional.of(MEMBER_1)
+        every { mockService.findMemberById(ID) } returns Optional.of(MEMBER)
 
         val response = underTest.getMemberById(ID)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(MEMBER_1)
+        assertThat(response.body).isEqualTo(MEMBER)
     }
 
     @Test
@@ -57,22 +56,22 @@ internal class MemberControllerTest {
 
     @Test
     internal fun `should return ok on update`() {
-        every { mockService.updateMember(ID, UPDATE_MEMBER) } returns Optional.of(MEMBER_1)
+        every { mockService.updateMember(ID, UPDATE_MEMBER) } returns Optional.of(MEMBER)
 
         val response = underTest.updateMember(ID, UPDATE_MEMBER)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(MEMBER_1)
+        assertThat(response.body).isEqualTo(MEMBER)
     }
 
     @Test
     internal fun `should return created on create`() {
-        every { mockService.insertMember(CREATE_MEMBER) } returns MEMBER_1
+        every { mockService.insertMember(CREATE_MEMBER) } returns MEMBER
 
         val response = underTest.createMember(CREATE_MEMBER)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
-        assertThat(response.body).isEqualTo(MEMBER_1)
+        assertThat(response.body).isEqualTo(MEMBER)
     }
 
     @Test
@@ -106,28 +105,10 @@ internal class MemberControllerTest {
     }
 
     companion object {
-        private val ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private const val NAME = "name1"
-        private val CREATE_MEMBER = CreateMember("url", NAME)
-        private val UPDATE_MEMBER = UpdateMember(
-            url = "url",
-            name = NAME,
-            description = "description",
-            role = "role",
-            status = MemberStatus.MEMBER,
-            archived = false,
-            joinedAt = LocalDate.EPOCH
-        )
-        private val MEMBER_1 = Member(
-            id = ID,
-            url = "url",
-            name = NAME,
-            description = "description",
-            role = "role",
-            status = MemberStatus.MEMBER,
-            archived = false,
-            joinedAt = LocalDate.EPOCH
-        )
-        private val MEMBER_LIST = listOf(MEMBER_1)
+        private val ID = mockk<UUID>()
+        private val CREATE_MEMBER = mockk<CreateMember>()
+        private val UPDATE_MEMBER = mockk<UpdateMember>()
+        private val MEMBER = mockk<Member>()
+        private val MEMBER_LIST = mockk<List<Member>>()
     }
 }

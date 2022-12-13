@@ -10,12 +10,13 @@ describe('delete /api/v1/videoCrew', () => {
   const video_id = '11234567-0123-0123-0123-0123456789ab'
   const position = 'position'
   const otherPosition = 'otherPosition'
+  const memberName = 'Bence Csik'
 
   it('should remove a crew member from a video', async () => {
     expect.assertions(2)
     const videoEntity1 = videoEntity({ id: video_id, url: 'url', title: 'title' })
     await dbUtils.addVideos([videoEntity1])
-    await dbUtils.addMembers([memberEntity({ id: member_id, url: 'url', name: 'Bence Csik' })])
+    await dbUtils.addMembers([memberEntity({ id: member_id, url: 'url', name: memberName })])
     await dbUtils.addVideoCrew([{ video_id, member_id, position }])
     await dbUtils.addVideoCrew([{ video_id, member_id, position: otherPosition }])
 
@@ -29,7 +30,13 @@ describe('delete /api/v1/videoCrew', () => {
       description: videoEntity1.description,
       uploadedAt: videoEntity1.uploaded_at,
       visible: videoEntity1.visible,
-      crew: [{ memberId: member_id, position: otherPosition }],
+      crew: [
+        {
+          videoId: videoEntity1.id,
+          position: otherPosition,
+          member: { id: member_id, name: memberName },
+        },
+      ],
     })
   })
 })
