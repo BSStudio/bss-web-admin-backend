@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 
-@FeignClient(name = "member", url = "")
+@FeignClient(name = "member", url = "\${bss.file-api.url}")
 interface FileApiClient {
 
     @RequestMapping(method = [RequestMethod.POST], path = ["/api/v1/member"])

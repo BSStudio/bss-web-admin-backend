@@ -10,15 +10,18 @@ import hu.bsstudio.bssweb.video.service.VideoService
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 
 @Configuration
 class VideoServiceConfig(
     private val videoRepository: VideoRepository,
     private val detailedRepository: DetailedVideoRepository,
-    private val fileClient: FileApiClient
+    private val fileClient: FileApiClient,
+    private val videoCrewMapper: VideoCrewMapper,
 ) {
 
     @Bean
+    @Primary
     fun videoService(defaultVideoService: VideoService): VideoService {
         return FileUpdatingVideoService(defaultVideoService, fileClient)
     }
@@ -29,5 +32,5 @@ class VideoServiceConfig(
     }
 
     @Bean
-    fun videoMapper(videoCrewMapper: VideoCrewMapper) = VideoMapper(videoCrewMapper)
+    fun videoMapper() = VideoMapper(videoCrewMapper)
 }

@@ -8,6 +8,7 @@ import hu.bsstudio.bssweb.member.service.FileUpdatingMemberService
 import hu.bsstudio.bssweb.member.service.MemberService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Primary
 
 @Configuration
 class MemberServiceConfig(
@@ -16,6 +17,7 @@ class MemberServiceConfig(
 ) {
 
     @Bean
+    @Primary
     fun memberService(defaultMemberService: MemberService): MemberService {
         return FileUpdatingMemberService(defaultMemberService, fileClient)
     }
