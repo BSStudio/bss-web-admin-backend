@@ -1,5 +1,5 @@
 import { DbUtils, eventEntity, memberEntity, videoEntity } from '../../database'
-import { BssMetrics, MetricsEndpoint } from '../../endpoints'
+import { BssMetrics, MetricsEndpoint } from '../../endpoints/app'
 
 describe('get /api/v1/metrics', () => {
   const dbUtils = new DbUtils()

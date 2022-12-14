@@ -1,5 +1,5 @@
 import { DbUtils, memberEntity, videoEntity } from '../../database'
-import { DetailedVideo, VideoCrewEndpoint } from '../../endpoints'
+import { DetailedVideo, VideoCrewEndpoint } from '../../endpoints/app'
 
 describe('post /api/v1/videoCrew', () => {
   const dbUtils = new DbUtils()

@@ -1,5 +1,5 @@
 import { DbUtils, eventEntity } from '../../database'
-import { Event, EventEndpoint } from '../../endpoints'
+import { Event, EventEndpoint } from '../../endpoints/app'
 
 describe('get /api/v1/event', () => {
   const dbUtils = new DbUtils()

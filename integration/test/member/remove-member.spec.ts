@@ -1,5 +1,5 @@
 import { DbUtils, memberEntity } from '../../database'
-import { MemberEndpoint } from '../../endpoints'
+import { MemberEndpoint } from '../../endpoints/app'
 
 describe('delete /api/v1/member/{memberId}', () => {
   const dbUtils = new DbUtils()

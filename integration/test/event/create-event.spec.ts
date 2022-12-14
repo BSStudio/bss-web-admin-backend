@@ -1,5 +1,5 @@
 import { DbUtils, eventEntity } from '../../database'
-import { EventEndpoint } from '../../endpoints'
+import { EventEndpoint } from '../../endpoints/app'
 import { UUID_REGEX, dateToday } from '../../util'
 
 describe('post /api/v1/event', () => {
