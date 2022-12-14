@@ -11,11 +11,11 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
-import java.util.*
+import java.util.Optional
+import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class FileUpdatingMemberServiceTest {
