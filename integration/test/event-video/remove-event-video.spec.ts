@@ -1,5 +1,5 @@
 import { DbUtils, eventEntity, videoEntity } from '../../database'
-import { DetailedEvent, EventVideoEndpoint } from '../../endpoints'
+import { DetailedEvent, EventVideoEndpoint } from '../../endpoints/app'
 
 describe('delete /api/v1/eventVideo?eventId={eventId}&videoId={videoId}', () => {
   const dbUtils = new DbUtils()

@@ -1,5 +1,5 @@
 import { client } from './client'
-import { MemberStatus } from '../database/member.queries'
+import { MemberStatus } from '../../database/member.queries'
 
 export interface Member {
   id: string

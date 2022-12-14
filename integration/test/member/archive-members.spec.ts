@@ -1,5 +1,5 @@
 import { DbUtils, memberEntity } from '../../database'
-import { MemberEndpoint } from '../../endpoints'
+import { MemberEndpoint } from '../../endpoints/app'
 
 describe('put /api/v1/member/archive', () => {
   const dbUtils = new DbUtils()

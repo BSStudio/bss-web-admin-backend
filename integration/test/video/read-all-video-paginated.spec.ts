@@ -1,5 +1,6 @@
 import { DbUtils, videoEntity } from '../../database'
-import { Video, VideoEndpoint } from '../../endpoints'
+import { Video, VideoEndpoint } from '../../endpoints/app'
+import { Page } from '../../interface'
 
 describe('get /api/video', () => {
   const dbUtils = new DbUtils()
@@ -34,7 +35,7 @@ describe('get /api/video', () => {
     const response = await VideoEndpoint.getAllVideosPaginated({ page: 0, size: 1 })
 
     expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual({
+    expect(response.data).toStrictEqual<Page<Video>>({
       content: [],
       empty: true,
       first: true,
@@ -46,11 +47,11 @@ describe('get /api/video', () => {
         pageNumber: 0,
         pageSize: 1,
         paged: true,
-        sort: { empty: true, sorted: false, unsorted: true },
+        sort: [],
         unpaged: false,
       },
       size: 1,
-      sort: { empty: true, sorted: false, unsorted: true },
+      sort: [],
       totalElements: 0,
       totalPages: 0,
     })
@@ -62,7 +63,7 @@ describe('get /api/video', () => {
     const response = await VideoEndpoint.getAllVideosPaginated()
 
     expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual({
+    expect(response.data).toStrictEqual<Page<Video>>({
       content: [],
       empty: true,
       first: true,
@@ -74,11 +75,11 @@ describe('get /api/video', () => {
         pageNumber: 0,
         pageSize: 20,
         paged: true,
-        sort: { empty: true, sorted: false, unsorted: true },
+        sort: [],
         unpaged: false,
       },
       size: 20,
-      sort: { empty: true, sorted: false, unsorted: true },
+      sort: [],
       totalElements: 0,
       totalPages: 0,
     })
@@ -102,11 +103,11 @@ describe('get /api/video', () => {
         pageNumber: 2,
         pageSize: 20,
         paged: true,
-        sort: { empty: true, sorted: false, unsorted: true },
+        sort: [],
         unpaged: false,
       },
       size: 20,
-      sort: { empty: true, sorted: false, unsorted: true },
+      sort: [],
       totalElements: 0,
       totalPages: 0,
     })
@@ -132,15 +133,29 @@ describe('get /api/video', () => {
         pageNumber: 0,
         pageSize: 2,
         paged: true,
-        sort: { empty: false, sorted: true, unsorted: false },
+        sort: [
+          {
+            ascending: false,
+            descending: true,
+            direction: 'DESC',
+            ignoreCase: false,
+            nullHandling: 'NATIVE',
+            property: 'url',
+          },
+        ],
         unpaged: false,
       },
       size: 2,
-      sort: {
-        empty: false,
-        sorted: true,
-        unsorted: false,
-      },
+      sort: [
+        {
+          ascending: false,
+          descending: true,
+          direction: 'DESC',
+          ignoreCase: false,
+          nullHandling: 'NATIVE',
+          property: 'url',
+        },
+      ],
       totalElements: 3,
       totalPages: 2,
     })
@@ -158,11 +173,29 @@ describe('get /api/video', () => {
         pageNumber: 1,
         pageSize: 2,
         paged: true,
-        sort: { empty: false, sorted: true, unsorted: false },
+        sort: [
+          {
+            ascending: false,
+            descending: true,
+            direction: 'DESC',
+            ignoreCase: false,
+            nullHandling: 'NATIVE',
+            property: 'url',
+          },
+        ],
         unpaged: false,
       },
       size: 2,
-      sort: { empty: false, sorted: true, unsorted: false },
+      sort: [
+        {
+          ascending: false,
+          descending: true,
+          direction: 'DESC',
+          ignoreCase: false,
+          nullHandling: 'NATIVE',
+          property: 'url',
+        },
+      ],
       totalElements: 3,
       totalPages: 2,
     })
@@ -188,11 +221,11 @@ describe('get /api/video', () => {
         pageNumber: 0,
         pageSize: 2,
         paged: true,
-        sort: { empty: true, sorted: false, unsorted: true },
+        sort: [],
         unpaged: false,
       },
       size: 2,
-      sort: { empty: true, sorted: false, unsorted: true },
+      sort: [],
       totalElements: 3,
       totalPages: 2,
     })
@@ -210,11 +243,11 @@ describe('get /api/video', () => {
         pageNumber: 1,
         pageSize: 2,
         paged: true,
-        sort: { empty: true, sorted: false, unsorted: true },
+        sort: [],
         unpaged: false,
       },
       size: 2,
-      sort: { empty: true, sorted: false, unsorted: true },
+      sort: [],
       totalElements: 3,
       totalPages: 2,
     })

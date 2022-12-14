@@ -1,5 +1,5 @@
 import { client } from './client'
-import { Page, PageableRequestParam } from '../interface'
+import { Page, PageableRequestParam } from '../../interface'
 
 export interface Video {
   id: string
