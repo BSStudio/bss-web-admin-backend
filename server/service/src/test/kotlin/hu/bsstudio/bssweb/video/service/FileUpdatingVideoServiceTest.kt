@@ -10,12 +10,12 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
@@ -52,6 +52,8 @@ internal class FileUpdatingVideoServiceTest {
     @Test
     internal fun `should insert new video`() {
         every { mockService.insertVideo(CREATE_VIDEO) } returns VIDEO
+        every { VIDEO.id } returns VIDEO_ID
+        every { VIDEO.url } returns URL
         every { mockClient.createVideoFolder(FILE_UPDATE) } returns FILE_UPDATE
 
         val response = underTest.insertVideo(CREATE_VIDEO)
@@ -99,6 +101,8 @@ internal class FileUpdatingVideoServiceTest {
     @Test
     internal fun `should update video`() {
         every { mockService.updateVideo(VIDEO_ID, UPDATE_VIDEO) } returns Optional.of(DETAILED_VIDEO)
+        every { DETAILED_VIDEO.id } returns VIDEO_ID
+        every { DETAILED_VIDEO.url } returns URL
         every { mockClient.updateVideoFolder(FILE_UPDATE) } returns FILE_UPDATE
 
         val response = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
@@ -114,14 +118,15 @@ internal class FileUpdatingVideoServiceTest {
     }
 
     private companion object {
-        private val PAGEABLE = Pageable.unpaged()
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private val VIDEO = Video(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
-        private val VIDEO_LIST = listOf(VIDEO)
-        private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
-        private val CREATE_VIDEO = CreateVideo("url", "title")
-        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
-        private val UPDATE_VIDEO = UpdateVideo("updatedUrl", "updatedTitle", "updatedDescription", LocalDate.of(2022, 2, 2), visible = false)
-        private val FILE_UPDATE = FileUpdate(VIDEO_ID, "url")
+        private val PAGEABLE = mockk<Pageable>()
+        private val VIDEO_ID = mockk<UUID>()
+        private const val URL = "url"
+        private val VIDEO = mockk<Video>()
+        private val VIDEO_LIST = mockk<List<Video>>()
+        private val PAGED_VIDEOS = mockk<Page<Video>>()
+        private val CREATE_VIDEO = mockk<CreateVideo>()
+        private val DETAILED_VIDEO = mockk<DetailedVideo>()
+        private val UPDATE_VIDEO = mockk<UpdateVideo>()
+        private val FILE_UPDATE = FileUpdate(VIDEO_ID, URL)
     }
 }

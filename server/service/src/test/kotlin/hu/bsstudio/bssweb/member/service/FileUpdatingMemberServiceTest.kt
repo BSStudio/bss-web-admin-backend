@@ -2,7 +2,6 @@ package hu.bsstudio.bssweb.member.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
 import hu.bsstudio.bssweb.fileserver.model.FileUpdate
-import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
@@ -10,10 +9,10 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
@@ -41,6 +40,8 @@ internal class FileUpdatingMemberServiceTest {
     @Test
     internal fun `should insert new member`() {
         every { mockService.insertMember(CREATE_MEMBER) } returns MEMBER
+        every { MEMBER.id } returns MEMBER_ID
+        every { MEMBER.url } returns URL
         every { mockClient.createMemberFolder(FILE_UPDATE) } returns FILE_UPDATE
 
         val response = underTest.insertMember(CREATE_MEMBER)
@@ -98,6 +99,8 @@ internal class FileUpdatingMemberServiceTest {
     @Test
     internal fun `should update member`() {
         every { mockService.updateMember(MEMBER_ID, UPDATE_MEMBER) } returns Optional.of(MEMBER)
+        every { MEMBER.id } returns MEMBER_ID
+        every { MEMBER.url } returns URL
         every { mockClient.updateMemberFolder(FILE_UPDATE) } returns FILE_UPDATE
 
         val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
@@ -113,11 +116,12 @@ internal class FileUpdatingMemberServiceTest {
     }
 
     private companion object {
-        private val MEMBER_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private val MEMBER = Member(MEMBER_ID, url = "url", name = "name", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
-        private val MEMBER_LIST = listOf(MEMBER)
-        private val CREATE_MEMBER = CreateMember("url", name = "name")
-        private val UPDATE_MEMBER = UpdateMember("updatedUrl", name = "updatedName", description = "updatedDescription", LocalDate.of(2022, 2, 2), role = "updatedRole", MemberStatus.ALUMNI, true)
-        private val FILE_UPDATE = FileUpdate(MEMBER_ID, "url")
+        private val MEMBER_ID = mockk<UUID>()
+        private const val URL = "url"
+        private val MEMBER = mockk<Member>()
+        private val MEMBER_LIST = mockk<List<Member>>()
+        private val CREATE_MEMBER = mockk<CreateMember>()
+        private val UPDATE_MEMBER = mockk<UpdateMember>()
+        private val FILE_UPDATE = FileUpdate(MEMBER_ID, URL)
     }
 }
