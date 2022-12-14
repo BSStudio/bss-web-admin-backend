@@ -7,186 +7,88 @@ export interface Count {
 export class FileEndpoint {
   private static client = client
 
+  private static mockBody = (url: string) => ({
+    request: {
+      method: 'POST',
+      url,
+      bodyPatterns: [
+        {
+          matchesJsonPath: '$.id',
+        },
+        {
+          matchesJsonPath: '$.url',
+        },
+      ],
+    },
+    response: {
+      status: 201,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      jsonBody: {
+        id: '01234567-0123-0123-0123-0123456789ab',
+        url: 'url',
+      },
+    },
+  })
+
+  private static verifyBody = (url: string) => ({
+    method: 'PUT',
+    url,
+    bodyPatterns: [
+      {
+        matchesJsonPath: '$.id',
+      },
+      {
+        matchesJsonPath: '$.url',
+      },
+    ],
+  })
+
   static resetMocks() {
     return this.client.post('/__admin/reset')
   }
 
   static mockCreateVideoFolder() {
-    return this.client.post('/__admin/mappings', {
-      request: {
-        method: 'POST',
-        url: '/api/v1/video',
-        bodyPatterns: [
-          {
-            matchesJsonPath: '$.id',
-          },
-          {
-            matchesJsonPath: '$.url',
-          },
-        ],
-      },
-      response: {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        jsonBody: {
-          id: '01234567-0123-0123-0123-0123456789ab',
-          url: 'url',
-        },
-      },
-    })
+    return this.client.post('/__admin/mappings', this.mockBody('/api/v1/video'))
   }
 
   static verifyCreateVideoFolder() {
     return this.client
-      .post<Count>('/__admin/requests/count', {
-        method: 'POST',
-        url: '/api/v1/video',
-        bodyPatterns: [
-          {
-            matchesJsonPath: '$.id',
-          },
-          {
-            matchesJsonPath: '$.url',
-          },
-        ],
-      })
+      .post<Count>('/__admin/requests/count', this.verifyBody('/api/v1/video'))
       .then(({ data }) => data)
       .then(({ count }) => count)
   }
 
   static mockUpdateVideoFolder() {
-    return this.client.post('/__admin/mappings', {
-      request: {
-        method: 'PUT',
-        url: '/api/v1/video',
-        bodyPatterns: [
-          {
-            matchesJsonPath: '$.id',
-          },
-          {
-            matchesJsonPath: '$.url',
-          },
-        ],
-      },
-      response: {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        jsonBody: {
-          id: '01234567-0123-0123-0123-0123456789ab',
-          url: 'url',
-        },
-      },
-    })
+    return this.client.post('/__admin/mappings', this.mockBody('/api/v1/video'))
   }
 
   static verifyUpdateVideoFolder() {
     return this.client
-      .post<Count>('/__admin/requests/count', {
-        method: 'PUT',
-        url: '/api/v1/video',
-        bodyPatterns: [
-          {
-            matchesJsonPath: '$.id',
-          },
-          {
-            matchesJsonPath: '$.url',
-          },
-        ],
-      })
+      .post<Count>('/__admin/requests/count', this.verifyBody('/api/v1/video'))
       .then(({ data }) => data)
       .then(({ count }) => count)
   }
 
   static mockCreateMemberFolder() {
-    return this.client.post('/__admin/mappings', {
-      request: {
-        method: 'POST',
-        url: '/api/v1/member',
-        bodyPatterns: [
-          {
-            matchesJsonPath: '$.id',
-          },
-          {
-            matchesJsonPath: '$.url',
-          },
-        ],
-      },
-      response: {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        jsonBody: {
-          id: '01234567-0123-0123-0123-0123456789ab',
-          url: 'url',
-        },
-      },
-    })
+    return this.client.post('/__admin/mappings', this.mockBody('/api/v1/member'))
   }
 
   static verifyCreateMemberFolder() {
     return this.client
-      .post<Count>('/__admin/requests/count', {
-        method: 'POST',
-        url: '/api/v1/member',
-        bodyPatterns: [
-          {
-            matchesJsonPath: '$.id',
-          },
-          {
-            matchesJsonPath: '$.url',
-          },
-        ],
-      })
+      .post<Count>('/__admin/requests/count', this.verifyBody('/api/v1/member'))
       .then(({ data }) => data)
       .then(({ count }) => count)
   }
 
   static mockUpdateMemberFolder() {
-    return this.client.post('/__admin/mappings', {
-      request: {
-        method: 'PUT',
-        url: '/api/v1/member',
-        bodyPatterns: [
-          {
-            matchesJsonPath: '$.id',
-          },
-          {
-            matchesJsonPath: '$.url',
-          },
-        ],
-      },
-      response: {
-        status: 201,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        jsonBody: {
-          id: '01234567-0123-0123-0123-0123456789ab',
-          url: 'url',
-        },
-      },
-    })
+    return this.client.post('/__admin/mappings', this.mockBody('/api/v1/member'))
   }
 
   static verifyUpdateMemberFolder() {
     return this.client
-      .post<Count>('/__admin/requests/count', {
-        method: 'PUT',
-        url: '/api/v1/member',
-        bodyPatterns: [
-          {
-            matchesJsonPath: '$.id',
-          },
-          {
-            matchesJsonPath: '$.url',
-          },
-        ],
-      })
+      .post<Count>('/__admin/requests/count', this.verifyBody('/api/v1/member'))
       .then(({ data }) => data)
       .then(({ count }) => count)
   }
