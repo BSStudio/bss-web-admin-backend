@@ -1,0 +1,100 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "POST",
+        "url": "/api/v1/video",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": "$.id"
+          },
+          {
+            "matchesJsonPath": "$.url"
+          }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "01234567-0123-0123-0123-0123456789ab",
+          "url": "url"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/api/v1/member",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": "$.id"
+          },
+          {
+            "matchesJsonPath": "$.url"
+          }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "01234567-0123-0123-0123-0123456789ab",
+          "url": "url"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/api/v1/video",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": "$.id"
+          },
+          {
+            "matchesJsonPath": "$.url"
+          }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "01234567-0123-0123-0123-0123456789ab",
+          "url": "url"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/api/v1/member",
+        "bodyPatterns": [
+          {
+            "matchesJsonPath": "$.id"
+          },
+          {
+            "matchesJsonPath": "$.url"
+          }
+        ]
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "id": "01234567-0123-0123-0123-0123456789ab",
+          "url": "url"
+        }
+      }
+    }
+  ]
+}
