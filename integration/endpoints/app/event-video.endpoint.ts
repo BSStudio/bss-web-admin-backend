@@ -1,5 +1,5 @@
 import { client } from './client'
-import { DetailedEvent } from './event.endpoint'
+import { DetailedEvent } from '../../api'
 
 export class EventVideoEndpoint {
   private static client = client

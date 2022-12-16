@@ -1,10 +1,5 @@
 import { client } from './client'
-
-export interface BssMetrics {
-  videoCount: number
-  eventCount: number
-  memberCount: number
-}
+import { BssMetrics } from '../../api'
 
 export class MetricsEndpoint {
   private static client = client

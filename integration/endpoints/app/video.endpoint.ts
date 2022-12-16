@@ -1,43 +1,6 @@
 import { client } from './client'
 import { Page, PageableRequestParam } from '../../interface'
-
-export interface Video {
-  id: string
-  url: string
-  title: string
-  uploadedAt: string
-  visible: boolean
-}
-export interface CreateVideo {
-  url: string
-  title: string
-}
-export interface UpdateVideo {
-  url: string
-  title: string
-  description: string
-  uploadedAt: string
-  visible: boolean
-}
-export interface DetailedVideo {
-  id: string
-  url: string
-  title: string
-  description: string
-  uploadedAt: string
-  visible: boolean
-  crew: VideoCrew[]
-}
-interface VideoCrew {
-  videoId: string
-  position: string
-  member: SimpleMember
-}
-
-interface SimpleMember {
-  id: string
-  name: string
-}
+import { CreateVideo, DetailedVideo, UpdateVideo, Video } from '../../api'
 
 export class VideoEndpoint {
   private static client = client

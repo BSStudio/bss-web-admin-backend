@@ -1,37 +1,5 @@
 import { client } from './client'
-import { Video } from './video.endpoint'
-
-export interface Event {
-  id: string
-  url: string
-  title: string
-  description: string
-  date: string
-  visible: boolean
-}
-
-export interface DetailedEvent {
-  id: string
-  url: string
-  title: string
-  description: string
-  date: string
-  visible: boolean
-  videos: Video[]
-}
-
-export interface CreateEvent {
-  url: string
-  title: string
-}
-
-export interface UpdateEvent {
-  url: string
-  title: string
-  description: string
-  date: string
-  visible: boolean
-}
+import { CreateEvent, DetailedEvent, Event, UpdateEvent } from '../../api'
 
 export class EventEndpoint {
   private static client = client

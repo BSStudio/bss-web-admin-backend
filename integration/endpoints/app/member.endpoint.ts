@@ -1,31 +1,5 @@
 import { client } from './client'
-import { MemberStatus } from '../../database/member.queries'
-
-export interface Member {
-  id: string
-  url: string
-  name: string
-  description: string
-  joinedAt: string
-  role: string
-  status: MemberStatus
-  archived: boolean
-}
-
-export interface CreateMember {
-  url: string
-  name: string
-}
-
-export interface UpdateMember {
-  url: string
-  name: string
-  description: string
-  joinedAt: string
-  role: string
-  status: MemberStatus
-  archived: boolean
-}
+import { CreateMember, Member, UpdateMember } from '../../api'
 
 export class MemberEndpoint {
   private static client = client

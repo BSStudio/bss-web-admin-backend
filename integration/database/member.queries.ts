@@ -1,4 +1,4 @@
-export type MemberStatus = 'ALUMNI' | 'ACTIVE_ALUMNI' | 'MEMBER' | 'MEMBER_CANDIDATE' | 'MEMBER_CANDIDATE_CANDIDATE'
+import { MemberStatus } from '../api'
 
 export interface MemberEntity {
   id: string
