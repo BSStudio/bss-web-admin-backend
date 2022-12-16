@@ -12,3 +12,4 @@ services:
   mock-file-api:
     ports:
       - "8080"
+    volumes: []
