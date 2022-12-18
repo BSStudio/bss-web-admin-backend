@@ -21,6 +21,7 @@ jobs:
       - run:
           command: npm run << parameters.command >>
           working_directory: ~/project/integration
+          environment:
       - store_test_results:
           path: ~/project/integration/junit.xml
     parameters:
@@ -68,7 +69,7 @@ workflows:
       - gradle_test
       - integration_test
       - integration_test:
-          command: "test:ci:war"
+          command: "test:ci:war -- --testTimeout 20000"
       - docker/hadolint:
           dockerfiles: Dockerfile:war.Dockerfile
       - docker/publish:
