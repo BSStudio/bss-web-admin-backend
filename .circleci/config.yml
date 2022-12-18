@@ -14,16 +14,17 @@ executors:
 jobs:
   integration_test:
     executor: node
-    working_directory: ~/project/integration
     steps:
       - checkout
-      - node/install-packages
+      - node/install-packages:
+          app-dir: ~/project/integration
       - run:
           command: npm test:ci
+          working_directory: ~/project/integration
           environment:
             DEBUG: testcontainers*
       - store_test_results:
-          path: ./junit.xml
+          path: ~/project/integration/junit.xml
   gradle_test:
     executor: jdk
     steps:
