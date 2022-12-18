@@ -9,20 +9,30 @@ executors:
     docker:
       - image: cimg/openjdk:17.0.5
   node:
-    docker:
-      - image: cimg/node:18.12.1
+    machine:
+      image: ubuntu-2204:2022.10.2
 jobs:
   integration_test:
     executor: node
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-          version: 20.10.18
       - node/install-packages:
           app-dir: ~/project/integration
       - run:
           command: npm run test:ci
+          working_directory: ~/project/integration
+          environment:
+            DEBUG: testcontainers*
+      - store_test_results:
+          path: ~/project/integration/junit.xml
+  integration_test_war:
+    executor: node
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: ~/project/integration
+      - run:
+          command: npm run test:ci:war
           working_directory: ~/project/integration
           environment:
             DEBUG: testcontainers*
@@ -68,15 +78,7 @@ workflows:
           version: 18.12.1
       - gradle_test
       - integration_test
-      - node/test:
-          app-dir: ~/project/integration
-          run-command: test:ci:war
-          setup:
-            - setup_remote_docker:
-                docker_layer_caching: true
-                version: 20.10.18
-          test-results-for: jest
-          version: 18.12.1
+      - integration_test_war
       - docker/hadolint:
           dockerfiles: Dockerfile:war.Dockerfile
       - docker/publish:
