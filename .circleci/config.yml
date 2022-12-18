@@ -19,7 +19,7 @@ jobs:
       - node/install-packages:
           app-dir: ~/project/integration
       - run:
-          command: npm test:ci
+          command: npm run test:ci
           working_directory: ~/project/integration
           environment:
             DEBUG: testcontainers*
