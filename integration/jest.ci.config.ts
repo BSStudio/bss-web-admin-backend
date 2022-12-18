@@ -6,6 +6,7 @@ const config: Config.InitialOptions = {
   globalSetup: require.resolve('./env/ci/global-setup.ts'),
   globalTeardown: require.resolve('./env/ci/global-teardown.ts'),
   maxWorkers: 1,
+  reporters: ['default', 'jest-junit'],
 }
 
 export default config
