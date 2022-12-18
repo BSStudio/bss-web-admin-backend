@@ -13,14 +13,14 @@ export default async function (): Promise<void[]> {
     .withWaitStrategy('app_1', Wait.forHealthCheck())
     .withWaitStrategy('db_1', Wait.forHealthCheck())
     .withWaitStrategy('influx_1', Wait.forHealthCheck())
-    .withWaitStrategy('file-api_1', Wait.forHealthCheck())
+    .withWaitStrategy('mock-file-api_1', Wait.forHealthCheck())
     .up()
 
   globalThis.dockerComposeEnvironment = dockerComposeEnvironment
 
   const app = dockerComposeEnvironment.getContainer('app-1')
   const db = dockerComposeEnvironment.getContainer('db-1')
-  const fileApi = dockerComposeEnvironment.getContainer('file-api-1')
+  const fileApi = dockerComposeEnvironment.getContainer('mock-file-api-1')
 
   const baseUrl = {
     app: `http://${app.getHost()}:${app.getMappedPort(8080)}`,
