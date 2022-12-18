@@ -16,6 +16,9 @@ jobs:
     executor: node
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 20.10.18
       - node/install-packages:
           app-dir: ~/project/integration
       - run:
