@@ -19,25 +19,14 @@ jobs:
       - node/install-packages:
           app-dir: ~/project/integration
       - run:
-          command: npm run test:ci
+          command: npm run << parameters.command >>
           working_directory: ~/project/integration
-          environment:
-            DEBUG: testcontainers*
       - store_test_results:
           path: ~/project/integration/junit.xml
-  integration_test_war:
-    executor: node
-    steps:
-      - checkout
-      - node/install-packages:
-          app-dir: ~/project/integration
-      - run:
-          command: npm run test:ci:war
-          working_directory: ~/project/integration
-          environment:
-            DEBUG: testcontainers*
-      - store_test_results:
-          path: ~/project/integration/junit.xml
+    parameters:
+      command:
+        type: string
+        default: "test:ci"
   gradle_test:
     executor: jdk
     steps:
@@ -78,7 +67,8 @@ workflows:
           version: 18.12.1
       - gradle_test
       - integration_test
-      - integration_test_war
+      - integration_test:
+          command: "test:ci:war"
       - docker/hadolint:
           dockerfiles: Dockerfile:war.Dockerfile
       - docker/publish:
