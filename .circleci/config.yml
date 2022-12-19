@@ -19,15 +19,19 @@ jobs:
       - node/install-packages:
           app-dir: ~/project/integration
       - run:
-          command: npm run << parameters.command >>
+          command: npm run test:ci -- --testTimeout << parameters.timeout >>
           working_directory: ~/project/integration
           environment:
+            DOCKER_COMPOSE_FILE_NAME: << parameters.compose_files >>
       - store_test_results:
           path: ~/project/integration/junit.xml
     parameters:
-      command:
+      timeout:
+        type: integer
+        default: 5000
+      compose_files:
         type: string
-        default: "test:ci"
+        default: docker-compose.yml,docker-compose.ci.yml
   gradle_test:
     executor: jdk
     steps:
@@ -69,7 +73,8 @@ workflows:
       - gradle_test
       - integration_test
       - integration_test:
-          command: "test:ci:war -- --testTimeout 20000"
+          timeout: 20000
+          compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
       - docker/hadolint:
           dockerfiles: Dockerfile:war.Dockerfile
       - docker/publish:

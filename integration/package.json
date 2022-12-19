@@ -33,7 +33,6 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "test": "jest",
-    "test:ci": "jest --config=jest.ci.config.ts",
-    "test:ci:war": "DOCKER_COMPOSE_FILE_NAME=docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml npm run test:ci"
+    "test:ci": "jest --config=jest.ci.config.ts"
   }
 }
