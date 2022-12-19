@@ -7,7 +7,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven { url = URI.create("https://repo.spring.io/milestone") }
 }
 
 dependencyManagement {
