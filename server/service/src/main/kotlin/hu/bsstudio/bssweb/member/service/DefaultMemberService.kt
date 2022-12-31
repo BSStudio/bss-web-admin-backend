@@ -51,6 +51,7 @@ class DefaultMemberService(
         return memberEntity.copy(
             url = updateMember.url,
             name = updateMember.name,
+            nickname = updateMember.nickname,
             description = updateMember.description,
             joinedAt = updateMember.joinedAt,
             role = updateMember.role,
