@@ -1,5 +1,7 @@
 export type Direction = 'ASC' | 'DESC'
+
 export type NullHandling = 'NATIVE' | 'NULLS_FIRST' | 'NULLS_LAST'
+
 export interface Order {
   ascending: boolean
   descending: boolean
@@ -8,7 +10,9 @@ export interface Order {
   nullHandling: NullHandling
   property: string
 }
+
 export type Sort = Order[]
+
 export interface Pageable {
   offset: number
   pageNumber: number
@@ -17,6 +21,7 @@ export interface Pageable {
   sort: Sort
   unpaged: boolean
 }
+
 export interface Page<T> {
   content: T[]
   empty: boolean
@@ -30,6 +35,7 @@ export interface Page<T> {
   totalElements: number
   totalPages: number
 }
+
 export interface PageableRequestParam {
   size?: number
   page?: number

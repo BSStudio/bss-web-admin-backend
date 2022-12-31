@@ -18,6 +18,7 @@ describe('put /api/v1/member/{memberId}', () => {
     const updateMember: UpdateMember = {
       url: 'updatedUrl',
       name: 'updatedName',
+      nickname: 'updatedNickname',
       description: 'updatedDescription',
       joinedAt: '1997-01-01',
       role: 'updatedRole',
