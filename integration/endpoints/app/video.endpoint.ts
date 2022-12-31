@@ -37,6 +37,7 @@ interface VideoCrew {
 interface SimpleMember {
   id: string
   name: string
+  nickname: string
 }
 
 export class VideoEndpoint {
