@@ -16,6 +16,7 @@ data class MemberEntity(
     var id: UUID,
     var url: String,
     var name: String,
+    var nickname: String = "",
     var description: String = "",
     var joinedAt: LocalDate = LocalDate.now(),
     var role: String = "",

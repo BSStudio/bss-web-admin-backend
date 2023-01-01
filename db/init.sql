@@ -19,6 +19,7 @@ CREATE TABLE bss_web.member
     id          UUID PRIMARY KEY             DEFAULT gen_random_uuid(),
     url         VARCHAR(250) UNIQUE NOT NULL,
     name        VARCHAR(250) UNIQUE NOT NULL,
+    nickname    VARCHAR(250)        NOT NULL DEFAULT '',
     description VARCHAR(2000)       NOT NULL DEFAULT '',
     joined_at   DATE                NOT NULL DEFAULT current_date,
     role        VARCHAR(250)        NOT NULL DEFAULT '',

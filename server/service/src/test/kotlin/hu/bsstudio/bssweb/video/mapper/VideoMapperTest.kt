@@ -68,10 +68,10 @@ internal class VideoMapperTest {
         private val UPLOADED_AT = LocalDate.of(2022, 1, 1)
         private const val VISIBLE = true
         private val CREW_ENTITY_ID = VideoCrewEntityId(VIDEO_ID, "position", VIDEO_ID)
-        private val MEMBER_ENTITY = SimpleMemberEntity(MEMBER_ID, "name")
+        private val MEMBER_ENTITY = SimpleMemberEntity(MEMBER_ID, "name", "nickname")
         private val CREW_ENTITY = DetailedVideoCrewEntity(id = CREW_ENTITY_ID, member = MEMBER_ENTITY)
         private val VIDEO_CREW = listOf(CREW_ENTITY)
-        private val MEMBER = SimpleMember(MEMBER_ID, "name")
+        private val MEMBER = SimpleMember(MEMBER_ID, "name", "nickname")
         private val CREW_MODEL = VideoCrew(videoId = VIDEO_ID, position = "position", member = MEMBER)
         private val CREW = listOf(CREW_MODEL)
         private val VIDEO_ENTITY = VideoEntity(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)

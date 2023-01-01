@@ -19,6 +19,7 @@ describe('get /api/v1/member/{memberId}', () => {
       id: entity1.id,
       url: entity1.url,
       name: entity1.name,
+      nickname: entity1.nickname,
       description: entity1.description,
       joinedAt: entity1.joined_at,
       role: entity1.role,

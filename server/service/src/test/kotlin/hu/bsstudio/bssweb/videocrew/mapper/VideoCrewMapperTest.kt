@@ -54,12 +54,12 @@ internal class VideoCrewMapperTest {
         private val VIDEO_ID = mockk<UUID>()
         private const val POSITION = "position"
         private val MEMBER_ID = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
-        private val MEMBER = SimpleMember(MEMBER_ID, "name")
+        private val MEMBER = SimpleMember(MEMBER_ID, "name", "nickname")
         private val VIDEO_CREW = VideoCrew(VIDEO_ID, POSITION, MEMBER)
         private val VIDEO_CREW_REQUEST = VideoCrewRequest(VIDEO_ID, POSITION, MEMBER_ID)
         private val VIDEO_CREW_ENTITY_ID = VideoCrewEntityId(VIDEO_ID, POSITION, MEMBER_ID)
         private val VIDEO_CREW_ENTITY = VideoCrewEntity(VIDEO_CREW_ENTITY_ID)
-        private val MEMBER_ENTITY = SimpleMemberEntity(MEMBER_ID, "name")
+        private val MEMBER_ENTITY = SimpleMemberEntity(MEMBER_ID, "name", "nickname")
         private val DETAILED_VIDEO_CREW_ENTITY = DetailedVideoCrewEntity(id = VIDEO_CREW_ENTITY_ID, member = MEMBER_ENTITY)
     }
 }

@@ -6,6 +6,7 @@ import java.time.LocalDate
 data class UpdateMember(
     val url: String,
     val name: String,
+    val nickname: String,
     val description: String,
     val joinedAt: LocalDate,
     val role: String,

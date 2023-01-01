@@ -11,4 +11,5 @@ data class SimpleMemberEntity(
     @Id
     var id: UUID,
     var name: String,
+    var nickname: String,
 )
