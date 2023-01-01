@@ -32,7 +32,7 @@ describe('post /api/v1/videoCrew', () => {
         {
           videoId: videoEntity1.id,
           position: position1,
-          member: { id: memberEntity1.id, name: memberEntity1.name },
+          member: { id: memberEntity1.id, name: memberEntity1.name, nickname: memberEntity1.nickname },
         },
       ],
     }
@@ -45,12 +45,12 @@ describe('post /api/v1/videoCrew', () => {
         {
           videoId: videoEntity1.id,
           position: position1,
-          member: { id: memberEntity1.id, name: memberEntity1.name },
+          member: { id: memberEntity1.id, name: memberEntity1.name, nickname: memberEntity1.nickname },
         },
         {
           videoId: videoEntity1.id,
           position: position2,
-          member: { id: memberEntity1.id, name: memberEntity1.name },
+          member: { id: memberEntity1.id, name: memberEntity1.name, nickname: memberEntity1.nickname },
         },
       ],
     })

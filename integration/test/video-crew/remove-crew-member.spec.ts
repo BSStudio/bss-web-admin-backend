@@ -34,7 +34,7 @@ describe('delete /api/v1/videoCrew', () => {
         {
           videoId: videoEntity1.id,
           position: otherPosition,
-          member: { id: member_id, name: memberName },
+          member: { id: member_id, name: memberName, nickname: '' },
         },
       ],
     })

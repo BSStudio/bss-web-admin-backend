@@ -26,39 +26,43 @@ internal class MemberMapperTest {
 
     @Test
     internal fun `should map entity to model`() {
-        val result = underTest.entityToModel(ENTITY)
+        val entity = MemberEntity(ID, URL, NAME, NICKNAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
 
-        assertThat(result).isEqualTo(MODEL)
+        val result = underTest.entityToModel(entity)
+
+        val model = Member(ID, URL, NAME, NICKNAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
+        assertThat(result).isEqualTo(model)
     }
 
     @Test
     internal fun `should map simple entity to model`() {
-        val result = underTest.entityToModel(SIMPLE_ENTITY)
+        val entity = SimpleMemberEntity(ID, NAME, NICKNAME)
 
-        assertThat(result).isEqualTo(SIMPLE_MODEL)
+        val result = underTest.entityToModel(entity)
+
+        val model = SimpleMember(ID, NAME, NICKNAME)
+        assertThat(result).isEqualTo(model)
     }
 
     @Test
     internal fun `should map model to entity`() {
-        val result = underTest.modelToEntity(CREATE_MEMBER)
+        val model = CreateMember(URL, NAME)
 
-        assertThat(result).isEqualTo(CREATED_ENTITY)
+        val result = underTest.modelToEntity(model)
+
+        val entity = MemberEntity(id = ID, url = URL, name = NAME)
+        assertThat(result).isEqualTo(entity)
     }
 
     private companion object {
         private val ID = mockk<UUID>()
         private const val URL = "url"
         private const val NAME = "name"
+        private const val NICKNAME = "nickname"
         private const val DESCRIPTION = "description"
-        private val JOINED_AT = LocalDate.of(2022, 1, 1)
+        private val JOINED_AT = mockk<LocalDate>()
         private const val ROLE = "role"
-        private val STATUS = MemberStatus.MEMBER
+        private val STATUS = mockk<MemberStatus>()
         private const val ARCHIVED = false
-        private val ENTITY = MemberEntity(ID, URL, NAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
-        private val MODEL = Member(ID, URL, NAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
-        private val CREATE_MEMBER = CreateMember(URL, NAME)
-        private val CREATED_ENTITY = MemberEntity(id = ID, url = URL, name = NAME)
-        private val SIMPLE_ENTITY = SimpleMemberEntity(ID, NAME)
-        private val SIMPLE_MODEL = SimpleMember(ID, NAME)
     }
 }

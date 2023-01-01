@@ -26,6 +26,7 @@ describe('post /api/v1/member', () => {
       id: expect.stringMatching(UUID_REGEX) as string,
       url,
       name,
+      nickname: '',
       description: '',
       joinedAt: dateToday(),
       role: '',
