@@ -114,4 +114,7 @@ workflows:
           compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
       - docker/hadolint:
           dockerfiles: Dockerfile:war.Dockerfile
-      - docker_publish
+      - docker_publish:
+          filters:
+            branches:
+              only: main
