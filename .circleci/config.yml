@@ -86,7 +86,6 @@ jobs:
   docker_publish:
     executor: docker/machine
     steps:
-      - setup_remote_docker
       - checkout
       - docker/check:
           registry: ghcr.io
