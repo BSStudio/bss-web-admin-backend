@@ -89,6 +89,7 @@ jobs:
       - checkout
       - docker/check:
           registry: ghcr.io
+          use-docker-credentials-store: true
       - docker/build:
           registry: ghcr.io
           image: bsstudio/bss-web-admin-backend
