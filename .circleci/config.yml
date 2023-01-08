@@ -62,25 +62,8 @@ jobs:
           registry: ghcr.io
           image: bsstudio/bss-web-admin-backend
           tag: latest
-  docker_publish_war:
-    executor: docker/machine
-    steps:
-      - checkout
-      - docker/check:
-          registry: ghcr.io
-          use-docker-credentials-store: true
-      - docker/build:
-          registry: ghcr.io
-          image: bsstudio/bss-web-admin-backend
-          dockerfile: war.Dockerfile
-          tag: war
-          use-buildkit: true
-      - docker/push:
-          registry: ghcr.io
-          image: bsstudio/bss-web-admin-backend
-          tag: war
 workflows:
-  app:
+  Build app:
     jobs:
       - gradle/run:
           name: Lint
@@ -118,8 +101,25 @@ workflows:
       - docker/hadolint:
           name: Lint Dockerfiles
           dockerfiles: Dockerfile:war.Dockerfile
+      - docker/publish:
+          name: "Build image: jar"
+          deploy: false
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: war
+          use-buildkit: true
+          use-docker-credentials-store: true
+      - docker/publish:
+          name: "Build image: war"
+          deploy: false
+          dockerfile: war.Dockerfile
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: war
+          use-buildkit: true
+          use-docker-credentials-store: true
       - docker_publish:
-          name: Publish Docker jar image
+          name: "Publish image: jar"
           requires:
             - Lint
             - Coverage
@@ -129,12 +129,14 @@ workflows:
             - Unit test
             - "Integration test: jar"
             - "Integration test: war"
+            - "Build image: jar"
+            - "Build image: war"
             - Lint Dockerfiles
-          #filters:
-          #  branches:
-          #    only: main
-      - docker_publish_war:
-          name: Publish Docker war image
+#          filters:
+#            branches:
+#              only: main
+      - docker_publish:
+          name: "Publish image: war"
           requires:
             - Lint
             - Coverage
@@ -144,7 +146,9 @@ workflows:
             - Unit test
             - "Integration test: jar"
             - "Integration test: war"
+            - "Build image: jar"
+            - "Build image: war"
             - Lint Dockerfiles
-          #filters:
-          #  branches:
-          #    only: main
+#          filters:
+#            branches:
+#              only: main
