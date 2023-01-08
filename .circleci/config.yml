@@ -46,22 +46,6 @@ jobs:
           reports_path: server/service/build/reports/
           test_results_path: server/service/build/test-results/
       - codecov/upload
-  docker_publish:
-    executor: docker/machine
-    steps:
-      - checkout
-      - docker/check:
-          registry: ghcr.io
-          use-docker-credentials-store: true
-      - docker/build:
-          registry: ghcr.io
-          image: bsstudio/bss-web-admin-backend
-          tag: latest
-          use-buildkit: true
-      - docker/push:
-          registry: ghcr.io
-          image: bsstudio/bss-web-admin-backend
-          tag: latest
 workflows:
   Build app:
     jobs:
@@ -106,7 +90,7 @@ workflows:
           deploy: false
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
-          tag: war
+          tag: latest
           use-buildkit: true
           use-docker-credentials-store: true
       - docker/publish:
@@ -118,8 +102,14 @@ workflows:
           tag: war
           use-buildkit: true
           use-docker-credentials-store: true
-      - docker_publish:
+      - docker/publish:
           name: "Publish image: jar"
+          deploy: true
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: latest
+          use-buildkit: true
+          use-docker-credentials-store: true
           requires:
             - Lint
             - Coverage
@@ -135,8 +125,15 @@ workflows:
 #          filters:
 #            branches:
 #              only: main
-      - docker_publish:
+      - docker/publish:
           name: "Publish image: war"
+          deploy: true
+          dockerfile: war.Dockerfile
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: war
+          use-buildkit: true
+          use-docker-credentials-store: true
           requires:
             - Lint
             - Coverage
