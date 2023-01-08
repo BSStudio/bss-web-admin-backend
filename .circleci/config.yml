@@ -46,6 +46,11 @@ jobs:
           reports_path: server/service/build/reports/
           test_results_path: server/service/build/test-results/
       - codecov/upload
+  fork_join:
+    docker:
+      - image: alpine:latest
+    steps:
+      - run: echo "Fork!"
 workflows:
   Build app:
     jobs:
@@ -102,14 +107,8 @@ workflows:
           tag: war
           use-buildkit: true
           use-docker-credentials-store: true
-      - docker/publish:
-          name: "Publish image: jar"
-          deploy: true
-          image: bsstudio/bss-web-admin-backend
-          registry: ghcr.io
-          tag: latest
-          use-buildkit: true
-          use-docker-credentials-store: true
+      - fork_join:
+          name: Fork join build
           requires:
             - Lint
             - Coverage
@@ -122,6 +121,16 @@ workflows:
             - "Build image: jar"
             - "Build image: war"
             - Lint Dockerfiles
+      - docker/publish:
+          name: "Publish image: jar"
+          deploy: true
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: latest
+          use-buildkit: true
+          use-docker-credentials-store: true
+          requires:
+            - Fork join build
           filters:
             branches:
               only: main
@@ -135,17 +144,7 @@ workflows:
           use-buildkit: true
           use-docker-credentials-store: true
           requires:
-            - Lint
-            - Coverage
-            - Build boot jar
-            - Build boot war
-            - Lint integration test
-            - Unit test
-            - "Integration test: jar"
-            - "Integration test: war"
-            - "Build image: jar"
-            - "Build image: war"
-            - Lint Dockerfiles
+            - Fork join build
           filters:
             branches:
               only: main
