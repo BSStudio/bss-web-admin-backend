@@ -4,7 +4,6 @@
 ![Codecov branch](https://img.shields.io/codecov/c/gh/BSStudio/bss-web-admin-backend/main)
 ![Swagger Validator](https://img.shields.io/swagger/valid/3.0?specUrl=https%3A%2F%2Fraw.githubusercontent.com%2FBSStudio%2Fbss-web-admin-backend%2Fmain%2Fserver%2Fweb%2Fsrc%2Fmain%2Fresources%2Fstatic%2Fopen-api.yaml)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/BSStudio/bss-web-admin-backend)
-![Docker Image Size (tag)](https://img.shields.io/docker/image-size/csikb/bss-web-admin-backend/latest)
 ![GitHub](https://img.shields.io/github/license/BSStudio/bss-web-admin-backend)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=BSStudio_bss-web-admin-backend&metric=bugs)](https://sonarcloud.io/dashboard?id=BSStudio_bss-web-admin-backend)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=BSStudio_bss-web-admin-backend&metric=code_smells)](https://sonarcloud.io/dashboard?id=BSStudio_bss-web-admin-backend)
