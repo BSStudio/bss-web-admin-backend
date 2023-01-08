@@ -83,6 +83,21 @@ jobs:
           reports_path: server/service/build/reports/
           test_results_path: server/service/build/test-results/
       - codecov/upload
+  docker_publish:
+    executor: docker/docker
+    steps:
+      - checkout
+      - docker/check:
+          registry: ghcr.io
+      - docker/build:
+          registry: ghcr.io
+          image: bsstudio/bss-web-admin-backend
+          tag: $CIRCLE_SHA1,latest
+          use-buildkit: true
+      - docker/push:
+          registry: ghcr.io
+          image: bsstudio/bss-web-admin-backend
+          tag: $CIRCLE_SHA1,latest
 workflows:
   app:
     jobs:
@@ -98,4 +113,4 @@ workflows:
           compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
       - docker/hadolint:
           dockerfiles: Dockerfile:war.Dockerfile
-      # todo docker build and publish
+      - docker_publish
