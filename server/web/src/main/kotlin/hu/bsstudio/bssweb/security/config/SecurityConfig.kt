@@ -12,13 +12,13 @@ class SecurityConfig {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-                .authorizeHttpRequests {
-                    it.requestMatchers("/api/**").authenticated()
-                      .anyRequest().permitAll()
-                }
-                .httpBasic(Customizer.withDefaults())
-                .cors().disable()
-                .csrf().disable()
-                .build()
+            .authorizeHttpRequests {
+                it.requestMatchers("/api/**").authenticated()
+                    .anyRequest().permitAll()
+            }
+            .httpBasic(Customizer.withDefaults())
+            .cors().disable()
+            .csrf().disable()
+            .build()
     }
 }
