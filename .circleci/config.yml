@@ -93,12 +93,29 @@ jobs:
       - docker/build:
           registry: ghcr.io
           image: bsstudio/bss-web-admin-backend
-          tag: $CIRCLE_SHA1,latest
+          tag: latest
           use-buildkit: true
       - docker/push:
           registry: ghcr.io
           image: bsstudio/bss-web-admin-backend
-          tag: $CIRCLE_SHA1,latest
+          tag: latest
+  docker_publish_war:
+    executor: docker/machine
+    steps:
+      - checkout
+      - docker/check:
+          registry: ghcr.io
+          use-docker-credentials-store: true
+      - docker/build:
+          registry: ghcr.io
+          image: bsstudio/bss-web-admin-backend
+          dockerfile: war.Dockerfile
+          tag: war
+          use-buildkit: true
+      - docker/push:
+          registry: ghcr.io
+          image: bsstudio/bss-web-admin-backend
+          tag: war
 workflows:
   app:
     jobs:
@@ -108,13 +125,37 @@ workflows:
       - bootWar
       - lint_integration_test
       - gradle_test
-      - integration_test
       - integration_test:
+          name: "integration_test_jar"
+      - integration_test:
+          name: "integration_test_war"
           timeout: 20000
           compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
       - docker/hadolint:
           dockerfiles: Dockerfile:war.Dockerfile
       - docker_publish:
+          requires:
+            - lint
+            - coverage
+            - bootJar
+            - bootWar
+            - lint_integration_test
+            - gradle_test
+            - integration_test_jar
+            - integration_test_war
+          filters:
+            branches:
+              only: main
+      - docker_publish_war:
+          requires:
+            - lint
+            - coverage
+            - bootJar
+            - bootWar
+            - lint_integration_test
+            - gradle_test
+            - integration_test_jar
+            - integration_test_war
           filters:
             branches:
               only: main
