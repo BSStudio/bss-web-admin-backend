@@ -83,65 +83,68 @@ workflows:
   app:
     jobs:
       - gradle/run:
-          name: lint
+          name: Lint
           command: ktlintCheck --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
-          name: coverage
+          name: Coverage
           command: jacocoTestCoverageVerification --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
-          name: bootJar
+          name: Build boot jar
           command: bootJar --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
-          name: bootWar
+          name: Build boot war
           command: bootWar --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - node/run:
-          name: lint_integration_test
+          name: Lint integration test
           app-dir: ~/project/integration
           npm-run: lint
           version: 18.12.1
-      - gradle_test
+      - gradle_test:
+          name: Unit test
       - integration_test:
-          name: "integration_test_jar"
+          name: "Integration test: jar"
       - integration_test:
-          name: "integration_test_war"
+          name: "Integration test: war"
           timeout: 20000
           compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
       - docker/hadolint:
-          name: lint_docker
+          name: Lint Dockerfiles
           dockerfiles: Dockerfile:war.Dockerfile
       - docker_publish:
+          name: Publish Docker jar image
           requires:
-            - lint
-            - coverage
-            - bootJar
-            - bootWar
-            - lint_integration_test
-            - gradle_test
-            - integration_test_jar
-            - integration_test_war
-            - lint_docker
+            - Lint
+            - Coverage
+            - Build boot jar
+            - Build boot war
+            - Lint integration test
+            - Unit test
+            - "Integration test: jar"
+            - "Integration test: war"
+            - Lint Dockerfiles
           #filters:
           #  branches:
           #    only: main
       - docker_publish_war:
+          name: Publish Docker war image
           requires:
-            - lint
-            - coverage
-            - bootJar
-            - bootWar
-            - lint_integration_test
-            - gradle_test
-            - integration_test_jar
-            - integration_test_war
-            - lint_docker
+            - Lint
+            - Coverage
+            - Build boot jar
+            - Build boot war
+            - Lint integration test
+            - Unit test
+            - "Integration test: jar"
+            - "Integration test: war"
+            - Lint Dockerfiles
           #filters:
           #  branches:
           #    only: main
