@@ -37,7 +37,6 @@ jobs:
     steps:
       - checkout
       - gradle/with_cache:
-          deps_checksum_file: build.gradle.kts
           steps:
             - run: ./gradlew test --parallel
       - gradle/collect_test_results:
@@ -47,42 +46,105 @@ jobs:
           reports_path: server/service/build/reports/
           test_results_path: server/service/build/test-results/
       - codecov/upload
+  fork_join:
+    docker:
+      - image: alpine:latest
+    steps:
+      - run: echo "Fork!"
 workflows:
-  app:
+  Build app:
     jobs:
       - gradle/run:
+          name: Lint
           command: ktlintCheck --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
+          name: Coverage
           command: jacocoTestCoverageVerification --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
+          name: Build boot jar
           command: bootJar --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
+          name: Build boot war
           command: bootWar --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - node/run:
+          name: Lint integration test
           app-dir: ~/project/integration
           npm-run: lint
           version: 18.12.1
-      - gradle_test
-      - integration_test
+      - gradle_test:
+          name: Unit test
       - integration_test:
+          name: "Integration test: jar"
+      - integration_test:
+          name: "Integration test: war"
           timeout: 20000
           compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
       - docker/hadolint:
+          name: Lint Dockerfiles
           dockerfiles: Dockerfile:war.Dockerfile
       - docker/publish:
+          name: "Build image: jar"
           deploy: false
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: latest
           use-buildkit: true
-          image: csikb/$CIRCLE_PROJECT_REPONAME
+          use-docker-credentials-store: true
       - docker/publish:
+          name: "Build image: war"
           deploy: false
-          use-buildkit: true
           dockerfile: war.Dockerfile
-          image: csikb/$CIRCLE_PROJECT_REPONAME
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: war
+          use-buildkit: true
+          use-docker-credentials-store: true
+      - fork_join:
+          name: Fork join build
+          requires:
+            - Lint
+            - Coverage
+            - Build boot jar
+            - Build boot war
+            - Lint integration test
+            - Unit test
+            - "Integration test: jar"
+            - "Integration test: war"
+            - "Build image: jar"
+            - "Build image: war"
+            - Lint Dockerfiles
+      - docker/publish:
+          name: "Publish image: jar"
+          deploy: true
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: latest
+          use-buildkit: true
+          use-docker-credentials-store: true
+          requires:
+            - Fork join build
+          filters:
+            branches:
+              only: main
+      - docker/publish:
+          name: "Publish image: war"
+          deploy: true
+          dockerfile: war.Dockerfile
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: war
+          use-buildkit: true
+          use-docker-credentials-store: true
+          requires:
+            - Fork join build
+          filters:
+            branches:
+              only: main
