@@ -122,9 +122,9 @@ workflows:
             - "Build image: jar"
             - "Build image: war"
             - Lint Dockerfiles
-#          filters:
-#            branches:
-#              only: main
+          filters:
+            branches:
+              only: main
       - docker/publish:
           name: "Publish image: war"
           deploy: true
@@ -146,6 +146,6 @@ workflows:
             - "Build image: jar"
             - "Build image: war"
             - Lint Dockerfiles
-#          filters:
-#            branches:
-#              only: main
+          filters:
+            branches:
+              only: main
