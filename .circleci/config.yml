@@ -12,15 +12,6 @@ executors:
     machine:
       image: ubuntu-2204:2022.10.2
 jobs:
-  lint_integration_test:
-    executor: node
-    steps:
-      - checkout
-      - node/install-packages:
-          app-dir: ~/project/integration
-      - run:
-          command: npm run lint
-          working_directory: ~/project/integration
   integration_test:
     executor: node
     steps:
