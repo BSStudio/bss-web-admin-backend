@@ -16,6 +16,7 @@ services:
       - influx
     environment:
       bss.file-api.url: "http://mock-file-api:8080"
+      spring.security.user.password: "password"
       spring.datasource.url: "jdbc:postgresql://db:5432/postgres?currentSchema=bss_web"
       spring.datasource.username: "postgres"
       spring.datasource.password: "postgres"
