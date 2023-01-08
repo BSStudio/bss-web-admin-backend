@@ -12,6 +12,43 @@ executors:
     machine:
       image: ubuntu-2204:2022.10.2
 jobs:
+  lint:
+    executor: jdk
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run: ./gradlew ktlintCheck --parallel
+  coverage:
+    executor: jdk
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run: ./gradlew jacocoTestCoverageVerification --parallel
+  bootJar:
+    executor: jdk
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run: ./gradlew bootJar --parallel
+  bootWar:
+    executor: jdk
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run: ./gradlew bootWar --parallel
+  lint_integration_test:
+    executor: node
+    steps:
+      - checkout
+      - node/install-packages:
+          app-dir: ~/project/integration
+      - run:
+          command: npm run lint
+          working_directory: ~/project/integration
   integration_test:
     executor: node
     steps:
@@ -37,7 +74,6 @@ jobs:
     steps:
       - checkout
       - gradle/with_cache:
-          deps_checksum_file: build.gradle.kts
           steps:
             - run: ./gradlew test --parallel
       - gradle/collect_test_results:
@@ -50,26 +86,11 @@ jobs:
 workflows:
   app:
     jobs:
-      - gradle/run:
-          command: ktlintCheck --parallel
-          deps_checksum_file: build.gradle.kts
-          executor: jdk
-      - gradle/run:
-          command: jacocoTestCoverageVerification --parallel
-          deps_checksum_file: build.gradle.kts
-          executor: jdk
-      - gradle/run:
-          command: bootJar --parallel
-          deps_checksum_file: build.gradle.kts
-          executor: jdk
-      - gradle/run:
-          command: bootWar --parallel
-          deps_checksum_file: build.gradle.kts
-          executor: jdk
-      - node/run:
-          app-dir: ~/project/integration
-          npm-run: lint
-          version: 18.12.1
+      - lint
+      - coverage
+      - bootJar
+      - bootWar
+      - lint_integration_test
       - gradle_test
       - integration_test
       - integration_test:
@@ -77,12 +98,4 @@ workflows:
           compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
       - docker/hadolint:
           dockerfiles: Dockerfile:war.Dockerfile
-      - docker/publish:
-          deploy: false
-          use-buildkit: true
-          image: csikb/$CIRCLE_PROJECT_REPONAME
-      - docker/publish:
-          deploy: false
-          use-buildkit: true
-          dockerfile: war.Dockerfile
-          image: csikb/$CIRCLE_PROJECT_REPONAME
+      # todo docker build and publish
