@@ -12,34 +12,6 @@ executors:
     machine:
       image: ubuntu-2204:2022.10.2
 jobs:
-  lint:
-    executor: jdk
-    steps:
-      - checkout
-      - gradle/with_cache:
-          steps:
-            - run: ./gradlew ktlintCheck --parallel
-  coverage:
-    executor: jdk
-    steps:
-      - checkout
-      - gradle/with_cache:
-          steps:
-            - run: ./gradlew jacocoTestCoverageVerification --parallel
-  bootJar:
-    executor: jdk
-    steps:
-      - checkout
-      - gradle/with_cache:
-          steps:
-            - run: ./gradlew bootJar --parallel
-  bootWar:
-    executor: jdk
-    steps:
-      - checkout
-      - gradle/with_cache:
-          steps:
-            - run: ./gradlew bootWar --parallel
   lint_integration_test:
     executor: node
     steps:
@@ -119,11 +91,31 @@ jobs:
 workflows:
   app:
     jobs:
-      - lint
-      - coverage
-      - bootJar
-      - bootWar
-      - lint_integration_test
+      - gradle/run:
+          name: lint
+          command: ktlintCheck --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - gradle/run:
+          name: coverage
+          command: jacocoTestCoverageVerification --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - gradle/run:
+          name: bootJar
+          command: bootJar --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - gradle/run:
+          name: bootWar
+          command: bootWar --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - node/run:
+          name: lint_integration_test
+          app-dir: ~/project/integration
+          npm-run: lint
+          version: 18.12.1
       - gradle_test
       - integration_test:
           name: "integration_test_jar"
@@ -132,6 +124,7 @@ workflows:
           timeout: 20000
           compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
       - docker/hadolint:
+          name: lint_docker
           dockerfiles: Dockerfile:war.Dockerfile
       - docker_publish:
           requires:
@@ -143,9 +136,10 @@ workflows:
             - gradle_test
             - integration_test_jar
             - integration_test_war
-          filters:
-            branches:
-              only: main
+            - lint_docker
+          #filters:
+          #  branches:
+          #    only: main
       - docker_publish_war:
           requires:
             - lint
@@ -156,6 +150,7 @@ workflows:
             - gradle_test
             - integration_test_jar
             - integration_test_war
-          filters:
-            branches:
-              only: main
+            - lint_docker
+          #filters:
+          #  branches:
+          #    only: main
