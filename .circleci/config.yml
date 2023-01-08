@@ -84,8 +84,9 @@ jobs:
           test_results_path: server/service/build/test-results/
       - codecov/upload
   docker_publish:
-    executor: docker/docker
+    executor: docker/machine
     steps:
+      - setup_remote_docker
       - checkout
       - docker/check:
           registry: ghcr.io
