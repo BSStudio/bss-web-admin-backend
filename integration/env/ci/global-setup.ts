@@ -1,6 +1,6 @@
 import { DockerComposeEnvironment, Wait } from 'testcontainers'
 import * as fs from 'fs/promises'
-import mkdirp = require('mkdirp')
+import { mkdirp } from 'mkdirp'
 import * as path from 'path'
 import jestTempDir from './jest-temp-dir'
 import('dotenv/config')
@@ -29,7 +29,7 @@ export default async function (): Promise<void[]> {
   }
 
   // use the file system to expose the baseUrls for TestEnvironments
-  mkdirp.sync(jestTempDir)
+  await mkdirp(jestTempDir)
   return Promise.all(Object.entries(baseUrl).map(([filename, content]) => writeToTempFile(filename, content)))
 }
 
