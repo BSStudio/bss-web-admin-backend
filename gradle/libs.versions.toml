@@ -1,7 +1,7 @@
 [versions]
 springdoc = "2.0.2"
 springBoot = "3.0.2"
-gradleKtlintPlugin = "11.0.0"
+gradleKtlintPlugin = "11.1.0"
 springDependencyManagementPlugin = "1.1.0"
 
 [libraries]
