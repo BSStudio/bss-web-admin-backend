@@ -18,13 +18,13 @@ class MemberMapper(private val idGenerator: () -> UUID = UUID::randomUUID) {
         joinedAt = entity.joinedAt,
         role = entity.role,
         status = entity.status,
-        archived = entity.archived,
+        archived = entity.archived
     )
 
     fun entityToModel(entity: SimpleMemberEntity) = SimpleMember(
         id = entity.id,
         name = entity.name,
-        nickname = entity.nickname,
+        nickname = entity.nickname
     )
 
     fun modelToEntity(model: CreateMember) = MemberEntity(

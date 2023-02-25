@@ -5,5 +5,5 @@ import java.util.UUID
 data class VideoCrewRequest(
     val videoId: UUID,
     val position: String,
-    val memberId: UUID,
+    val memberId: UUID
 )

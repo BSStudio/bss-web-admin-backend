@@ -22,6 +22,7 @@ internal class EventControllerTest {
 
     @MockK
     private lateinit var mockService: EventService
+
     @InjectMockKs
     private lateinit var underTest: EventController
 

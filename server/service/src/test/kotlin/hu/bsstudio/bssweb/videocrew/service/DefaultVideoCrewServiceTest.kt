@@ -23,10 +23,13 @@ internal class DefaultVideoCrewServiceTest {
 
     @MockK
     private lateinit var mockRepository: VideoCrewRepository
+
     @MockK
     private lateinit var mockMapper: VideoCrewMapper
+
     @MockK
     private lateinit var mockVideoService: VideoService
+
     @InjectMockKs
     private lateinit var underTest: DefaultVideoCrewService
 

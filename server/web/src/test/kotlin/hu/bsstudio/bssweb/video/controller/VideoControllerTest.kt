@@ -24,6 +24,7 @@ internal class VideoControllerTest {
 
     @MockK
     private lateinit var mockService: VideoService
+
     @InjectMockKs
     private lateinit var underTest: VideoController
 

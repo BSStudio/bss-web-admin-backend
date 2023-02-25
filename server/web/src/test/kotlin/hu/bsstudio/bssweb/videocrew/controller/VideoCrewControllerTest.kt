@@ -20,6 +20,7 @@ internal class VideoCrewControllerTest {
 
     @MockK
     private lateinit var mockService: VideoCrewService
+
     @InjectMockKs
     private lateinit var underTest: VideoCrewController
 

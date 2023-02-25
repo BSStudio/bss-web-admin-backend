@@ -13,7 +13,7 @@ class VideoCrewMapper(private val memberMapper: MemberMapper) {
         return VideoCrewEntityId(
             videoId = model.videoId,
             position = model.position,
-            memberId = model.memberId,
+            memberId = model.memberId
         )
     }
 
@@ -25,7 +25,7 @@ class VideoCrewMapper(private val memberMapper: MemberMapper) {
         return VideoCrew(
             videoId = entity.id.videoId,
             position = entity.id.position,
-            member = memberMapper.entityToModel(entity.member),
+            member = memberMapper.entityToModel(entity.member)
         )
     }
 }

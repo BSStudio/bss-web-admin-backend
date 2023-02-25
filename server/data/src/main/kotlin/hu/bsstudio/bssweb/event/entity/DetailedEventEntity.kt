@@ -27,5 +27,5 @@ data class DetailedEventEntity(
         joinColumns = [JoinColumn(name = "event_id")],
         inverseJoinColumns = [JoinColumn(name = "video_id")]
     )
-    var videos: List<VideoEntity> = listOf(),
+    var videos: List<VideoEntity> = listOf()
 )

@@ -22,5 +22,5 @@ data class MemberEntity(
     var role: String = "",
     @Enumerated(EnumType.STRING)
     var status: MemberStatus = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-    var archived: Boolean = false,
+    var archived: Boolean = false
 )

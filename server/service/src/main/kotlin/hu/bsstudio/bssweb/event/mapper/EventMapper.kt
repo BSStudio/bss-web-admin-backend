@@ -20,7 +20,7 @@ class EventMapper(
             title = entity.title,
             description = entity.description,
             date = entity.date,
-            visible = entity.visible,
+            visible = entity.visible
         )
     }
 
@@ -40,7 +40,7 @@ class EventMapper(
         return EventEntity(
             id = idGenerator.invoke(),
             url = model.url,
-            title = model.title,
+            title = model.title
         )
     }
 }

@@ -20,8 +20,10 @@ internal class DefaultEventVideoServiceTest {
 
     @MockK
     private lateinit var mockRepository: EventVideoRepository
+
     @MockK
     private lateinit var mockEventService: EventService
+
     @InjectMockKs
     private lateinit var underTest: DefaultEventVideoService
 
