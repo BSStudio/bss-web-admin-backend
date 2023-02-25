@@ -57,7 +57,7 @@ class DefaultEventService(
             title = updateEvent.title,
             description = updateEvent.description,
             date = updateEvent.date,
-            visible = updateEvent.visible,
+            visible = updateEvent.visible
         )
     }
 }

@@ -17,6 +17,7 @@ internal class MetricsControllerTest {
 
     @MockK
     private lateinit var service: MetricsService
+
     @InjectMockKs
     private lateinit var underTest: MetricsController
 

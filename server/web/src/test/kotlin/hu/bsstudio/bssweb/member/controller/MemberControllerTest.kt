@@ -21,6 +21,7 @@ internal class MemberControllerTest {
 
     @MockK
     private lateinit var mockService: MemberService
+
     @InjectMockKs
     private lateinit var underTest: MemberController
 

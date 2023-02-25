@@ -17,7 +17,7 @@ import java.util.UUID
 class DefaultVideoService(
     private val repository: VideoRepository,
     private val detailedRepository: DetailedVideoRepository,
-    private val mapper: VideoMapper,
+    private val mapper: VideoMapper
 ) : VideoService {
 
     override fun findAllVideos(): List<Video> {
@@ -64,7 +64,7 @@ class DefaultVideoService(
             title = updateVideo.title,
             description = updateVideo.description,
             uploadedAt = updateVideo.uploadedAt,
-            visible = updateVideo.visible,
+            visible = updateVideo.visible
         )
     }
 }

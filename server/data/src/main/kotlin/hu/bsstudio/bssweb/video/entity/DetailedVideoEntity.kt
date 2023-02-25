@@ -22,5 +22,5 @@ data class DetailedVideoEntity(
     var visible: Boolean = false,
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "video_id")
-    var videoCrew: List<DetailedVideoCrewEntity> = listOf(),
+    var videoCrew: List<DetailedVideoCrewEntity> = listOf()
 ) : SimpleVideoEntity

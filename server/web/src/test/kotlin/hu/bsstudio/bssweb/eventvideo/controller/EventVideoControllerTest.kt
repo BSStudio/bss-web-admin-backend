@@ -19,6 +19,7 @@ internal class EventVideoControllerTest {
 
     @MockK
     private lateinit var mockService: EventVideoService
+
     @InjectMockKs
     private lateinit var underTest: EventVideoController
 

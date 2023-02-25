@@ -118,7 +118,7 @@ internal class DefaultVideoServiceTest {
             title = UPDATE_VIDEO.title,
             description = UPDATE_VIDEO.description,
             uploadedAt = UPDATE_VIDEO.uploadedAt,
-            visible = UPDATE_VIDEO.visible,
+            visible = UPDATE_VIDEO.visible
         )
         every { mockDetailedRepository.save(updatedDetailedEntity) } returns updatedDetailedEntity
         val updatedVideo = DETAILED_VIDEO.copy(
@@ -126,7 +126,7 @@ internal class DefaultVideoServiceTest {
             title = UPDATE_VIDEO.title,
             description = UPDATE_VIDEO.description,
             uploadedAt = UPDATE_VIDEO.uploadedAt,
-            visible = UPDATE_VIDEO.visible,
+            visible = UPDATE_VIDEO.visible
         )
         every { mockMapper.entityToModel(updatedDetailedEntity) } returns updatedVideo
 

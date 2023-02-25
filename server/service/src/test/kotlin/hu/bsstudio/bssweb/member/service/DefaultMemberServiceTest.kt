@@ -24,8 +24,10 @@ internal class DefaultMemberServiceTest {
 
     @MockK
     private lateinit var mockRepository: MemberRepository
+
     @MockK
     private lateinit var mockMapper: MemberMapper
+
     @InjectMockKs
     private lateinit var underTest: DefaultMemberService
 

@@ -15,5 +15,5 @@ data class EventEntity(
     var title: String,
     var description: String = "",
     var date: LocalDate = LocalDate.now(),
-    var visible: Boolean = false,
+    var visible: Boolean = false
 )

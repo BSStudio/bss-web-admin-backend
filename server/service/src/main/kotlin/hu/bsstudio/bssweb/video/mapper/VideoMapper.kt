@@ -16,7 +16,7 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper, private val idMa
             url = entity.url,
             title = entity.title,
             uploadedAt = entity.uploadedAt,
-            visible = entity.visible,
+            visible = entity.visible
         )
     }
 
@@ -28,7 +28,7 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper, private val idMa
             description = entity.description,
             uploadedAt = entity.uploadedAt,
             visible = entity.visible,
-            crew = entity.videoCrew.map(videoCrewMapper::entityToModel),
+            crew = entity.videoCrew.map(videoCrewMapper::entityToModel)
         )
     }
 

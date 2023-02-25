@@ -7,23 +7,21 @@ describe('delete /api/v1/video/{videoId}', () => {
   afterAll(async () => await dbUtils.afterAll())
 
   const id = '01234567-0123-0123-0123-0123456789ab'
-  it('should return 500 and empty body when removing a non-existent video', async () => {
-    expect.assertions(1)
+  it('should return no content and empty body when video was removed', async () => {
+    expect.assertions(2)
+    await dbUtils.addVideos([videoEntity({ id, url: 'url', title: 'title' })])
 
     const response = await VideoEndpoint.removeVideo(id)
 
-    expect(response.status).toBe(500)
+    expect(response.status).toBe(204)
+    expect(response.data).toBe('')
   })
+  it('should return no content and empty body when removing a non-existent video', async () => {
+    expect.assertions(2)
 
-  it('should return ok and empty body when video was removed', async () => {
-    expect.assertions(3)
-    await dbUtils.addVideos([videoEntity({ id, url: 'url', title: 'title' })])
+    const response = await VideoEndpoint.removeVideo(id)
 
-    const deleteResponse = await VideoEndpoint.removeVideo(id)
-    const getResponse = await VideoEndpoint.getVideo(id)
-
-    expect(deleteResponse.status).toBe(200)
-    expect(deleteResponse.data).toBe('')
-    expect(getResponse.status).toBe(404)
+    expect(response.status).toBe(204)
+    expect(response.data).toBe('')
   })
 })

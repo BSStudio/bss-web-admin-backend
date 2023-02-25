@@ -10,7 +10,7 @@ import java.util.Optional
 class DefaultVideoCrewService(
     private val repository: VideoCrewRepository,
     private val videoService: VideoService,
-    private val mapper: VideoCrewMapper,
+    private val mapper: VideoCrewMapper
 ) : VideoCrewService {
 
     override fun getPositions() = repository.getPositions().sorted()

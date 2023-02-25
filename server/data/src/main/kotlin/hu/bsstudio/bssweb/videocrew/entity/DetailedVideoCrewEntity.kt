@@ -14,5 +14,5 @@ data class DetailedVideoCrewEntity(
     var id: VideoCrewEntityId,
     @ManyToOne
     @JoinColumn(insertable = false, updatable = false)
-    var member: SimpleMemberEntity,
+    var member: SimpleMemberEntity
 )

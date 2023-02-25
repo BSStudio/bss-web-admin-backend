@@ -26,10 +26,13 @@ internal class DefaultEventServiceTest {
 
     @MockK
     private lateinit var mockRepository: EventRepository
+
     @MockK
     private lateinit var mockDetailedRepository: DetailedEventRepository
+
     @MockK
     private lateinit var mockMapper: EventMapper
+
     @InjectMockKs
     private lateinit var underTest: DefaultEventService
 
@@ -116,7 +119,7 @@ internal class DefaultEventServiceTest {
             title = UPDATE_EVENT.title,
             description = UPDATE_EVENT.description,
             date = UPDATE_EVENT.date,
-            visible = UPDATE_EVENT.visible,
+            visible = UPDATE_EVENT.visible
         )
         every { mockDetailedRepository.save(updatedEntity) } returns updatedEntity
         val updatedDetailedEvent = DETAILED_EVENT.copy(
@@ -124,7 +127,7 @@ internal class DefaultEventServiceTest {
             title = UPDATE_EVENT.title,
             description = UPDATE_EVENT.description,
             date = UPDATE_EVENT.date,
-            visible = UPDATE_EVENT.visible,
+            visible = UPDATE_EVENT.visible
         )
         every { mockMapper.entityToModel(updatedEntity) } returns updatedDetailedEvent
 
