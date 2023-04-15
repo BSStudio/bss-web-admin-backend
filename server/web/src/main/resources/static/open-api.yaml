@@ -1,10 +1,16 @@
 openapi: 3.0.0
 info:
   title: BSS Web admin API
+  description: BSS Web admin API
   version: 1.0.0
   contact:
     name: Bence Csik
     url: https://github.com/csikb
+servers:
+  - description: "Local"
+    url: http://localhost:8080
+  - description: "Dev"
+    url: https://dev-admin.bsstudio.hu
 tags:
   - name: Member
     description: "REST operations for members"
@@ -21,12 +27,13 @@ tags:
 paths:
   /api/v1/member:
     get:
+      operationId: "getAllMembers"
       summary: "Read all member"
       description: "Read all member"
       tags:
         - Member
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
@@ -35,6 +42,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Member'
     post:
+      operationId: "createMember"
       summary: "Create member"
       description: "Create member"
       tags:
@@ -45,7 +53,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateMember'
       responses:
-        201:
+        "201":
           description: "Created"
           content:
             application/json:
@@ -53,6 +61,7 @@ paths:
                 $ref: '#/components/schemas/Member'
   /api/v1/member/{memberId}:
     put:
+      operationId: "updateMember"
       summary: "Update member"
       description: "Update member"
       tags:
@@ -70,13 +79,14 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateMember'
       responses:
-        200:
+        "200":
           description: "Created"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Member'
     get:
+      operationId: "getMemberById"
       summary: "Read one member"
       description: "Read one member"
       tags:
@@ -89,13 +99,14 @@ paths:
             type: string
             format: uuid
       responses:
-        200:
+        "200":
           description: "Ok"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Member'
     delete:
+      operationId: "removeMember"
       summary: "Delete member"
       description: "Delete member"
       tags:
@@ -108,10 +119,11 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: "OK"
   /api/v1/video:
     get:
+      operationId: "getAllVideos"
       summary: "Read all video (paginated)"
       description: "Read all video (paginated)"
       tags:
@@ -133,7 +145,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
@@ -147,6 +159,7 @@ paths:
                         items:
                           $ref: "#/components/schemas/Video"
     post:
+      operationId: "createVideo"
       summary: "Create video"
       description: "Create video"
       tags:
@@ -157,44 +170,15 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateVideo'
       responses:
-        201:
+        "201":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Video'
-  /api/v1/video/archive:
-    put:
-      summary: "Archive videos"
-      description: "Archive videos"
-      tags:
-        - Video
-      parameters:
-        - name: videoIds
-          in: query
-          required: true
-          explode: false
-          schema:
-            type: array
-            items:
-              type: string
-        - name: unarchive
-          in: query
-          description: Defaults to false if no value was provided
-          schema:
-            type: boolean
-            nullable: false
-      responses:
-        200:
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
   /api/v1/video/visible:
     put:
+      operationId: "changeVideoVisibility"
       summary: "Change video visibility"
       description: "Change video visibility"
       tags:
@@ -214,7 +198,7 @@ paths:
           schema:
             type: boolean
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
@@ -224,6 +208,7 @@ paths:
                   type: string
   /api/v1/video/{videoId}:
     put:
+      operationId: "updateVideo"
       summary: "Update video"
       description: "Update video"
       tags:
@@ -240,13 +225,14 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateVideo'
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DetailedVideo'
     get:
+      operationId: "getVideo"
       summary: "Read one video"
       description: "Read one video"
       tags:
@@ -258,13 +244,14 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DetailedVideo'
     delete:
+      operationId: "deleteVideo"
       summary: "Delete video"
       description: "Delete video"
       tags:
@@ -276,7 +263,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
@@ -286,6 +273,7 @@ paths:
                   type: string
   /api/v1/videoCrew:
     put:
+      operationId: "addPosition"
       summary: "Add position with member to the video"
       description: "Add position with member to the video"
       tags:
@@ -307,15 +295,16 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DetailedVideo'
-        404:
+        "404":
           description: "Not found"
     delete:
+      operationId: "removePosition"
       summary: "Delete position with member to the video"
       description: "Delete position with member to the video"
       tags:
@@ -337,22 +326,23 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DetailedVideo'
-        404:
+        "404":
           description: "Not found"
   /api/v1/event:
     get:
+      operationId: "findAllEvent"
       summary: "Read all event"
       description: "Read all event"
       tags:
         - Event
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
@@ -361,6 +351,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Event"
     post:
+      operationId: "createEvent"
       summary: "Create event"
       description: "Create event"
       tags:
@@ -371,7 +362,7 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateEvent"
       responses:
-        201:
+        "201":
           description: "Created"
           content:
             application/json:
@@ -379,6 +370,7 @@ paths:
                 $ref: "#/components/schemas/Event"
   /api/v1/event/{eventId}:
     get:
+      operationId: "findEventById"
       summary: "Read one event"
       description: "Read one event"
       tags:
@@ -391,13 +383,14 @@ paths:
             type: string
             format: uuid
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/DetailedEvent"
     put:
+      operationId: "updateEvent"
       summary: "Update event"
       description: "Update event"
       tags:
@@ -410,13 +403,14 @@ paths:
             type: string
             format: uuid
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/DetailedEvent"
     delete:
+      operationId: "deleteEvent"
       summary: "Delete event"
       description: "Delete event"
       tags:
@@ -429,10 +423,11 @@ paths:
             type: string
             format: uuid
       responses:
-        200:
+        "200":
           description: "OK"
   /api/v1/eventVideo:
     put:
+      operationId: "addVideoToEvent"
       summary: "Add video to event"
       description: "Add video to event"
       tags:
@@ -451,13 +446,14 @@ paths:
             type: string
             format: uuid
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DetailedEvent"
+                $ref: "#/components/schemas/Event"
     delete:
+      operationId: "removeVideoFromEvent"
       summary: "Delete video from event"
       description: "Delete video from event"
       tags:
@@ -476,7 +472,7 @@ paths:
             type: string
             format: uuid
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
@@ -484,18 +480,25 @@ paths:
                 $ref: "#/components/schemas/DetailedEvent"
   /api/v1/metrics:
     get:
+      operationId: "getMetrics"
       summary: "Read metrics"
       description: "Read metrics"
       tags:
         - Metrics
       responses:
-        200:
+        "200":
           description: "OK"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/BssMetrics"
+security:
+  - basicAuth: []
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
   schemas:
     Sort:
       type: object
@@ -722,20 +725,6 @@ components:
         id:
           type: string
           format: uuid
-        url:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        date:
-          type: string
-          format: date
-        visible:
-          type: boolean
-    UpdateEvent:
-      type: object
-      properties:
         url:
           type: string
         title:
