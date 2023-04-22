@@ -32,22 +32,29 @@
       "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
+      "groupSlug": "all-minor-patch",
+      "automerge": true
     },
     {
       "description": "Group all minor and patch updates together for gradle.",
       "matchManagers": ["gradle"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
+      "groupSlug": "all-minor-patch",
+      "automerge": true
     },
     {
       "description": "Group all minor and patch updates together for docker.",
       "matchManagers": ["docker-compose", "dockerfile"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
+      "groupSlug": "all-minor-patch",
+      "automerge": true
     }
   ],
-  "rebaseWhen": "conflicted"
+  "lockFileMaintenance": {
+      "enabled": true,
+      "automerge": true
+  },
+  "rebaseWhen": "auto"
 }
