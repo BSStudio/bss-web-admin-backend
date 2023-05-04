@@ -20,9 +20,9 @@ RUN ./gradlew $BUILD_ARG
 
 FROM tomcat:11.0.0-jre17-temurin-jammy AS app
 
-RUN addgroup --system tomcat && \
-    adduser --system --ingroup tomcat tomcat && \
-    chown -R tomcat:tomcat $CATALINA_HOME
+RUN addgroup --system tomcat \
+    adduser --system --ingroup tomcat tomcat \
+    chown -R tomcat:tomcat "$CATALINA_HOME"
 USER tomcat:tomcat
 
 ARG BUILD_ROOT=/usr/src/app
