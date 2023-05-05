@@ -42,7 +42,7 @@ services:
     volumes:
       - "./db:/docker-entrypoint-initdb.d"
   influx:
-    image: "influxdb:2.7.0-alpine"
+    image: "influxdb:2.7.1-alpine"
     ports:
       - "127.0.0.1:8086:8086"
     healthcheck:
