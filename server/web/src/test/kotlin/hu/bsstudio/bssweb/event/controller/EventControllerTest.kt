@@ -24,7 +24,7 @@ internal class EventControllerTest {
     private lateinit var mockService: EventService
 
     @InjectMockKs
-    private lateinit var underTest: EventController
+    private lateinit var underTest: DefaultEventController
 
     @Test
     internal fun findAllEvent() {

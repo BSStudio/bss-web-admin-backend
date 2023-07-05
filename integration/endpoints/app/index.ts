@@ -1,6 +1,0 @@
-export * from './event.endpoint'
-export * from './event-video.endpoint'
-export * from './member.endpoint'
-export * from './metrics.endpoint'
-export * from './video.endpoint'
-export * from './video-crew.endpoint'

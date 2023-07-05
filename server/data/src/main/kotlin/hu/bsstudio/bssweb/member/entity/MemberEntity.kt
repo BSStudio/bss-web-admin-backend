@@ -1,19 +1,15 @@
 package hu.bsstudio.bssweb.member.entity
 
 import hu.bsstudio.bssweb.member.common.MemberStatus
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
 @Entity
 @Table(name = "member")
 data class MemberEntity(
     @Id
-    var id: UUID,
+    var id: UUID = UUID.randomUUID(),
     var url: String,
     var name: String,
     var nickname: String = "",
