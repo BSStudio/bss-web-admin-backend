@@ -1,178 +1,150 @@
 version: 2.1
 orbs: 
-  codecov: codecov/codecov@3.2.4
-commands:
-  init_gradle:
-    steps:
-      - checkout
-      - restore_cache:
-          key: v2-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - run: ./gradlew --build-cache
-      - save_cache:
-          paths:
-            - ~/.gradle/wrapper
-          key: v2-gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-  store_gradle_reports:
-    steps:
-      - store_artifacts:
-          path: server/build/reports
-      - store_artifacts:
-          path: server/web/build/reports
-      - store_artifacts:
-          path: server/service/build/reports
-      - store_artifacts:
-          path: server/data/build/reports
-  init_npm:
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-npm-deps-{{ checksum "integration/package-lock.json" }}
-      - run:
-          command: npm clean-install --no-fund --no-audit
-          working_directory: integration
-      - save_cache:
-          paths:
-            - integration/node_modules
-          key: v1-npm-deps-{{ checksum "integration/package-lock.json" }}
-  docker_build:
-    steps:
-      - checkout
-      - restore_cache:
-          key: v3-docker-image-{{ .Branch }}
-      - run:
-          name: Restore cache
-          command: |
-            set +o pipefail
-            docker load -i ~/caches/image.tar | true
-      - run: docker build . --file <<parameters.filename>> --tag $DOCKERHUB_USERNAME/$IMAGE_NAME:<<parameters.tag>>
-      - run:
-          name: Save Docker image layer cache
-          command: |
-            mkdir -p ~/caches
-            docker save -o ~/caches/image.tar $DOCKERHUB_USERNAME/$IMAGE_NAME:<<parameters.tag>>
-      - save_cache:
-          paths:
-            - ~/cache/image.tar
-          key: v3-docker-image-{{ .Branch }}-{{ checksum <<parameters.filename>> }}
-    parameters:
-      tag:
-        type: string
-        default: latest
-      filename:
-        type: string
-        default: Dockerfile
+  codecov: codecov/codecov@3.2.5
+  node: circleci/node@5.1.0
+  gradle: circleci/gradle@3.0.0
+  docker: circleci/docker@2.2.0
 executors:
   jdk:
     docker:
-      - image: cimg/openjdk:17.0
+      - image: cimg/openjdk:17.0.7
   node:
-    docker:
-      - image: cimg/node:16.18
-  ubuntu-docker:
-    environment:
-      IMAGE_NAME: bss-web-admin-backend
     machine:
-      image: ubuntu-2204:2022.04.1
-      docker_layer_caching: true
+      image: ubuntu-2204:2022.10.2
 jobs:
-  lint:
-    executor: jdk
-    steps:
-      - init_gradle
-      - run: ./gradlew ktlintCheck --parallel
-  test:
-    executor: jdk
-    steps:
-      - init_gradle
-      - run: ./gradlew jacocoTestReport --parallel
-      - store_test_results:
-          path: web/build/test-results
-      - store_test_results:
-          path: service/build/test-results
-      - store_gradle_reports
-  coverage:
-    executor: jdk
-    steps:
-      - init_gradle
-      - run:
-          name: "Run test and test coverage"
-          command: ./gradlew jacocoTestCoverageVerification --parallel
-      - store_gradle_reports
-      - codecov/upload
-  lint-integration-test:
+  integration_test:
     executor: node
     steps:
-      - init_npm
+      - checkout
+      - node/install-packages:
+          app-dir: ~/project/integration
       - run:
-          name: Lint integration test
-          command: |
-            npm run lint -- -f=junit -o ./out/eslint/report.xml
-            npm run lint
-          working_directory: integration
-      - store_test_results:
-          path: integration/out/eslint
-  integration-test:
-    executor: ubuntu-docker
-    steps:
-      - init_npm
-      - run:
-          name: Run integration test
-          command: npm run test:ci -- --ci
-          working_directory: integration
+          command: npm run test:ci -- --testTimeout << parameters.timeout >>
+          working_directory: ~/project/integration
           environment:
-            DEBUG: testcontainers*
+            DOCKER_COMPOSE_FILE_NAME: << parameters.compose_files >>
       - store_test_results:
-          path: integration/out/jest
-  integration-test-war:
-    executor: ubuntu-docker
+          path: ~/project/integration/junit.xml
+    parameters:
+      timeout:
+        type: integer
+        default: 5000
+      compose_files:
+        type: string
+        default: docker-compose.yml,docker-compose.ci.yml
+  gradle_test:
+    executor: jdk
     steps:
-      - init_npm
-      - run:
-          name: Run integration test
-          command: npm run test:ci -- --ci --testTimeout 20000
-          working_directory: integration
-          environment:
-            DEBUG: testcontainers*
-            DOCKER_COMPOSE_FILE_NAME: docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml
-      - store_test_results:
-          path: integration/out/jest
-  docker-build:
-    executor: ubuntu-docker
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run: ./gradlew test --parallel
+      - gradle/collect_test_results:
+          reports_path: server/web/build/reports/
+          test_results_path: server/web/build/test-results/
+      - gradle/collect_test_results:
+          reports_path: server/service/build/reports/
+          test_results_path: server/service/build/test-results/
+      - codecov/upload
+  fork_join:
+    docker:
+      - image: alpine:latest
     steps:
-      - docker_build
-  docker-build-war:
-    executor: ubuntu-docker
-    steps:
-      - docker_build:
-          tag: war
-          filename: war.Dockerfile
-  docker-push:
-    executor: ubuntu-docker
-    steps:
-      - docker_build
-      - run: echo "$DOCKERHUB_ACCESS_TOKEN" | docker login --username $DOCKERHUB_USERNAME --password-stdin
-      - run: docker push $DOCKERHUB_USERNAME/$IMAGE_NAME:latest
+      - run: echo "Fork!"
 workflows:
-  all:
+  Build app:
     jobs:
-      - lint
-      - test
-      - coverage
-      - integration-test
-      - integration-test-war
-      - lint-integration-test
-      - docker-build
-      - docker-build-war
-      - docker-push:
+      - gradle/run:
+          name: Lint
+          command: ktlintCheck --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - gradle/run:
+          name: Coverage
+          command: jacocoTestCoverageVerification --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - gradle/run:
+          name: Build boot jar
+          command: bootJar --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - gradle/run:
+          name: Build boot war
+          command: bootWar --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - node/run:
+          name: Lint integration test
+          app-dir: ~/project/integration
+          npm-run: lint
+          version: 18.12.1
+      - gradle_test:
+          name: Unit test
+      - integration_test:
+          name: "Integration test: jar"
+      - integration_test:
+          name: "Integration test: war"
+          timeout: 20000
+          compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
+      - docker/hadolint:
+          name: Lint Dockerfiles
+          dockerfiles: Dockerfile:war.Dockerfile
+      - docker/publish:
+          name: "Build image: jar"
+          deploy: false
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: latest
+          use-buildkit: true
+          use-docker-credentials-store: true
+      - docker/publish:
+          name: "Build image: war"
+          deploy: false
+          dockerfile: war.Dockerfile
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: war
+          use-buildkit: true
+          use-docker-credentials-store: true
+      - fork_join:
+          name: Fork join build
+          requires:
+            - Lint
+            - Coverage
+            - Build boot jar
+            - Build boot war
+            - Lint integration test
+            - Unit test
+            - "Integration test: jar"
+            - "Integration test: war"
+            - "Build image: jar"
+            - "Build image: war"
+            - Lint Dockerfiles
+      - docker/publish:
+          name: "Publish image: jar"
+          deploy: true
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: latest
+          use-buildkit: true
+          use-docker-credentials-store: true
+          requires:
+            - Fork join build
           filters:
             branches:
-              only:
-                - main
+              only: main
+      - docker/publish:
+          name: "Publish image: war"
+          deploy: true
+          dockerfile: war.Dockerfile
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: war
+          use-buildkit: true
+          use-docker-credentials-store: true
           requires:
-            - lint
-            - test
-            - coverage
-            - integration-test
-            - lint-integration-test
-            - docker-build
+            - Fork join build
+          filters:
+            branches:
+              only: main

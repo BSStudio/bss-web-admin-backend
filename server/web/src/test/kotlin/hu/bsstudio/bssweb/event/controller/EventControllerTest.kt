@@ -9,11 +9,11 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
-import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
@@ -22,6 +22,7 @@ internal class EventControllerTest {
 
     @MockK
     private lateinit var mockService: EventService
+
     @InjectMockKs
     private lateinit var underTest: EventController
 
@@ -37,22 +38,22 @@ internal class EventControllerTest {
 
     @Test
     internal fun createEvent() {
-        every { mockService.insertEvent(CREATE_EVENT) } returns EVENT_1
+        every { mockService.insertEvent(CREATE_EVENT) } returns EVENT
 
         val response = underTest.createEvent(CREATE_EVENT)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.CREATED)
-        assertThat(response.body).isEqualTo(EVENT_1)
+        assertThat(response.body).isEqualTo(EVENT)
     }
 
     @Test
     internal fun findEventById1() {
-        every { mockService.findEventById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_1)
+        every { mockService.findEventById(EVENT_ID) } returns Optional.of(DETAILED_EVENT)
 
         val response = underTest.findEventById(EVENT_ID)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(DETAILED_EVENT_1)
+        assertThat(response.body).isEqualTo(DETAILED_EVENT)
     }
 
     @Test
@@ -67,12 +68,12 @@ internal class EventControllerTest {
 
     @Test
     internal fun updateEvent1() {
-        every { mockService.updateEvent(EVENT_ID, UPDATE_EVENT) } returns Optional.of(DETAILED_EVENT_1)
+        every { mockService.updateEvent(EVENT_ID, UPDATE_EVENT) } returns Optional.of(DETAILED_EVENT)
 
         val response = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
         assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(DETAILED_EVENT_1)
+        assertThat(response.body).isEqualTo(DETAILED_EVENT)
     }
 
     @Test
@@ -93,11 +94,11 @@ internal class EventControllerTest {
     }
 
     private companion object {
-        private val EVENT_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private val EVENT_1 = Event(id = EVENT_ID, url = "url", title = "title", description = "description", date = LocalDate.of(2022, 1, 1), visible = false)
-        private val CREATE_EVENT = CreateEvent(url = "url", title = "title")
-        private val DETAILED_EVENT_1 = DetailedEvent(id = EVENT_ID, url = "url", title = "title", description = "description", date = LocalDate.of(2022, 1, 1), visible = false, videos = listOf())
-        private val UPDATE_EVENT = UpdateEvent(url = "url", title = "title", description = "description", date = LocalDate.of(2022, 1, 1), visible = false)
-        private val EVENT_LIST = listOf(EVENT_1)
+        private val EVENT_ID = mockk<UUID>()
+        private val EVENT = mockk<Event>()
+        private val CREATE_EVENT = mockk<CreateEvent>()
+        private val DETAILED_EVENT = mockk<DetailedEvent>()
+        private val UPDATE_EVENT = mockk<UpdateEvent>()
+        private val EVENT_LIST = mockk<List<Event>>()
     }
 }

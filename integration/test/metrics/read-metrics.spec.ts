@@ -1,5 +1,5 @@
 import { DbUtils, eventEntity, memberEntity, videoEntity } from '../../database'
-import { BssMetrics, MetricsEndpoint } from '../../endpoints'
+import { BssMetrics, MetricsEndpoint } from '../../endpoints/app'
 
 describe('get /api/v1/metrics', () => {
   const dbUtils = new DbUtils()
@@ -21,8 +21,7 @@ describe('get /api/v1/metrics', () => {
 
     const response = await MetricsEndpoint.getMetrics()
 
-    const expectedMetrics: BssMetrics = { memberCount: 3, videoCount: 2, eventCount: 1 }
     expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual(expectedMetrics)
+    expect(response.data).toStrictEqual<BssMetrics>({ memberCount: 3, videoCount: 2, eventCount: 1 })
   })
 })

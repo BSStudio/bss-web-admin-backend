@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -116,20 +117,16 @@ internal class DefaultVideoServiceTest {
             url = UPDATE_VIDEO.url,
             title = UPDATE_VIDEO.title,
             description = UPDATE_VIDEO.description,
-            videoUrl = UPDATE_VIDEO.videoUrl,
-            thumbnailUrl = UPDATE_VIDEO.thumbnailUrl,
             uploadedAt = UPDATE_VIDEO.uploadedAt,
-            visible = UPDATE_VIDEO.visible,
+            visible = UPDATE_VIDEO.visible
         )
         every { mockDetailedRepository.save(updatedDetailedEntity) } returns updatedDetailedEntity
         val updatedVideo = DETAILED_VIDEO.copy(
             url = UPDATE_VIDEO.url,
             title = UPDATE_VIDEO.title,
             description = UPDATE_VIDEO.description,
-            videoUrl = UPDATE_VIDEO.videoUrl,
-            thumbnailUrl = UPDATE_VIDEO.thumbnailUrl,
             uploadedAt = UPDATE_VIDEO.uploadedAt,
-            visible = UPDATE_VIDEO.visible,
+            visible = UPDATE_VIDEO.visible
         )
         every { mockMapper.entityToModel(updatedDetailedEntity) } returns updatedVideo
 
@@ -147,14 +144,14 @@ internal class DefaultVideoServiceTest {
 
     private companion object {
         private val PAGEABLE = Pageable.unpaged()
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val VIDEO_ID = mockk<UUID>()
         private val VIDEO_ENTITY = VideoEntity(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
         private val VIDEO_ENTITY_LIST = listOf(VIDEO_ENTITY)
         private val VIDEO = Video(VIDEO_ID, "url", "title", LocalDate.of(2022, 1, 1), visible = true)
         private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
         private val CREATE_VIDEO = CreateVideo("url", "title")
-        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
-        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, "url", "title", "description", "videoUrl", "thumbnailUrl", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
-        private val UPDATE_VIDEO = UpdateVideo("updatedUrl", "updatedTitle", "updatedDescription", "updatedVideoUrl", "updatedThumbnailUrl", LocalDate.of(2022, 2, 2), visible = false)
+        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), visible = true, videoCrew = listOf())
+        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, "url", "title", "description", LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
+        private val UPDATE_VIDEO = UpdateVideo("updatedUrl", "updatedTitle", "updatedDescription", LocalDate.of(2022, 2, 2), visible = false)
     }
 }

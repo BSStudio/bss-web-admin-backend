@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class EventVideoServiceConfig(
     private val repository: EventVideoRepository,
-    private val eventService: EventService,
+    private val eventService: EventService
 ) {
 
     @Bean

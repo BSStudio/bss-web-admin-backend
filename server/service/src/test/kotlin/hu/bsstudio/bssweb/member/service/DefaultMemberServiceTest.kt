@@ -11,6 +11,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,8 +24,10 @@ internal class DefaultMemberServiceTest {
 
     @MockK
     private lateinit var mockRepository: MemberRepository
+
     @MockK
     private lateinit var mockMapper: MemberMapper
+
     @InjectMockKs
     private lateinit var underTest: DefaultMemberService
 
@@ -110,7 +113,6 @@ internal class DefaultMemberServiceTest {
             url = UPDATE_MEMBER.url,
             name = UPDATE_MEMBER.name,
             description = UPDATE_MEMBER.description,
-            imageUrl = UPDATE_MEMBER.imageUrl,
             joinedAt = UPDATE_MEMBER.joinedAt,
             role = UPDATE_MEMBER.role,
             status = UPDATE_MEMBER.status,
@@ -121,7 +123,6 @@ internal class DefaultMemberServiceTest {
             url = UPDATE_MEMBER.url,
             name = UPDATE_MEMBER.name,
             description = UPDATE_MEMBER.description,
-            imageUrl = UPDATE_MEMBER.imageUrl,
             joinedAt = UPDATE_MEMBER.joinedAt,
             role = UPDATE_MEMBER.role,
             status = UPDATE_MEMBER.status,
@@ -142,12 +143,12 @@ internal class DefaultMemberServiceTest {
     }
 
     private companion object {
-        private val MEMBER_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private val MEMBER_ENTITY = MemberEntity(MEMBER_ID, "url", "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)
+        private val MEMBER_ID = mockk<UUID>()
+        private val MEMBER_ENTITY = MemberEntity(MEMBER_ID, url = "url", name = "name", nickname = "nickname", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
         private val MEMBER_ENTITY_LIST = listOf(MEMBER_ENTITY)
-        private val MEMBER = Member(MEMBER_ID, "url", "name", "description", "imageUrl", LocalDate.of(2022, 1, 1), "role", MemberStatus.MEMBER, false)
+        private val MEMBER = Member(MEMBER_ID, url = "url", name = "name", nickname = "nickname", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
         private val MEMBER_LIST = listOf(MEMBER)
-        private val CREATE_MEMBER = CreateMember("url", "name")
-        private val UPDATE_MEMBER = UpdateMember("updatedUrl", "updatedName", "updatedDescription", "imageUrl", LocalDate.of(2022, 2, 2), "updatedRole", MemberStatus.ALUMNI, true)
+        private val CREATE_MEMBER = mockk<CreateMember>()
+        private val UPDATE_MEMBER = UpdateMember("updatedUrl", name = "updatedName", nickname = "nickname", description = "updatedDescription", LocalDate.of(2022, 2, 2), role = "updatedRole", MemberStatus.ALUMNI, true)
     }
 }

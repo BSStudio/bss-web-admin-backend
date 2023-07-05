@@ -1,5 +1,5 @@
 import { DbUtils, videoEntity } from '../../database'
-import { DetailedVideo, VideoEndpoint } from '../../endpoints'
+import { DetailedVideo, VideoEndpoint } from '../../endpoints/app'
 
 describe('get /api/v1/video/{videoId}', () => {
   const dbUtils = new DbUtils()
@@ -25,18 +25,15 @@ describe('get /api/v1/video/{videoId}', () => {
 
     const response1 = await VideoEndpoint.getVideo(id)
 
-    const expectedDetailedVideo: DetailedVideo = {
+    expect(response1.status).toBe(200)
+    expect(response1.data).toStrictEqual<DetailedVideo>({
       id,
       url,
       title,
-      videoUrl: '',
       visible: false,
       description: '',
-      thumbnailUrl: '',
       uploadedAt: '2022-01-01',
       crew: [],
-    }
-    expect(response1.status).toBe(200)
-    expect(response1.data).toStrictEqual(expectedDetailedVideo)
+    })
   })
 })

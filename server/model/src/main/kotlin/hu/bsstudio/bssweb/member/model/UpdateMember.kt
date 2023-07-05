@@ -6,10 +6,10 @@ import java.time.LocalDate
 data class UpdateMember(
     val url: String,
     val name: String,
+    val nickname: String,
     val description: String,
-    val imageUrl: String,
     val joinedAt: LocalDate,
     val role: String,
     val status: MemberStatus,
-    val archived: Boolean,
+    val archived: Boolean
 )

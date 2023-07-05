@@ -1,5 +1,5 @@
 import { DbUtils, memberEntity } from '../../database'
-import { Member, MemberEndpoint } from '../../endpoints'
+import { Member, MemberEndpoint } from '../../endpoints/app'
 
 describe('get /api/v1/member/{memberId}', () => {
   const dbUtils = new DbUtils()
@@ -19,15 +19,15 @@ describe('get /api/v1/member/{memberId}', () => {
       id: entity1.id,
       url: entity1.url,
       name: entity1.name,
+      nickname: entity1.nickname,
       description: entity1.description,
-      imageUrl: entity1.image_url,
       joinedAt: entity1.joined_at,
       role: entity1.role,
       status: entity1.status,
       archived: entity1.archived,
     }
     expect(response.status).toBe(200)
-    expect(response.data).toStrictEqual(expectedMember1)
+    expect(response.data).toStrictEqual<Member>(expectedMember1)
   })
   it('should not find member', async () => {
     expect.assertions(1)

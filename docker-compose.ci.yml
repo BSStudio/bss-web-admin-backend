@@ -9,3 +9,7 @@ services:
   influx:
     ports:
       - "8086"
+  mock-file-api:
+    ports:
+      - "8080"
+    volumes: []

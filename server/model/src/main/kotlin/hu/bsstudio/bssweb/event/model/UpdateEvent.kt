@@ -7,5 +7,5 @@ data class UpdateEvent(
     val title: String,
     val description: String,
     val date: LocalDate,
-    val visible: Boolean,
+    val visible: Boolean
 )

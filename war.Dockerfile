@@ -18,8 +18,17 @@ COPY ./ ./
 ARG BUILD_ARG="bootWar --parallel"
 RUN ./gradlew $BUILD_ARG
 
-FROM tomcat:9.0.68-jre17-temurin-jammy as app
-RUN apt-get install curl
+FROM tomcat:11.0.0-jre17-temurin-jammy AS app
+
+RUN addgroup --system tomcat && \
+    adduser --system --ingroup tomcat tomcat && \
+    chown -R tomcat:tomcat "$CATALINA_HOME"
+USER tomcat:tomcat
+
 ARG BUILD_ROOT=/usr/src/app
 ARG BOOT_WAR=$BUILD_ROOT/server/build/libs/*.war
 COPY --from=build $BOOT_WAR $CATALINA_HOME/webapps/ROOT.war
+
+LABEL org.opencontainers.image.source="https://github.com/BSStudio/bss-web-admin-backend"
+LABEL org.opencontainers.image.description="BSS Web admin backend"
+LABEL org.opencontainers.image.licenses="GPL-3.0"

@@ -17,10 +17,13 @@ internal class DefaultMetricsServiceTest {
 
     @MockK
     private lateinit var videoRepository: VideoRepository
+
     @MockK
     private lateinit var eventRepository: EventRepository
+
     @MockK
     private lateinit var memberRepository: MemberRepository
+
     @InjectMockKs
     private lateinit var underTest: DefaultMetricsService
 

@@ -1,5 +1,5 @@
 import { DbUtils, memberEntity, videoEntity } from '../../database'
-import { DetailedVideo, VideoCrewEndpoint } from '../../endpoints'
+import { DetailedVideo, VideoCrewEndpoint } from '../../endpoints/app'
 
 describe('post /api/v1/videoCrew', () => {
   const dbUtils = new DbUtils()
@@ -26,20 +26,32 @@ describe('post /api/v1/videoCrew', () => {
       url: videoEntity1.url,
       title: videoEntity1.title,
       description: videoEntity1.description,
-      videoUrl: videoEntity1.video_url,
-      thumbnailUrl: videoEntity1.thumbnail_url,
       uploadedAt: videoEntity1.uploaded_at,
       visible: videoEntity1.visible,
-      crew: [{ memberId, position: position1 }],
+      crew: [
+        {
+          videoId: videoEntity1.id,
+          position: position1,
+          member: { id: memberEntity1.id, name: memberEntity1.name, nickname: memberEntity1.nickname },
+        },
+      ],
     }
     expect(response1.status).toBe(200)
-    expect(response1.data).toStrictEqual(expected)
+    expect(response1.data).toStrictEqual<DetailedVideo>(expected)
     expect(response2.status).toBe(200)
-    expect(response2.data).toStrictEqual({
+    expect(response2.data).toStrictEqual<DetailedVideo>({
       ...expected,
       crew: [
-        { memberId, position: position1 },
-        { memberId, position: position2 },
+        {
+          videoId: videoEntity1.id,
+          position: position1,
+          member: { id: memberEntity1.id, name: memberEntity1.name, nickname: memberEntity1.nickname },
+        },
+        {
+          videoId: videoEntity1.id,
+          position: position2,
+          member: { id: memberEntity1.id, name: memberEntity1.name, nickname: memberEntity1.nickname },
+        },
       ],
     })
   })

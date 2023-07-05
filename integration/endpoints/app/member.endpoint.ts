@@ -1,12 +1,12 @@
 import { client } from './client'
-import { MemberStatus } from '../database/member.queries'
+import { MemberStatus } from '../../database/member.queries'
 
 export interface Member {
   id: string
   url: string
   name: string
+  nickname: string
   description: string
-  imageUrl: string
   joinedAt: string
   role: string
   status: MemberStatus
@@ -21,8 +21,8 @@ export interface CreateMember {
 export interface UpdateMember {
   url: string
   name: string
+  nickname: string
   description: string
-  imageUrl: string
   joinedAt: string
   role: string
   status: MemberStatus
@@ -38,9 +38,8 @@ export class MemberEndpoint {
     return this.client.post<Member>('/api/v1/member', createMember)
   }
   static archiveMembers(memberIds: string[], archive: boolean) {
-    return this.client.put<string[]>('/api/v1/member/archive', null, {
-      params: { memberIds: memberIds.join(','), archive: `${archive}` },
-    })
+    const params = { memberIds: memberIds.join(','), archive: `${archive}` }
+    return this.client.put<string[]>('/api/v1/member/archive', null, { params })
   }
   static updateMember(memberId: string, updateMember: UpdateMember) {
     return this.client.put<Member>(`/api/v1/member/${memberId}`, updateMember)
@@ -49,6 +48,6 @@ export class MemberEndpoint {
     return this.client.get<Member>(`/api/v1/member/${memberId}`)
   }
   static removeMember(memberId: string) {
-    return this.client.delete(`/api/v1/member/${memberId}`)
+    return this.client.delete<void>(`/api/v1/member/${memberId}`)
   }
 }

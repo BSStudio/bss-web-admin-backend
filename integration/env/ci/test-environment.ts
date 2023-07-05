@@ -14,11 +14,12 @@ export default class TestEnvironment extends NodeEnvironment {
     // get the urls
     const app = await TestEnvironment.readTempFile('app')
     const db = await TestEnvironment.readTempFile('db')
+    const fileApi = await TestEnvironment.readTempFile('fileApi')
 
-    if (!app || !db) {
+    if (!app || !db || !fileApi) {
       throw new Error('baseUrls not found')
     }
 
-    this.global.baseUrl = { app, db }
+    this.global.baseUrl = { app, db, fileApi }
   }
 }

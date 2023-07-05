@@ -1,17 +1,11 @@
 [versions]
-# update in buildSrc/src/main/kotlin/dependency-management.gradle.kts
-mockk = "1.13.2"
-springdoc = "1.6.12"
-springBoot = "2.7.5"
-# update in buildSrc/src/main/kotlin/dependency-management.gradle.kts
-springCloud = "2021.0.4"
-gradleKtlintPlugin = "11.0.0"
+springdoc = "2.1.0"
+springBoot = "3.1.1"
+gradleKtlintPlugin = "11.4.2"
 springDependencyManagementPlugin = "1.1.0"
 
 [libraries]
-mockk = { module = "io.mockk:mockk-jvm", version.ref = "mockk" }
-springCloud = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "springCloud" }
-springdocOpenapiUi = { module = "org.springdoc:springdoc-openapi-ui", version.ref = "springdoc" }
+springdocOpenapiStarterWebmvcUi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 
 plugin-springBoot = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
 plugin-springDependencyManagement = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "springDependencyManagementPlugin" }

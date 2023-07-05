@@ -1,16 +1,20 @@
 package hu.bsstudio.bssweb.video.mapper
 
+import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
+import hu.bsstudio.bssweb.member.model.SimpleMember
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.Video
-import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
+import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
+import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
-import hu.bsstudio.bssweb.videocrew.model.SimpleCrew
+import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -56,22 +60,24 @@ internal class VideoMapperTest {
     }
 
     private companion object {
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
+        private val VIDEO_ID = mockk<UUID>()
+        private val MEMBER_ID = UUID.fromString("11234567-0123-0123-0123-0123456789ab")
         private const val URL = "url"
         private const val TITLE = "title"
         private const val DESCRIPTION = "description"
-        private const val VIDEO_URL = "videoUrl"
-        private const val THUMBNAIL_URL = "thumbnailUrl"
         private val UPLOADED_AT = LocalDate.of(2022, 1, 1)
         private const val VISIBLE = true
-        private val CREW_ENTITY = VideoCrewEntity(VIDEO_ID, "position", VIDEO_ID)
+        private val CREW_ENTITY_ID = VideoCrewEntityId(VIDEO_ID, "position", VIDEO_ID)
+        private val MEMBER_ENTITY = SimpleMemberEntity(MEMBER_ID, "name", "nickname")
+        private val CREW_ENTITY = DetailedVideoCrewEntity(id = CREW_ENTITY_ID, member = MEMBER_ENTITY)
         private val VIDEO_CREW = listOf(CREW_ENTITY)
-        private val CREW_MODEL = SimpleCrew("position", VIDEO_ID)
+        private val MEMBER = SimpleMember(MEMBER_ID, "name", "nickname")
+        private val CREW_MODEL = VideoCrew(videoId = VIDEO_ID, position = "position", member = MEMBER)
         private val CREW = listOf(CREW_MODEL)
         private val VIDEO_ENTITY = VideoEntity(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
         private val VIDEO = Video(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
-        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, URL, TITLE, DESCRIPTION, VIDEO_URL, THUMBNAIL_URL, UPLOADED_AT, VISIBLE, VIDEO_CREW)
-        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, URL, TITLE, DESCRIPTION, VIDEO_URL, THUMBNAIL_URL, UPLOADED_AT, VISIBLE, CREW)
+        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(VIDEO_ID, URL, TITLE, DESCRIPTION, UPLOADED_AT, VISIBLE, VIDEO_CREW)
+        private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, URL, TITLE, DESCRIPTION, UPLOADED_AT, VISIBLE, CREW)
         private val CREATE_VIDEO = CreateVideo(URL, TITLE)
         private val CREATED_VIDEO_ENTITY = VideoEntity(id = VIDEO_ID, url = URL, title = TITLE)
     }

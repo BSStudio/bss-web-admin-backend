@@ -6,8 +6,8 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
     healthcheck:
-      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
-      interval: 20s
+      test: "wget --tries=1 --no-verbose -qO- http://localhost:8080/actuator/health | grep -q UP"
+      interval: 10s
       timeout: 5s
       retries: 5
       start_period: 20s
@@ -15,34 +15,42 @@ services:
       - db
       - influx
     environment:
+      bss.file-api.url: "http://mock-file-api:8080"
+      spring.security.user.password: "password"
       spring.datasource.url: "jdbc:postgresql://db:5432/postgres?currentSchema=bss_web"
       spring.datasource.username: "postgres"
       spring.datasource.password: "postgres"
       spring.datasource.driver-class-name: "org.postgresql.Driver"
-      management.metrics.export.influx.uri: "http://influx:8086"
-      management.metrics.export.influx.token: "token"
-      management.metrics.export.influx.org: "org"
-      management.metrics.export.influx.user-name: "user"
-      management.metrics.export.influx.password: "password"
-      management.metrics.export.influx.bucket: "bucket"
+      management.influx.metrics.export.uri: "http://influx:8086"
+      management.influx.metrics.export.token: "token"
+      management.influx.metrics.export.org: "org"
+      management.influx.metrics.export.user-name: "user"
+      management.influx.metrics.export.password: "password"
+      management.influx.metrics.export.bucket: "bucket"
   db:
-    image: "postgres:9.6.24-alpine"
+    image: "postgres:15.1-alpine3.16"
     environment:
       POSTGRES_PASSWORD: "postgres"
     ports:
       - "127.0.0.1:5432:5432"
     healthcheck:
-      test: "pg_isready -q"
-      interval: 20s
+      test: "pg_isready -q -U postgres"
+      interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
     volumes:
       - "./db:/docker-entrypoint-initdb.d"
   influx:
-    image: "influxdb:2.4.0-alpine"
+    image: "influxdb:2.7.1-alpine"
     ports:
       - "127.0.0.1:8086:8086"
+    healthcheck:
+      test: "influx ping"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     environment:
       DOCKER_INFLUXDB_INIT_MODE: "setup"
       DOCKER_INFLUXDB_INIT_USERNAME: "user"
@@ -50,3 +58,15 @@ services:
       DOCKER_INFLUXDB_INIT_ORG: "org"
       DOCKER_INFLUXDB_INIT_BUCKET: "bucket"
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "token"
+  mock-file-api:
+    image: "wiremock/wiremock:2.35.0-alpine"
+    ports:
+      - "127.0.0.1:8888:8080"
+    healthcheck:
+      test: "wget --no-verbose --tries=1 --spider http://localhost:8080/__admin/docs || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - "./stubs:/home/wiremock/mappings"

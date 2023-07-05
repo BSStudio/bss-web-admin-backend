@@ -1,5 +1,5 @@
 import { DbUtils, memberEntity } from '../../database'
-import { Member, MemberEndpoint } from '../../endpoints'
+import { Member, MemberEndpoint } from '../../endpoints/app'
 
 describe('get /api/v1/member', () => {
   const dbUtils = new DbUtils()
@@ -18,8 +18,8 @@ describe('get /api/v1/member', () => {
       id: entity1.id,
       url: entity1.url,
       name: entity1.name,
+      nickname: entity1.nickname,
       description: entity1.description,
-      imageUrl: entity1.image_url,
       joinedAt: entity1.joined_at,
       role: entity1.role,
       status: entity1.status,
@@ -29,8 +29,8 @@ describe('get /api/v1/member', () => {
       id: entity2.id,
       url: entity2.url,
       name: entity2.name,
+      nickname: entity2.nickname,
       description: entity2.description,
-      imageUrl: entity2.image_url,
       joinedAt: entity2.joined_at,
       role: entity2.role,
       status: entity2.status,
@@ -38,8 +38,8 @@ describe('get /api/v1/member', () => {
     }
     expect(response.status).toBe(200)
     expect(response.data).toHaveLength(2)
-    expect(response.data[0]).toStrictEqual(expectedMember1)
-    expect(response.data[1]).toStrictEqual(expectedMember2)
+    expect(response.data[0]).toStrictEqual<Member>(expectedMember1)
+    expect(response.data[1]).toStrictEqual<Member>(expectedMember2)
   })
   it('should return empty array if empty', async () => {
     expect.assertions(2)

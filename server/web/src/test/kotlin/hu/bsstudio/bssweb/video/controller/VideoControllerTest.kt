@@ -9,13 +9,13 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
-import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
@@ -24,6 +24,7 @@ internal class VideoControllerTest {
 
     @MockK
     private lateinit var mockService: VideoService
+
     @InjectMockKs
     private lateinit var underTest: VideoController
 
@@ -117,12 +118,12 @@ internal class VideoControllerTest {
     }
 
     private companion object {
-        private val PAGEABLE = Pageable.unpaged()
-        private val VIDEO_ID = UUID.fromString("01234567-0123-0123-0123-0123456789ab")
-        private val VIDEO = Video(id = VIDEO_ID, url = "url", title = "title", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)
-        private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
-        private val CREATE_VIDEO = CreateVideo(url = "url", title = "title")
-        private val DETAILED_VIDEO = DetailedVideo(id = VIDEO_ID, url = "url", title = "title", "description", "videoUrl", "thumbnailUrl", uploadedAt = LocalDate.of(2022, 1, 1), visible = true, crew = listOf())
-        private val UPDATE_VIDEO = UpdateVideo(url = "url", title = "title", "description", "videoUrl", "thumbnailUrl", uploadedAt = LocalDate.of(2022, 1, 1), visible = true)
+        private val PAGEABLE = mockk<Pageable>()
+        private val VIDEO_ID = mockk<UUID>()
+        private val VIDEO = mockk<Video>()
+        private val PAGED_VIDEOS = mockk<Page<Video>>()
+        private val CREATE_VIDEO = mockk<CreateVideo>()
+        private val DETAILED_VIDEO = mockk<DetailedVideo>()
+        private val UPDATE_VIDEO = mockk<UpdateVideo>()
     }
 }

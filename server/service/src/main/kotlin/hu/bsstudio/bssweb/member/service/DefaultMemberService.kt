@@ -11,7 +11,7 @@ import java.util.UUID
 
 class DefaultMemberService(
     private val repository: MemberRepository,
-    private val mapper: MemberMapper,
+    private val mapper: MemberMapper
 ) : MemberService {
 
     override fun findAllMembers(): List<Member> {
@@ -51,12 +51,12 @@ class DefaultMemberService(
         return memberEntity.copy(
             url = updateMember.url,
             name = updateMember.name,
+            nickname = updateMember.nickname,
             description = updateMember.description,
-            imageUrl = updateMember.imageUrl,
             joinedAt = updateMember.joinedAt,
             role = updateMember.role,
             status = updateMember.status,
-            archived = updateMember.archived,
+            archived = updateMember.archived
         )
     }
 }

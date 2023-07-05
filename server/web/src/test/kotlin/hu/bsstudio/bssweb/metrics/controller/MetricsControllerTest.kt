@@ -6,6 +6,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -16,6 +17,7 @@ internal class MetricsControllerTest {
 
     @MockK
     private lateinit var service: MetricsService
+
     @InjectMockKs
     private lateinit var underTest: MetricsController
 
@@ -30,6 +32,6 @@ internal class MetricsControllerTest {
     }
 
     private companion object {
-        private val METRICS = BssMetrics(1L, 2L, 3L)
+        private val METRICS = mockk<BssMetrics>()
     }
 }
