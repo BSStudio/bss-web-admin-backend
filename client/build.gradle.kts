@@ -7,4 +7,5 @@ plugins {
 dependencies {
     api(project(":server:model"))
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springframework.data:spring-data-commons")
 }
