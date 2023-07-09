@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/v1/metrics")
-class MetricsController(private val service: MetricsService): MetricsApi {
+class MetricsController(private val service: MetricsService) : MetricsApi {
 
     override fun getMetrics(): ResponseEntity<BssMetrics> {
         return service.getMetrics()

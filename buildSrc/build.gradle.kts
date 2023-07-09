@@ -16,4 +16,5 @@ dependencies {
     implementation(kotlin("reflect", "1.8.22"))
     implementation(kotlin("stdlib-jdk8", "1.8.22"))
     implementation(kotlin("noarg", "1.8.22"))
+    implementation(kotlin("serialization", "1.8.22"))
 }

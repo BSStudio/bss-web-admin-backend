@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class VideoCrewController(private val service: VideoCrewService): VideoCrewApi {
+class VideoCrewController(private val service: VideoCrewService) : VideoCrewApi {
 
     override fun getPositions(): ResponseEntity<List<String>> {
         return service.getPositions().let { ResponseEntity.ok(it) }

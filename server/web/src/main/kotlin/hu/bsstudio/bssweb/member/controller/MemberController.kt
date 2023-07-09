@@ -8,10 +8,10 @@ import hu.bsstudio.bssweb.member.service.MemberService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.UUID
 
 @RestController
-class MemberController(val service: MemberService): MemberApi {
+class MemberController(val service: MemberService) : MemberApi {
 
     override fun getAllMembers(): ResponseEntity<List<Member>> {
         return service.findAllMembers()

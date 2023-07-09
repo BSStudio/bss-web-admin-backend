@@ -10,5 +10,4 @@ interface MetricsApi {
 
     @GetMapping
     fun getMetrics(): ResponseEntity<BssMetrics>
-
 }

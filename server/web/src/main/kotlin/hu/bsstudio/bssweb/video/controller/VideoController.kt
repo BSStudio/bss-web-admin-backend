@@ -11,10 +11,10 @@ import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
-import java.util.*
+import java.util.UUID
 
 @RestController
-class VideoController(private val service: VideoService): VideoApi {
+class VideoController(private val service: VideoService) : VideoApi {
 
     override fun getAllVideos(): ResponseEntity<List<Video>> {
         return service.findAllVideos()
