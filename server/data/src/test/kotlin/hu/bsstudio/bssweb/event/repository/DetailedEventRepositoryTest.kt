@@ -11,29 +11,23 @@ import org.springframework.test.context.ContextConfiguration
 import java.time.LocalDate
 import java.util.UUID
 
-@DataJpaTest
-@ContextConfiguration(
-    classes = [
-        DetailedEventRepositoryTest::class,
-        DetailedEventRepository::class
-    ]
-)
 @EnableAutoConfiguration
 @EntityScan(basePackages = ["hu.bsstudio.bssweb"])
+@DataJpaTest
+@ContextConfiguration(classes = [DetailedEventRepositoryTest::class])
 class DetailedEventRepositoryTest(
     @Autowired private val underTest: DetailedEventRepository
 ) {
 
     @Test
-    fun `test create read update and delete`() {
+    fun `test create read and delete`() {
+        assertThat(underTest.count()).isZero()
         val (id) = underTest.save(ENTITY)
-        val foundEntity = underTest.findById(id)
-
-        assertThat(foundEntity).hasValue(ENTITY)
+        assertThat(underTest.findById(id)).hasValue(ENTITY)
+        assertThat(underTest.count()).isOne()
 
         underTest.deleteById(id)
-        val count = underTest.count()
-        assertThat(count).isZero()
+        assertThat(underTest.count()).isZero()
     }
 
     companion object {

@@ -8,9 +8,9 @@ import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.service.VideoService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
 
 @RestController
@@ -28,7 +28,7 @@ class VideoController(private val service: VideoService) : VideoApi {
 
     override fun createVideo(createVideo: CreateVideo): ResponseEntity<Video> {
         return service.insertVideo(createVideo)
-            .let { ResponseEntity(it, HttpStatus.CREATED) }
+            .let { ResponseEntity.created(locationUri(it.id)).body(it) }
     }
 
     override fun changeVideoVisibility(videoIds: List<UUID>, visible: Boolean): ResponseEntity<List<UUID>> {
@@ -50,4 +50,9 @@ class VideoController(private val service: VideoService) : VideoApi {
         service.deleteVideoById(videoId)
         return ResponseEntity.noContent().build()
     }
+
+    private fun locationUri(id: UUID) = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(id)
+            .toUri()
 }

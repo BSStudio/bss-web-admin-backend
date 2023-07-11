@@ -5,9 +5,9 @@ import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.service.MemberService
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
 
 @RestController
@@ -20,7 +20,7 @@ class MemberController(val service: MemberService) : MemberApi {
 
     override fun createMember(member: CreateMember): ResponseEntity<Member> {
         return service.insertMember(member)
-            .let { ResponseEntity(it, HttpStatus.CREATED) }
+            .let { ResponseEntity.created(locationUri(it.id)).body(it) }
     }
 
     override fun updateMember(memberId: UUID, updateMember: UpdateMember): ResponseEntity<Member> {
@@ -42,4 +42,9 @@ class MemberController(val service: MemberService) : MemberApi {
         service.removeMember(memberId)
         return ResponseEntity.noContent().build()
     }
+
+    private fun locationUri(id: UUID) = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(id)
+            .toUri()
 }

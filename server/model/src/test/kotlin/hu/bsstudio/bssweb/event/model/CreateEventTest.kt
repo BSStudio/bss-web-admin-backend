@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
 import org.springframework.boot.test.json.JacksonTester
-import org.springframework.boot.test.json.JsonContent
 import org.springframework.test.context.ContextConfiguration
 
 @JsonTest
@@ -16,14 +15,14 @@ class CreateEventTest(
 
     @Test
     fun `test serialisation`() {
-        val actual: JsonContent<CreateEvent> = this.underTest.write(CREATE_EVENT)
+        val actual = this.underTest.write(CREATE_EVENT)
 
         assertThat(actual).isEqualToJson(JSON)
     }
 
     @Test
     fun `test deserialization`() {
-        val actual: CreateEvent = this.underTest.parseObject(JSON)
+        val actual = this.underTest.parseObject(JSON)
 
         assertThat(actual).isEqualTo(CREATE_EVENT)
     }

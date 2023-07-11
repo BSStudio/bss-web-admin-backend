@@ -6,9 +6,9 @@ import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.service.EventService
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
 
 @RestController
@@ -21,7 +21,7 @@ class EventController(private val service: EventService) : EventApi {
 
     override fun createEvent(createEvent: CreateEvent): ResponseEntity<Event> {
         return service.insertEvent(createEvent)
-            .let { ResponseEntity(it, HttpStatus.CREATED) }
+            .let { ResponseEntity.created(locationUri(it.id)).body(it) }
     }
 
     override fun findEventById(eventId: UUID): ResponseEntity<DetailedEvent> {
@@ -38,4 +38,9 @@ class EventController(private val service: EventService) : EventApi {
         service.removeEvent(eventId)
         return ResponseEntity.noContent().build()
     }
+
+    private fun locationUri(id: UUID) = ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(id)
+            .toUri()
 }
