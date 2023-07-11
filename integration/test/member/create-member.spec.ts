@@ -13,7 +13,7 @@ describe('post /api/v1/member', () => {
   const name = 'name'
 
   it('should create a new member', async () => {
-    expect.assertions(3)
+    expect.assertions(4)
     await FileEndpoint.mockCreateMemberFolder()
 
     const createMember: CreateMember = { url, name }
@@ -22,6 +22,7 @@ describe('post /api/v1/member', () => {
 
     expect(mockCalls).toBe(1)
     expect(response.status).toBe(201)
+    expect(response.headers['location']).toBe(`${globalThis.baseUrl.app}/api/v1/member/${response.data.id}`)
     expect(response.data).toMatchObject<Member>({
       id: expect.stringMatching(UUID_REGEX) as string,
       url,
