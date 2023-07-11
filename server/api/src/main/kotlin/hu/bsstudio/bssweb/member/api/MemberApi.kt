@@ -3,7 +3,6 @@ package hu.bsstudio.bssweb.member.api
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.ResponseStatus
 import java.util.UUID
 
 @RequestMapping("/api/v1/member")
@@ -35,6 +33,5 @@ interface MemberApi {
     fun getMemberById(@PathVariable memberId: UUID): ResponseEntity<Member>
 
     @DeleteMapping("/{memberId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun removeMember(@PathVariable memberId: UUID): ResponseEntity<Void>
 }
