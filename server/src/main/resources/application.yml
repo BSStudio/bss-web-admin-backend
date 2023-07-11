@@ -8,9 +8,3 @@ springdoc:
     url: /open-api.yaml
     display-request-duration: true
     use-root-path: true
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
-        web: DEBUG
