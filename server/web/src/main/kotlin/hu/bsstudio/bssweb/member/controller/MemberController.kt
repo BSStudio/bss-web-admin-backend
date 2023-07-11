@@ -1,9 +1,9 @@
 package hu.bsstudio.bssweb.member.controller
 
-import hu.bsstudio.bssweb.member.api.MemberApi
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
+import hu.bsstudio.bssweb.member.operation.MemberOperation
 import hu.bsstudio.bssweb.member.service.MemberService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
 
 @RestController
-class MemberController(val service: MemberService) : MemberApi {
+class MemberController(val service: MemberService) : MemberOperation {
 
     override fun getAllMembers(): ResponseEntity<List<Member>> {
         return service.findAllMembers()

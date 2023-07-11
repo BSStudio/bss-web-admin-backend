@@ -1,4 +1,4 @@
-package hu.bsstudio.bssweb.member.api
+package hu.bsstudio.bssweb.member.operation
 
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import java.util.UUID
 
 @RequestMapping("/api/v1/member")
-interface MemberApi {
+interface MemberOperation {
 
     @GetMapping
     fun getAllMembers(): ResponseEntity<List<Member>>

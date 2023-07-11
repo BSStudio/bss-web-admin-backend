@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":server:api"))
+    api(project(":server:operation"))
     api(project(":server:service"))
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")

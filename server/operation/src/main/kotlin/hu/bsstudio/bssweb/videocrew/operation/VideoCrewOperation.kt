@@ -1,4 +1,4 @@
-package hu.bsstudio.bssweb.videocrew.api
+package hu.bsstudio.bssweb.videocrew.operation
 
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
 @RequestMapping("/api/v1/videoCrew")
-interface VideoCrewApi {
+interface VideoCrewOperation {
 
     @GetMapping("/position")
     fun getPositions(): ResponseEntity<List<String>>

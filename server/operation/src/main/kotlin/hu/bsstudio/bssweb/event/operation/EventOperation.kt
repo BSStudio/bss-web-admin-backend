@@ -1,4 +1,4 @@
-package hu.bsstudio.bssweb.event.api
+package hu.bsstudio.bssweb.event.operation
 
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import java.util.UUID
 
 @RequestMapping("/api/v1/event")
-interface EventApi {
+interface EventOperation {
 
     @GetMapping
     fun findAllEvent(): ResponseEntity<List<Event>>

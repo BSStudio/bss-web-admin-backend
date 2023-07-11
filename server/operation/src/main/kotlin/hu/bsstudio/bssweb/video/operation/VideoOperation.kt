@@ -1,4 +1,4 @@
-package hu.bsstudio.bssweb.video.api
+package hu.bsstudio.bssweb.video.operation
 
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import java.util.UUID
 
 @RequestMapping("/api/v1/video")
-interface VideoApi {
+interface VideoOperation {
 
     @GetMapping("/all")
     fun getAllVideos(): ResponseEntity<List<Video>>
