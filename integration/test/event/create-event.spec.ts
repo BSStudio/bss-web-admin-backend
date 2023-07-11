@@ -9,11 +9,12 @@ describe('post /api/v1/event', () => {
   const url = 'url'
   const title = 'title'
   it('should create a new event', async () => {
-    expect.assertions(2)
+    expect.assertions(3)
 
     const response = await EventEndpoint.createEvent({ url, title })
 
     expect(response.status).toBe(201)
+    expect(response.headers['location']).toBe(`${globalThis.baseUrl.app}/api/v1/event/${response.data.id}`)
     expect(response.data).toMatchObject({
       id: expect.stringMatching(UUID_REGEX) as string,
       url,
