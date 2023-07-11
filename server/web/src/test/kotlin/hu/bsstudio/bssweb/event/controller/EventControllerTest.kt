@@ -11,13 +11,22 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.HttpStatus
+import org.springframework.mock.web.MockHttpServletRequest
+import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
 import java.util.Optional
 import java.util.UUID
 
+@WebMvcTest
+@ContextConfiguration(classes = [EventControllerTest::class])
 @ExtendWith(MockKExtension::class)
 internal class EventControllerTest {
 
@@ -26,6 +35,19 @@ internal class EventControllerTest {
 
     @InjectMockKs
     private lateinit var underTest: EventController
+
+    @BeforeEach
+    fun setUp() {
+        val request = MockHttpServletRequest()
+        val response = MockHttpServletResponse()
+        val servletRequestAttributes = ServletRequestAttributes(request, response)
+        RequestContextHolder.setRequestAttributes(servletRequestAttributes)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        RequestContextHolder.resetRequestAttributes()
+    }
 
     @Test
     internal fun findAllEvent() {
@@ -38,7 +60,6 @@ internal class EventControllerTest {
     }
 
     @Test
-    @Disabled
     internal fun createEvent() {
         every { mockService.insertEvent(CREATE_EVENT) } returns EVENT
         every { EVENT.id } returns EVENT_ID
