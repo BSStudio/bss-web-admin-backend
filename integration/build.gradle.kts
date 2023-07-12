@@ -5,7 +5,8 @@ plugins {
 }
 
 dependencies {
-    api(project(":server"))
+    api(project(":server:data"))
+    api(project(":client"))
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.testcontainers:junit-jupiter")
 }

@@ -9,12 +9,6 @@ import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.io.File
 
-
-@SpringBootTest(
-        classes = [BssWebApplication::class],
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-)
-@ComponentScan
 @Testcontainers
 abstract class IntegrationTestBase {
     companion object {
