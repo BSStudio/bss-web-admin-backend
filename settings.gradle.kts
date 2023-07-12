@@ -7,5 +7,6 @@ include(
     "server:model",
     "server:data",
     "server:common",
-    "server:client"
+    "server:client",
+    "client"
 )
