@@ -34,7 +34,7 @@ internal class EventControllerTest {
     private lateinit var mockService: EventService
 
     @InjectMockKs
-    private lateinit var underTest: DefaultEventController
+    private lateinit var underTest: EventController
 
     @BeforeEach
     fun setUp() {
