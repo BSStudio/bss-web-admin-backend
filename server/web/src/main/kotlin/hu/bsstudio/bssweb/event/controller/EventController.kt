@@ -4,28 +4,43 @@ import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
-import org.springframework.http.HttpStatus
+import hu.bsstudio.bssweb.event.operation.EventOperation
+import hu.bsstudio.bssweb.event.service.EventService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-import java.util.*
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.util.UUID
 
+@RestController
+class EventController(private val service: EventService) : EventOperation {
 
-@RequestMapping("/api/v1/event")
-interface EventController {
+    override fun findAllEvent(): ResponseEntity<List<Event>> {
+        return service.findAllEvent()
+            .let { ResponseEntity.ok(it) }
+    }
 
-    @GetMapping
-    fun findAllEvent(): ResponseEntity<List<Event>>
+    override fun createEvent(createEvent: CreateEvent): ResponseEntity<Event> {
+        return service.insertEvent(createEvent)
+            .let { ResponseEntity.created(locationUri(it.id)).body(it) }
+    }
 
-    @PostMapping
-    fun createEvent(@RequestBody createEvent: CreateEvent): ResponseEntity<Event>
+    override fun findEventById(eventId: UUID): ResponseEntity<DetailedEvent> {
+        return service.findEventById(eventId)
+            .let { ResponseEntity.of(it) }
+    }
 
-    @GetMapping("/{eventId}")
-    fun findEventById(@PathVariable eventId: UUID): ResponseEntity<DetailedEvent>
+    override fun updateEvent(eventId: UUID, updateEvent: UpdateEvent): ResponseEntity<DetailedEvent> {
+        return service.updateEvent(eventId, updateEvent)
+            .let { ResponseEntity.of(it) }
+    }
 
-    @PutMapping("/{eventId}")
-    fun updateEvent(@PathVariable eventId: UUID, @RequestBody updateEvent: UpdateEvent): ResponseEntity<DetailedEvent>
+    override fun deleteEvent(eventId: UUID): ResponseEntity<Void> {
+        service.removeEvent(eventId)
+        return ResponseEntity.noContent().build()
+    }
 
-    @DeleteMapping("/{eventId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteEvent(@PathVariable eventId: UUID)
+    private fun locationUri(id: UUID) = ServletUriComponentsBuilder.fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(id)
+        .toUri()
 }

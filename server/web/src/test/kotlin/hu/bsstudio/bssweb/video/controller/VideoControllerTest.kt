@@ -11,11 +11,17 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
+import org.springframework.mock.web.MockHttpServletRequest
+import org.springframework.mock.web.MockHttpServletResponse
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
 import java.util.Optional
 import java.util.UUID
 
@@ -27,6 +33,19 @@ internal class VideoControllerTest {
 
     @InjectMockKs
     private lateinit var underTest: VideoController
+
+    @BeforeEach
+    fun setUp() {
+        val request = MockHttpServletRequest()
+        val response = MockHttpServletResponse()
+        val servletRequestAttributes = ServletRequestAttributes(request, response)
+        RequestContextHolder.setRequestAttributes(servletRequestAttributes)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        RequestContextHolder.resetRequestAttributes()
+    }
 
     @Test
     internal fun getAllVideos() {
@@ -51,6 +70,7 @@ internal class VideoControllerTest {
     @Test
     internal fun createVideo() {
         every { mockService.insertVideo(CREATE_VIDEO) } returns VIDEO
+        every { VIDEO.id } returns VIDEO_ID
 
         val response = this.underTest.createVideo(CREATE_VIDEO)
 
