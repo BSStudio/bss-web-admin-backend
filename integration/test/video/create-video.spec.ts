@@ -13,7 +13,7 @@ describe('post /api/v1/video', () => {
   const title = 'title'
 
   it('should return ok and created video', async () => {
-    expect.assertions(3)
+    expect.assertions(4)
     await FileEndpoint.mockCreateVideoFolder()
 
     const createVideo: CreateVideo = { url, title }
@@ -22,6 +22,7 @@ describe('post /api/v1/video', () => {
 
     expect(mockCalls).toBe(1)
     expect(response.status).toBe(201)
+    expect(response.headers['location']).toBe(`${globalThis.baseUrl.app}/api/v1/video/${response.data.id}`)
     expect(response.data).toMatchObject({
       id: expect.stringMatching(UUID_REGEX) as string,
       url,

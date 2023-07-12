@@ -5,11 +5,11 @@ plugins {
 }
 
 dependencies {
-    api(project(":server:api"))
+    api(project(":server:operation"))
     api(project(":server:service"))
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-json")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation(libs.springdocOpenapiStarterWebmvcUi)
 }

@@ -1,10 +1,10 @@
 package hu.bsstudio.bssweb.video.controller
 
-import hu.bsstudio.bssweb.video.api.VideoApi
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
+import hu.bsstudio.bssweb.video.operation.VideoOperation
 import hu.bsstudio.bssweb.video.service.VideoService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -14,7 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
 
 @RestController
-class VideoController(private val service: VideoService) : VideoApi {
+class VideoController(private val service: VideoService) : VideoOperation {
 
     override fun getAllVideos(): ResponseEntity<List<Video>> {
         return service.findAllVideos()
@@ -52,7 +52,7 @@ class VideoController(private val service: VideoService) : VideoApi {
     }
 
     private fun locationUri(id: UUID) = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(id)
-            .toUri()
+        .path("/{id}")
+        .buildAndExpand(id)
+        .toUri()
 }
