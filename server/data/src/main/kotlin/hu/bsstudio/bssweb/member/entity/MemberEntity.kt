@@ -1,9 +1,13 @@
 package hu.bsstudio.bssweb.member.entity
 
 import hu.bsstudio.bssweb.member.common.MemberStatus
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 @Entity
 @Table(name = "member")
