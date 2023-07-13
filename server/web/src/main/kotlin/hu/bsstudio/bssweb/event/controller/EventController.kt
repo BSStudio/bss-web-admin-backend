@@ -14,10 +14,6 @@ import java.util.UUID
 @RestController
 class EventController(private val service: EventService) : EventOperation {
 
-    init {
-        println("EventController init")
-    }
-
     override fun findAllEvent(): ResponseEntity<List<Event>> {
         return service.findAllEvent()
             .let { ResponseEntity.ok(it) }

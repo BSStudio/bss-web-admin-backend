@@ -1,6 +1,9 @@
 package hu.bsstudio.bssweb.event.model
 
-data class CreateEvent(
-    val url: String,
-    val title: String
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class CreateEvent @JsonCreator constructor(
+    @JsonProperty("url") val url: String,
+    @JsonProperty("title") val title: String
 )

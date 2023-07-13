@@ -1,7 +1,10 @@
 package hu.bsstudio.bssweb.metrics.model
 
-data class BssMetrics(
-    val videoCount: Long,
-    val eventCount: Long,
-    val memberCount: Long
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class BssMetrics @JsonCreator constructor(
+    @JsonProperty("videoCount") val videoCount: Long,
+    @JsonProperty("eventCount") val eventCount: Long,
+    @JsonProperty("memberCount") val memberCount: Long
 )

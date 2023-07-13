@@ -1,11 +1,13 @@
 package hu.bsstudio.bssweb.video.model
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
-data class UpdateVideo(
-    val url: String,
-    val title: String,
-    val description: String,
-    val uploadedAt: LocalDate,
-    val visible: Boolean
+data class UpdateVideo @JsonCreator constructor(
+    @JsonProperty("url") val url: String,
+    @JsonProperty("title") val title: String,
+    @JsonProperty("description") val description: String,
+    @JsonProperty("uploadedAt") val uploadedAt: LocalDate,
+    @JsonProperty("visible") val visible: Boolean
 )
