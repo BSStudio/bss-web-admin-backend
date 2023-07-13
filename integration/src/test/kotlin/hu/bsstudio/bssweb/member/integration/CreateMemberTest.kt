@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.member.integration
 
-import hu.bsstudio.bssweb.IntegrationTestBase
+import hu.bsstudio.bssweb.IntegrationTestConfig
 import hu.bsstudio.bssweb.client.BssWebClient
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
@@ -9,14 +9,16 @@ import hu.bsstudio.bssweb.member.repository.MemberRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatusCode
 import java.net.URI
 import java.time.LocalDate
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = [IntegrationTestConfig::class])
 class CreateMemberTest(
     @Autowired private val client: BssWebClient,
     @Autowired private val memberRepository: MemberRepository
-): IntegrationTestBase() {
+) {
 
     @Test
     fun testName() {
@@ -44,8 +46,8 @@ class CreateMemberTest(
 
     @Test
     fun testName2() {
-        val actual1 = client.createMember(CreateMember(url = "bcsik", name = "Bence Csik"))
-        val actual2 = client.createMember(CreateMember(url = "bcsik", name = "Bence Csik"))
+        client.createMember(CreateMember(url = "bcsik", name = "Bence Csik"))
+        client.createMember(CreateMember(url = "bcsik", name = "Bence Csik"))
         // assertThat(actual.body).isEqualTo(Member())
         // assertThat(actual.statusCode).isEqualTo()
         // memberRepository.deleteAll()

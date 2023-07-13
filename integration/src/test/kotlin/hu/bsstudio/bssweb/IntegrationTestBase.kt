@@ -14,7 +14,6 @@ abstract class IntegrationTestBase {
     companion object {
 
         private val COMPOSE_FILE = File("./../docker-compose.yml")
-
         private val COMPOSE_FILE_CI = File("./../docker-compose.ci.yml")
 
         @Container
@@ -23,8 +22,6 @@ abstract class IntegrationTestBase {
             .withExposedService("db", 5432)
             .withExposedService("influx", 8086)
             .withExposedService("mock-file-api", 8080)
-
-
         @JvmStatic
         @DynamicPropertySource
         fun configureProperties(registry: DynamicPropertyRegistry) {
