@@ -9,25 +9,25 @@ import org.springframework.test.context.ContextConfiguration
 
 @JsonTest
 @ContextConfiguration(classes = [CreateMemberTest::class])
-class CreateMemberTest(
+internal class CreateMemberTest(
     @Autowired private val underTest: JacksonTester<CreateMember>
 ) {
 
     @Test
-    fun `test serialisation`() {
+    internal fun `test serialisation`() {
         val actual = this.underTest.write(CREATE_MEMBER)
 
         assertThat(actual).isEqualToJson(JSON)
     }
 
     @Test
-    fun `test deserialization`() {
+    internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
         assertThat(actual).isEqualTo(CREATE_MEMBER)
     }
 
-    companion object {
+    private companion object {
         private const val url = "member_url"
         private const val name = "member_name"
         private val CREATE_MEMBER = CreateMember(

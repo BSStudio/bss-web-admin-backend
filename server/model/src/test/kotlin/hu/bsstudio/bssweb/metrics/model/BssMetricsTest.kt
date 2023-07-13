@@ -9,25 +9,25 @@ import org.springframework.test.context.ContextConfiguration
 
 @JsonTest
 @ContextConfiguration(classes = [BssMetricsTest::class])
-class BssMetricsTest(
+internal class BssMetricsTest(
     @Autowired private val underTest: JacksonTester<BssMetrics>
 ) {
 
     @Test
-    fun `test serialisation`() {
+    internal fun `test serialisation`() {
         val actual = this.underTest.write(BSS_METRICS)
 
         assertThat(actual).isEqualToJson(JSON)
     }
 
     @Test
-    fun `test deserialization`() {
+    internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
         assertThat(actual).isEqualTo(BSS_METRICS)
     }
 
-    companion object {
+    private companion object {
         private const val videoCount = 10L
         private const val eventCount = 5L
         private const val memberCount = 100L

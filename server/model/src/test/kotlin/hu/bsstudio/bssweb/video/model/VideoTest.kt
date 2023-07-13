@@ -11,25 +11,25 @@ import java.util.UUID
 
 @JsonTest
 @ContextConfiguration(classes = [VideoTest::class])
-class VideoTest(
+internal class VideoTest(
     @Autowired private val underTest: JacksonTester<Video>
 ) {
 
     @Test
-    fun `test serialisation`() {
+    internal fun `test serialisation`() {
         val actual = this.underTest.write(VIDEO)
 
         assertThat(actual).isEqualToJson(JSON)
     }
 
     @Test
-    fun `test deserialization`() {
+    internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
         assertThat(actual).isEqualTo(VIDEO)
     }
 
-    companion object {
+    private companion object {
         private val ID = UUID.randomUUID()
         private const val url = "video_url"
         private const val title = "video_title"

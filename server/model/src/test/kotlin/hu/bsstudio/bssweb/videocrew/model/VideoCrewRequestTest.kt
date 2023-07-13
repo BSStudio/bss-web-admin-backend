@@ -10,25 +10,25 @@ import java.util.UUID
 
 @JsonTest
 @ContextConfiguration(classes = [VideoCrewRequestTest::class])
-class VideoCrewRequestTest(
+internal class VideoCrewRequestTest(
     @Autowired private val underTest: JacksonTester<VideoCrewRequest>
 ) {
 
     @Test
-    fun `test serialisation`() {
+    internal fun `test serialisation`() {
         val actual = this.underTest.write(VIDEO_CREW_REQUEST)
 
         assertThat(actual).isEqualToJson(JSON)
     }
 
     @Test
-    fun `test deserialization`() {
+    internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
         assertThat(actual).isEqualTo(VIDEO_CREW_REQUEST)
     }
 
-    companion object {
+    private companion object {
         private val videoId = UUID.randomUUID()
         private const val position = "Director"
         private val memberId = UUID.randomUUID()

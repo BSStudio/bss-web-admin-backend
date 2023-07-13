@@ -10,25 +10,25 @@ import java.util.UUID
 
 @JsonTest
 @ContextConfiguration(classes = [SimpleMemberTest::class])
-class SimpleMemberTest(
+internal class SimpleMemberTest(
     @Autowired private val underTest: JacksonTester<SimpleMember>
 ) {
 
     @Test
-    fun `test serialisation`() {
+    internal fun `test serialisation`() {
         val actual = this.underTest.write(SIMPLE_MEMBER)
 
         assertThat(actual).isEqualToJson(JSON)
     }
 
     @Test
-    fun `test deserialization`() {
+    internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
         assertThat(actual).isEqualTo(SIMPLE_MEMBER)
     }
 
-    companion object {
+    private companion object {
         private val ID = UUID.randomUUID()
         private const val name = "John Doe"
         private const val nickname = "JD"

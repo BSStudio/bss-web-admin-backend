@@ -9,25 +9,25 @@ import org.springframework.test.context.ContextConfiguration
 
 @JsonTest
 @ContextConfiguration(classes = [CreateEventTest::class])
-class CreateEventTest(
+internal class CreateEventTest(
     @Autowired private val underTest: JacksonTester<CreateEvent>
 ) {
 
     @Test
-    fun `test serialisation`() {
+    internal fun `test serialisation`() {
         val actual = this.underTest.write(CREATE_EVENT)
 
         assertThat(actual).isEqualToJson(JSON)
     }
 
     @Test
-    fun `test deserialization`() {
+    internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
         assertThat(actual).isEqualTo(CREATE_EVENT)
     }
 
-    companion object {
+    private companion object {
         private const val URL = "url"
         private const val TITLE = "title"
         private val CREATE_EVENT = CreateEvent(url = URL, title = TITLE)

@@ -9,25 +9,25 @@ import org.springframework.test.context.ContextConfiguration
 
 @JsonTest
 @ContextConfiguration(classes = [CreateVideoTest::class])
-class CreateVideoTest(
+internal class CreateVideoTest(
     @Autowired private val underTest: JacksonTester<CreateVideo>
 ) {
 
     @Test
-    fun `test serialisation`() {
+    internal fun `test serialisation`() {
         val actual = this.underTest.write(CREATE_VIDEO)
 
         assertThat(actual).isEqualToJson(JSON)
     }
 
     @Test
-    fun `test deserialization`() {
+    internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
         assertThat(actual).isEqualTo(CREATE_VIDEO)
     }
 
-    companion object {
+    private companion object {
         private const val url = "video_url"
         private const val title = "video_title"
         private val CREATE_VIDEO = CreateVideo(

@@ -11,25 +11,25 @@ import java.time.LocalDate
 
 @JsonTest
 @ContextConfiguration(classes = [UpdateMemberTest::class])
-class UpdateMemberTest(
+internal class UpdateMemberTest(
     @Autowired private val underTest: JacksonTester<UpdateMember>
 ) {
 
     @Test
-    fun `test serialisation`() {
+    internal fun `test serialisation`() {
         val actual = this.underTest.write(UPDATE_MEMBER)
 
         assertThat(actual).isEqualToJson(JSON)
     }
 
     @Test
-    fun `test deserialization`() {
+    internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
         assertThat(actual).isEqualTo(UPDATE_MEMBER)
     }
 
-    companion object {
+    private companion object {
         private const val url = "member_url"
         private const val name = "member_name"
         private const val nickname = "member_nickname"
