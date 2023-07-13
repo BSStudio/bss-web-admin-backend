@@ -11,29 +11,28 @@ import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
-import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
 import java.util.UUID
 
-internal class VideoMapperTest {
-
-    @MockK
-    private lateinit var mockVideoCrewMapper: VideoCrewMapper
+@ExtendWith(MockKExtension::class)
+internal class VideoMapperTest(
+    @MockK private val mockVideoCrewMapper: VideoCrewMapper
+) {
 
     private lateinit var underTest: VideoMapper
 
     @BeforeEach
     fun setUp() {
-        MockKAnnotations.init(this)
-        val idMapper = { VIDEO_ID }
         underTest = VideoMapper(mockVideoCrewMapper)
-        underTest = VideoMapper(mockVideoCrewMapper, idMapper)
+        underTest = VideoMapper(mockVideoCrewMapper) { VIDEO_ID }
     }
 
     @Test

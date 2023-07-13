@@ -4,12 +4,10 @@ import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.eventvideo.operation.EventVideoOperation
 import hu.bsstudio.bssweb.eventvideo.service.EventVideoService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 
 @RestController
-@RequestMapping("/api/v1/eventVideo")
 class EventVideoController(private val service: EventVideoService) : EventVideoOperation {
 
     override fun addVideoToEvent(eventId: UUID, videoId: UUID): ResponseEntity<DetailedEvent> {

@@ -17,13 +17,10 @@ import java.util.Optional
 import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
-internal class FileUpdatingMemberServiceTest {
-
-    @MockK
-    private lateinit var mockService: MemberService
-
-    @MockK
-    private lateinit var mockClient: FileApiClient
+internal class FileUpdatingMemberServiceTest(
+    @MockK private val mockService: MemberService,
+    @MockK private val mockClient: FileApiClient
+) {
 
     @InjectMockKs
     private lateinit var underTest: FileUpdatingMemberService

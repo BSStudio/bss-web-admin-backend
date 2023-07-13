@@ -27,7 +27,7 @@ interface MemberOperation {
     fun updateMember(@PathVariable memberId: UUID, @RequestBody updateMember: UpdateMember): ResponseEntity<Member>
 
     @PutMapping("/archive")
-    fun archiveMembers(@RequestParam memberIds: List<UUID>, @RequestParam archive: Boolean = true): ResponseEntity<List<UUID>>
+    fun archiveMembers(@RequestParam memberIds: List<UUID>, @RequestParam(defaultValue = "true") archive: Boolean): ResponseEntity<List<UUID>>
 
     @GetMapping("/{memberId}")
     fun getMemberById(@PathVariable memberId: UUID): ResponseEntity<Member>

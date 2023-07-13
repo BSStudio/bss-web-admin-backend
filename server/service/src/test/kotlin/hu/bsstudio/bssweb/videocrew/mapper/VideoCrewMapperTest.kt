@@ -19,10 +19,9 @@ import org.junit.jupiter.api.extension.ExtendWith
 import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
-internal class VideoCrewMapperTest {
-
-    @MockK
-    private lateinit var memberMapper: MemberMapper
+internal class VideoCrewMapperTest(
+    @MockK private val memberMapper: MemberMapper
+) {
 
     @InjectMockKs
     private lateinit var underTest: VideoCrewMapper

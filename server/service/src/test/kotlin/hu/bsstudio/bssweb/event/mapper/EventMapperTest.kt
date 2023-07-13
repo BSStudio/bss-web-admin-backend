@@ -8,28 +8,28 @@ import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.Video
-import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
 import java.util.UUID
 
-internal class EventMapperTest {
+@ExtendWith(MockKExtension::class)
+internal class EventMapperTest(
+    @MockK private val mockVideoMapper: VideoMapper
+) {
 
-    @MockK
-    private lateinit var mockVideoMapper: VideoMapper
     private lateinit var underTest: EventMapper
 
     @BeforeEach
     internal fun setUp() {
-        MockKAnnotations.init(this)
-        val idGenerator = { ID }
         underTest = EventMapper(mockVideoMapper)
-        underTest = EventMapper(mockVideoMapper, idGenerator)
+        underTest = EventMapper(mockVideoMapper) { ID }
     }
 
     @Test

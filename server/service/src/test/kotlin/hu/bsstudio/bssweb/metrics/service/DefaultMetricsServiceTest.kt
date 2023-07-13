@@ -13,16 +13,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
-internal class DefaultMetricsServiceTest {
-
-    @MockK
-    private lateinit var videoRepository: VideoRepository
-
-    @MockK
-    private lateinit var eventRepository: EventRepository
-
-    @MockK
-    private lateinit var memberRepository: MemberRepository
+internal class DefaultMetricsServiceTest(
+    @MockK private val videoRepository: VideoRepository,
+    @MockK private val eventRepository: EventRepository,
+    @MockK private val memberRepository: MemberRepository
+) {
 
     @InjectMockKs
     private lateinit var underTest: DefaultMetricsService
