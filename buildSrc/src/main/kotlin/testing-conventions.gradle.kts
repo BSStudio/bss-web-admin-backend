@@ -24,10 +24,8 @@ tasks.check {
 }
 
 val excluded = setOf(
-    "**/model/**",
     "**/entity/**",
     "**/config/**",
-    "**/configuration/**",
     "**/exception/**"
 )
 

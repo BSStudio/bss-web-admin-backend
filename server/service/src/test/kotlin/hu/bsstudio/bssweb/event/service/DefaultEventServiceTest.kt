@@ -22,16 +22,11 @@ import java.util.Optional
 import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
-internal class DefaultEventServiceTest {
-
-    @MockK
-    private lateinit var mockRepository: EventRepository
-
-    @MockK
-    private lateinit var mockDetailedRepository: DetailedEventRepository
-
-    @MockK
-    private lateinit var mockMapper: EventMapper
+internal class DefaultEventServiceTest(
+    @MockK private val mockRepository: EventRepository,
+    @MockK private val mockDetailedRepository: DetailedEventRepository,
+    @MockK private val mockMapper: EventMapper
+) {
 
     @InjectMockKs
     private lateinit var underTest: DefaultEventService

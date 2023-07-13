@@ -24,16 +24,11 @@ import java.util.Optional
 import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
-internal class DefaultVideoServiceTest {
-
-    @MockK
-    private lateinit var mockRepository: VideoRepository
-
-    @MockK
-    private lateinit var mockDetailedRepository: DetailedVideoRepository
-
-    @MockK
-    private lateinit var mockMapper: VideoMapper
+internal class DefaultVideoServiceTest(
+    @MockK private val mockRepository: VideoRepository,
+    @MockK private val mockDetailedRepository: DetailedVideoRepository,
+    @MockK private val mockMapper: VideoMapper
+) {
 
     @InjectMockKs
     private lateinit var underTest: DefaultVideoService
