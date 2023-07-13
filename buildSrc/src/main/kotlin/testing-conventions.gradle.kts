@@ -9,6 +9,7 @@ dependencies {
         exclude(module = "hamcrest")     // require developers to use assertJ
     }
     testImplementation("io.mockk:mockk-jvm:1.13.5")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 }
 
 tasks.test {
