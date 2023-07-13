@@ -7,6 +7,8 @@ import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.operation.EventOperation
 import hu.bsstudio.bssweb.event.service.EventService
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
@@ -19,7 +21,9 @@ class EventController(private val service: EventService) : EventOperation {
             .let { ResponseEntity.ok(it) }
     }
 
+    @PreAuthorize("!hasAnyRole('STATUS_MEMBER_CANDIDATE_CANDIDATE')")
     override fun createEvent(createEvent: CreateEvent): ResponseEntity<Event> {
+        println(SecurityContextHolder.getContext().authentication)
         return service.insertEvent(createEvent)
             .let { ResponseEntity.created(locationUri(it.id)).body(it) }
     }

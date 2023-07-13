@@ -11,6 +11,7 @@ interface MemberService {
     fun insertMember(createMember: CreateMember): Member
     fun archiveMembers(memberIds: List<UUID>, archive: Boolean = true): List<UUID>
     fun findMemberById(memberIds: UUID): Optional<Member>
+    fun findMemberByNickname(nickName: String): Optional<Member>
     fun updateMember(memberId: UUID, updateMember: UpdateMember): Optional<Member>
     fun removeMember(memberId: UUID)
 }

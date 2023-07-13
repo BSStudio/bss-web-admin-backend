@@ -42,7 +42,12 @@ class DefaultMemberService(
 
     override fun findMemberById(memberIds: UUID): Optional<Member> {
         return repository.findById(memberIds)
-            .map(mapper::entityToModel)
+                .map(mapper::entityToModel)
+    }
+
+    override fun findMemberByNickname(nickName: String): Optional<Member> {
+        return repository.findByNickname(nickName)
+                .map(mapper::entityToModel)
     }
 
     override fun removeMember(memberId: UUID) = repository.deleteById(memberId)

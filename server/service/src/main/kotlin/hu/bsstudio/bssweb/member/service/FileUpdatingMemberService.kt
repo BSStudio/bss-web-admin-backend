@@ -27,6 +27,10 @@ class FileUpdatingMemberService(private val server: MemberService, private val f
         return this.server.findMemberById(memberIds)
     }
 
+    override fun findMemberByNickname(nickName: String): Optional<Member> {
+        return this.server.findMemberByNickname(nickName)
+    }
+
     override fun updateMember(memberId: UUID, updateMember: UpdateMember): Optional<Member> {
         return this.server.updateMember(memberId, updateMember)
             .map { fileClient.updateMemberFolder(FileUpdate(it.id, it.url)); it }
