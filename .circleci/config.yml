@@ -83,7 +83,6 @@ workflows:
             - Unit test
             - "Build image: jar"
             - "Build image: war"
-            - Lint Dockerfiles
       - docker/publish:
           name: "Publish image: jar"
           deploy: true
