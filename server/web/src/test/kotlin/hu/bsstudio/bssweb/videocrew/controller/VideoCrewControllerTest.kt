@@ -1,84 +1,107 @@
 package hu.bsstudio.bssweb.videocrew.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import hu.bsstudio.bssweb.videocrew.service.VideoCrewService
 import io.mockk.every
-import io.mockk.impl.annotations.InjectMockKs
-import io.mockk.impl.annotations.MockK
-import io.mockk.junit5.MockKExtension
-import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.springframework.http.HttpStatus
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.delete
+import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.put
+import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
-@ExtendWith(MockKExtension::class)
+@WebMvcTest(VideoCrewController::class, excludeAutoConfiguration = [SecurityAutoConfiguration::class])
+@ContextConfiguration(classes = [VideoCrewController::class])
 internal class VideoCrewControllerTest {
+    @Autowired
+    private lateinit var objectMapper: ObjectMapper
 
-    @MockK
+    @Autowired
+    private lateinit var mockMvc: MockMvc
+
+    @MockkBean
     private lateinit var mockService: VideoCrewService
-
-    @InjectMockKs
-    private lateinit var underTest: VideoCrewController
 
     @Test
     internal fun getPositions() {
         every { mockService.getPositions() } returns listOf(POSITION)
 
-        val response = this.underTest.getPositions()
-
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(listOf(POSITION))
+        mockMvc.get("/api/v1/videoCrew/position").andExpectAll {
+            status { isOk() }
+            content { objectMapper.writeValueAsString(listOf(POSITION)) }
+        }
     }
 
     @Test
     internal fun addPosition() {
         every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
-        val response = this.underTest.addPosition(VIDEO_CREW_REQUEST)
-
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(DETAILED_VIDEO)
+        mockMvc.put("/api/v1/videoCrew") {
+            param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
+            param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
+            param("position", VIDEO_CREW_REQUEST.position)
+        }.andExpectAll {
+            status { isOk() }
+            content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
+        }
     }
 
     @Test
     internal fun addPositionEmpty() {
         every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
-        val response = this.underTest.addPosition(VIDEO_CREW_REQUEST)
-
-        assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
-        assertThat(response.body).isEqualTo(null)
+        mockMvc.put("/api/v1/videoCrew") {
+            param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
+            param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
+            param("position", VIDEO_CREW_REQUEST.position)
+        }.andExpectAll {
+            status { isNotFound() }
+            content { string("") }
+        }
     }
 
     @Test
     internal fun removePosition() {
         every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
-        val response = this.underTest.removePosition(VIDEO_CREW_REQUEST)
-
-        assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(response.body).isEqualTo(DETAILED_VIDEO)
+        mockMvc.delete("/api/v1/videoCrew") {
+            param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
+            param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
+            param("position", VIDEO_CREW_REQUEST.position)
+        }.andExpectAll {
+            status { isOk() }
+            content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
+        }
     }
 
     @Test
     internal fun removePositionEmpty() {
         every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
-        val response = this.underTest.removePosition(VIDEO_CREW_REQUEST)
-
-        assertThat(response.statusCode).isEqualTo(HttpStatus.NOT_FOUND)
-        assertThat(response.body).isEqualTo(null)
+        mockMvc.delete("/api/v1/videoCrew") {
+            param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
+            param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
+            param("position", VIDEO_CREW_REQUEST.position)
+        }.andExpectAll {
+            status { isNotFound() }
+            content { string("") }
+        }
     }
 
     private companion object {
-        private val VIDEO_ID = mockk<UUID>()
+        private val VIDEO_ID = UUID.randomUUID()
         private const val POSITION = "position"
-        private val MEMBER_ID = mockk<UUID>()
+        private val MEMBER_ID = UUID.randomUUID()
         private val VIDEO_CREW_REQUEST = VideoCrewRequest(VIDEO_ID, POSITION, MEMBER_ID)
-        private val DETAILED_VIDEO = mockk<DetailedVideo>()
+        private val DETAILED_VIDEO = DetailedVideo(id = VIDEO_ID, url = "url", title = "title", description = "description", uploadedAt = LocalDate.now(), visible = false, crew = listOf())
     }
 }
