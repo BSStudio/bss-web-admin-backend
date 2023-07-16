@@ -79,7 +79,6 @@ workflows:
             - Coverage
             - Build boot jar
             - Build boot war
-            - Lint integration test
             - Unit test
             - "Build image: jar"
             - "Build image: war"
