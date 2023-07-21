@@ -8,7 +8,7 @@ dependencies {
     api(project(":server:common"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    runtimeOnly("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")
-    runtimeOnly("com.h2database:h2")
-    testRuntimeOnly("org.flywaydb:flyway-core")
+    testRuntimeOnly("com.h2database:h2")
 }
