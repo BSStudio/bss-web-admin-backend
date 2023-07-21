@@ -39,8 +39,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    volumes:
-      - "./db:/docker-entrypoint-initdb.d"
   influx:
     image: "influxdb:2.7.1-alpine"
     ports:
