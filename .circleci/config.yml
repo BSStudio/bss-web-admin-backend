@@ -23,7 +23,6 @@ jobs:
           working_directory: ~/project/integration
           environment:
             DOCKER_COMPOSE_FILE_NAME: << parameters.compose_files >>
-            DEBUG: testcontainers:containers
       - store_test_results:
           path: ~/project/integration/junit.xml
     parameters:
@@ -86,7 +85,7 @@ workflows:
           name: "Integration test: jar"
       - integration_test:
           name: "Integration test: war"
-          timeout: 40000
+          timeout: 20000
           compose_files: "docker-compose.yml,docker-compose.war.yml,docker-compose.ci.yml"
       - docker/hadolint:
           name: Lint Dockerfiles
