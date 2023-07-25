@@ -44,7 +44,7 @@ export class DbUtils {
       client.query('TRUNCATE bss_web.video CASCADE'),
       client.query('TRUNCATE bss_web.member CASCADE'),
       client.query('TRUNCATE bss_web.event CASCADE'),
-    ])
+    ]).catch((reason) => console.log(reason))
     client.release()
   }
 
