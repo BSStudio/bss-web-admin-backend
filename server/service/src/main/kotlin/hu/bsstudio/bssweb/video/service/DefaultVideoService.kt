@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
-import hu.bsstudio.bssweb.video.entity.VideoEntity
+import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -39,9 +39,9 @@ class DefaultVideoService(
 
     override fun changeVideoVisibility(videoIds: List<UUID>, visible: Boolean): List<UUID> {
         return repository.findAllById(videoIds)
-            .map { it.copy(visible = visible) }
+            .map { it.visible = visible; it }
             .map(repository::save)
-            .map(VideoEntity::id)
+            .map(SimpleVideoEntity::id)
     }
 
     override fun findVideoById(videoId: UUID): Optional<DetailedVideo> {
@@ -59,12 +59,11 @@ class DefaultVideoService(
     override fun deleteVideoById(videoId: UUID) = repository.deleteById(videoId)
 
     private fun updateVideo(videoEntity: DetailedVideoEntity, updateVideo: UpdateVideo): DetailedVideoEntity {
-        return videoEntity.copy(
-            url = updateVideo.url,
-            title = updateVideo.title,
-            description = updateVideo.description,
-            uploadedAt = updateVideo.uploadedAt,
-            visible = updateVideo.visible
-        )
+        videoEntity.url = updateVideo.url
+        videoEntity.title = updateVideo.title
+        videoEntity.description = updateVideo.description
+        videoEntity.uploadedAt = updateVideo.uploadedAt
+        videoEntity.visible = updateVideo.visible
+        return videoEntity
     }
 }

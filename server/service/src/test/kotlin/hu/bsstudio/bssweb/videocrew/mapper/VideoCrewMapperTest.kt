@@ -58,7 +58,7 @@ internal class VideoCrewMapperTest(
         private val VIDEO_CREW_REQUEST = VideoCrewRequest(VIDEO_ID, POSITION, MEMBER_ID)
         private val VIDEO_CREW_ENTITY_ID = VideoCrewEntityId(VIDEO_ID, POSITION, MEMBER_ID)
         private val VIDEO_CREW_ENTITY = VideoCrewEntity(VIDEO_CREW_ENTITY_ID)
-        private val MEMBER_ENTITY = SimpleMemberEntity(MEMBER_ID, "name", "nickname")
+        private val MEMBER_ENTITY = SimpleMemberEntity("name", "nickname").apply { id = MEMBER_ID }
         private val DETAILED_VIDEO_CREW_ENTITY = DetailedVideoCrewEntity(id = VIDEO_CREW_ENTITY_ID, member = MEMBER_ENTITY)
     }
 }

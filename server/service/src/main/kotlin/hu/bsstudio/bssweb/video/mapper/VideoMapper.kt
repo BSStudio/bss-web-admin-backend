@@ -1,16 +1,15 @@
 package hu.bsstudio.bssweb.video.mapper
 
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
-import hu.bsstudio.bssweb.video.entity.VideoEntity
+import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
-import java.util.UUID
 
-class VideoMapper(private val videoCrewMapper: VideoCrewMapper, private val idMapper: () -> UUID = UUID::randomUUID) {
+class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
 
-    fun entityToModel(entity: VideoEntity): Video {
+    fun entityToModel(entity: SimpleVideoEntity): Video {
         return Video(
             id = entity.id,
             url = entity.url,
@@ -32,7 +31,7 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper, private val idMa
         )
     }
 
-    fun modelToEntity(model: CreateVideo): VideoEntity {
-        return VideoEntity(id = idMapper.invoke(), url = model.url, title = model.title)
+    fun modelToEntity(model: CreateVideo): SimpleVideoEntity {
+        return SimpleVideoEntity(url = model.url, title = model.title)
     }
 }

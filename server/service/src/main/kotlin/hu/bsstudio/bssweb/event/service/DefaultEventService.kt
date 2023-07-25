@@ -32,7 +32,7 @@ class DefaultEventService(
 
     override fun changeVisibility(eventIds: List<UUID>, visible: Boolean): List<UUID> {
         return repository.findAllById(eventIds)
-            .map { it.copy(visible = visible) }
+            .map { it.visible = visible; it }
             .map(repository::save)
             .map(EventEntity::id)
     }
@@ -52,12 +52,11 @@ class DefaultEventService(
     override fun removeEvent(eventId: UUID) = repository.deleteById(eventId)
 
     private fun updateEvent(eventEntity: DetailedEventEntity, updateEvent: UpdateEvent): DetailedEventEntity {
-        return eventEntity.copy(
-            url = updateEvent.url,
-            title = updateEvent.title,
-            description = updateEvent.description,
-            date = updateEvent.date,
-            visible = updateEvent.visible
-        )
+        eventEntity.url = updateEvent.url
+        eventEntity.title = updateEvent.title
+        eventEntity.description = updateEvent.description
+        eventEntity.date = updateEvent.date
+        eventEntity.visible = updateEvent.visible
+        return eventEntity
     }
 }

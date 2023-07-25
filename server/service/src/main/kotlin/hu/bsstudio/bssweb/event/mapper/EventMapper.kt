@@ -6,12 +6,8 @@ import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
-import java.util.UUID
 
-class EventMapper(
-    private val videoMapper: VideoMapper,
-    private val idGenerator: () -> UUID = UUID::randomUUID
-) {
+class EventMapper(private val videoMapper: VideoMapper) {
 
     fun entityToModel(entity: EventEntity): Event {
         return Event(
@@ -38,7 +34,6 @@ class EventMapper(
 
     fun modelToEntity(model: CreateEvent): EventEntity {
         return EventEntity(
-            id = idGenerator.invoke(),
             url = model.url,
             title = model.title
         )

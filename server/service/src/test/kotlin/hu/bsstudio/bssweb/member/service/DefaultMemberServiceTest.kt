@@ -30,12 +30,12 @@ internal class DefaultMemberServiceTest(
 
     @Test
     internal fun `should return all members`() {
-        every { mockRepository.findAll() } returns MEMBER_ENTITY_LIST
+        every { mockRepository.findAll() } returns listOf(MEMBER_ENTITY)
         every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
 
         val response = underTest.findAllMembers()
 
-        assertThat(response).isEqualTo(MEMBER_LIST)
+        assertThat(response).containsExactly(MEMBER)
     }
 
     @Test
@@ -53,9 +53,9 @@ internal class DefaultMemberServiceTest(
     internal fun `should archive member`() {
         val memberIds = listOf(MEMBER_ID)
         every { mockRepository.findAllById(memberIds) } returns listOf(MEMBER_ENTITY)
-        val updatedMemberEntity = MEMBER_ENTITY.copy(archived = true)
-        every { mockRepository.save(updatedMemberEntity) } returns updatedMemberEntity
-        every { mockMapper.entityToModel(updatedMemberEntity) } returns MEMBER
+        every { MEMBER_ENTITY.archived = true } returns Unit
+        every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
+        every { MEMBER_ENTITY.id } returns MEMBER_ID
 
         val response = underTest.archiveMembers(memberIds)
 
@@ -66,9 +66,9 @@ internal class DefaultMemberServiceTest(
     internal fun `should archive member with implicit archive flag`() {
         val memberIds = listOf(MEMBER_ID)
         every { mockRepository.findAllById(memberIds) } returns listOf(MEMBER_ENTITY)
-        val updatedMemberEntity = MEMBER_ENTITY.copy(archived = true)
-        every { mockRepository.save(updatedMemberEntity) } returns updatedMemberEntity
-        every { mockMapper.entityToModel(updatedMemberEntity) } returns MEMBER
+        every { MEMBER_ENTITY.archived = true } returns Unit
+        every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
+        every { MEMBER_ENTITY.id } returns MEMBER_ID
 
         val response = underTest.archiveMembers(memberIds, true)
 
@@ -106,30 +106,28 @@ internal class DefaultMemberServiceTest(
     @Test
     internal fun `should update member`() {
         every { mockRepository.findById(MEMBER_ID) } returns Optional.of(MEMBER_ENTITY)
-        val updatedEntity = MEMBER_ENTITY.copy(
-            url = UPDATE_MEMBER.url,
-            name = UPDATE_MEMBER.name,
-            description = UPDATE_MEMBER.description,
-            joinedAt = UPDATE_MEMBER.joinedAt,
-            role = UPDATE_MEMBER.role,
-            status = UPDATE_MEMBER.status,
-            archived = UPDATE_MEMBER.archived
-        )
-        every { mockRepository.save(updatedEntity) } returns updatedEntity
-        val updatedMember = MEMBER.copy(
-            url = UPDATE_MEMBER.url,
-            name = UPDATE_MEMBER.name,
-            description = UPDATE_MEMBER.description,
-            joinedAt = UPDATE_MEMBER.joinedAt,
-            role = UPDATE_MEMBER.role,
-            status = UPDATE_MEMBER.status,
-            archived = UPDATE_MEMBER.archived
-        )
-        every { mockMapper.entityToModel(updatedEntity) } returns updatedMember
+        every { UPDATE_MEMBER.url } returns URL
+        every { MEMBER_ENTITY.url = URL } returns Unit
+        every { UPDATE_MEMBER.name } returns NAME
+        every { MEMBER_ENTITY.name = NAME } returns Unit
+        every { UPDATE_MEMBER.nickname } returns NICKNAME
+        every { MEMBER_ENTITY.nickname = NICKNAME } returns Unit
+        every { UPDATE_MEMBER.description } returns DESCRIPTION
+        every { MEMBER_ENTITY.description = DESCRIPTION } returns Unit
+        every { UPDATE_MEMBER.joinedAt } returns JOINED_AT
+        every { MEMBER_ENTITY.joinedAt = JOINED_AT } returns Unit
+        every { UPDATE_MEMBER.role } returns ROLE
+        every { MEMBER_ENTITY.role = ROLE } returns Unit
+        every { UPDATE_MEMBER.status } returns STATUS
+        every { MEMBER_ENTITY.status = STATUS } returns Unit
+        every { UPDATE_MEMBER.archived } returns ARCHIVED
+        every { MEMBER_ENTITY.archived = ARCHIVED } returns Unit
+        every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
+        every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
 
         val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        assertThat(response).hasValue(updatedMember)
+        assertThat(response).hasValue(MEMBER)
     }
 
     @Test
@@ -141,11 +139,17 @@ internal class DefaultMemberServiceTest(
 
     private companion object {
         private val MEMBER_ID = mockk<UUID>()
-        private val MEMBER_ENTITY = MemberEntity(MEMBER_ID, url = "url", name = "name", nickname = "nickname", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
-        private val MEMBER_ENTITY_LIST = listOf(MEMBER_ENTITY)
-        private val MEMBER = Member(MEMBER_ID, url = "url", name = "name", nickname = "nickname", description = "description", LocalDate.of(2022, 1, 1), role = "role", MemberStatus.MEMBER, false)
-        private val MEMBER_LIST = listOf(MEMBER)
+        private val MEMBER_ENTITY = mockk<MemberEntity>()
+        private val MEMBER = mockk<Member>()
         private val CREATE_MEMBER = mockk<CreateMember>()
-        private val UPDATE_MEMBER = UpdateMember("updatedUrl", name = "updatedName", nickname = "nickname", description = "updatedDescription", LocalDate.of(2022, 2, 2), role = "updatedRole", MemberStatus.ALUMNI, true)
+        private val UPDATE_MEMBER = mockk<UpdateMember>()
+        private const val URL = "URL"
+        private const val NAME = "NAME"
+        private const val NICKNAME = "NICKNAME"
+        private const val DESCRIPTION = "DESCRIPTION"
+        private val JOINED_AT = LocalDate.now()
+        private const val ROLE = "ROLE"
+        private val STATUS = MemberStatus.MEMBER
+        private const val ARCHIVED = true
     }
 }
