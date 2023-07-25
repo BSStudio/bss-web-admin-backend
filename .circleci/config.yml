@@ -37,14 +37,12 @@ jobs:
     steps:
       - checkout
       - gradle/with_cache:
+          deps_checksum_file: build.gradle.kts
           steps:
             - run: ./gradlew test --parallel
       - gradle/collect_test_results:
-          reports_path: server/web/build/reports/
-          test_results_path: server/web/build/test-results/
-      - gradle/collect_test_results:
-          reports_path: server/service/build/reports/
-          test_results_path: server/service/build/test-results/
+          reports_path: server/build/reports/jacoco
+          test_results_path: server/build/reports/tests
       - codecov/upload
   fork_join:
     docker:
@@ -60,7 +58,7 @@ workflows:
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
-          name: Coverage
+          name: Coverage verification
           command: jacocoTestCoverageVerification --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
