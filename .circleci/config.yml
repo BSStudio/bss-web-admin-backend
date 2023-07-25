@@ -109,7 +109,7 @@ workflows:
           name: Fork join build
           requires:
             - Lint
-            - Coverage
+            - Coverage verification
             - Build boot jar
             - Build boot war
             - Lint integration test
