@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.video.service
 
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.CreateVideo
@@ -51,19 +50,10 @@ class DefaultVideoService(
 
     override fun updateVideo(videoId: UUID, updateVideo: UpdateVideo): Optional<DetailedVideo> {
         return detailedRepository.findById(videoId)
-            .map { updateVideo(it, updateVideo) }
+            .map { mapper.updateToEntity(it, updateVideo) }
             .map(detailedRepository::save)
             .map(mapper::entityToModel)
     }
 
     override fun deleteVideoById(videoId: UUID) = repository.deleteById(videoId)
-
-    private fun updateVideo(videoEntity: DetailedVideoEntity, updateVideo: UpdateVideo): DetailedVideoEntity {
-        videoEntity.url = updateVideo.url
-        videoEntity.title = updateVideo.title
-        videoEntity.description = updateVideo.description
-        videoEntity.uploadedAt = updateVideo.uploadedAt
-        videoEntity.visible = updateVideo.visible
-        return videoEntity
-    }
 }

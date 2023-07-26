@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
-import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
@@ -108,16 +107,7 @@ internal class DefaultVideoServiceTest(
     @Test
     internal fun `should update video`() {
         every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_ENTITY)
-        every { UPDATE_VIDEO.url } returns URL
-        every { DETAILED_VIDEO_ENTITY.url = URL } returns Unit
-        every { UPDATE_VIDEO.title } returns TITLE
-        every { DETAILED_VIDEO_ENTITY.title = TITLE } returns Unit
-        every { UPDATE_VIDEO.description } returns DESCRIPTION
-        every { DETAILED_VIDEO_ENTITY.description = DESCRIPTION } returns Unit
-        every { UPDATE_VIDEO.uploadedAt } returns UPLOADED_AT
-        every { DETAILED_VIDEO_ENTITY.uploadedAt = UPLOADED_AT } returns Unit
-        every { UPDATE_VIDEO.visible } returns VISIBLE
-        every { DETAILED_VIDEO_ENTITY.visible = VISIBLE } returns Unit
+        every { mockMapper.updateToEntity(DETAILED_VIDEO_ENTITY, UPDATE_VIDEO) } returns DETAILED_VIDEO_ENTITY
         every { mockDetailedRepository.save(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO_ENTITY
         every { mockMapper.entityToModel(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO
 
@@ -144,10 +134,5 @@ internal class DefaultVideoServiceTest(
         private val DETAILED_VIDEO_ENTITY = mockk<DetailedVideoEntity>()
         private val DETAILED_VIDEO = mockk<DetailedVideo>()
         private val UPDATE_VIDEO = mockk<UpdateVideo>()
-        private const val URL = "url"
-        private const val TITLE = "title"
-        private const val DESCRIPTION = "description"
-        private val UPLOADED_AT = LocalDate.now()
-        private const val VISIBLE = true
     }
 }
