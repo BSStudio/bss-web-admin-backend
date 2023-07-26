@@ -10,7 +10,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.Optional
@@ -31,7 +31,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val response = underTest.findAllMembers()
 
-        Assertions.assertThat(response).isEqualTo(MEMBER_LIST)
+        assertThat(response).isEqualTo(MEMBER_LIST)
     }
 
     @Test
@@ -43,7 +43,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val response = underTest.insertMember(CREATE_MEMBER)
 
-        Assertions.assertThat(response).isEqualTo(MEMBER)
+        assertThat(response).isEqualTo(MEMBER)
     }
 
     @Test
@@ -53,7 +53,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val response = underTest.archiveMembers(memberIds)
 
-        Assertions.assertThat(response).isEqualTo(memberIds)
+        assertThat(response).isEqualTo(memberIds)
     }
 
     @Test
@@ -63,7 +63,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val response = underTest.archiveMembers(memberIds, true)
 
-        Assertions.assertThat(response).isEqualTo(memberIds)
+        assertThat(response).isEqualTo(memberIds)
     }
 
     @Test
@@ -72,7 +72,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val response = underTest.findMemberById(MEMBER_ID)
 
-        Assertions.assertThat(response).hasValue(MEMBER)
+        assertThat(response).hasValue(MEMBER)
     }
 
     @Test
@@ -81,7 +81,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val response = underTest.findMemberById(MEMBER_ID)
 
-        Assertions.assertThat(response).isEmpty
+        assertThat(response).isEmpty
     }
 
     @Test
@@ -90,7 +90,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        Assertions.assertThat(response).isEmpty
+        assertThat(response).isEmpty
     }
 
     @Test
@@ -102,7 +102,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        Assertions.assertThat(response).hasValue(MEMBER)
+        assertThat(response).hasValue(MEMBER)
     }
 
     @Test
