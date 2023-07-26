@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface VideoRepository : CrudRepository<SimpleVideoEntity, UUID> {
+interface SimpleVideoRepository : CrudRepository<SimpleVideoEntity, UUID> {
     fun findAll(pageable: Pageable): Page<SimpleVideoEntity>
 }

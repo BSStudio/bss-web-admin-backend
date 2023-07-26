@@ -8,7 +8,7 @@ import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
-import hu.bsstudio.bssweb.video.repository.VideoRepository
+import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -22,11 +22,10 @@ import org.springframework.data.domain.Pageable
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
-import javax.accessibility.AccessibleState.VISIBLE
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultVideoServiceTest(
-    @MockK private val mockRepository: VideoRepository,
+    @MockK private val mockRepository: SimpleVideoRepository,
     @MockK private val mockDetailedRepository: DetailedVideoRepository,
     @MockK private val mockMapper: VideoMapper
 ) {
