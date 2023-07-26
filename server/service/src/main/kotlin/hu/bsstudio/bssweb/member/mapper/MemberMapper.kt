@@ -5,9 +5,9 @@ import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.SimpleMember
-import java.util.UUID
+import hu.bsstudio.bssweb.member.model.UpdateMember
 
-class MemberMapper(private val idGenerator: () -> UUID = UUID::randomUUID) {
+class MemberMapper {
 
     fun entityToModel(entity: MemberEntity) = Member(
         id = entity.id,
@@ -28,8 +28,19 @@ class MemberMapper(private val idGenerator: () -> UUID = UUID::randomUUID) {
     )
 
     fun modelToEntity(model: CreateMember) = MemberEntity(
-        id = idGenerator.invoke(),
         url = model.url,
         name = model.name
     )
+
+    fun updateToEntity(memberEntity: MemberEntity, updateMember: UpdateMember): MemberEntity {
+        memberEntity.url = updateMember.url
+        memberEntity.name = updateMember.name
+        memberEntity.nickname = updateMember.nickname
+        memberEntity.description = updateMember.description
+        memberEntity.joinedAt = updateMember.joinedAt
+        memberEntity.role = updateMember.role
+        memberEntity.status = updateMember.status
+        memberEntity.archived = updateMember.archived
+        return memberEntity
+    }
 }

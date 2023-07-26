@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.event.service
 
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.mapper.EventMapper
 import hu.bsstudio.bssweb.event.model.CreateEvent
@@ -32,7 +31,7 @@ class DefaultEventService(
 
     override fun changeVisibility(eventIds: List<UUID>, visible: Boolean): List<UUID> {
         return repository.findAllById(eventIds)
-            .map { it.copy(visible = visible) }
+            .map { it.visible = visible; it }
             .map(repository::save)
             .map(EventEntity::id)
     }
@@ -44,20 +43,10 @@ class DefaultEventService(
 
     override fun updateEvent(eventId: UUID, updateEvent: UpdateEvent): Optional<DetailedEvent> {
         return detailedRepository.findById(eventId)
-            .map { updateEvent(it, updateEvent) }
+            .map { mapper.updateToEntity(it, updateEvent) }
             .map(detailedRepository::save)
             .map(mapper::entityToModel)
     }
 
     override fun removeEvent(eventId: UUID) = repository.deleteById(eventId)
-
-    private fun updateEvent(eventEntity: DetailedEventEntity, updateEvent: UpdateEvent): DetailedEventEntity {
-        return eventEntity.copy(
-            url = updateEvent.url,
-            title = updateEvent.title,
-            description = updateEvent.description,
-            date = updateEvent.date,
-            visible = updateEvent.visible
-        )
-    }
 }
