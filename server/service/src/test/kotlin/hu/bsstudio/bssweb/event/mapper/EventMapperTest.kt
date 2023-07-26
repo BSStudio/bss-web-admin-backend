@@ -5,6 +5,7 @@ import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
+import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.Video
@@ -50,6 +51,13 @@ internal class EventMapperTest(
         assertThat(result).isEqualTo(CREATED_ENTITY)
     }
 
+    @Test
+    internal fun `should map update to entity`() {
+        val result = underTest.updateToEntity(DETAILED_ENTITY, UPDATE_EVENT)
+
+        assertThat(result).isEqualTo(UPDATED_ENTITY)
+    }
+
     private companion object {
         private val ID = mockk<UUID>()
         private const val URL = "URL"
@@ -57,13 +65,20 @@ internal class EventMapperTest(
         private const val DESCRIPTION = "DESCRIPTION"
         private val DATE = mockk<LocalDate>()
         private const val VISIBLE = true
-        private val ENTITY = EventEntity(URL, TITLE, DESCRIPTION, DATE, VISIBLE).also { it.id = ID }
+        private val ENTITY = EventEntity(URL, TITLE, DESCRIPTION, DATE, VISIBLE).apply { id = ID }
         private val MODEL = Event(ID, URL, TITLE, DESCRIPTION, DATE, VISIBLE)
         private val VIDEO_ENTITY = mockk<SimpleVideoEntity>()
         private val VIDEO = mockk<Video>()
-        private val DETAILED_ENTITY = DetailedEventEntity(URL, TITLE, DESCRIPTION, DATE, VISIBLE, listOf(VIDEO_ENTITY)).also { it.id = ID }
+        private val DETAILED_ENTITY = DetailedEventEntity(URL, TITLE, DESCRIPTION, DATE, VISIBLE, listOf(VIDEO_ENTITY)).apply { id = ID }
         private val DETAILED_MODEL = DetailedEvent(ID, URL, TITLE, DESCRIPTION, DATE, VISIBLE, listOf(VIDEO))
         private val CREATE_EVENT = CreateEvent(URL, TITLE)
-        private val CREATED_ENTITY = EventEntity(url = URL, title = TITLE).also { it.id = ID }
+        private val CREATED_ENTITY = EventEntity(url = URL, title = TITLE).apply { id = ID }
+        private const val NEW_URL = "NEW_URL"
+        private const val NEW_TITLE = "NEW_TITLE"
+        private const val NEW_DESCRIPTION = "NEW_DESCRIPTION"
+        private val NEW_DATE = mockk<LocalDate>()
+        private const val NEW_VISIBLE = false
+        private val UPDATE_EVENT = UpdateEvent(NEW_URL, NEW_TITLE, NEW_DESCRIPTION, NEW_DATE, NEW_VISIBLE)
+        private val UPDATED_ENTITY = DetailedEventEntity(NEW_URL, NEW_TITLE, NEW_DESCRIPTION, NEW_DATE, NEW_VISIBLE, listOf(VIDEO_ENTITY)).apply { id = ID }
     }
 }

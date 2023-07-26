@@ -110,16 +110,7 @@ internal class DefaultEventServiceTest(
     @Test
     internal fun `should update event`() {
         every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_ENTITY)
-        every { UPDATE_EVENT.url } returns URL
-        every { DETAILED_EVENT_ENTITY.url = URL } returns Unit
-        every { UPDATE_EVENT.title } returns TITLE
-        every { DETAILED_EVENT_ENTITY.title = TITLE } returns Unit
-        every { UPDATE_EVENT.description } returns DESCRIPTION
-        every { DETAILED_EVENT_ENTITY.description = DESCRIPTION } returns Unit
-        every { UPDATE_EVENT.date } returns DATE
-        every { DETAILED_EVENT_ENTITY.date = DATE } returns Unit
-        every { UPDATE_EVENT.visible } returns VISIBLE
-        every { DETAILED_EVENT_ENTITY.visible = VISIBLE } returns Unit
+        every { mockMapper.updateToEntity(DETAILED_EVENT_ENTITY, UPDATE_EVENT) } returns DETAILED_EVENT_ENTITY
         every { mockDetailedRepository.save(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT_ENTITY
         every { mockMapper.entityToModel(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT
 
@@ -143,10 +134,5 @@ internal class DefaultEventServiceTest(
         private val UPDATE_EVENT = mockk<UpdateEvent>()
         private val DETAILED_EVENT = mockk<DetailedEvent>()
         private val DETAILED_EVENT_ENTITY = mockk<DetailedEventEntity>()
-        private const val URL = ""
-        private const val TITLE = ""
-        private const val DESCRIPTION = ""
-        private val DATE = LocalDate.now()
-        private const val VISIBLE = true
     }
 }

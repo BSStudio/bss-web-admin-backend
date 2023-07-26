@@ -44,19 +44,10 @@ class DefaultEventService(
 
     override fun updateEvent(eventId: UUID, updateEvent: UpdateEvent): Optional<DetailedEvent> {
         return detailedRepository.findById(eventId)
-            .map { updateEvent(it, updateEvent) }
+            .map { mapper.updateToEntity(it, updateEvent) }
             .map(detailedRepository::save)
             .map(mapper::entityToModel)
     }
 
     override fun removeEvent(eventId: UUID) = repository.deleteById(eventId)
-
-    private fun updateEvent(eventEntity: DetailedEventEntity, updateEvent: UpdateEvent): DetailedEventEntity {
-        eventEntity.url = updateEvent.url
-        eventEntity.title = updateEvent.title
-        eventEntity.description = updateEvent.description
-        eventEntity.date = updateEvent.date
-        eventEntity.visible = updateEvent.visible
-        return eventEntity
-    }
 }
