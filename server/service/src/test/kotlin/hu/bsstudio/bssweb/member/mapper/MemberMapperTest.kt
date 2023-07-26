@@ -6,6 +6,7 @@ import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.SimpleMember
+import hu.bsstudio.bssweb.member.model.UpdateMember
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
@@ -42,6 +43,13 @@ internal class MemberMapperTest {
         assertThat(result).isEqualTo(CREATE_MEMBER_ENTITY)
     }
 
+    @Test
+    internal fun `should map update model to entity`() {
+        val result = underTest.updateToEntity(MEMBER_ENTITY, MEMBER_UPDATE)
+
+        assertThat(result).isEqualTo(UPDATED_MEMBER_ENTITY)
+    }
+
     private companion object {
         private val ID = mockk<UUID>()
         private const val URL = "url"
@@ -58,5 +66,15 @@ internal class MemberMapperTest {
         private val SIMPLE_MEMBER = SimpleMember(ID, NAME, NICKNAME)
         private val CREATE_MEMBER = CreateMember(URL, NAME)
         private val CREATE_MEMBER_ENTITY = MemberEntity(url = URL, name = NAME).apply { id = ID }
+        private const val NEW_URL = "NEW_URL"
+        private const val NEW_NAME = "NEW_NAME"
+        private const val NEW_NICKNAME = "NEW_NICKNAME"
+        private const val NEW_DESCRIPTION = "NEW_DESCRIPTION"
+        private val NEW_JOINED_AT = mockk<LocalDate>()
+        private const val NEW_ROLE = "NEW_ROLE"
+        private val NEW_STATUS = mockk<MemberStatus>()
+        private const val NEW_ARCHIVED = true
+        private val MEMBER_UPDATE = UpdateMember(NEW_URL, NEW_NAME, NEW_NICKNAME, NEW_DESCRIPTION, NEW_JOINED_AT, NEW_ROLE, NEW_STATUS, NEW_ARCHIVED)
+        private val UPDATED_MEMBER_ENTITY = MemberEntity(NEW_URL, NEW_NAME, NEW_NICKNAME, NEW_DESCRIPTION, NEW_JOINED_AT, NEW_ROLE, NEW_STATUS, NEW_ARCHIVED).apply { id = ID }
     }
 }

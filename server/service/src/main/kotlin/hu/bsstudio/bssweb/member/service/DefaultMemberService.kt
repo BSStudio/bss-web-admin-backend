@@ -35,7 +35,7 @@ class DefaultMemberService(
 
     override fun updateMember(memberId: UUID, updateMember: UpdateMember): Optional<Member> {
         return repository.findById(memberId)
-            .map { updateMember(it, updateMember) }
+            .map { mapper.updateToEntity(it, updateMember) }
             .map(repository::save)
             .map(mapper::entityToModel)
     }
@@ -46,16 +46,4 @@ class DefaultMemberService(
     }
 
     override fun removeMember(memberId: UUID) = repository.deleteById(memberId)
-
-    private fun updateMember(memberEntity: MemberEntity, updateMember: UpdateMember): MemberEntity {
-        memberEntity.url = updateMember.url
-        memberEntity.name = updateMember.name
-        memberEntity.nickname = updateMember.nickname
-        memberEntity.description = updateMember.description
-        memberEntity.joinedAt = updateMember.joinedAt
-        memberEntity.role = updateMember.role
-        memberEntity.status = updateMember.status
-        memberEntity.archived = updateMember.archived
-        return memberEntity
-    }
 }

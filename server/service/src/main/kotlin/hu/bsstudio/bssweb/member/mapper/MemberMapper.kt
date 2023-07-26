@@ -5,6 +5,7 @@ import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.SimpleMember
+import hu.bsstudio.bssweb.member.model.UpdateMember
 
 class MemberMapper {
 
@@ -30,4 +31,16 @@ class MemberMapper {
         url = model.url,
         name = model.name
     )
+
+    fun updateToEntity(memberEntity: MemberEntity, updateMember: UpdateMember): MemberEntity {
+        memberEntity.url = updateMember.url
+        memberEntity.name = updateMember.name
+        memberEntity.nickname = updateMember.nickname
+        memberEntity.description = updateMember.description
+        memberEntity.joinedAt = updateMember.joinedAt
+        memberEntity.role = updateMember.role
+        memberEntity.status = updateMember.status
+        memberEntity.archived = updateMember.archived
+        return memberEntity
+    }
 }

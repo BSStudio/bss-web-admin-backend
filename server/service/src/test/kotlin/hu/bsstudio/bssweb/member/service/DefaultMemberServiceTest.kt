@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.member.service
 
-import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.entity.MemberEntity
 import hu.bsstudio.bssweb.member.mapper.MemberMapper
 import hu.bsstudio.bssweb.member.model.CreateMember
@@ -15,7 +14,6 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
@@ -106,22 +104,7 @@ internal class DefaultMemberServiceTest(
     @Test
     internal fun `should update member`() {
         every { mockRepository.findById(MEMBER_ID) } returns Optional.of(MEMBER_ENTITY)
-        every { UPDATE_MEMBER.url } returns URL
-        every { MEMBER_ENTITY.url = URL } returns Unit
-        every { UPDATE_MEMBER.name } returns NAME
-        every { MEMBER_ENTITY.name = NAME } returns Unit
-        every { UPDATE_MEMBER.nickname } returns NICKNAME
-        every { MEMBER_ENTITY.nickname = NICKNAME } returns Unit
-        every { UPDATE_MEMBER.description } returns DESCRIPTION
-        every { MEMBER_ENTITY.description = DESCRIPTION } returns Unit
-        every { UPDATE_MEMBER.joinedAt } returns JOINED_AT
-        every { MEMBER_ENTITY.joinedAt = JOINED_AT } returns Unit
-        every { UPDATE_MEMBER.role } returns ROLE
-        every { MEMBER_ENTITY.role = ROLE } returns Unit
-        every { UPDATE_MEMBER.status } returns STATUS
-        every { MEMBER_ENTITY.status = STATUS } returns Unit
-        every { UPDATE_MEMBER.archived } returns ARCHIVED
-        every { MEMBER_ENTITY.archived = ARCHIVED } returns Unit
+        every { mockMapper.updateToEntity(MEMBER_ENTITY, UPDATE_MEMBER) } returns MEMBER_ENTITY
         every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
         every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
 
@@ -143,13 +126,5 @@ internal class DefaultMemberServiceTest(
         private val MEMBER = mockk<Member>()
         private val CREATE_MEMBER = mockk<CreateMember>()
         private val UPDATE_MEMBER = mockk<UpdateMember>()
-        private const val URL = "URL"
-        private const val NAME = "NAME"
-        private const val NICKNAME = "NICKNAME"
-        private const val DESCRIPTION = "DESCRIPTION"
-        private val JOINED_AT = LocalDate.now()
-        private const val ROLE = "ROLE"
-        private val STATUS = MemberStatus.MEMBER
-        private const val ARCHIVED = true
     }
 }
