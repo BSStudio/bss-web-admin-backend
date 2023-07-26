@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.event.service
 
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.mapper.EventMapper
 import hu.bsstudio.bssweb.event.model.CreateEvent

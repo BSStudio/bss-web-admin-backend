@@ -17,10 +17,8 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
-import javax.accessibility.AccessibleState.VISIBLE
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultEventServiceTest(
