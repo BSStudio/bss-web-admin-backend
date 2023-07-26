@@ -28,14 +28,14 @@ class DefaultMemberService(
 
     override fun archiveMembers(memberIds: List<UUID>, archive: Boolean): List<UUID> {
         return repository.findAllById(memberIds)
-            .map { it.copy(archived = archive) }
+            .map { it.archived = archive; it }
             .map(repository::save)
             .map(MemberEntity::id)
     }
 
     override fun updateMember(memberId: UUID, updateMember: UpdateMember): Optional<Member> {
         return repository.findById(memberId)
-            .map { updateMember(it, updateMember) }
+            .map { mapper.updateToEntity(it, updateMember) }
             .map(repository::save)
             .map(mapper::entityToModel)
     }
@@ -46,17 +46,4 @@ class DefaultMemberService(
     }
 
     override fun removeMember(memberId: UUID) = repository.deleteById(memberId)
-
-    private fun updateMember(memberEntity: MemberEntity, updateMember: UpdateMember): MemberEntity {
-        return memberEntity.copy(
-            url = updateMember.url,
-            name = updateMember.name,
-            nickname = updateMember.nickname,
-            description = updateMember.description,
-            joinedAt = updateMember.joinedAt,
-            role = updateMember.role,
-            status = updateMember.status,
-            archived = updateMember.archived
-        )
-    }
 }

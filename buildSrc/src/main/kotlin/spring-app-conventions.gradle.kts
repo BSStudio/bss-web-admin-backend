@@ -1,11 +1,18 @@
 plugins {
     id("org.springframework.boot")
     id("spring-module-conventions")
+    id("jacoco-report-aggregation")
+    id("test-report-aggregation")
     war
 }
 
-tasks.getByName<Jar>("jar") {
+tasks.jar {
     enabled = false
+}
+
+tasks.test {
+    finalizedBy(tasks.named<TestReport>("testAggregateTestReport"))
+    finalizedBy(tasks.named<JacocoReport>("testCodeCoverageReport"))
 }
 
 dependencies {

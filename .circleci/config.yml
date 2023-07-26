@@ -6,21 +6,27 @@ orbs:
 executors:
   jdk:
     docker:
-      - image: cimg/openjdk:17.0.7
+      - image: cimg/openjdk:17.0.8
+  node:
+    machine:
+      image: ubuntu-2204:2022.10.2
 jobs:
   gradle_test:
     executor: jdk
     steps:
       - checkout
       - gradle/with_cache:
+          deps_checksum_file: build.gradle.kts
           steps:
             - run: ./gradlew test --parallel
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} test-results/junit/ \;
       - gradle/collect_test_results:
-          reports_path: server/web/build/reports/
-          test_results_path: server/web/build/test-results/
-      - gradle/collect_test_results:
-          reports_path: server/service/build/reports/
-          test_results_path: server/service/build/test-results/
+          reports_path: server/build/reports
+          test_results_path: test-results
       - codecov/upload
   fork_join:
     docker:
@@ -36,7 +42,7 @@ workflows:
           deps_checksum_file: build.gradle.kts
           executor: jdk
       - gradle/run:
-          name: Coverage
+          name: Coverage verification
           command: jacocoTestCoverageVerification --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
@@ -76,7 +82,7 @@ workflows:
           name: Fork join build
           requires:
             - Lint
-            - Coverage
+            - Coverage verification
             - Build boot jar
             - Build boot war
             - Unit test
