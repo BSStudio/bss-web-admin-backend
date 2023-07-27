@@ -33,9 +33,9 @@ class DetailedEventRepositoryTest(
         assertThat(underTest.count()).isZero
 
         val entity = DetailedEventEntity(url = URL, title = TITLE)
-        underTest.save(entity)
+        val id = underTest.save(entity).id
+        entityManager.run { flush(); clear() }
 
-        val id = entity.id
         val expected = createExpected(id)
         assertThat(underTest.findById(id))
             .isPresent()

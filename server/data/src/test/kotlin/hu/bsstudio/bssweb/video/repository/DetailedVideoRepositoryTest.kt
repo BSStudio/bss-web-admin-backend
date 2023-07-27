@@ -36,6 +36,7 @@ class DetailedVideoRepositoryTest(
 
         val entity = DetailedVideoEntity(url = URL, title = TITLE)
         val id = underTest.save(entity).id
+        entityManager.run { flush(); clear() }
 
         val expected = createExpected(id)
         assertThat(underTest.findById(id))
