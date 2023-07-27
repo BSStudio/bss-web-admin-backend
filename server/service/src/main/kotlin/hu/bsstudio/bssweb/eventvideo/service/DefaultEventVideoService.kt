@@ -8,8 +8,7 @@ import jakarta.transaction.Transactional
 import java.util.Optional
 import java.util.UUID
 
-@Transactional
-open class DefaultEventVideoService(
+class DefaultEventVideoService(
     private val repository: EventVideoRepository,
     private val eventService: EventService
 ) : EventVideoService {
