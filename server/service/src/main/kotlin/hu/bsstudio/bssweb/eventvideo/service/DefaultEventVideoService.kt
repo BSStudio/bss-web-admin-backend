@@ -4,10 +4,12 @@ import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.service.EventService
 import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
 import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
+import jakarta.transaction.Transactional
 import java.util.Optional
 import java.util.UUID
 
-class DefaultEventVideoService(
+@Transactional
+open class DefaultEventVideoService(
     private val repository: EventVideoRepository,
     private val eventService: EventService
 ) : EventVideoService {
