@@ -35,9 +35,8 @@ class DetailedVideoRepositoryTest(
         assertThat(underTest.count()).isZero
 
         val entity = DetailedVideoEntity(url = URL, title = TITLE)
-        underTest.save(entity)
+        val id = underTest.save(entity).id
 
-        val id = entity.id
         val expected = createExpected(id)
         assertThat(underTest.findById(id))
             .isPresent()
