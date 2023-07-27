@@ -32,7 +32,7 @@ class VideoCrewRepositoryTest(
         val entity = VideoCrewEntity(id)
         underTest.save(entity)
         assertThat(underTest.findById(id))
-            .isPresent
+            .isPresent()
             .get()
             .usingRecursiveComparison()
             .isEqualTo(entity)

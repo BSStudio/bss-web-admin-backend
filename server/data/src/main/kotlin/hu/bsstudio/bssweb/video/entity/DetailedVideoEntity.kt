@@ -18,7 +18,7 @@ data class DetailedVideoEntity(
     override var title: String,
     var description: String = "",
     override var uploadedAt: LocalDate = LocalDate.now(),
-    override var visible: Boolean = false,
+    override var visible: Boolean = false
 ) : VideoEntity {
     @Id
     @GeneratedValue

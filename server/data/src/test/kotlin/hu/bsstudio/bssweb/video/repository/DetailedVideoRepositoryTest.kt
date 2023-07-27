@@ -70,7 +70,7 @@ class DetailedVideoRepositoryTest(
             title = TITLE,
             description = "",
             uploadedAt = LocalDate.now(),
-            visible = false,
+            visible = false
         ).apply {
             id = videoId
             videoCrew = listOf(

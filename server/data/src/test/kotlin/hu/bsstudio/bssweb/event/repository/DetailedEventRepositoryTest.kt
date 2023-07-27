@@ -6,8 +6,6 @@ import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
 import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
-import jakarta.persistence.EntityManager
-import jakarta.transaction.Transactional
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
