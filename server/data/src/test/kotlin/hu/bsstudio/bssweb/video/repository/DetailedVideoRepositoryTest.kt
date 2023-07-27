@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import java.time.LocalDate
+import java.util.UUID
 
 @DataJpaTest
 @ContextConfiguration(classes = [DataConfiguration::class])
@@ -31,26 +32,21 @@ class DetailedVideoRepositoryTest(
 ) {
     @Test
     internal fun `create read delete`() {
-        assertThat(this.underTest.count()).isZero
+        assertThat(underTest.count()).isZero
 
         val entity = DetailedVideoEntity(url = URL, title = TITLE)
-        this.underTest.save(entity)
+        underTest.save(entity)
 
         val id = entity.id
-        val expected = DetailedVideoEntity(
-            url = URL,
-            title = TITLE,
-            description = "",
-            uploadedAt = LocalDate.now(),
-            visible = false
-        ).apply {
-            this.id = id
-            this.videoCrew = emptyList()
-        }
-        assertThat(this.underTest.findById(id)).hasValue(expected)
+        val expected = createExpected(id)
+        assertThat(underTest.findById(id))
+            .isPresent()
+            .get()
+            .usingRecursiveComparison()
+            .isEqualTo(expected)
 
-        this.underTest.deleteById(id)
-        assertThat(this.underTest.findById(id)).isEmpty
+        underTest.deleteById(id)
+        assertThat(underTest.findById(id)).isEmpty()
     }
 
     @Test
@@ -65,27 +61,25 @@ class DetailedVideoRepositoryTest(
         this.videoCrewRepository.save(VideoCrewEntity(videoCrewId))
         entityManager.run { flush(); clear() }
 
-        val expected = DetailedVideoEntity(
+        val expected = createExpected(videoId, listOf(DetailedVideoCrewEntity(videoCrewId, SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId })))
+        assertThat(underTest.findById(videoId))
+            .isPresent()
+            .get()
+            .usingRecursiveComparison()
+            .isEqualTo(expected)
+    }
+
+    private fun createExpected(id: UUID, videoCrew: List<DetailedVideoCrewEntity> = emptyList()) =
+        DetailedVideoEntity(
             url = URL,
             title = TITLE,
             description = "",
             uploadedAt = LocalDate.now(),
             visible = false
         ).apply {
-            id = videoId
-            videoCrew = listOf(
-                DetailedVideoCrewEntity(
-                    videoCrewId,
-                    SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId }
-                )
-            )
+            this.id = id
+            this.videoCrew = videoCrew
         }
-        assertThat(this.underTest.findById(videoId))
-            .isPresent()
-            .get()
-            .usingRecursiveComparison()
-            .isEqualTo(expected)
-    }
 
     private companion object {
         private const val URL = "szobakommando"

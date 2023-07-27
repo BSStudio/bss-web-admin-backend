@@ -19,28 +19,28 @@ class SimpleVideoRepositoryTest(
 
     @Test
     fun `create read delete`() {
-        assertThat(this.underTest.count()).isZero
+        assertThat(underTest.count()).isZero
 
         val entity = SimpleVideoEntity(url = URL, title = TITLE)
-        this.underTest.save(entity)
+        val id = underTest.save(entity).id
 
-        val id = entity.id
-        val expected = SimpleVideoEntity(
-            url = URL,
-            title = TITLE,
-            uploadedAt = LocalDate.now(),
-            visible = false
-        ).apply {
-            this.id = id
-        }
-        assertThat(this.underTest.findById(id))
+        assertThat(underTest.findById(id))
             .isPresent
             .get()
             .usingRecursiveComparison()
-            .isEqualTo(expected)
+            .isEqualTo(
+                SimpleVideoEntity(
+                    url = URL,
+                    title = TITLE,
+                    uploadedAt = LocalDate.now(),
+                    visible = false
+                ).apply {
+                    this.id = id
+                }
+            )
 
-        this.underTest.deleteById(id)
-        assertThat(this.underTest.findById(id)).isEmpty
+        underTest.deleteById(id)
+        assertThat(underTest.findById(id)).isEmpty()
     }
 
     private companion object {

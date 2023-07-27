@@ -10,6 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 
@@ -28,19 +29,17 @@ class EventVideoRepositoryTest(
         val eventId = eventRepository.save(SimpleEventEntity(url = "url", title = "title")).id
 
         val entity = EventVideoEntity(eventId, videoId)
-        this.underTest.save(entity)
+        underTest.save(entity)
 
-        assertThat(this.underTest.findById(entity))
+        assertThat(underTest.findById(entity))
             .isPresent()
             .get()
             .usingRecursiveComparison()
             .isEqualTo(entity)
 
-        this.underTest.deleteById(entity)
-        assertThat(this.underTest.findById(entity)).isEmpty
-        assertThat(videoRepository.count()).isOne
-        assertThat(eventRepository.count()).isOne
-        videoRepository.deleteById(videoId)
-        eventRepository.deleteById(eventId)
+        underTest.deleteById(entity)
+        assertThat(underTest.findById(entity)).isEmpty()
+        assertThat(videoRepository.count()).isOne()
+        assertThat(eventRepository.count()).isOne()
     }
 }

@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.event.repository
 
 import hu.bsstudio.bssweb.DataConfiguration
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
+import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
 import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
@@ -14,12 +15,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import java.time.LocalDate
+import java.util.UUID
 
 @DataJpaTest
 @ContextConfiguration(classes = [DataConfiguration::class])
 @TestPropertySource(properties = ["spring.flyway.locations=classpath:db/migration/{vendor}"])
 class DetailedEventRepositoryTest(
     @Autowired private val underTest: DetailedEventRepository,
+    @Autowired private val simpleEventRepository: SimpleEventRepository,
     @Autowired private val simpleVideoRepository: SimpleVideoRepository,
     @Autowired private val eventVideoRepository: EventVideoRepository,
     @Autowired private val entityManager: TestEntityManager
@@ -27,13 +30,44 @@ class DetailedEventRepositoryTest(
 
     @Test
     internal fun `create read delete`() {
-        assertThat(this.underTest.count()).isZero
+        assertThat(underTest.count()).isZero
 
         val entity = DetailedEventEntity(url = URL, title = TITLE)
-        this.underTest.save(entity)
+        underTest.save(entity)
 
         val id = entity.id
-        val expected = DetailedEventEntity(
+        val expected = createExpected(id)
+        assertThat(underTest.findById(id))
+            .isPresent()
+            .get()
+            .usingRecursiveComparison()
+            .isEqualTo(expected)
+
+        underTest.deleteById(id)
+        assertThat(underTest.findById(id)).isEmpty()
+    }
+
+    @Test
+    internal fun `create read delete with video`() {
+        val eventId = simpleEventRepository.save(SimpleEventEntity(url = URL, title = TITLE)).id
+        val video = simpleVideoRepository.save(SimpleVideoEntity(url = "url", title = "title"))
+
+        eventVideoRepository.save(EventVideoEntity(eventId = eventId, videoId = video.id))
+        entityManager.run { flush(); clear() }
+
+        val actual = underTest.findById(eventId).orElseThrow()
+        val expected = createExpected(eventId, listOf(video))
+        assertThat(actual)
+            .usingRecursiveComparison()
+            .isEqualTo(expected)
+
+        underTest.deleteById(eventId)
+        assertThat(underTest.findById(eventId)).isEmpty()
+        assertThat(simpleVideoRepository.count()).isOne()
+    }
+
+    private fun createExpected(id: UUID, videos: List<SimpleVideoEntity> = emptyList()) =
+        DetailedEventEntity(
             url = URL,
             title = TITLE,
             description = "",
@@ -41,42 +75,8 @@ class DetailedEventRepositoryTest(
             visible = false
         ).apply {
             this.id = id
-            this.videos = emptyList()
+            this.videos = videos
         }
-        assertThat(this.underTest.findById(id)).hasValue(expected)
-
-        this.underTest.deleteById(id)
-        assertThat(this.underTest.findById(id)).isEmpty
-    }
-
-    @Test
-    internal fun `create read delete with video`() {
-        val eventId = this.underTest.save(DetailedEventEntity(url = URL, title = TITLE)).id
-        val video = this.simpleVideoRepository.save(SimpleVideoEntity(url = "url", title = "title"))
-
-        this.eventVideoRepository.save(EventVideoEntity(eventId = eventId, videoId = video.id))
-        entityManager.run { flush(); clear() }
-
-        val actual = this.underTest.findById(eventId).orElseThrow()
-        val expected = DetailedEventEntity(
-            url = URL,
-            title = TITLE,
-            description = "",
-            date = LocalDate.now(),
-            visible = false
-        ).apply {
-            this.id = eventId
-            this.videos = listOf(video)
-        }
-        assertThat(actual)
-            .usingRecursiveComparison()
-            .isEqualTo(expected)
-
-        this.underTest.deleteById(eventId)
-        assertThat(this.underTest.findById(eventId)).isEmpty
-        assertThat(this.simpleVideoRepository.count()).isOne
-        this.simpleVideoRepository.deleteById(video.id)
-    }
 
     private companion object {
         private const val URL = "szobakommando"

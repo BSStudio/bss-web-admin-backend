@@ -19,28 +19,32 @@ class MemberRepositoryTest(
 ) {
     @Test
     fun `create read delete`() {
-        assertThat(this.underTest.count()).isZero
+        assertThat(underTest.count()).isZero()
 
         val entity = DetailedMemberEntity(name = NAME, url = URL)
-        this.underTest.save(entity)
+        val id = underTest.save(entity).id
 
-        val id = entity.id
-        val expected = DetailedMemberEntity(
-            name = NAME,
-            url = URL,
-            nickname = "",
-            description = "",
-            joinedAt = LocalDate.now(),
-            role = "",
-            status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-            archived = false
-        ).apply {
-            this.id = id
-        }
-        assertThat(this.underTest.findById(id)).hasValue(expected)
+        assertThat(underTest.findById(id))
+            .isPresent()
+            .get()
+            .usingRecursiveComparison()
+            .isEqualTo(
+                DetailedMemberEntity(
+                    name = NAME,
+                    url = URL,
+                    nickname = "",
+                    description = "",
+                    joinedAt = LocalDate.now(),
+                    role = "",
+                    status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                    archived = false
+                ).apply {
+                    this.id = id
+                }
+            )
 
-        this.underTest.deleteById(id)
-        assertThat(this.underTest.findById(id)).isEmpty
+        underTest.deleteById(id)
+        assertThat(underTest.findById(id)).isEmpty()
     }
 
     private companion object {

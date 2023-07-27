@@ -38,10 +38,8 @@ class VideoCrewRepositoryTest(
             .isEqualTo(entity)
 
         underTest.deleteById(id)
-        assertThat(underTest.findById(id)).isEmpty
-        assertThat(memberRepository.count()).isOne
-        assertThat(videoRepository.count()).isOne
-        memberRepository.deleteById(memberId)
-        videoRepository.deleteById(videoId)
+        assertThat(underTest.findById(id)).isEmpty()
+        assertThat(memberRepository.count()).isOne()
+        assertThat(videoRepository.count()).isOne()
     }
 }
