@@ -8,12 +8,14 @@ import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
+import jakarta.transaction.Transactional
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import java.util.Optional
 import java.util.UUID
 
-class DefaultVideoService(
+@Transactional
+open class DefaultVideoService(
     private val repository: SimpleVideoRepository,
     private val detailedRepository: DetailedVideoRepository,
     private val mapper: VideoMapper

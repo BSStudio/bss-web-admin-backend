@@ -8,10 +8,12 @@ import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
+import jakarta.transaction.Transactional
 import java.util.Optional
 import java.util.UUID
 
-class DefaultEventService(
+@Transactional
+open class DefaultEventService(
     private val repository: SimpleEventRepository,
     private val detailedRepository: DetailedEventRepository,
     private val mapper: EventMapper
