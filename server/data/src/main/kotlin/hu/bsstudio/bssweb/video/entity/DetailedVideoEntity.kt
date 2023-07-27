@@ -19,13 +19,14 @@ data class DetailedVideoEntity(
     var description: String = "",
     override var uploadedAt: LocalDate = LocalDate.now(),
     override var visible: Boolean = false,
-    @OneToMany
-    @JoinColumn(name = "video_id")
-    var videoCrew: List<DetailedVideoCrewEntity> = listOf()
 ) : VideoEntity {
     @Id
     @GeneratedValue
     override lateinit var id: UUID
+
+    @OneToMany
+    @JoinColumn(name = "video_id")
+    lateinit var videoCrew: List<DetailedVideoCrewEntity>
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
