@@ -2,7 +2,6 @@ package hu.bsstudio.bssweb.video.entity
 
 import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -20,7 +19,7 @@ data class DetailedVideoEntity(
     var description: String = "",
     override var uploadedAt: LocalDate = LocalDate.now(),
     override var visible: Boolean = false,
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany
     @JoinColumn(name = "video_id")
     var videoCrew: List<DetailedVideoCrewEntity> = listOf()
 ) : VideoEntity {

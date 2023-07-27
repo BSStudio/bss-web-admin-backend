@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.member.service
 
-import hu.bsstudio.bssweb.member.entity.MemberEntity
+import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.mapper.MemberMapper
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
@@ -30,7 +30,7 @@ class DefaultMemberService(
         return repository.findAllById(memberIds)
             .map { it.archived = archive; it }
             .map(repository::save)
-            .map(MemberEntity::id)
+            .map(DetailedMemberEntity::id)
     }
 
     override fun updateMember(memberId: UUID, updateMember: UpdateMember): Optional<Member> {

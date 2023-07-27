@@ -1,18 +1,18 @@
 package hu.bsstudio.bssweb.event.service
 
-import hu.bsstudio.bssweb.event.entity.EventEntity
+import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.event.mapper.EventMapper
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
-import hu.bsstudio.bssweb.event.repository.EventRepository
+import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
 import java.util.Optional
 import java.util.UUID
 
 class DefaultEventService(
-    private val repository: EventRepository,
+    private val repository: SimpleEventRepository,
     private val detailedRepository: DetailedEventRepository,
     private val mapper: EventMapper
 ) : EventService {
@@ -33,7 +33,7 @@ class DefaultEventService(
         return repository.findAllById(eventIds)
             .map { it.visible = visible; it }
             .map(repository::save)
-            .map(EventEntity::id)
+            .map(SimpleEventEntity::id)
     }
 
     override fun findEventById(eventId: UUID): Optional<DetailedEvent> {
