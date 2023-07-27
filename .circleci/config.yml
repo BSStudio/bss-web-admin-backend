@@ -23,6 +23,7 @@ jobs:
           working_directory: ~/project/integration
           environment:
             DOCKER_COMPOSE_FILE_NAME: << parameters.compose_files >>
+            DEBUG: testcontainers:*
       - store_test_results:
           path: ~/project/integration/junit.xml
     parameters:

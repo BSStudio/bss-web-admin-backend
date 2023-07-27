@@ -13,7 +13,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "member")
-data class MemberEntity(
+data class DetailedMemberEntity(
     var url: String,
     var name: String,
     var nickname: String = "",
@@ -31,7 +31,7 @@ data class MemberEntity(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as MemberEntity
+        other as DetailedMemberEntity
         return this.id == other.id
     }
 

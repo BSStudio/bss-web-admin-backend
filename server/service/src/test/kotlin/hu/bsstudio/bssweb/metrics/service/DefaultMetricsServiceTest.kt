@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.metrics.service
 
-import hu.bsstudio.bssweb.event.repository.EventRepository
+import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.metrics.model.BssMetrics
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MockKExtension::class)
 internal class DefaultMetricsServiceTest(
     @MockK private val videoRepository: SimpleVideoRepository,
-    @MockK private val eventRepository: EventRepository,
+    @MockK private val eventRepository: SimpleEventRepository,
     @MockK private val memberRepository: MemberRepository
 ) {
 
