@@ -17,11 +17,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import java.time.LocalDate
 
-@DataJpaTest(properties = [
-    "logging.level.ROOT= WARN",
-    "logging.level.org.springframework.test.context.transaction= INFO",
-    "logging.level.org.hibernate.SQL= DEBUG"
-])
+@DataJpaTest
 @ContextConfiguration(classes = [DataConfiguration::class])
 @TestPropertySource(properties = ["spring.flyway.locations=classpath:db/migration/{vendor}"])
 class DetailedEventRepositoryTest(

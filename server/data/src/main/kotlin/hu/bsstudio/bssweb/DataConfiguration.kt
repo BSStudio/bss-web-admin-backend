@@ -7,6 +7,6 @@ import org.springframework.context.annotation.Configuration
 
 @EnableAutoConfiguration
 @EntityScan("hu.bsstudio.bssweb.**.entity")
-@ComponentScan("hu.bsstudio.bssweb.**.repository")
+@ComponentScan("hu.bsstudio.bssweb.*.repository")
 @Configuration
 class DataConfiguration
