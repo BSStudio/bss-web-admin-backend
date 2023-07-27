@@ -35,7 +35,7 @@ class EventRepositoryTest(
             this.id = id
         }
         assertThat(this.underTest.findById(id))
-            .isPresent
+            .isPresent()
             .get()
             .usingRecursiveComparison()
             .isEqualTo(expected)

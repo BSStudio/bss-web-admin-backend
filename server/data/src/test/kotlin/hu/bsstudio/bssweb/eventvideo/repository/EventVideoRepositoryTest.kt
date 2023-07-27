@@ -31,7 +31,7 @@ class EventVideoRepositoryTest(
         this.underTest.save(entity)
 
         assertThat(this.underTest.findById(entity))
-            .isPresent
+            .isPresent()
             .get()
             .usingRecursiveComparison()
             .isEqualTo(entity)
