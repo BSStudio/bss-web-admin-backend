@@ -40,7 +40,7 @@ jobs:
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           steps:
-            - run: ./gradlew test --parallel
+            - run: ./gradlew test --continue --parallel
       - run:
           name: Save test results
           command: |
