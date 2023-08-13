@@ -71,33 +71,33 @@ jobs:
 workflows:
   Build app:
     jobs:
-      # - gradle/run:
-      #     name: Lint
-      #     command: ktlintCheck --parallel
-      #     deps_checksum_file: build.gradle.kts
-      #     executor: jdk
-      # - gradle/run:
-      #     name: Coverage verification
-      #     command: jacocoTestCoverageVerification --parallel
-      #     deps_checksum_file: build.gradle.kts
-      #     executor: jdk
-      # - gradle/run:
-      #     name: Build boot jar
-      #     command: bootJar --parallel
-      #     deps_checksum_file: build.gradle.kts
-      #     executor: jdk
-      # - node/run:
-      #     name: Lint integration test
-      #     app-dir: ~/project/integration
-      #     npm-run: lint
-      #     version: 18.12.1
-      # - gradle_test:
-      #     name: Unit test
-      # - integration_test:
-      #     name: Integration test
-      # - docker/hadolint:
-      #     name: Lint Dockerfile
-      #     dockerfiles: Dockerfile
+      - gradle/run:
+          name: Lint
+          command: ktlintCheck --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - gradle/run:
+          name: Coverage verification
+          command: jacocoTestCoverageVerification --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - gradle/run:
+          name: Build boot jar
+          command: bootJar --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
+      - node/run:
+          name: Lint integration test
+          app-dir: ~/project/integration
+          npm-run: lint
+          version: 18.12.1
+      - gradle_test:
+          name: Unit test
+      - integration_test:
+          name: Integration test
+      - docker/hadolint:
+          name: Lint Dockerfile
+          dockerfiles: Dockerfile
       - docker/publish:
           name: Build image
           deploy: false
