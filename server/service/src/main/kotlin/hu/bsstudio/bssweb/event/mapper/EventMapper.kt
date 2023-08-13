@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.event.mapper
 
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
-import hu.bsstudio.bssweb.event.entity.EventEntity
+import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
@@ -10,7 +10,7 @@ import hu.bsstudio.bssweb.video.mapper.VideoMapper
 
 class EventMapper(private val videoMapper: VideoMapper) {
 
-    fun entityToModel(entity: EventEntity): Event {
+    fun entityToModel(entity: SimpleEventEntity): Event {
         return Event(
             id = entity.id,
             url = entity.url,
@@ -33,8 +33,8 @@ class EventMapper(private val videoMapper: VideoMapper) {
         )
     }
 
-    fun modelToEntity(model: CreateEvent): EventEntity {
-        return EventEntity(
+    fun modelToEntity(model: CreateEvent): SimpleEventEntity {
+        return SimpleEventEntity(
             url = model.url,
             title = model.title
         )

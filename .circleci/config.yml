@@ -18,7 +18,7 @@ jobs:
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           steps:
-            - run: ./gradlew test --parallel
+            - run: ./gradlew test --continue --parallel
       - run:
           name: Save test results
           command: |
@@ -51,31 +51,17 @@ workflows:
           command: bootJar --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
-      - gradle/run:
-          name: Build boot war
-          command: bootWar --parallel
-          deps_checksum_file: build.gradle.kts
-          executor: jdk
       - gradle_test:
           name: Unit test
       - docker/hadolint:
-          name: Lint Dockerfiles
-          dockerfiles: Dockerfile:war.Dockerfile
+          name: Lint Dockerfile
+          dockerfiles: Dockerfile
       - docker/publish:
-          name: "Build image: jar"
+          name: Build image
           deploy: false
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
           tag: latest
-          use-buildkit: true
-          use-docker-credentials-store: true
-      - docker/publish:
-          name: "Build image: war"
-          deploy: false
-          dockerfile: war.Dockerfile
-          image: bsstudio/bss-web-admin-backend
-          registry: ghcr.io
-          tag: war
           use-buildkit: true
           use-docker-credentials-store: true
       - fork_join:
@@ -84,31 +70,15 @@ workflows:
             - Lint
             - Coverage verification
             - Build boot jar
-            - Build boot war
             - Unit test
-            - "Build image: jar"
-            - "Build image: war"
-            - Lint Dockerfiles
+            - Build image
+            - Lint Dockerfile
       - docker/publish:
-          name: "Publish image: jar"
+          name: Publish image
           deploy: true
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
           tag: latest
-          use-buildkit: true
-          use-docker-credentials-store: true
-          requires:
-            - Fork join build
-          filters:
-            branches:
-              only: main
-      - docker/publish:
-          name: "Publish image: war"
-          deploy: true
-          dockerfile: war.Dockerfile
-          image: bsstudio/bss-web-admin-backend
-          registry: ghcr.io
-          tag: war
           use-buildkit: true
           use-docker-credentials-store: true
           requires:

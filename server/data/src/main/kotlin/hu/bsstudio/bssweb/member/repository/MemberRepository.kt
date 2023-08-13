@@ -1,7 +1,9 @@
 package hu.bsstudio.bssweb.member.repository
 
-import hu.bsstudio.bssweb.member.entity.MemberEntity
-import org.springframework.data.repository.CrudRepository
+import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 import java.util.UUID
 
-interface MemberRepository : CrudRepository<MemberEntity, UUID>
+@Repository
+interface MemberRepository : JpaRepository<DetailedMemberEntity, UUID>

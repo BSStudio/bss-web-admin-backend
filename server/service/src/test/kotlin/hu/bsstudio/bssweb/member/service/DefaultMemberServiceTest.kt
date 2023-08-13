@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.member.service
 
-import hu.bsstudio.bssweb.member.entity.MemberEntity
+import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.mapper.MemberMapper
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
@@ -122,7 +122,7 @@ internal class DefaultMemberServiceTest(
 
     private companion object {
         private val MEMBER_ID = mockk<UUID>()
-        private val MEMBER_ENTITY = mockk<MemberEntity>()
+        private val MEMBER_ENTITY = mockk<DetailedMemberEntity>()
         private val MEMBER = mockk<Member>()
         private val CREATE_MEMBER = mockk<CreateMember>()
         private val UPDATE_MEMBER = mockk<UpdateMember>()
