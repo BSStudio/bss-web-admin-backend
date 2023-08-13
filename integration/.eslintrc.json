@@ -13,20 +13,15 @@
     "prettier",
     "plugin:prettier/recommended",
     "plugin:jest/all",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:@typescript-eslint/strict-type-checked",
+    "plugin:@typescript-eslint/stylistic-type-checked"
   ],
   "plugins": [
     "prettier",
     "jest"
   ],
   "rules": {
-    "jest/no-hooks": "off",
-    "@typescript-eslint/restrict-template-expressions": [
-      "error",
-      {
-        "allowBoolean": true
-      }
-    ]
+    "jest/no-hooks": "off"
   }
 }

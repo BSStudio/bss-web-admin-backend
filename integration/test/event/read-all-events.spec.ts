@@ -1,10 +1,14 @@
 import { DbUtils, eventEntity } from '../../database'
-import { Event, EventEndpoint } from '../../endpoints/app'
+import { Event, getAllEvents } from '../../endpoints/app'
 
 describe('get /api/v1/event', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   it('should return ok and all events', async () => {
     expect.assertions(2)
@@ -12,7 +16,7 @@ describe('get /api/v1/event', () => {
     const eventEntity2 = eventEntity({ id: '11234567-0123-0123-0123-0123456789ab', url: 'url2', title: 'title2' })
     await dbUtils.addEvents([eventEntity1, eventEntity2])
 
-    const response = await EventEndpoint.getAllEvents()
+    const response = await getAllEvents()
 
     const expectedEvent1: Event = { ...eventEntity1 }
     const expectedEvent2: Event = { ...eventEntity2 }
@@ -23,7 +27,7 @@ describe('get /api/v1/event', () => {
   it('should return ok and empty array', async () => {
     expect.assertions(2)
 
-    const response = await EventEndpoint.getAllEvents()
+    const response = await getAllEvents()
 
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual([])

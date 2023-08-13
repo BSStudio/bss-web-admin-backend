@@ -21,9 +21,9 @@ export function eventEntity(createEventEntity: CreateEventEntity): EventEntity {
     id: createEventEntity.id,
     url: createEventEntity.url,
     title: createEventEntity.title,
-    description: createEventEntity.description || '',
-    date: createEventEntity.date || '2022-01-01',
-    visible: createEventEntity.visible || false,
+    description: createEventEntity.description ?? '',
+    date: createEventEntity.date ?? '2022-01-01',
+    visible: createEventEntity.visible ?? false,
   }
 }
 

@@ -1,10 +1,14 @@
 import { DbUtils, memberEntity, videoEntity } from '../../database'
-import { DetailedVideo, VideoCrewEndpoint } from '../../endpoints/app'
+import { DetailedVideo, removeVideoCrewMember } from '../../endpoints/app'
 
 describe('delete /api/v1/videoCrew', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   const member_id = '01234567-0123-0123-0123-0123456789ab'
   const video_id = '11234567-0123-0123-0123-0123456789ab'
@@ -20,7 +24,7 @@ describe('delete /api/v1/videoCrew', () => {
     await dbUtils.addVideoCrew([{ video_id, member_id, position }])
     await dbUtils.addVideoCrew([{ video_id, member_id, position: otherPosition }])
 
-    const response = await VideoCrewEndpoint.removeVideoCrewMember(video_id, member_id, position)
+    const response = await removeVideoCrewMember(video_id, member_id, position)
 
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual<DetailedVideo>({

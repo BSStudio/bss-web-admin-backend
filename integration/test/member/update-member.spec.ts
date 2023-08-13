@@ -1,21 +1,21 @@
 import { DbUtils, memberEntity } from '../../database'
-import { Member, MemberEndpoint, UpdateMember } from '../../endpoints/app'
-import { FileEndpoint } from '../../endpoints/file-api/file.endpoint'
+import { Member, updateMember, UpdateMember } from '../../endpoints/app'
+import { mockUpdateMemberFolder, resetMocks, verifyUpdateMemberFolder } from '../../endpoints/file-api/file.endpoint'
 
 describe('put /api/v1/member/{memberId}', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => Promise.all([FileEndpoint.resetMocks(), dbUtils.beforeEach()]))
-  afterAll(async () => Promise.all([FileEndpoint.resetMocks(), dbUtils.afterAll()]))
+  beforeEach(async () => Promise.all([resetMocks(), dbUtils.beforeEach()]))
+  afterAll(async () => Promise.all([resetMocks(), dbUtils.afterAll()]))
 
   const id = '01234567-0123-0123-0123-0123456789ab'
 
   it('should update member', async () => {
     expect.assertions(3)
-    await FileEndpoint.mockUpdateMemberFolder()
+    await mockUpdateMemberFolder()
     const entity1 = memberEntity({ id, url: 'url1', name: 'Bence Csik 1' })
     await dbUtils.addMembers([entity1])
 
-    const updateMember: UpdateMember = {
+    const updateMemberBody: UpdateMember = {
       url: 'updatedUrl',
       name: 'updatedName',
       nickname: 'updatedNickname',
@@ -25,11 +25,11 @@ describe('put /api/v1/member/{memberId}', () => {
       status: 'ALUMNI',
       archived: true,
     }
-    const response = await MemberEndpoint.updateMember(entity1.id, updateMember)
-    const mockCalls = await FileEndpoint.verifyUpdateMemberFolder()
+    const response = await updateMember(entity1.id, updateMemberBody)
+    const mockCalls = await verifyUpdateMemberFolder()
 
     expect(mockCalls).toBe(1)
-    const expectedMember: Member = { id, ...updateMember }
+    const expectedMember: Member = { id, ...updateMemberBody }
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual<Member>(expectedMember)
   })

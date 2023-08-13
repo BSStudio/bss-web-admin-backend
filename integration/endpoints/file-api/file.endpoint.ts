@@ -4,35 +4,8 @@ export interface Count {
   count: number
 }
 
-export class FileEndpoint {
-  private static client = client
-
-  private static mockBody = (method: string, url: string) => ({
-    request: {
-      method,
-      url,
-      bodyPatterns: [
-        {
-          matchesJsonPath: '$.id',
-        },
-        {
-          matchesJsonPath: '$.url',
-        },
-      ],
-    },
-    response: {
-      status: 201,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      jsonBody: {
-        id: '01234567-0123-0123-0123-0123456789ab',
-        url: 'url',
-      },
-    },
-  })
-
-  private static verifyBody = (method: string, url: string) => ({
+const mockBody = (method: string, url: string) => ({
+  request: {
     method,
     url,
     bodyPatterns: [
@@ -43,53 +16,76 @@ export class FileEndpoint {
         matchesJsonPath: '$.url',
       },
     ],
-  })
+  },
+  response: {
+    status: 201,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    jsonBody: {
+      id: '01234567-0123-0123-0123-0123456789ab',
+      url: 'url',
+    },
+  },
+})
 
-  static resetMocks() {
-    return this.client.post('/__admin/reset')
-  }
+const verifyBody = (method: string, url: string) => ({
+  method,
+  url,
+  bodyPatterns: [
+    {
+      matchesJsonPath: '$.id',
+    },
+    {
+      matchesJsonPath: '$.url',
+    },
+  ],
+})
 
-  static mockCreateVideoFolder() {
-    return this.client.post('/__admin/mappings', this.mockBody('POST', '/api/v1/video'))
-  }
+export function resetMocks() {
+  return client.post('/__admin/reset')
+}
 
-  static verifyCreateVideoFolder() {
-    return this.client
-      .post<Count>('/__admin/requests/count', this.verifyBody('POST', '/api/v1/video'))
-      .then(({ data }) => data)
-      .then(({ count }) => count)
-  }
+export function mockCreateVideoFolder() {
+  return client.post('/__admin/mappings', mockBody('POST', '/api/v1/video'))
+}
 
-  static mockUpdateVideoFolder() {
-    return this.client.post('/__admin/mappings', this.mockBody('PUT', '/api/v1/video'))
-  }
+export function verifyCreateVideoFolder() {
+  return client
+    .post<Count>('/__admin/requests/count', verifyBody('POST', '/api/v1/video'))
+    .then(({ data }) => data)
+    .then(({ count }) => count)
+}
 
-  static verifyUpdateVideoFolder() {
-    return this.client
-      .post<Count>('/__admin/requests/count', this.verifyBody('PUT', '/api/v1/video'))
-      .then(({ data }) => data)
-      .then(({ count }) => count)
-  }
+export function mockUpdateVideoFolder() {
+  return client.post('/__admin/mappings', mockBody('PUT', '/api/v1/video'))
+}
 
-  static mockCreateMemberFolder() {
-    return this.client.post('/__admin/mappings', this.mockBody('POST', '/api/v1/member'))
-  }
+export function verifyUpdateVideoFolder() {
+  return client
+    .post<Count>('/__admin/requests/count', verifyBody('PUT', '/api/v1/video'))
+    .then(({ data }) => data)
+    .then(({ count }) => count)
+}
 
-  static verifyCreateMemberFolder() {
-    return this.client
-      .post<Count>('/__admin/requests/count', this.verifyBody('POST', '/api/v1/member'))
-      .then(({ data }) => data)
-      .then(({ count }) => count)
-  }
+export function mockCreateMemberFolder() {
+  return client.post('/__admin/mappings', mockBody('POST', '/api/v1/member'))
+}
 
-  static mockUpdateMemberFolder() {
-    return this.client.post('/__admin/mappings', this.mockBody('PUT', '/api/v1/member'))
-  }
+export function verifyCreateMemberFolder() {
+  return client
+    .post<Count>('/__admin/requests/count', verifyBody('POST', '/api/v1/member'))
+    .then(({ data }) => data)
+    .then(({ count }) => count)
+}
 
-  static verifyUpdateMemberFolder() {
-    return this.client
-      .post<Count>('/__admin/requests/count', this.verifyBody('PUT', '/api/v1/member'))
-      .then(({ data }) => data)
-      .then(({ count }) => count)
-  }
+export function mockUpdateMemberFolder() {
+  return client.post('/__admin/mappings', mockBody('PUT', '/api/v1/member'))
+}
+
+export function verifyUpdateMemberFolder() {
+  return client
+    .post<Count>('/__admin/requests/count', verifyBody('PUT', '/api/v1/member'))
+    .then(({ data }) => data)
+    .then(({ count }) => count)
 }

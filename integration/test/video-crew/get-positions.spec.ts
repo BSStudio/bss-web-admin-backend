@@ -1,10 +1,14 @@
 import { DbUtils, memberEntity, videoEntity } from '../../database'
-import { VideoCrewEndpoint } from '../../endpoints/app'
+import { getPositions } from '../../endpoints/app'
 
 describe('get /api/v1/videoCrew/position', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   const member_id = '01234567-0123-0123-0123-0123456789ab'
   const video_id = '11234567-0123-0123-0123-0123456789ab'
@@ -22,7 +26,7 @@ describe('get /api/v1/videoCrew/position', () => {
       { video_id, member_id, position: position2 },
     ])
 
-    const response1 = await VideoCrewEndpoint.getPositions()
+    const response1 = await getPositions()
 
     expect(response1.status).toBe(200)
     expect(response1.data).toStrictEqual([position1, position2])

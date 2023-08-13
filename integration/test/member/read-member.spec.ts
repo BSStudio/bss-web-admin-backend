@@ -1,10 +1,14 @@
 import { DbUtils, memberEntity } from '../../database'
-import { Member, MemberEndpoint } from '../../endpoints/app'
+import { getMember, Member } from '../../endpoints/app'
 
 describe('get /api/v1/member/{memberId}', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   const id = '01234567-0123-0123-0123-0123456789ab'
 
@@ -13,7 +17,7 @@ describe('get /api/v1/member/{memberId}', () => {
     const entity1 = memberEntity({ id, url: 'url1', name: 'Bence Csik 1' })
     await dbUtils.addMembers([entity1])
 
-    const response = await MemberEndpoint.getMember(entity1.id)
+    const response = await getMember(entity1.id)
 
     const expectedMember1: Member = {
       id: entity1.id,
@@ -32,7 +36,7 @@ describe('get /api/v1/member/{memberId}', () => {
   it('should not find member', async () => {
     expect.assertions(1)
 
-    const response = await MemberEndpoint.getMember('01234567-0123-0123-0123-0123456789ab')
+    const response = await getMember('01234567-0123-0123-0123-0123456789ab')
 
     expect(response.status).toBe(404)
   })

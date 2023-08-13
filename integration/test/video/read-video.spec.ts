@@ -1,10 +1,14 @@
 import { DbUtils, videoEntity } from '../../database'
-import { DetailedVideo, VideoEndpoint } from '../../endpoints/app'
+import { DetailedVideo, getVideo } from '../../endpoints/app'
 
 describe('get /api/v1/video/{videoId}', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   const id = '01234567-0123-0123-0123-0123456789ab'
   const url = 'url'
@@ -13,7 +17,7 @@ describe('get /api/v1/video/{videoId}', () => {
   it('should return not found and empty body when video does not exist', async () => {
     expect.assertions(2)
 
-    const response = await VideoEndpoint.getVideo(id)
+    const response = await getVideo(id)
 
     expect(response.status).toBe(404)
     expect(response.data).toBe('')
@@ -23,7 +27,7 @@ describe('get /api/v1/video/{videoId}', () => {
     expect.assertions(2)
     await dbUtils.addVideos([videoEntity({ id, url, title })])
 
-    const response1 = await VideoEndpoint.getVideo(id)
+    const response1 = await getVideo(id)
 
     expect(response1.status).toBe(200)
     expect(response1.data).toStrictEqual<DetailedVideo>({

@@ -1,10 +1,14 @@
 import { DbUtils, memberEntity } from '../../database'
-import { Member, MemberEndpoint } from '../../endpoints/app'
+import { getAllMembers, Member } from '../../endpoints/app'
 
 describe('get /api/v1/member', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   it('should read all members', async () => {
     expect.assertions(4)
@@ -12,7 +16,7 @@ describe('get /api/v1/member', () => {
     const entity2 = memberEntity({ id: '11234567-0123-0123-0123-0123456789ab', url: 'url2', name: 'Bence Csik 2' })
     await dbUtils.addMembers([entity1, entity2])
 
-    const response = await MemberEndpoint.getAllMembers()
+    const response = await getAllMembers()
 
     const expectedMember1: Member = {
       id: entity1.id,
@@ -44,7 +48,7 @@ describe('get /api/v1/member', () => {
   it('should return empty array if empty', async () => {
     expect.assertions(2)
 
-    const response = await MemberEndpoint.getAllMembers()
+    const response = await getAllMembers()
 
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual([])

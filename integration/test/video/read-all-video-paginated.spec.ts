@@ -1,5 +1,5 @@
 import { DbUtils, videoEntity } from '../../database'
-import { Video, VideoEndpoint } from '../../endpoints/app'
+import { getAllVideosPaginated, Video } from '../../endpoints/app'
 import { Page } from '../../interface'
 
 describe('get /api/video', () => {
@@ -26,13 +26,17 @@ describe('get /api/video', () => {
     url: 'url3',
     ...defaultVideo,
   }
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   it('should return ok and empty array', async () => {
     expect.assertions(2)
 
-    const response = await VideoEndpoint.getAllVideosPaginated({ page: 0, size: 1 })
+    const response = await getAllVideosPaginated({ page: 0, size: 1 })
 
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual<Page<Video>>({
@@ -60,7 +64,7 @@ describe('get /api/video', () => {
   it('should respond without pagination params and should have page size 20 by default', async () => {
     expect.assertions(2)
 
-    const response = await VideoEndpoint.getAllVideosPaginated()
+    const response = await getAllVideosPaginated()
 
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual<Page<Video>>({
@@ -88,7 +92,7 @@ describe('get /api/video', () => {
   it('should respond without pageSize', async () => {
     expect.assertions(2)
 
-    const response = await VideoEndpoint.getAllVideosPaginated({ page: 2 })
+    const response = await getAllVideosPaginated({ page: 2 })
 
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual({
@@ -117,8 +121,8 @@ describe('get /api/video', () => {
     expect.assertions(4)
     await dbUtils.addVideos([videoEntity1, videoEntity2, videoEntity3])
 
-    const response1 = await VideoEndpoint.getAllVideosPaginated({ page: 0, size: 2, sort: 'url,desc' })
-    const response2 = await VideoEndpoint.getAllVideosPaginated({ page: 1, size: 2, sort: 'url,desc' })
+    const response1 = await getAllVideosPaginated({ page: 0, size: 2, sort: 'url,desc' })
+    const response2 = await getAllVideosPaginated({ page: 1, size: 2, sort: 'url,desc' })
 
     expect(response1.status).toBe(200)
     expect(response1.data).toStrictEqual({
@@ -205,8 +209,8 @@ describe('get /api/video', () => {
     expect.assertions(4)
     await dbUtils.addVideos([videoEntity1, videoEntity2, videoEntity3])
 
-    const response1 = await VideoEndpoint.getAllVideosPaginated({ page: 0, size: 2 })
-    const response2 = await VideoEndpoint.getAllVideosPaginated({ page: 1, size: 2 })
+    const response1 = await getAllVideosPaginated({ page: 0, size: 2 })
+    const response2 = await getAllVideosPaginated({ page: 1, size: 2 })
 
     expect(response1.status).toBe(200)
     expect(response1.data).toStrictEqual({

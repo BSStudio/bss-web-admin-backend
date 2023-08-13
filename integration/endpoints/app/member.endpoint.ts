@@ -29,25 +29,22 @@ export interface UpdateMember {
   archived: boolean
 }
 
-export class MemberEndpoint {
-  private static client = client
-  static getAllMembers() {
-    return this.client.get<Member[]>('/api/v1/member')
-  }
-  static createMember(createMember: CreateMember) {
-    return this.client.post<Member>('/api/v1/member', createMember)
-  }
-  static archiveMembers(memberIds: string[], archive: boolean) {
-    const params = { memberIds: memberIds.join(','), archive: `${archive}` }
-    return this.client.put<string[]>('/api/v1/member/archive', null, { params })
-  }
-  static updateMember(memberId: string, updateMember: UpdateMember) {
-    return this.client.put<Member>(`/api/v1/member/${memberId}`, updateMember)
-  }
-  static getMember(memberId: string) {
-    return this.client.get<Member>(`/api/v1/member/${memberId}`)
-  }
-  static removeMember(memberId: string) {
-    return this.client.delete<void>(`/api/v1/member/${memberId}`)
-  }
+export function getAllMembers() {
+  return client.get<Member[]>('/api/v1/member')
+}
+export function createMember(createMember: CreateMember) {
+  return client.post<Member>('/api/v1/member', createMember)
+}
+export function archiveMembers(memberIds: string[], archive: boolean) {
+  const params = { memberIds: memberIds.join(','), archive: `${archive}` }
+  return client.put<string[]>('/api/v1/member/archive', null, { params })
+}
+export function updateMember(memberId: string, updateMember: UpdateMember) {
+  return client.put<Member>(`/api/v1/member/${memberId}`, updateMember)
+}
+export function getMember(memberId: string) {
+  return client.get<Member>(`/api/v1/member/${memberId}`)
+}
+export function removeMember(memberId: string) {
+  return client.delete<never>(`/api/v1/member/${memberId}`)
 }

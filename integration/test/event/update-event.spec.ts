@@ -1,10 +1,14 @@
 import { DbUtils, eventEntity } from '../../database'
-import { DetailedEvent, EventEndpoint, UpdateEvent } from '../../endpoints/app'
+import { DetailedEvent, updateEvent, UpdateEvent } from '../../endpoints/app'
 
 describe('put /api/v1/event/{eventId}', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   const id = '01234567-0123-0123-0123-0123456789ab'
 
@@ -21,16 +25,16 @@ describe('put /api/v1/event/{eventId}', () => {
       }),
     ])
 
-    const updateEvent: UpdateEvent = {
+    const updateEventBody: UpdateEvent = {
       url: 'updateUrl',
       title: 'updateTitle',
       description: 'updatedDescription',
       date: '1997-01-01',
       visible: true,
     }
-    const response = await EventEndpoint.updateEvent(id, updateEvent)
+    const response = await updateEvent(id, updateEventBody)
 
-    const detailedEvent: DetailedEvent = { id, ...updateEvent, videos: [] }
+    const detailedEvent: DetailedEvent = { id, ...updateEventBody, videos: [] }
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual(detailedEvent)
   })
