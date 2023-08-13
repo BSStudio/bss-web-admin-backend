@@ -61,7 +61,6 @@ jobs:
       - attach_workspace:
           at: ./
       - run: docker load < bss-web-admin-backend.tar
-#      - docker/configure-docker-credentials-store
       - docker/check:
           registry: ghcr.io
           use-docker-credentials-store: true
@@ -110,7 +109,6 @@ workflows:
           use-remote-docker: true
           remote-docker-dlc: true
           use-buildkit: true
-          use-docker-credentials-store: true
           before_build:
             - restore_cache:
                 key: docker-layers-v1
