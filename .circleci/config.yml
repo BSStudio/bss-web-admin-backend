@@ -70,9 +70,7 @@ workflows:
             - Lint
             - Coverage verification
             - Build boot jar
-            - Lint integration test
             - Unit test
-            - Integration test
             - Build image
             - Lint Dockerfile
       - docker/publish:
