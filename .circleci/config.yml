@@ -127,18 +127,18 @@ workflows:
       - fork_join:
           name: Fork join build
           requires:
-          #   - Lint
-          #   - Coverage verification
-          #   - Build boot jar
-          #   - Lint integration test
-          #   - Unit test
-          #   - Integration test
+            - Lint
+            - Coverage verification
+            - Build boot jar
+            - Lint integration test
+            - Unit test
+            - Integration test
             - Build image
-          #   - Lint Dockerfile
+            - Lint Dockerfile
       - docker_publish:
           name: Publish image
           requires:
             - Fork join build
-          # filters:
-          #   branches:
-          #     only: main
+          filters:
+            branches:
+              only: main
