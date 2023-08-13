@@ -96,6 +96,12 @@ workflows:
           use-remote-docker: true
           use-buildkit: true
           use-docker-credentials-store: true
+          after_build:
+            - run: docker save --output bss-web-admin-backend.tar ghcr.io/bsstudio/bss-web-admin-backend:latest
+            - persist_to_workspace:
+                root: ./
+                paths:
+                  - bss-web-admin-backend.tar
       - fork_join:
           name: Fork join build
           requires:
@@ -113,10 +119,16 @@ workflows:
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
           tag: latest
+          executor: docker/docker
+          remote-docker-version: 20.10.24
+          use-remote-docker: true
           use-buildkit: true
           use-docker-credentials-store: true
+          attach-at: ./
+          before_build:
+            - run: docker load < bss-web-admin-backend.tar
           requires:
             - Fork join build
-          filters:
-            branches:
-              only: main
+          # filters:
+          #   branches:
+          #     only: main
