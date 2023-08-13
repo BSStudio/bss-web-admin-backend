@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb
 
-import jakarta.servlet.Filter
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer
 
 class ServletInitializer : AbstractAnnotationConfigDispatcherServletInitializer() {
