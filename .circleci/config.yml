@@ -91,6 +91,9 @@ workflows:
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
           tag: latest
+          executor: docker/docker
+          remote-docker-version: 20.10.24
+          use-remote-docker: true
           use-buildkit: true
           use-docker-credentials-store: true
       - fork_join:
