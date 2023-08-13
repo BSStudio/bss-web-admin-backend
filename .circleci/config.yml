@@ -63,6 +63,7 @@ jobs:
       - attach_workspace:
           at: ./
       - run: docker load < bss-web-admin-backend.tar
+      - docker/install-docker-credential-helper
       - docker/push:
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
