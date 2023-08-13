@@ -63,7 +63,9 @@ jobs:
       - run: docker load < bss-web-admin-backend.tar
       - docker/install-docker-credential-helper
       - docker/configure-docker-credentials-store
-      - docker/check
+      - docker/check:
+          registry: ghcr.io
+          use-docker-credentials-store: true
       - docker/push:
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
