@@ -1,11 +1,18 @@
 package hu.bsstudio.bssweb
 
-import org.springframework.boot.builder.SpringApplicationBuilder
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
+import jakarta.servlet.Filter
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer
 
-class ServletInitializer : SpringBootServletInitializer() {
+class ServletInitializer : AbstractAnnotationConfigDispatcherServletInitializer() {
+    override fun getServletMappings(): Array<String> {
+        return arrayOf("/")
+    }
 
-    override fun configure(builder: SpringApplicationBuilder): SpringApplicationBuilder {
-        return builder.sources(BssWebApplication::class.java)
+    override fun getRootConfigClasses(): Array<Class<*>>? {
+        return null
+    }
+
+    override fun getServletConfigClasses(): Array<Class<*>>? {
+        return arrayOf(BssWebApplication::class.java)
     }
 }
