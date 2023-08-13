@@ -2,7 +2,6 @@ package hu.bsstudio.bssweb.event.entity
 
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -16,22 +15,23 @@ import java.util.UUID
 @Entity
 @Table(name = "event")
 data class DetailedEventEntity(
-    var url: String,
-    var title: String,
-    var description: String = "",
-    var date: LocalDate = LocalDate.now(),
-    var visible: Boolean = false,
-    @OneToMany(fetch = FetchType.EAGER)
+    override var url: String,
+    override var title: String,
+    override var description: String = "",
+    override var date: LocalDate = LocalDate.now(),
+    override var visible: Boolean = false
+) : EventEntity {
+    @Id
+    @GeneratedValue
+    override lateinit var id: UUID
+
+    @OneToMany
     @JoinTable(
         name = "event_video",
         joinColumns = [JoinColumn(name = "event_id")],
         inverseJoinColumns = [JoinColumn(name = "video_id")]
     )
-    var videos: List<SimpleVideoEntity> = listOf()
-) {
-    @Id
-    @GeneratedValue
-    lateinit var id: UUID
+    lateinit var videos: List<SimpleVideoEntity>
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

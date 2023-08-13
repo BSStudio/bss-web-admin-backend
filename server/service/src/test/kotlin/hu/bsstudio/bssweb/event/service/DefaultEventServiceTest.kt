@@ -1,14 +1,14 @@
 package hu.bsstudio.bssweb.event.service
 
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
-import hu.bsstudio.bssweb.event.entity.EventEntity
+import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.event.mapper.EventMapper
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
-import hu.bsstudio.bssweb.event.repository.EventRepository
+import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -22,7 +22,7 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultEventServiceTest(
-    @MockK private val mockRepository: EventRepository,
+    @MockK private val mockRepository: SimpleEventRepository,
     @MockK private val mockDetailedRepository: DetailedEventRepository,
     @MockK private val mockMapper: EventMapper
 ) {
@@ -127,7 +127,7 @@ internal class DefaultEventServiceTest(
     private companion object {
         private val EVENT_ID = mockk<UUID>()
         private val EVENT = mockk<Event>()
-        private val EVENT_ENTITY = mockk<EventEntity>()
+        private val EVENT_ENTITY = mockk<SimpleEventEntity>()
         private val CREATE_EVENT = mockk<CreateEvent>()
         private val UPDATE_EVENT = mockk<UpdateEvent>()
         private val DETAILED_EVENT = mockk<DetailedEvent>()
