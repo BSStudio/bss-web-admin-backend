@@ -44,7 +44,7 @@ export function insertMemberQuery(members: MemberEntity[]) {
     members
       .map(
         (member) =>
-          `('${member.id}', '${member.url}', '${member.name}', '${member.nickname}', '${member.description}', '${member.joined_at}', '${member.role}', '${member.status}', '${member.archived}')`
+          `('${member.id}', '${member.url}', '${member.name}', '${member.nickname}', '${member.description}', '${member.joined_at}', '${member.role}', '${member.status}', '${member.archived}')`,
       )
       .join(',')
   )

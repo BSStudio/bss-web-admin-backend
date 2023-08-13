@@ -33,7 +33,7 @@ export function insertEventQuery(events: EventEntity[]) {
     events
       .map(
         (event) =>
-          `('${event.id}', '${event.url}', '${event.title}', '${event.description}', '${event.date}', '${event.visible}')`
+          `('${event.id}', '${event.url}', '${event.title}', '${event.description}', '${event.date}', '${event.visible}')`,
       )
       .join(',')
   )

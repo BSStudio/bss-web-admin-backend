@@ -33,7 +33,7 @@ export function insertVideoQuery(videos: VideoEntity[]) {
     videos
       .map(
         (video) =>
-          `('${video.id}', '${video.url}', '${video.title}', '${video.description}', '${video.uploaded_at}', '${video.visible}')`
+          `('${video.id}', '${video.url}', '${video.title}', '${video.description}', '${video.uploaded_at}', '${video.visible}')`,
       )
       .join(',')
   )
