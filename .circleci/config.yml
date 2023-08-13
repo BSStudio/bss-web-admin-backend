@@ -109,6 +109,7 @@ workflows:
           executor: docker/docker
           remote-docker-version: 20.10.24
           use-remote-docker: true
+          remote-docker-dlc: true
           use-buildkit: true
           use-docker-credentials-store: true
           after_build:
