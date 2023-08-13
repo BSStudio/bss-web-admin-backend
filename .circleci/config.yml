@@ -61,7 +61,7 @@ jobs:
       - attach_workspace:
           at: ./
       - run: docker load < bss-web-admin-backend.tar
-      - docker/install-docker-credential-helper
+#      - docker/install-docker-credential-helper
       - docker/configure-docker-credentials-store
       - docker/check:
           registry: ghcr.io
@@ -112,8 +112,17 @@ workflows:
           remote-docker-dlc: true
           use-buildkit: true
           use-docker-credentials-store: true
+          before_build:
+            - restore_cache:
+                key: docker-layers-v1
+                paths:
+                  - bss-web-admin-backend.tar
           after_build:
             - run: docker save --output bss-web-admin-backend.tar ghcr.io/bsstudio/bss-web-admin-backend:latest
+            - save_cache:
+                key: docker-layers-v1
+                paths:
+                  - bss-web-admin-backend.tar
             - persist_to_workspace:
                 root: ./
                 paths:
