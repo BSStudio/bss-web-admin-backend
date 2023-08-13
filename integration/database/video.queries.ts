@@ -18,12 +18,12 @@ interface CreateVideoEntity {
 
 export function videoEntity(createEntity: CreateVideoEntity): VideoEntity {
   return {
-    id: createEntity.id || '',
-    url: createEntity.url || '',
-    title: createEntity.title || '',
-    description: createEntity.description || '',
-    uploaded_at: createEntity.uploaded_at || '2022-01-01',
-    visible: createEntity.visible || false,
+    id: createEntity.id,
+    url: createEntity.url,
+    title: createEntity.title,
+    description: createEntity.description ?? '',
+    uploaded_at: createEntity.uploaded_at ?? '2022-01-01',
+    visible: createEntity.visible ?? false,
   }
 }
 
@@ -33,7 +33,7 @@ export function insertVideoQuery(videos: VideoEntity[]) {
     videos
       .map(
         (video) =>
-          `('${video.id}', '${video.url}', '${video.title}', '${video.description}', '${video.uploaded_at}', '${video.visible}')`
+          `('${video.id}', '${video.url}', '${video.title}', '${video.description}', '${video.uploaded_at}', '${video.visible}')`,
       )
       .join(',')
   )

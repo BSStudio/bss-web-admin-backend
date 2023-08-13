@@ -6,9 +6,6 @@ export interface BssMetrics {
   memberCount: number
 }
 
-export class MetricsEndpoint {
-  private static client = client
-  static getMetrics() {
-    return this.client.get<BssMetrics>('/api/v1/metrics')
-  }
+export function getMetrics() {
+  return client.get<BssMetrics>('/api/v1/metrics')
 }

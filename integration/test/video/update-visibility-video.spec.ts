@@ -1,10 +1,14 @@
 import { DbUtils, videoEntity } from '../../database'
-import { VideoEndpoint } from '../../endpoints/app'
+import { changeVideoVisibility, getVideo } from '../../endpoints/app'
 
 describe('put /api/v1/video/visible', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   const id1 = '01234567-0123-0123-0123-0123456789ab'
   const id2 = '11234567-0123-0123-0123-0123456789ab'
@@ -16,9 +20,9 @@ describe('put /api/v1/video/visible', () => {
       videoEntity({ id: id2, url: 'url2', title: 'title2' }),
     ])
 
-    const response = await VideoEndpoint.changeVideoVisibility([id1, id2], true)
-    const getResponse1 = await VideoEndpoint.getVideo(id1)
-    const getResponse2 = await VideoEndpoint.getVideo(id2)
+    const response = await changeVideoVisibility([id1, id2], true)
+    const getResponse1 = await getVideo(id1)
+    const getResponse2 = await getVideo(id2)
 
     expect(response.data).toStrictEqual([id1, id2])
     expect(response.data).toHaveLength(2)
@@ -32,9 +36,9 @@ describe('put /api/v1/video/visible', () => {
       videoEntity({ id: id2, url: 'url2', title: 'title2', visible: false }),
     ])
 
-    const response = await VideoEndpoint.changeVideoVisibility([id1, id2], false)
-    const getResponse1 = await VideoEndpoint.getVideo(id1)
-    const getResponse2 = await VideoEndpoint.getVideo(id2)
+    const response = await changeVideoVisibility([id1, id2], false)
+    const getResponse1 = await getVideo(id1)
+    const getResponse2 = await getVideo(id2)
 
     expect(response.data).toStrictEqual([id1, id2])
     expect(response.data).toHaveLength(2)

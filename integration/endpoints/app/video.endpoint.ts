@@ -40,28 +40,25 @@ interface SimpleMember {
   nickname: string
 }
 
-export class VideoEndpoint {
-  private static client = client
-  static getAllVideos() {
-    return this.client.get<Video[]>('/api/v1/video/all')
-  }
-  static getAllVideosPaginated(pageable?: PageableRequestParam) {
-    return this.client.get<Page<Video>>('/api/v1/video', { params: { ...pageable } })
-  }
-  static createVideo(createVideo: CreateVideo) {
-    return this.client.post<Video>('/api/v1/video', createVideo)
-  }
-  static changeVideoVisibility(videoIds: string[], visible: boolean) {
-    const params = { videoIds: videoIds.join(','), visible: `${visible}` }
-    return this.client.put<string[]>('/api/v1/video/visible', null, { params })
-  }
-  static updateVideo(videoId: string, updateVideo: UpdateVideo) {
-    return this.client.put<DetailedVideo>(`/api/v1/video/${videoId}`, updateVideo)
-  }
-  static getVideo(videoId: string) {
-    return this.client.get<DetailedVideo>(`/api/v1/video/${videoId}`)
-  }
-  static removeVideo(videoId: string) {
-    return this.client.delete(`/api/v1/video/${videoId}`)
-  }
+export function getAllVideos() {
+  return client.get<Video[]>('/api/v1/video/all')
+}
+export function getAllVideosPaginated(pageable?: PageableRequestParam) {
+  return client.get<Page<Video>>('/api/v1/video', { params: { ...pageable } })
+}
+export function createVideo(createVideo: CreateVideo) {
+  return client.post<Video>('/api/v1/video', createVideo)
+}
+export function changeVideoVisibility(videoIds: string[], visible: boolean) {
+  const params = { videoIds: videoIds.join(','), visible: `${visible}` }
+  return client.put<string[]>('/api/v1/video/visible', null, { params })
+}
+export function updateVideo(videoId: string, updateVideo: UpdateVideo) {
+  return client.put<DetailedVideo>(`/api/v1/video/${videoId}`, updateVideo)
+}
+export function getVideo(videoId: string) {
+  return client.get<DetailedVideo>(`/api/v1/video/${videoId}`)
+}
+export function removeVideo(videoId: string) {
+  return client.delete(`/api/v1/video/${videoId}`)
 }

@@ -1,10 +1,14 @@
 import { DbUtils, memberEntity, videoEntity } from '../../database'
-import { DetailedVideo, VideoCrewEndpoint } from '../../endpoints/app'
+import { addVideoCrewMember, DetailedVideo } from '../../endpoints/app'
 
 describe('post /api/v1/videoCrew', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   const memberId = '01234567-0123-0123-0123-0123456789ab'
   const videoId = '11234567-0123-0123-0123-0123456789ab'
@@ -18,8 +22,8 @@ describe('post /api/v1/videoCrew', () => {
     await dbUtils.addMembers([memberEntity1])
     await dbUtils.addVideos([videoEntity1])
 
-    const response1 = await VideoCrewEndpoint.addVideoCrewMember(videoId, memberId, position1)
-    const response2 = await VideoCrewEndpoint.addVideoCrewMember(videoId, memberId, position2)
+    const response1 = await addVideoCrewMember(videoId, memberId, position1)
+    const response2 = await addVideoCrewMember(videoId, memberId, position2)
 
     const expected: DetailedVideo = {
       id: videoEntity1.id,

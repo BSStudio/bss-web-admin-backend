@@ -1,10 +1,14 @@
 import { DbUtils, memberEntity } from '../../database'
-import { MemberEndpoint } from '../../endpoints/app'
+import { archiveMembers } from '../../endpoints/app'
 
 describe('put /api/v1/member/archive', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   const id1 = '01234567-0123-0123-0123-0123456789ab'
   const id2 = '11234567-0123-0123-0123-0123456789ab'
@@ -16,7 +20,7 @@ describe('put /api/v1/member/archive', () => {
       memberEntity({ id: id2, url: 'url2', name: 'name2' }),
     ])
 
-    const response = await MemberEndpoint.archiveMembers([id1, id2], true)
+    const response = await archiveMembers([id1, id2], true)
 
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual([id1, id2])
@@ -29,7 +33,7 @@ describe('put /api/v1/member/archive', () => {
       memberEntity({ id: id2, url: 'url2', name: 'name2', archived: true }),
     ])
 
-    const response = await MemberEndpoint.archiveMembers([id1, id2], false)
+    const response = await archiveMembers([id1, id2], false)
 
     expect(response.status).toBe(200)
     expect(response.data).toStrictEqual([id1, id2])

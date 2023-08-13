@@ -21,9 +21,9 @@ export function eventEntity(createEventEntity: CreateEventEntity): EventEntity {
     id: createEventEntity.id,
     url: createEventEntity.url,
     title: createEventEntity.title,
-    description: createEventEntity.description || '',
-    date: createEventEntity.date || '2022-01-01',
-    visible: createEventEntity.visible || false,
+    description: createEventEntity.description ?? '',
+    date: createEventEntity.date ?? '2022-01-01',
+    visible: createEventEntity.visible ?? false,
   }
 }
 
@@ -33,7 +33,7 @@ export function insertEventQuery(events: EventEntity[]) {
     events
       .map(
         (event) =>
-          `('${event.id}', '${event.url}', '${event.title}', '${event.description}', '${event.date}', '${event.visible}')`
+          `('${event.id}', '${event.url}', '${event.title}', '${event.description}', '${event.date}', '${event.visible}')`,
       )
       .join(',')
   )

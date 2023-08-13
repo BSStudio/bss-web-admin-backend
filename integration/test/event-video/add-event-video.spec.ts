@@ -1,10 +1,14 @@
 import { DbUtils, eventEntity, videoEntity } from '../../database'
-import { DetailedEvent, EventVideoEndpoint } from '../../endpoints/app'
+import { DetailedEvent, addEventToVideo } from '../../endpoints/app'
 
 describe('post /api/v1/eventVideo?eventId={eventId}&videoId={videoId}', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => await dbUtils.beforeEach())
-  afterAll(async () => await dbUtils.afterAll())
+  beforeEach(async () => {
+    await dbUtils.beforeEach()
+  })
+  afterAll(async () => {
+    await dbUtils.afterAll()
+  })
 
   const eventId = '01234567-0123-0123-0123-0123456789ab'
   const videoId = '11234567-0123-0123-0123-0123456789ab'
@@ -15,7 +19,7 @@ describe('post /api/v1/eventVideo?eventId={eventId}&videoId={videoId}', () => {
     await dbUtils.addEvents([eventEntity1])
     await dbUtils.addVideos([videoEntity({ id: videoId, url: 'url', title: 'title' })])
 
-    const response = await EventVideoEndpoint.addEventToVideo(eventId, videoId)
+    const response = await addEventToVideo(eventId, videoId)
 
     const expectedDetailedEvent: DetailedEvent = {
       ...eventEntity1,

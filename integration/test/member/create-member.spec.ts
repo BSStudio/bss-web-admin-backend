@@ -1,12 +1,12 @@
 import { DbUtils, memberEntity } from '../../database'
-import { CreateMember, Member, MemberEndpoint } from '../../endpoints/app'
+import { createMember, CreateMember, Member } from '../../endpoints/app'
 import { UUID_REGEX, dateToday } from '../../util'
-import { FileEndpoint } from '../../endpoints/file-api/file.endpoint'
+import { mockCreateMemberFolder, resetMocks, verifyCreateMemberFolder } from '../../endpoints/file-api/file.endpoint'
 
 describe('post /api/v1/member', () => {
   const dbUtils = new DbUtils()
-  beforeEach(async () => Promise.all([FileEndpoint.resetMocks(), dbUtils.beforeEach()]))
-  afterAll(async () => Promise.all([FileEndpoint.resetMocks(), dbUtils.afterAll()]))
+  beforeEach(async () => Promise.all([resetMocks(), dbUtils.beforeEach()]))
+  afterAll(async () => Promise.all([resetMocks(), dbUtils.afterAll()]))
 
   const id = '01234567-0123-0123-0123-0123456789ab'
   const url = 'url'
@@ -14,16 +14,16 @@ describe('post /api/v1/member', () => {
 
   it('should create a new member', async () => {
     expect.assertions(4)
-    await FileEndpoint.mockCreateMemberFolder()
+    await mockCreateMemberFolder()
 
-    const createMember: CreateMember = { url, name }
-    const response = await MemberEndpoint.createMember(createMember)
-    const mockCalls = await FileEndpoint.verifyCreateMemberFolder()
+    const createMemberBody: CreateMember = { url, name }
+    const response = await createMember(createMemberBody)
+    const mockCalls = await verifyCreateMemberFolder()
 
     expect(mockCalls).toBe(1)
     expect(response.status).toBe(201)
-    expect(response.headers['location']).toBe(`${globalThis.baseUrl.app}/api/v1/member/${response.data.id}`)
-    expect(response.data).toMatchObject<Member>({
+    expect(response.headers.location).toBe(`${globalThis.baseUrl.app}/api/v1/member/${response.data.id}`)
+    expect(response.data).toMatchObject({
       id: expect.stringMatching(UUID_REGEX) as string,
       url,
       name,
@@ -33,16 +33,16 @@ describe('post /api/v1/member', () => {
       role: '',
       status: 'MEMBER_CANDIDATE_CANDIDATE',
       archived: false,
-    })
+    } as Member)
   })
   it('should not create a new member when url already exist', async () => {
     expect.assertions(2)
-    await FileEndpoint.mockCreateMemberFolder()
+    await mockCreateMemberFolder()
     await dbUtils.addMembers([memberEntity({ id, url, name })])
-    const createMember: CreateMember = { url, name }
+    const createMemberBody: CreateMember = { url, name }
 
-    const response = await MemberEndpoint.createMember(createMember)
-    const mockCalls = await FileEndpoint.verifyCreateMemberFolder()
+    const response = await createMember(createMemberBody)
+    const mockCalls = await verifyCreateMemberFolder()
 
     expect(mockCalls).toBe(0)
     expect(response.status).toBe(500)

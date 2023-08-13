@@ -26,15 +26,15 @@ interface CreateMemberEntity {
 
 export function memberEntity(createEntity: CreateMemberEntity): MemberEntity {
   return {
-    id: createEntity.id || '',
-    url: createEntity.url || '',
+    id: createEntity.id,
+    url: createEntity.url,
     name: createEntity.name,
-    nickname: createEntity.nickname || '',
-    description: createEntity.description || '',
-    joined_at: createEntity.joined_at || '2022-01-01',
-    role: createEntity.role || '',
-    status: createEntity.status || 'MEMBER_CANDIDATE_CANDIDATE',
-    archived: createEntity.archived || false,
+    nickname: createEntity.nickname ?? '',
+    description: createEntity.description ?? '',
+    joined_at: createEntity.joined_at ?? '2022-01-01',
+    role: createEntity.role ?? '',
+    status: createEntity.status ?? 'MEMBER_CANDIDATE_CANDIDATE',
+    archived: createEntity.archived ?? false,
   }
 }
 
@@ -44,7 +44,7 @@ export function insertMemberQuery(members: MemberEntity[]) {
     members
       .map(
         (member) =>
-          `('${member.id}', '${member.url}', '${member.name}', '${member.nickname}', '${member.description}', '${member.joined_at}', '${member.role}', '${member.status}', '${member.archived}')`
+          `('${member.id}', '${member.url}', '${member.name}', '${member.nickname}', '${member.description}', '${member.joined_at}', '${member.role}', '${member.status}', '${member.archived}')`,
       )
       .join(',')
   )
