@@ -55,6 +55,19 @@ jobs:
       - image: alpine:latest
     steps:
       - run: echo "Fork!"
+  docker_publish:
+    executor: docker/machine
+    steps:
+      - attach_workspace:
+          at: ./
+      - run: docker load < bss-web-admin-backend.tar
+      - docker/check:
+          registry: ghcr.io
+          use-docker-credentials-store: true
+      - docker/push:
+          image: bsstudio/bss-web-admin-backend
+          registry: ghcr.io
+          tag: latest
 workflows:
   Build app:
     jobs:
@@ -91,8 +104,26 @@ workflows:
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
           tag: latest
+          executor: docker/docker
+          remote-docker-version: 20.10.24
+          use-remote-docker: true
+          remote-docker-dlc: true
           use-buildkit: true
-          use-docker-credentials-store: true
+          before_build:
+            - restore_cache:
+                key: docker-layers-v1
+                paths:
+                  - bss-web-admin-backend.tar
+          after_build:
+            - run: docker save --output bss-web-admin-backend.tar ghcr.io/bsstudio/bss-web-admin-backend:latest
+            - save_cache:
+                key: docker-layers-v1
+                paths:
+                  - bss-web-admin-backend.tar
+            - persist_to_workspace:
+                root: ./
+                paths:
+                  - bss-web-admin-backend.tar
       - fork_join:
           name: Fork join build
           requires:
@@ -104,14 +135,8 @@ workflows:
             - Integration test
             - Build image
             - Lint Dockerfile
-      - docker/publish:
+      - docker_publish:
           name: Publish image
-          deploy: true
-          image: bsstudio/bss-web-admin-backend
-          registry: ghcr.io
-          tag: latest
-          use-buildkit: true
-          use-docker-credentials-store: true
           requires:
             - Fork join build
           filters:
