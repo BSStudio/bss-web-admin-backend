@@ -106,5 +106,14 @@ docker-compose.yml
 ### Git template
 .git/
 
+### Circle CI
+.circleci/
+
+### SDKman template
+.sdkmanrc
+
+### Renovate template
+renovate.json
+
 ### User template
 db/
