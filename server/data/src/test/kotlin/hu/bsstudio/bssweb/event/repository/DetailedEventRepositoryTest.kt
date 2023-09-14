@@ -21,11 +21,7 @@ import java.util.UUID
 @DataJpaTest
 @ContextConfiguration(classes = [DataConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(
-    properties = [
-        "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///databasename"
-    ]
-)
+@TestPropertySource(properties = ["spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///db"])
 class DetailedEventRepositoryTest(
     @Autowired private val underTest: DetailedEventRepository,
     @Autowired private val simpleEventRepository: SimpleEventRepository,
