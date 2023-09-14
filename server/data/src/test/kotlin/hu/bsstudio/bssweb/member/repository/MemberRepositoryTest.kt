@@ -15,9 +15,11 @@ import java.time.LocalDate
 @DataJpaTest
 @ContextConfiguration(classes = [DataConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(properties = [
-    "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///databasename"
-])
+@TestPropertySource(
+    properties = [
+        "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///databasename"
+    ]
+)
 class MemberRepositoryTest(
     @Autowired private val underTest: MemberRepository
 ) {

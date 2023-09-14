@@ -24,9 +24,11 @@ import java.util.UUID
 @DataJpaTest
 @ContextConfiguration(classes = [DataConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(properties = [
-    "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///databasename"
-])
+@TestPropertySource(
+    properties = [
+        "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///databasename"
+    ]
+)
 class DetailedVideoRepositoryTest(
     @Autowired private val underTest: DetailedVideoRepository,
     @Autowired private val memberRepository: MemberRepository,
