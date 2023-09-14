@@ -17,11 +17,7 @@ import org.springframework.test.context.TestPropertySource
 @DataJpaTest
 @ContextConfiguration(classes = [DataConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(
-    properties = [
-        "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///databasename"
-    ]
-)
+@TestPropertySource(properties = ["spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///db"])
 class EventVideoRepositoryTest(
     @Autowired private val eventRepository: SimpleEventRepository,
     @Autowired private val videoRepository: SimpleVideoRepository,
