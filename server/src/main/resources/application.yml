@@ -3,9 +3,6 @@ spring:
     name: BSS Web admin API
   jpa:
     open-in-view: false
-  flyway:
-    locations:
-      - classpath:db/migration/{vendor}
 springdoc:
   swagger-ui:
     url: /open-api.yaml
