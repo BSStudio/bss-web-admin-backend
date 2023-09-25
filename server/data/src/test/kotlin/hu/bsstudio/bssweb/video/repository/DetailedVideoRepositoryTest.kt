@@ -60,7 +60,8 @@ class DetailedVideoRepositoryTest(
             listOf(
                 DetailedVideoCrewEntity(
                     videoCrewId,
-                    SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId })
+                    SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId }
+                )
             )
         )
         assertThat(underTest.findById(videoId))
