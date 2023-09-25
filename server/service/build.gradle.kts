@@ -9,5 +9,4 @@ dependencies {
     api(project(":server:model"))
     api(project(":server:client"))
     implementation("org.springframework:spring-context")
-    api("org.springframework.boot:spring-boot-starter-data-jpa")
 }
