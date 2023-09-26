@@ -14,21 +14,20 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import java.util.UUID
 
-@RequestMapping("/api/v1/event")
 interface EventOperation {
 
-    @GetMapping
+    @GetMapping("/api/v1/event")
     fun findAllEvent(): ResponseEntity<List<Event>>
 
-    @PostMapping
+    @PostMapping("/api/v1/event")
     fun createEvent(@RequestBody createEvent: CreateEvent): ResponseEntity<Event>
 
-    @GetMapping("/{eventId}")
+    @GetMapping("/api/v1/event/{eventId}")
     fun findEventById(@PathVariable eventId: UUID): ResponseEntity<DetailedEvent>
 
-    @PutMapping("/{eventId}")
+    @PutMapping("/api/v1/event/{eventId}")
     fun updateEvent(@PathVariable eventId: UUID, @RequestBody updateEvent: UpdateEvent): ResponseEntity<DetailedEvent>
 
-    @DeleteMapping("/{eventId}")
+    @DeleteMapping("/api/v1/event/{eventId}")
     fun deleteEvent(@PathVariable eventId: UUID): ResponseEntity<Void>
 }

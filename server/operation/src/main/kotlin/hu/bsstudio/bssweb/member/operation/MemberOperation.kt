@@ -14,24 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.util.UUID
 
-@RequestMapping("/api/v1/member")
 interface MemberOperation {
 
-    @GetMapping
+    @GetMapping("/api/v1/member")
     fun getAllMembers(): ResponseEntity<List<Member>>
 
-    @PostMapping
+    @PostMapping("/api/v1/member")
     fun createMember(@RequestBody member: CreateMember): ResponseEntity<Member>
 
-    @PutMapping("/{memberId}")
+    @PutMapping("/api/v1/member/{memberId}")
     fun updateMember(@PathVariable memberId: UUID, @RequestBody updateMember: UpdateMember): ResponseEntity<Member>
 
-    @PutMapping("/archive")
+    @PutMapping("/api/v1/member/archive")
     fun archiveMembers(@RequestParam memberIds: List<UUID>, @RequestParam(defaultValue = "true") archive: Boolean): ResponseEntity<List<UUID>>
 
-    @GetMapping("/{memberId}")
+    @GetMapping("/api/v1/member/{memberId}")
     fun getMemberById(@PathVariable memberId: UUID): ResponseEntity<Member>
 
-    @DeleteMapping("/{memberId}")
+    @DeleteMapping("/api/v1/member/{memberId}")
     fun removeMember(@PathVariable memberId: UUID): ResponseEntity<Void>
 }

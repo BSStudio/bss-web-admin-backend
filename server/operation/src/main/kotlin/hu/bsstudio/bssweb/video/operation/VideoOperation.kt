@@ -17,33 +17,32 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.util.UUID
 
-@RequestMapping("/api/v1/video")
 interface VideoOperation {
 
-    @GetMapping("/all")
+    @GetMapping("/api/v1/video/all")
     fun getAllVideos(): ResponseEntity<List<Video>>
 
-    @GetMapping
+    @GetMapping("/api/v1/video")
     fun getAllVideos(pageable: Pageable): ResponseEntity<Page<Video>>
 
-    @PostMapping
+    @PostMapping("/api/v1/video")
     fun createVideo(@RequestBody createVideo: CreateVideo): ResponseEntity<Video>
 
-    @PutMapping("/visible")
+    @PutMapping("/api/v1/video/visible")
     fun changeVideoVisibility(
         @RequestParam videoIds: List<UUID>,
         @RequestParam visible: Boolean
     ): ResponseEntity<List<UUID>>
 
-    @GetMapping("/{videoId}")
+    @GetMapping("/api/v1/video/{videoId}")
     fun getVideo(@PathVariable videoId: UUID): ResponseEntity<DetailedVideo>
 
-    @PutMapping("/{videoId}")
+    @PutMapping("/api/v1/video/{videoId}")
     fun updateVideo(
         @PathVariable videoId: UUID,
         @RequestBody updateVideo: UpdateVideo
     ): ResponseEntity<DetailedVideo>
 
-    @DeleteMapping("/{videoId}")
+    @DeleteMapping("/api/v1/video/{videoId}")
     fun deleteVideo(@PathVariable videoId: UUID): ResponseEntity<Void>
 }

@@ -5,5 +5,5 @@ plugins {
 
 dependencies {
     api(project(":server:operation"))
-    api("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 }

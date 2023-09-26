@@ -5,9 +5,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 
-@RequestMapping("/api/v1/metrics")
 interface MetricsOperation {
 
-    @GetMapping
+    @GetMapping("/api/v1/metrics")
     fun getMetrics(): ResponseEntity<BssMetrics>
 }
