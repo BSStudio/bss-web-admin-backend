@@ -23,10 +23,7 @@ import java.time.LocalDate
         "spring.cloud.openfeign.client.config.member.url=http://localhost:9999"
     ]
 )
-class CreateMemberTest {
-
-    @Autowired
-    private lateinit var client: MemberClient
+class CreateMemberIntegrationTest(@Autowired private val client: MemberClient) {
 
     @BeforeEach
     fun setUp() {
