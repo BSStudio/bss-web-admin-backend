@@ -15,14 +15,12 @@ import org.springframework.http.HttpStatusCode
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import java.net.URI
-import java.nio.charset.Charset
 import java.time.LocalDate
-import kotlin.random.Random
 
 @SpringJUnitConfig(classes = [BssFeignConfig::class])
 @TestPropertySource(
     properties = [
-        "spring.cloud.openfeign.client.config.member.url=http://localhost:9999",
+        "spring.cloud.openfeign.client.config.member.url=http://localhost:9999"
     ]
 )
 class CreateMemberTest {
@@ -57,8 +55,12 @@ class CreateMemberTest {
                 )
             )
         assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(201))
-        assertThat(actual.headers.location).isEqualTo(URI.create("http://localhost:9999/api/v1/member/${actual.body!!
-            .id}"))
+        assertThat(actual.headers.location).isEqualTo(
+            URI.create(
+                "http://localhost:9999/api/v1/member/${actual.body!!
+                    .id}"
+            )
+        )
         actual.body?.let { client.removeMember(it.id) }
     }
 
@@ -68,9 +70,8 @@ class CreateMemberTest {
 
         assertThatExceptionOfType(FeignException.InternalServerError::class.java)
             .isThrownBy { client.createMember(CreateMember(url = "bcsik", name = "Bence Csik")) }
-            .satisfies( { assertThat(it.status()).isEqualTo(500) } )
-            .satisfies( { assertThat(it.contentUTF8()).contains(""","status":500,"error":"Internal Server Error","path":"/api/v1/member"}""") } )
-
+            .satisfies({ assertThat(it.status()).isEqualTo(500) })
+            .satisfies({ assertThat(it.contentUTF8()).contains(""","status":500,"error":"Internal Server Error","path":"/api/v1/member"}""") })
 
         member.body?.let { client.removeMember(it.id) }
     }

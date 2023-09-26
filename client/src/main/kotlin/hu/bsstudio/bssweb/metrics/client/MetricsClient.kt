@@ -4,4 +4,4 @@ import hu.bsstudio.bssweb.metrics.operation.MetricsOperation
 import org.springframework.cloud.openfeign.FeignClient
 
 @FeignClient
-interface MetricsClient: MetricsOperation
+interface MetricsClient : MetricsOperation

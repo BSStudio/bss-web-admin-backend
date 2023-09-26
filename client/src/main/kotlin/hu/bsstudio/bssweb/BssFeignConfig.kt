@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb
 
 import feign.auth.BasicAuthRequestInterceptor
+import org.bouncycastle.cms.RecipientId.password
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration
 import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration
@@ -14,12 +15,12 @@ import org.springframework.context.annotation.Configuration
 class BssFeignConfig {
 
     @Configuration
-    class DefaultFeignConfig {
+    class DefaultFeignConfig(
+        @Value("\${hu.bsstudio.bssweb.client.username:user}") val username: String,
+        @Value("\${hu.bsstudio.bssweb.client.password:password}") val password: String
+    ) {
 
         @Bean
-        fun interceptor(
-            @Value("\${hu.bsstudio.bssweb.client.username:user}") username: String,
-            @Value("\${hu.bsstudio.bssweb.client.password:password}") password: String
-        ) = BasicAuthRequestInterceptor(username, password)
+        fun interceptor() = BasicAuthRequestInterceptor(this.username, this.password)
     }
 }

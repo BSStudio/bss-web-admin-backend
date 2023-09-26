@@ -4,4 +4,4 @@ import hu.bsstudio.bssweb.member.operation.MemberOperation
 import org.springframework.cloud.openfeign.FeignClient
 
 @FeignClient(name = "member")
-interface MemberClient: MemberOperation
+interface MemberClient : MemberOperation
