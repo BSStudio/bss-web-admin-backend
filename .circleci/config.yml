@@ -68,6 +68,11 @@ workflows:
           command: ktlintCheck --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
+      - gradle/run:
+          name: Integration test
+          command: integrationTest --parallel
+          deps_checksum_file: build.gradle.kts
+          executor: jdk
       - gradle_coverage:
           name: Coverage verification
       - gradle/run:
@@ -113,6 +118,7 @@ workflows:
             - Coverage verification
             - Build boot jar
             - Unit test
+            - Integration test
             - Build image
             - Lint Dockerfile
       - docker_publish:
