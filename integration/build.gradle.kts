@@ -18,6 +18,6 @@ dependencies {
     intTestImplementation("org.testcontainers:junit-jupiter")
     intTestImplementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     intTestImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(module = "hamcrest")     // require developers to use assertJ
+        exclude(module = "hamcrest") // require developers to use assertJ
     }
 }
