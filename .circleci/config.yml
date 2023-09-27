@@ -42,6 +42,17 @@ jobs:
           deps_checksum_file: build.gradle.kts
           steps:
             - run: ./gradlew jacocoTestCoverageVerification --parallel
+  gradle_integration:
+    executor: jdk
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 20.10.24
+      - gradle/with_cache:
+          deps_checksum_file: build.gradle.kts
+          steps:
+            - run: ./gradlew integrationTest --parallel
   fork_join:
     docker:
       - image: alpine:latest
@@ -68,11 +79,8 @@ workflows:
           command: ktlintCheck --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
-      - gradle/run:
+      - gradle_integration:
           name: Integration test
-          command: integrationTest --parallel
-          deps_checksum_file: build.gradle.kts
-          executor: jdk
       - gradle_coverage:
           name: Coverage verification
       - gradle/run:
