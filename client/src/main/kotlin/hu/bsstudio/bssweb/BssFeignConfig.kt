@@ -16,8 +16,8 @@ class BssFeignConfig {
 
     @Configuration
     class DefaultFeignConfig(
-        @Value("\${hu.bsstudio.bssweb.client.username:user}") val username: String,
-        @Value("\${hu.bsstudio.bssweb.client.password:password}") val password: String
+        @Value("\${bss.client.username}") val username: String,
+        @Value("\${bss.client.password}") val password: String
     ) {
 
         @Bean

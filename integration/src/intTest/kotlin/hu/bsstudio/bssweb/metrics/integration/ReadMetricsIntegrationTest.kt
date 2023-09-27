@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.metrics.integration
 
-import hu.bsstudio.bssweb.BssFeignConfig
+import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.member.client.MemberClient
@@ -14,24 +14,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
-import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 
-@SpringJUnitConfig(classes = [BssFeignConfig::class])
-@TestPropertySource(
-    properties = [
-        "spring.cloud.openfeign.client.config.metrics.url=http://localhost:9999",
-        "spring.cloud.openfeign.client.config.video.url=http://localhost:9999",
-        "spring.cloud.openfeign.client.config.event.url=http://localhost:9999",
-        "spring.cloud.openfeign.client.config.member.url=http://localhost:9999"
-    ]
-)
 class ReadMetricsIntegrationTest(
     @Autowired private val client: MetricsClient,
     @Autowired private val videoClient: VideoClient,
     @Autowired private val eventClient: EventClient,
     @Autowired private val memberClient: MemberClient
-) {
+) : IntegrationTest() {
 
     @BeforeEach
     fun setUp() {

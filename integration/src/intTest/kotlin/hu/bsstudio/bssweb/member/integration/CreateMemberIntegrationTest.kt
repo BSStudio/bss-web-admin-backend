@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.member.integration
 
 import feign.FeignException
-import hu.bsstudio.bssweb.BssFeignConfig
+import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
@@ -12,18 +12,12 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
-import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import java.net.URI
 import java.time.LocalDate
 
-@SpringJUnitConfig(classes = [BssFeignConfig::class])
-@TestPropertySource(
-    properties = [
-        "spring.cloud.openfeign.client.config.member.url=http://localhost:9999"
-    ]
-)
-class CreateMemberIntegrationTest(@Autowired private val client: MemberClient) {
+class CreateMemberIntegrationTest(
+    @Autowired private val client: MemberClient
+) : IntegrationTest() {
 
     @BeforeEach
     fun setUp() {
@@ -54,8 +48,7 @@ class CreateMemberIntegrationTest(@Autowired private val client: MemberClient) {
         assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(201))
         assertThat(actual.headers.location).isEqualTo(
             URI.create(
-                "http://localhost:9999/api/v1/member/${actual.body!!
-                    .id}"
+                "http://localhost:9999/api/v1/member/${actual.body!!.id}"
             )
         )
         actual.body?.let { client.removeMember(it.id) }
