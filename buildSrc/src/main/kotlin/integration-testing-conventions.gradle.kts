@@ -25,6 +25,10 @@ val integrationTest = task<Test>("integrationTest") {
     shouldRunAfter("test")
 
     useJUnitPlatform()
+
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 tasks.check { dependsOn(integrationTest) }
