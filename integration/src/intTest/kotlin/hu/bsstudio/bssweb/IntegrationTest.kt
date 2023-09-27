@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb
 
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.TestPropertySource
@@ -22,6 +23,7 @@ open class IntegrationTest {
     companion object {
         @JvmStatic
         @Container
+        @ServiceConnection
         private val container = DockerComposeContainer(
             File("../docker-compose.yml"),
             File("../docker-compose.ci.yml")

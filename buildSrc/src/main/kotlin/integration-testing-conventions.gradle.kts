@@ -33,7 +33,7 @@ val integrationTest = task<Test>("integrationTest") {
     useJUnitPlatform()
 
     testLogging {
-        events("passed", "skipped", "failed")
+        showStandardStreams = true
     }
 }
 
