@@ -15,7 +15,7 @@ jobs:
     parameters:
       command:
         type: string
-        default: ./gradlew test --continue --parallel
+        default: test --continue --parallel
       after:
         type: steps
         default: []
@@ -31,7 +31,7 @@ jobs:
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           steps:
-            - run: << parameters.command >>
+            - run: ./gradlew << parameters.command >>
       - steps: << parameters.after >>
   fork_join:
     docker:
@@ -59,17 +59,16 @@ workflows:
           command: ktlintCheck --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
-      - gradle_docker:
+      - gradle/test:
+          executor: jdk-machine
           name: Integration test
-          command: ./gradlew integrationTest --continue --parallel
-          after:
-            - gradle/collect_test_results:
-                reports_path: integration/build/reports
-                test_results_path: integration/build/test-results
+          test_command: integrationTest --continue --parallel
+          deps_checksum_file: build.gradle.kts
+          reports_path: integration/build/reports
+          test_results_path: integration/build/test-results
       - gradle_docker:
           name: Coverage verification
-          executor: jdk-machine
-          command: ./gradlew jacocoTestCoverageVerification --parallel
+          command: jacocoTestCoverageVerification --parallel
       - gradle/run:
           name: Build boot jar
           command: bootJar --parallel
