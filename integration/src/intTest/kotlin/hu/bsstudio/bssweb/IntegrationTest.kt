@@ -9,7 +9,6 @@ import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.io.File
 
-
 @SpringJUnitConfig(classes = [BssFeignConfig::class])
 @TestPropertySource(
     properties = [
