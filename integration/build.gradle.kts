@@ -1,7 +1,6 @@
 plugins {
-    id("spring-module-conventions")
     id("ktlint-conventions")
-    id("testing-conventions")
+    id("integration-testing-conventions")
 }
 
 tasks.jacocoTestCoverageVerification {
@@ -15,7 +14,10 @@ tasks.jacocoTestReport {
 dependencies {
     api(project(":server:data"))
     api(project(":client"))
-    testImplementation("org.springframework.boot:spring-boot-testcontainers")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    intTestImplementation("org.springframework.boot:spring-boot-testcontainers")
+    intTestImplementation("org.testcontainers:junit-jupiter")
+    intTestImplementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    intTestImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "hamcrest")     // require developers to use assertJ
+    }
 }
