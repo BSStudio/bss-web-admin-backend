@@ -11,12 +11,14 @@ import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatusCode
 import java.net.URI
 import java.time.LocalDate
 
 class CreateMemberIntegrationTest(
-    @Autowired private val client: MemberClient
+    @Autowired private val client: MemberClient,
+    @Value("\${bss.client.url}") private val url: String
 ) : IntegrationTest() {
 
     @BeforeEach
@@ -47,9 +49,7 @@ class CreateMemberIntegrationTest(
             )
         assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(201))
         assertThat(actual.headers.location).isEqualTo(
-            URI.create(
-                "http://localhost:9999/api/v1/member/${actual.body!!.id}"
-            )
+            URI.create("$url/api/v1/member/${actual.body!!.id}")
         )
         actual.body?.let { client.removeMember(it.id) }
     }

@@ -26,6 +26,7 @@ open class IntegrationTest {
             File("../docker-compose.yml"),
             File("../docker-compose.ci.yml")
         )
+            .withExposedService("app_1", 8080)
 
         @JvmStatic
         @DynamicPropertySource
