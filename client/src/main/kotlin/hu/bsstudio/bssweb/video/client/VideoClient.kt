@@ -4,4 +4,4 @@ import hu.bsstudio.bssweb.video.operation.VideoOperation
 import org.springframework.cloud.openfeign.FeignClient
 
 @FeignClient(name = "video")
-interface VideoClient: VideoOperation
+interface VideoClient : VideoOperation

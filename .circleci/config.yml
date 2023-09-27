@@ -21,7 +21,7 @@ jobs:
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           steps:
-            - run: ./gradlew test --continue --parallel
+            - run: ./gradlew :server:test --continue --parallel
       - run:
           name: Save test results
           command: |
@@ -41,7 +41,7 @@ jobs:
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           steps:
-            - run: ./gradlew jacocoTestCoverageVerification --parallel
+            - run: ./gradlew :server:jacocoTestCoverageVerification --parallel
   fork_join:
     docker:
       - image: alpine:latest
