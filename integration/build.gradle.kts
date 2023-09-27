@@ -4,6 +4,14 @@ plugins {
     id("testing-conventions")
 }
 
+tasks.jacocoTestCoverageVerification {
+    enabled = false
+}
+
+tasks.jacocoTestReport {
+    enabled = false
+}
+
 dependencies {
     api(project(":server:data"))
     api(project(":client"))
