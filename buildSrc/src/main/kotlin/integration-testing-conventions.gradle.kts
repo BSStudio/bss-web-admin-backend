@@ -16,6 +16,12 @@ val intTestRuntimeOnly by configurations.getting
 
 configurations["intTestRuntimeOnly"].extendsFrom(configurations.runtimeOnly.get())
 
+dependencies {
+    intTestImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "hamcrest") // require developers to use assertJ
+    }
+}
+
 val integrationTest = task<Test>("integrationTest") {
     description = "Runs integration tests."
     group = "verification"
