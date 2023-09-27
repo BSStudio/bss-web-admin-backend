@@ -13,7 +13,6 @@ import java.io.File
 @SpringJUnitConfig(classes = [BssFeignConfig::class])
 @TestPropertySource(
     properties = [
-        "bss.client.url=http://localhost:9999",
         "bss.client.username=user",
         "bss.client.password=password"
     ]
@@ -33,8 +32,8 @@ open class IntegrationTest {
         @DynamicPropertySource
         fun properties(registry: DynamicPropertyRegistry) {
             registry.add("bss.client.url") {
-                val host = container.getServiceHost("app", 8080)
-                val port = container.getServicePort("app", 8080)
+                val host = container.getServiceHost("app_1", 8080)
+                val port = container.getServicePort("app_1", 8080)
                 "http://$host:$port"
             }
         }
