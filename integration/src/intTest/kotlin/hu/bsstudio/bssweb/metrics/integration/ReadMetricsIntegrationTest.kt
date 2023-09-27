@@ -11,12 +11,10 @@ import hu.bsstudio.bssweb.video.client.VideoClient
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
-@Disabled
 class ReadMetricsIntegrationTest(
     @Autowired private val client: MetricsClient,
     @Autowired private val videoClient: VideoClient,
