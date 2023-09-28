@@ -16,6 +16,9 @@ jobs:
       command:
         type: string
         default: test --continue --parallel
+      before:
+        type: steps
+        default: []
       after:
         type: steps
         default: []
@@ -28,6 +31,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
           version: 20.10.24
+      -  steps: << parameters.before >>
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           steps:

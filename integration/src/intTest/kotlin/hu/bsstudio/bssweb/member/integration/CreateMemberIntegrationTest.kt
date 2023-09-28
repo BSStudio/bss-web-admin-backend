@@ -4,11 +4,11 @@ import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.common.MemberStatus
+import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -21,14 +21,9 @@ class CreateMemberIntegrationTest(
     @Value("\${bss.client.url}") private val url: String
 ) : IntegrationTest() {
 
-    @BeforeEach
-    fun setUp() {
-        client.getAllMembers().body?.forEach { client.removeMember(it.id) }
-    }
-
     @Test
     fun `it should return 200 and member body`() {
-        val actual = client.createMember(CreateMember(url = "bcsik", name = "Bence Csik"))
+        val actual = client.createMember(CreateMember(url = URL, name = NAME))
 
         assertThat(actual.body)
             .isNotNull
@@ -37,8 +32,8 @@ class CreateMemberIntegrationTest(
             .isEqualTo(
                 Member(
                     id = actual.body!!.id,
-                    url = "bcsik",
-                    name = "Bence Csik",
+                    url = URL,
+                    name = NAME,
                     nickname = "",
                     description = "",
                     joinedAt = LocalDate.now(),
@@ -56,13 +51,16 @@ class CreateMemberIntegrationTest(
 
     @Test
     fun `it should return 500 when duplicate urls were specified`() {
-        val member = client.createMember(CreateMember(url = "bcsik", name = "Bence Csik"))
+        memberRepository.save(DetailedMemberEntity(url = URL, name = NAME))
 
         assertThatExceptionOfType(FeignException.InternalServerError::class.java)
-            .isThrownBy { client.createMember(CreateMember(url = "bcsik", name = "Bence Csik")) }
+            .isThrownBy { client.createMember(CreateMember(url = URL, name = NAME)) }
             .satisfies({ assertThat(it.status()).isEqualTo(500) })
             .satisfies({ assertThat(it.contentUTF8()).contains(""","status":500,"error":"Internal Server Error","path":"/api/v1/member"}""") })
+    }
 
-        member.body?.let { client.removeMember(it.id) }
+    private companion object {
+        private const val URL = "bcsik"
+        private const val NAME = "Bence Csik"
     }
 }

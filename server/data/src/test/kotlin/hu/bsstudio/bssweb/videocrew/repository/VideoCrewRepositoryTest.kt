@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.videocrew.repository
 
-import hu.bsstudio.bssweb.DataConfiguration
+import hu.bsstudio.bssweb.BssDataConfiguration
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
@@ -16,7 +16,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 
 @DataJpaTest
-@ContextConfiguration(classes = [DataConfiguration::class])
+@ContextConfiguration(classes = [BssDataConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(
     properties = [

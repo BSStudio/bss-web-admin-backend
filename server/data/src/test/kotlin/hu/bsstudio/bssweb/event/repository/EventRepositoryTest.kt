@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.event.repository
 
-import hu.bsstudio.bssweb.DataConfiguration
+import hu.bsstudio.bssweb.BssDataConfiguration
 import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -12,7 +12,7 @@ import org.springframework.test.context.TestPropertySource
 import java.time.LocalDate
 
 @DataJpaTest
-@ContextConfiguration(classes = [DataConfiguration::class])
+@ContextConfiguration(classes = [BssDataConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(
     properties = [

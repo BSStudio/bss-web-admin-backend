@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.member.repository
 
-import hu.bsstudio.bssweb.DataConfiguration
+import hu.bsstudio.bssweb.BssDataConfiguration
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import org.assertj.core.api.Assertions.assertThat
@@ -13,7 +13,7 @@ import org.springframework.test.context.TestPropertySource
 import java.time.LocalDate
 
 @DataJpaTest
-@ContextConfiguration(classes = [DataConfiguration::class])
+@ContextConfiguration(classes = [BssDataConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(
     properties = [

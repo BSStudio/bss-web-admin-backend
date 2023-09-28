@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.eventvideo.repository
 
-import hu.bsstudio.bssweb.DataConfiguration
+import hu.bsstudio.bssweb.BssDataConfiguration
 import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
 import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
@@ -15,7 +15,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 
 @DataJpaTest
-@ContextConfiguration(classes = [DataConfiguration::class])
+@ContextConfiguration(classes = [BssDataConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(
     properties = [

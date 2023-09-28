@@ -1,43 +1,35 @@
 package hu.bsstudio.bssweb
 
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection
-import org.springframework.test.context.DynamicPropertyRegistry
-import org.springframework.test.context.DynamicPropertySource
+import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
+import hu.bsstudio.bssweb.member.repository.MemberRepository
+import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
+import org.junit.jupiter.api.BeforeEach
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
-import org.testcontainers.containers.DockerComposeContainer
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
-import java.io.File
 
-@SpringJUnitConfig(classes = [BssFeignConfig::class])
+@SpringJUnitConfig(classes = [BssFeignConfig::class, BssDataConfiguration::class])
 @TestPropertySource(
     properties = [
+        "bss.client.url=http://localhost:8080",
         "bss.client.username=user",
-        "bss.client.password=password"
+        "bss.client.password=password",
+        "spring.datasource.url=jdbc:postgresql://localhost:5432/postgres?currentSchema=bss_web",
+        "spring.datasource.username=postgres",
+        "spring.datasource.password=postgres"
     ]
 )
-@Testcontainers
 open class IntegrationTest {
+    @Autowired protected lateinit var videoRepository: DetailedVideoRepository
 
-    companion object {
-        @JvmStatic
-        @Container
-        @ServiceConnection
-        private val container = DockerComposeContainer(
-            File("../docker-compose.yml"),
-            File("../docker-compose.ci.yml")
-        )
-            .withExposedService("app_1", 8080)
+    @Autowired protected lateinit var eventRepository: DetailedEventRepository
 
-        @JvmStatic
-        @DynamicPropertySource
-        fun properties(registry: DynamicPropertyRegistry) {
-            registry.add("bss.client.url") {
-                val host = container.getServiceHost("app_1", 8080)
-                val port = container.getServicePort("app_1", 8080)
-                "http://$host:$port"
-            }
-        }
+    @Autowired protected lateinit var memberRepository: MemberRepository
+
+    @BeforeEach
+    fun setUp() {
+        this.memberRepository.deleteAll()
+        this.videoRepository.deleteAll()
+        this.eventRepository.deleteAll()
     }
 }

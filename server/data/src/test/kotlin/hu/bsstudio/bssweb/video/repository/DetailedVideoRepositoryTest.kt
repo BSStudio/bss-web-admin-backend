@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.video.repository
 
-import hu.bsstudio.bssweb.DataConfiguration
+import hu.bsstudio.bssweb.BssDataConfiguration
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
 import hu.bsstudio.bssweb.member.repository.MemberRepository
@@ -22,7 +22,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @DataJpaTest
-@ContextConfiguration(classes = [DataConfiguration::class])
+@ContextConfiguration(classes = [BssDataConfiguration::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(
     properties = [
