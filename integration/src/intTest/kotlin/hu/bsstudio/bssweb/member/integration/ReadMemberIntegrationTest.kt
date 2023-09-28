@@ -1,13 +1,16 @@
 package hu.bsstudio.bssweb.member.integration
 
+import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.model.Member
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
+import java.util.*
 
 class ReadMemberIntegrationTest(
     @Autowired private val client: MemberClient
@@ -31,6 +34,11 @@ class ReadMemberIntegrationTest(
             archived = entity.archived
         ))
         assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
+    }
 
+    @Test
+    fun `it should return 404 when member not found`() {
+        Assertions.assertThatExceptionOfType(FeignException.NotFound::class.java)
+            .isThrownBy { client.getMemberById(UUID.fromString("00000000-0000-0000-0000-000000000000")) }
     }
 }
