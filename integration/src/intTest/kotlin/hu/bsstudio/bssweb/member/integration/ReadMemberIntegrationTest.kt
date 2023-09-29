@@ -22,17 +22,19 @@ class ReadMemberIntegrationTest(
 
         val actual = client.getMemberById(entity.id)
 
-        assertThat(actual.body).isEqualTo(Member(
-            id = entity.id,
-            url = entity.url,
-            name = entity.name,
-            nickname = entity.nickname,
-            description = entity.description,
-            joinedAt = entity.joinedAt,
-            role = entity.role,
-            status = entity.status,
-            archived = entity.archived
-        ))
+        assertThat(actual.body).isEqualTo(
+            Member(
+                id = entity.id,
+                url = entity.url,
+                name = entity.name,
+                nickname = entity.nickname,
+                description = entity.description,
+                joinedAt = entity.joinedAt,
+                role = entity.role,
+                status = entity.status,
+                archived = entity.archived
+            )
+        )
         assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
     }
 

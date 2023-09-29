@@ -1,4 +1,4 @@
-package hu.bsstudio.bssweb.member.integration;
+package hu.bsstudio.bssweb.member.integration
 
 import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
@@ -25,17 +25,19 @@ class UpdateMemberIntegrationTest(
 
         val actual = client.updateMember(entity.id, UPDATE_MEMBER)
 
-        assertThat(actual.body).isEqualTo(Member(
-            id = entity.id,
-            url = UPDATE_MEMBER.url,
-            name = UPDATE_MEMBER.name,
-            nickname = UPDATE_MEMBER.nickname,
-            description = UPDATE_MEMBER.description,
-            joinedAt = UPDATE_MEMBER.joinedAt,
-            role = UPDATE_MEMBER.role,
-            status = UPDATE_MEMBER.status,
-            archived = UPDATE_MEMBER.archived
-        ))
+        assertThat(actual.body).isEqualTo(
+            Member(
+                id = entity.id,
+                url = UPDATE_MEMBER.url,
+                name = UPDATE_MEMBER.name,
+                nickname = UPDATE_MEMBER.nickname,
+                description = UPDATE_MEMBER.description,
+                joinedAt = UPDATE_MEMBER.joinedAt,
+                role = UPDATE_MEMBER.role,
+                status = UPDATE_MEMBER.status,
+                archived = UPDATE_MEMBER.archived
+            )
+        )
         assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
     }
 

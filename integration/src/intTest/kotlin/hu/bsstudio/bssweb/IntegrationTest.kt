@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb
 
+import hu.bsstudio.bssweb.config.BssDataConfig
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
@@ -8,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 
-@SpringJUnitConfig(classes = [BssFeignConfig::class, BssDataConfiguration::class])
+@SpringJUnitConfig(classes = [BssFeignConfig::class, BssDataConfig::class])
 @TestPropertySource(
     properties = [
         "bss.client.url=http://localhost:8080",
