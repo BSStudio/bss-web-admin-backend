@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.videocrew.repository
 
-import hu.bsstudio.bssweb.BssDataConfiguration
+import hu.bsstudio.bssweb.DataTest
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
@@ -10,24 +10,12 @@ import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestPropertySource
 
-@DataJpaTest
-@ContextConfiguration(classes = [BssDataConfiguration::class])
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(
-    properties = [
-        "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///databasename"
-    ]
-)
 class VideoCrewRepositoryTest(
     @Autowired private val underTest: VideoCrewRepository,
     @Autowired private val memberRepository: MemberRepository,
     @Autowired private val videoRepository: SimpleVideoRepository
-) {
+) : DataTest() {
 
     @Test
     fun `create read delete`() {

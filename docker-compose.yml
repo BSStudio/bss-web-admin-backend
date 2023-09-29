@@ -28,7 +28,7 @@ services:
       management.influx.metrics.export.password: "password"
       management.influx.metrics.export.bucket: "bucket"
   db:
-    image: "postgres:15.1-alpine3.16"
+    image: "postgres:16.0-alpine3.18"
     environment:
       POSTGRES_PASSWORD: "postgres"
     ports:
