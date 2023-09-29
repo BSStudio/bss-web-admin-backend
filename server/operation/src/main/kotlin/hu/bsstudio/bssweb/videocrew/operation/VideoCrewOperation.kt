@@ -7,17 +7,15 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
 
-@RequestMapping("/api/v1/videoCrew")
 interface VideoCrewOperation {
 
-    @GetMapping("/position")
+    @GetMapping("/api/v1/videoCrew/position")
     fun getPositions(): ResponseEntity<List<String>>
 
-    @PutMapping
+    @PutMapping("/api/v1/videoCrew")
     fun addPosition(@ModelAttribute crew: VideoCrewRequest): ResponseEntity<DetailedVideo>
 
-    @DeleteMapping
+    @DeleteMapping("/api/v1/videoCrew")
     fun removePosition(@ModelAttribute crew: VideoCrewRequest): ResponseEntity<DetailedVideo>
 }
