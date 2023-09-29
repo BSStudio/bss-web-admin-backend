@@ -116,5 +116,4 @@ docker-compose.yml
 renovate.json
 
 ### User template
-integration/
 db/
