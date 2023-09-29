@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb
 
-import hu.bsstudio.bssweb.config.BssDataConfig
+import hu.bsstudio.bssweb.config.BssFeignConfig
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
@@ -9,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 
-@SpringJUnitConfig(classes = [BssFeignConfig::class, BssDataConfig::class])
+@SpringJUnitConfig(classes = [BssFeignConfig::class, DataConfig::class])
 @TestPropertySource(
     properties = [
         "bss.client.url=http://localhost:8080",
         "bss.client.username=user",
         "bss.client.password=password",
+        "spring.flyway.enabled=false",
         "spring.datasource.url=jdbc:postgresql://localhost:5432/postgres?currentSchema=bss_web",
         "spring.datasource.username=postgres",
         "spring.datasource.password=postgres"
