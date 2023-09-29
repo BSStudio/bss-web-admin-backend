@@ -10,7 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
-import java.util.*
+import java.util.UUID
 
 class ReadMemberIntegrationTest(
     @Autowired private val client: MemberClient

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 class UpdateMemberIntegrationTest(
     @Autowired private val client: MemberClient
