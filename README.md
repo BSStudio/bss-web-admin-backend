@@ -16,6 +16,33 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=BSStudio_bss-web-admin-backend&metric=sqale_index)](https://sonarcloud.io/dashboard?id=BSStudio_bss-web-admin-backend)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=BSStudio_bss-web-admin-backend&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=BSStudio_bss-web-admin-backend)
 
+```mermaid
+---
+title: Project structure
+---
+classDiagram
+    direction TB
+
+
+    client ..> operation
+    web ..> operation
+    web ..> service
+    service ..> data
+    operation ..> model
+    service ..> model
+    integration ..> client
+    src ..> web
+
+    %% namespace server {
+    %%     class src
+    %%     class web
+    %%     class operation
+    %%     class service
+    %%     class model
+    %%     class data
+    %% }
+```
+
 ## Development
 ### Lint
 ```shell

@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.video.repository
 
-import hu.bsstudio.bssweb.DataConfiguration
+import hu.bsstudio.bssweb.DataTest
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
 import hu.bsstudio.bssweb.member.repository.MemberRepository
@@ -13,29 +13,17 @@ import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestPropertySource
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
-@DataJpaTest
-@ContextConfiguration(classes = [DataConfiguration::class])
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(
-    properties = [
-        "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///databasename"
-    ]
-)
 class DetailedVideoRepositoryTest(
     @Autowired private val underTest: DetailedVideoRepository,
     @Autowired private val memberRepository: MemberRepository,
     @Autowired private val simpleVideoRepository: SimpleVideoRepository,
     @Autowired private val videoCrewRepository: VideoCrewRepository,
     @Autowired private val entityManager: TestEntityManager
-) {
+) : DataTest() {
     @Test
     internal fun `create read delete`() {
         assertThat(underTest.count()).isZero
@@ -67,7 +55,15 @@ class DetailedVideoRepositoryTest(
         this.videoCrewRepository.save(VideoCrewEntity(videoCrewId))
         entityManager.run { flush(); clear() }
 
-        val expected = createExpected(videoId, listOf(DetailedVideoCrewEntity(videoCrewId, SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId })))
+        val expected = createExpected(
+            videoId,
+            listOf(
+                DetailedVideoCrewEntity(
+                    videoCrewId,
+                    SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId }
+                )
+            )
+        )
         assertThat(underTest.findById(videoId))
             .isPresent()
             .get()

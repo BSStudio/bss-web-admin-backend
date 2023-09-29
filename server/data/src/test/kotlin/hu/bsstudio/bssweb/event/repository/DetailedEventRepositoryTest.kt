@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.event.repository
 
-import hu.bsstudio.bssweb.DataConfiguration
+import hu.bsstudio.bssweb.DataTest
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
@@ -10,30 +10,17 @@ import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.TestPropertySource
 import java.time.LocalDate
-import java.util.UUID
+import java.util.*
 
-@DataJpaTest
-@ContextConfiguration(classes = [DataConfiguration::class])
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(
-    properties = [
-        "spring.datasource.url=jdbc:tc:postgresql:15.4-alpine:///databasename"
-    ]
-)
 class DetailedEventRepositoryTest(
     @Autowired private val underTest: DetailedEventRepository,
     @Autowired private val simpleEventRepository: SimpleEventRepository,
     @Autowired private val simpleVideoRepository: SimpleVideoRepository,
     @Autowired private val eventVideoRepository: EventVideoRepository,
     @Autowired private val entityManager: TestEntityManager
-) {
-
+) : DataTest() {
     @Test
     internal fun `create read delete`() {
         assertThat(underTest.count()).isZero
