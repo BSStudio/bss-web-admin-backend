@@ -1,0 +1,9 @@
+package hu.bsstudio.bssweb.video.integration
+
+import hu.bsstudio.bssweb.IntegrationTest
+import hu.bsstudio.bssweb.video.client.VideoClient
+import org.springframework.beans.factory.annotation.Autowired
+
+class CreateVideoIntegrationTest(
+    @Autowired private val client: VideoClient
+) : IntegrationTest()

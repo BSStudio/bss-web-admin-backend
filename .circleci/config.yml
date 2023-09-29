@@ -7,12 +7,22 @@ executors:
   jdk:
     docker:
       - image: cimg/openjdk:17.0.8
-  node:
+  jdk-machine:
     machine:
       image: ubuntu-2204:2022.10.2
 jobs:
-  gradle_test:
-    executor: jdk
+  gradle_docker:
+    parameters:
+      command:
+        type: string
+        default: test --continue --parallel
+      after:
+        type: steps
+        default: []
+      executor:
+        type: executor
+        default: jdk
+    executor: << parameters.executor >>
     steps:
       - checkout
       - setup_remote_docker:
@@ -21,27 +31,18 @@ jobs:
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           steps:
-            - run: ./gradlew test --continue --parallel
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} test-results/junit/ \;
+            - run: ./gradlew << parameters.command >>
+      - steps: << parameters.after >>
+  gradle_integration:
+    executor: jdk-machine
+    steps:
+      - checkout
+      - run: docker compose up -d
+      - run: ./gradlew integrationTest --continue --parallel
       - gradle/collect_test_results:
-          reports_path: server/build/reports
-          test_results_path: test-results
-      - codecov/upload
-  gradle_coverage:
-    executor: jdk
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-          version: 20.10.24
-      - gradle/with_cache:
-          deps_checksum_file: build.gradle.kts
-          steps:
-            - run: ./gradlew jacocoTestCoverageVerification --parallel
+          reports_path: integration/build/reports
+          test_results_path: integration/build/test-results
+      - run: docker compose down
   fork_join:
     docker:
       - image: alpine:latest
@@ -68,15 +69,28 @@ workflows:
           command: ktlintCheck --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
-      - gradle_coverage:
+      - gradle_integration:
+          name: Integration test
+      - gradle_docker:
           name: Coverage verification
+          command: jacocoTestCoverageVerification --parallel
       - gradle/run:
           name: Build boot jar
           command: bootJar --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
-      - gradle_test:
+      - gradle_docker:
           name: Unit test
+          after:
+            - run:
+                name: Save test results
+                command: |
+                  mkdir -p test-results/junit/
+                  find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} test-results/junit/ \;
+            - gradle/collect_test_results:
+                reports_path: server/build/reports
+                test_results_path: test-results
+            - codecov/upload
       - docker/hadolint:
           name: Lint Dockerfile
           dockerfiles: Dockerfile
@@ -113,6 +127,7 @@ workflows:
             - Coverage verification
             - Build boot jar
             - Unit test
+            - Integration test
             - Build image
             - Lint Dockerfile
       - docker_publish:

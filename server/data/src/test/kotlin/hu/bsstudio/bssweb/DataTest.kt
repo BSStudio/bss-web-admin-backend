@@ -5,6 +5,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ContextConfiguration
 
 @DataJpaTest(properties = ["spring.datasource.url=jdbc:tc:postgresql:16.0-alpine3.18:///db"])
-@ContextConfiguration(classes = [DataModuleConfiguration::class])
+@ContextConfiguration(classes = [DataConfig::class])
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class DataTest

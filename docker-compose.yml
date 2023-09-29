@@ -20,6 +20,7 @@ services:
       spring.datasource.url: "jdbc:postgresql://db:5432/postgres?currentSchema=bss_web"
       spring.datasource.username: "postgres"
       spring.datasource.password: "postgres"
+      spring.flyway.default-schema: "bss_web"
       management.influx.metrics.export.uri: "http://influx:8086"
       management.influx.metrics.export.token: "token"
       management.influx.metrics.export.org: "org"

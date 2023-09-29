@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 class DetailedVideoRepositoryTest(
     @Autowired private val underTest: DetailedVideoRepository,
@@ -55,15 +55,7 @@ class DetailedVideoRepositoryTest(
         this.videoCrewRepository.save(VideoCrewEntity(videoCrewId))
         entityManager.run { flush(); clear() }
 
-        val expected = createExpected(
-            videoId,
-            listOf(
-                DetailedVideoCrewEntity(
-                    videoCrewId,
-                    SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId }
-                )
-            )
-        )
+        val expected = createExpected(videoId, listOf(DetailedVideoCrewEntity(videoCrewId, SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId })))
         assertThat(underTest.findById(videoId))
             .isPresent()
             .get()
