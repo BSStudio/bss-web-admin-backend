@@ -14,7 +14,8 @@ COPY ./server/model/build.gradle.kts   ./server/model/
 COPY ./server/common/build.gradle.kts  ./server/common/
 RUN ./gradlew
 # build
-COPY ./ ./
+COPY ./buildSrc ./buildSrc
+COPY ./server   ./server
 ARG BUILD_ARG="bootJar --parallel"
 RUN ./gradlew $BUILD_ARG
 
