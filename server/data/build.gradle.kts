@@ -6,7 +6,8 @@ plugins {
 
 dependencies {
     api(project(":server:common"))
-    api("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     runtimeOnly("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
