@@ -63,13 +63,17 @@ workflows:
           command: ktlintCheck --parallel
           deps_checksum_file: build.gradle.kts
           executor: jdk
-      - gradle/test:
+      - gradle_docker:
           executor: jdk-machine
           name: Integration test
-          test_command: integrationTest --continue --parallel
-          deps_checksum_file: build.gradle.kts
-          reports_path: integration/build/reports
-          test_results_path: integration/build/test-results
+          command: integrationTest --continue --parallel
+          before:
+            - run: docker compose up -d
+          after:
+            - gradle/collect_test_results:
+                reports_path: integration/build/reports
+                test_results_path: integration/build/test-results
+            - run: docker compose down
       - gradle_docker:
           name: Coverage verification
           command: jacocoTestCoverageVerification --parallel

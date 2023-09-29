@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.member.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
+import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +15,7 @@ class DeleteMemberIntegrationTest(
 
     @Test
     fun `it should return 204 and delete member`() {
-        val entity = memberRepository.save(hu.bsstudio.bssweb.member.entity.DetailedMemberEntity(url = "url", name = "name"))
+        val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
         val actual = client.removeMember(entity.id)
 

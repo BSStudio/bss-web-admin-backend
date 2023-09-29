@@ -3,6 +3,7 @@ package hu.bsstudio.bssweb.member.integration
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
+import hu.bsstudio.bssweb.member.model.Member
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,11 +23,23 @@ class ReadAllMemberIntegrationTest(
 
     @Test
     fun `it should return 200 and list with 1 member`() {
-        memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
+        val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
         val actual = client.getAllMembers()
 
-        assertThat(actual.body).hasSize(1)
+        assertThat(actual.body).containsExactly(
+            Member(
+                id = entity.id,
+                url = entity.url,
+                name = entity.name,
+                nickname = entity.nickname,
+                joinedAt = entity.joinedAt,
+                description = entity.description,
+                role = entity.role,
+                status = entity.status,
+                archived = entity.archived
+            )
+        )
         assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
     }
 }
