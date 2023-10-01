@@ -3,7 +3,9 @@ package hu.bsstudio.bssweb.member.integration
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
@@ -19,8 +21,8 @@ class ArchiveMemberIntegrationTest(
 
         val actual = client.archiveMembers(listOf(entity.id), true)
 
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual.body).isEqualTo(listOf(entity.id))
+        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        actual.body.shouldContainExactly(entity.id)
     }
 
     @Test
@@ -29,15 +31,15 @@ class ArchiveMemberIntegrationTest(
 
         val actual = client.archiveMembers(listOf(entity.id), false)
 
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual.body).isEqualTo(listOf(entity.id))
+        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        actual.body.shouldContainExactly(entity.id)
     }
 
     @Test
     fun `it should return 200 and empty list when id can't be found`() {
         val actual = client.archiveMembers(listOf(UUID.fromString("00000000-0000-0000-0000-000000000000")), true)
 
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual.body).isEmpty()
+        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        actual.body.shouldBeEmpty()
     }
 }

@@ -33,7 +33,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val actual = underTest.findAllMembers()
 
-        actual.shouldBeEqual(MEMBER_LIST)
+        actual shouldBeEqual MEMBER_LIST
     }
 
     @Test
@@ -45,7 +45,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val actual = underTest.insertMember(CREATE_MEMBER)
 
-        actual.shouldBeEqual(MEMBER)
+        actual shouldBeEqual MEMBER
     }
 
     @Test
@@ -55,7 +55,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val actual = underTest.archiveMembers(memberIds)
 
-        actual.shouldBeEqual(memberIds)
+        actual shouldBeEqual memberIds
     }
 
     @Test
@@ -65,7 +65,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val actual = underTest.archiveMembers(memberIds, true)
 
-        actual.shouldBeEqual(memberIds)
+        actual shouldBeEqual memberIds
     }
 
     @Test
@@ -74,7 +74,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val actual = underTest.findMemberById(MEMBER_ID)
 
-        actual.shouldBePresent().shouldBeEqual(MEMBER)
+        actual shouldBePresent { it shouldBeEqual MEMBER }
     }
 
     @Test
@@ -104,7 +104,7 @@ internal class FileUpdatingMemberServiceTest(
 
         val actual = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        actual.shouldBePresent().shouldBeEqual(MEMBER)
+        actual shouldBePresent { it shouldBeEqual MEMBER }
     }
 
     @Test

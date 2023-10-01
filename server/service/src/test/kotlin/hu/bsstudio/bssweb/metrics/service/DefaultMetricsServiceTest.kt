@@ -30,7 +30,7 @@ internal class DefaultMetricsServiceTest(
 
         val actual = underTest.getMetrics()
 
-        actual.shouldBeEqual(BSS_METRICS)
+        actual shouldBeEqual BSS_METRICS
     }
 
     private companion object {

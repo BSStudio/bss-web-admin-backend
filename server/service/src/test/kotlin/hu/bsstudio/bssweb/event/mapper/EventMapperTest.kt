@@ -32,7 +32,7 @@ internal class EventMapperTest(
     internal fun `should map entity to model`() {
         val actual = underTest.entityToModel(ENTITY)
 
-        actual.shouldBeEqual(MODEL)
+        actual shouldBeEqual MODEL
     }
 
     @Test
@@ -41,21 +41,21 @@ internal class EventMapperTest(
 
         val actual = underTest.entityToModel(DETAILED_ENTITY)
 
-        actual.shouldBeEqual(DETAILED_MODEL)
+        actual shouldBeEqual DETAILED_MODEL
     }
 
     @Test
     internal fun `should map model to entity`() {
         val actual = underTest.modelToEntity(CREATE_EVENT).apply { id = ID }
 
-        actual.shouldBeEqual(CREATED_ENTITY)
+        actual shouldBeEqual CREATED_ENTITY
     }
 
     @Test
     internal fun `should map update to entity`() {
         val actual = underTest.updateToEntity(DETAILED_ENTITY, UPDATE_EVENT)
 
-        actual.shouldBeEqual(UPDATED_ENTITY)
+        actual shouldBeEqual UPDATED_ENTITY
     }
 
     private companion object {

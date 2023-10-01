@@ -4,7 +4,8 @@ import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.video.client.VideoClient
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.model.Video
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -29,8 +30,8 @@ class ReadAllPageableVideoIntegrationTest(
         val actual1 = client.getAllVideos(PageRequest.of(0, 2))
         val actual2 = client.getAllVideos(PageRequest.of(1, 2))
 
-        assertThat(actual1.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual1.body!!.content).containsExactly(
+        actual1.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        actual1.body!!.content.shouldContainExactly(
             Video(
                 id = entity0.id,
                 url = "url0",
@@ -46,8 +47,8 @@ class ReadAllPageableVideoIntegrationTest(
                 visible = false
             )
         )
-        assertThat(actual2.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual2.body!!.content).containsExactly(
+        actual2.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        actual2.body!!.content.shouldContainExactly(
             Video(
                 id = entity2.id,
                 url = "url2",

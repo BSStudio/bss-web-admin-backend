@@ -48,7 +48,7 @@ internal class DefaultVideoCrewServiceTest(
 
         val actual = underTest.addPosition(VIDEO_CREW)
 
-        actual.shouldBePresent().shouldBeEqual(DETAILED_VIDEO)
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
     }
 
     @Test
@@ -60,7 +60,7 @@ internal class DefaultVideoCrewServiceTest(
 
         val actual = underTest.removePosition(VIDEO_CREW)
 
-        actual.shouldBePresent().shouldBeEqual(DETAILED_VIDEO_OTHER)
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO_OTHER }
     }
 
     private companion object {

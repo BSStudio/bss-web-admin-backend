@@ -20,6 +20,7 @@ dependencies {
     intTestImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "hamcrest") // require developers to use assertJ
     }
+    intTestImplementation("io.kotest:kotest-runner-junit5:5.7.2")
 }
 
 val integrationTest = task<Test>("integrationTest") {

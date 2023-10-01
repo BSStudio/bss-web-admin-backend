@@ -30,14 +30,14 @@ internal class VideoCrewMapperTest(
     internal fun `should map model to entity id`() {
         val actual = underTest.modelToId(VIDEO_CREW_REQUEST)
 
-        actual.shouldBeEqual(VIDEO_CREW_ENTITY_ID)
+        actual shouldBeEqual VIDEO_CREW_ENTITY_ID
     }
 
     @Test
     internal fun `should map model to entity`() {
         val actual = underTest.modelToEntity(VIDEO_CREW_REQUEST)
 
-        actual.shouldBeEqual(VIDEO_CREW_ENTITY)
+        actual shouldBeEqual VIDEO_CREW_ENTITY
     }
 
     @Test
@@ -46,7 +46,7 @@ internal class VideoCrewMapperTest(
 
         val actual = underTest.entityToModel(DETAILED_VIDEO_CREW_ENTITY)
 
-        actual.shouldBeEqual(VIDEO_CREW)
+        actual shouldBeEqual VIDEO_CREW
     }
 
     private companion object {

@@ -6,7 +6,7 @@ import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.metrics.client.MetricsClient
 import hu.bsstudio.bssweb.metrics.model.BssMetrics
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
@@ -19,8 +19,8 @@ class ReadMetricsIntegrationTest(
     fun `it should return 200 and empty metrics`() {
         val actual = this.client.getMetrics()
 
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual.body!!).isEqualTo(BssMetrics(0, 0, 0))
+        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        actual.body!! shouldBeEqual BssMetrics(0, 0, 0)
     }
 
     @Test
@@ -31,7 +31,7 @@ class ReadMetricsIntegrationTest(
 
         val actual = this.client.getMetrics()
 
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual.body!!).isEqualTo(BssMetrics(1, 1, 1))
+        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        actual.body!! shouldBeEqual BssMetrics(1, 1, 1)
     }
 }

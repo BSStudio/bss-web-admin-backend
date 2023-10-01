@@ -52,7 +52,7 @@ internal class DefaultVideoServiceTest(
 
         val actual = underTest.findAllVideos(PAGEABLE)
 
-        actual.shouldBeEqual(PAGED_VIDEOS)
+        actual shouldBeEqual PAGED_VIDEOS
     }
 
     @Test
@@ -63,7 +63,7 @@ internal class DefaultVideoServiceTest(
 
         val actual = underTest.insertVideo(CREATE_VIDEO)
 
-        actual.shouldBeEqual(VIDEO)
+        actual shouldBeEqual VIDEO
     }
 
     @Test
@@ -86,7 +86,7 @@ internal class DefaultVideoServiceTest(
 
         val actual = underTest.findVideoById(VIDEO_ID)
 
-        actual.shouldBePresent().shouldBeEqual(DETAILED_VIDEO)
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
     }
 
     @Test
@@ -116,7 +116,7 @@ internal class DefaultVideoServiceTest(
 
         val actual = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
-        actual.shouldBePresent().shouldBeEqual(DETAILED_VIDEO)
+        actual.shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
     }
 
     @Test

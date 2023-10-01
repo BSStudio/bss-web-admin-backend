@@ -26,28 +26,28 @@ internal class MemberMapperTest {
     internal fun `should map entity to model`() {
         val actual = underTest.entityToModel(MEMBER_ENTITY)
 
-        actual.shouldBeEqual(MEMBER)
+        actual shouldBeEqual MEMBER
     }
 
     @Test
     internal fun `should map simple entity to model`() {
         val actual = underTest.entityToModel(SIMPLE_MEMBER_ENTITY)
 
-        actual.shouldBeEqual(SIMPLE_MEMBER)
+        actual shouldBeEqual SIMPLE_MEMBER
     }
 
     @Test
     internal fun `should map model to entity`() {
         val actual = underTest.modelToEntity(CREATE_MEMBER).apply { id = ID }
 
-        actual.shouldBeEqual(CREATE_MEMBER_ENTITY)
+        actual shouldBeEqual CREATE_MEMBER_ENTITY
     }
 
     @Test
     internal fun `should map update model to entity`() {
         val actual = underTest.updateToEntity(MEMBER_ENTITY, MEMBER_UPDATE)
 
-        actual.shouldBeEqual(UPDATED_MEMBER_ENTITY)
+        actual shouldBeEqual UPDATED_MEMBER_ENTITY
     }
 
     private companion object {

@@ -32,7 +32,7 @@ internal class DefaultEventVideoServiceTest(
 
         val actual = underTest.addVideoToEvent(EVENT_ID, VIDEO_ID)
 
-        actual.shouldBePresent().shouldBeEqual(DETAILED_EVENT)
+        actual shouldBePresent { it shouldBeEqual DETAILED_EVENT }
     }
 
     @Test
@@ -42,7 +42,7 @@ internal class DefaultEventVideoServiceTest(
 
         val actual = underTest.removeVideoFromEvent(EVENT_ID, VIDEO_ID)
 
-        actual.shouldBePresent().shouldBeEqual(DETAILED_EVENT)
+        actual shouldBePresent { it shouldBeEqual DETAILED_EVENT }
     }
 
     private companion object {

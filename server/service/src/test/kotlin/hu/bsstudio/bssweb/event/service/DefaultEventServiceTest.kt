@@ -51,7 +51,7 @@ internal class DefaultEventServiceTest(
 
         val actual = underTest.insertEvent(CREATE_EVENT)
 
-        actual.shouldBeEqual(EVENT)
+        actual shouldBeEqual EVENT
     }
 
     @Test
@@ -87,7 +87,7 @@ internal class DefaultEventServiceTest(
 
         val actual = underTest.findEventById(EVENT_ID)
 
-        actual.shouldBePresent().shouldBeEqual(DETAILED_EVENT)
+        actual shouldBePresent { it shouldBeEqual DETAILED_EVENT }
     }
 
     @Test
@@ -117,7 +117,7 @@ internal class DefaultEventServiceTest(
 
         val actual = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
-        actual.shouldBePresent().shouldBeEqual(DETAILED_EVENT)
+        actual shouldBePresent { it shouldBeEqual DETAILED_EVENT }
     }
 
     @Test
