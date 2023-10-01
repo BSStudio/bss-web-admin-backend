@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.event.model
 
+import hu.bsstudio.bssweb.BssModelConfig
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
@@ -9,7 +10,7 @@ import org.springframework.boot.test.json.JacksonTester
 import org.springframework.test.context.ContextConfiguration
 
 @JsonTest
-@ContextConfiguration(classes = [CreateEventTest::class])
+@ContextConfiguration(classes = [BssModelConfig::class])
 internal class CreateEventTest(
     @Autowired private val underTest: JacksonTester<CreateEvent>
 ) {

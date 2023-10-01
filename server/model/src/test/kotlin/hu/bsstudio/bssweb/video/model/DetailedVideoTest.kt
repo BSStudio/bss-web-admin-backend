@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.video.model
 
+import hu.bsstudio.bssweb.BssModelConfig
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
@@ -11,7 +12,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @JsonTest
-@ContextConfiguration(classes = [DetailedVideoTest::class])
+@ContextConfiguration(classes = [BssModelConfig::class])
 internal class DetailedVideoTest(
     @Autowired private val underTest: JacksonTester<DetailedVideo>
 ) {

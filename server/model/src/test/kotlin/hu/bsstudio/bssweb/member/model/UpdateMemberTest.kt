@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.member.model
 
+import hu.bsstudio.bssweb.BssModelConfig
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.matchers.equals.shouldBeEqual
@@ -11,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration
 import java.time.LocalDate
 
 @JsonTest
-@ContextConfiguration(classes = [UpdateMemberTest::class])
+@ContextConfiguration(classes = [BssModelConfig::class])
 internal class UpdateMemberTest(
     @Autowired private val underTest: JacksonTester<UpdateMember>
 ) {

@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.member.model
 
+import hu.bsstudio.bssweb.BssModelConfig
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.matchers.equals.shouldBeEqual
@@ -12,7 +13,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @JsonTest
-@ContextConfiguration(classes = [MemberTest::class])
+@ContextConfiguration(classes = [BssModelConfig::class])
 internal class MemberTest(
     @Autowired private val underTest: JacksonTester<Member>
 ) {

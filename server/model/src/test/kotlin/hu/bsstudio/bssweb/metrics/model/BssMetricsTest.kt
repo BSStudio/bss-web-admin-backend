@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.metrics.model
 
+import hu.bsstudio.bssweb.BssModelConfig
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
@@ -9,7 +10,7 @@ import org.springframework.boot.test.json.JacksonTester
 import org.springframework.test.context.ContextConfiguration
 
 @JsonTest
-@ContextConfiguration(classes = [BssMetricsTest::class])
+@ContextConfiguration(classes = [BssModelConfig::class])
 internal class BssMetricsTest(
     @Autowired private val underTest: JacksonTester<BssMetrics>
 ) {
