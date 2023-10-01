@@ -116,7 +116,7 @@ internal class DefaultVideoServiceTest(
 
         val actual = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
-        actual.shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
     }
 
     @Test
