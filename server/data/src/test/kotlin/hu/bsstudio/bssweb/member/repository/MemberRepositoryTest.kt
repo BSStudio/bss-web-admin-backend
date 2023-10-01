@@ -21,22 +21,20 @@ class MemberRepositoryTest(
         val entity = DetailedMemberEntity(name = NAME, url = URL)
         val id = underTest.save(entity).id
 
-        underTest.findById(id)
-            .shouldBePresent()
-            .shouldBeEqualToComparingFields(
-                DetailedMemberEntity(
-                    name = NAME,
-                    url = URL,
-                    nickname = "",
-                    description = "",
-                    joinedAt = LocalDate.now(),
-                    role = "",
-                    status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-                    archived = false
-                ).apply {
-                    this.id = id
-                }
-            )
+        underTest.findById(id) shouldBePresent {
+            it shouldBeEqualToComparingFields DetailedMemberEntity(
+                name = NAME,
+                url = URL,
+                nickname = "",
+                description = "",
+                joinedAt = LocalDate.now(),
+                role = "",
+                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                archived = false
+            ).apply {
+                this.id = id
+            }
+        }
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()

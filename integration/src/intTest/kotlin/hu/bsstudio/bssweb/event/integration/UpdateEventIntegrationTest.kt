@@ -6,6 +6,7 @@ import hu.bsstudio.bssweb.event.client.EventClient
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.UpdateEvent
+import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
@@ -24,17 +25,18 @@ class UpdateEventIntegrationTest(
 
         val actual = client.updateEvent(entity.id, UPDATE_EVENT)
 
-        actual.body!! shouldBeEqual DetailedEvent(
-            id = entity.id,
-            url = UPDATE_EVENT.url,
-            title = UPDATE_EVENT.title,
-            description = UPDATE_EVENT.description,
-            date = UPDATE_EVENT.date,
-            visible = UPDATE_EVENT.visible,
-            videos = listOf()
-        )
-
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        assertSoftly(actual) {
+            body!! shouldBeEqual DetailedEvent(
+                id = entity.id,
+                url = UPDATE_EVENT.url,
+                title = UPDATE_EVENT.title,
+                description = UPDATE_EVENT.description,
+                date = UPDATE_EVENT.date,
+                visible = UPDATE_EVENT.visible,
+                videos = listOf()
+            )
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        }
     }
 
     @Test

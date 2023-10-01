@@ -7,6 +7,7 @@ import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.eventvideo.client.EventVideoClient
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.model.Video
+import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
@@ -25,24 +26,26 @@ class AddVideoToEventIntegrationTest(
 
         val actual = client.addVideoToEvent(eventEntity.id, videoEntity.id)
 
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-        actual.body!! shouldBeEqual DetailedEvent(
-            id = eventEntity.id,
-            url = eventEntity.url,
-            title = eventEntity.title,
-            description = eventEntity.description,
-            date = eventEntity.date,
-            visible = eventEntity.visible,
-            videos = listOf(
-                Video(
-                    id = videoEntity.id,
-                    url = videoEntity.url,
-                    title = videoEntity.title,
-                    uploadedAt = videoEntity.uploadedAt,
-                    visible = videoEntity.visible
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            body!! shouldBeEqual DetailedEvent(
+                id = eventEntity.id,
+                url = eventEntity.url,
+                title = eventEntity.title,
+                description = eventEntity.description,
+                date = eventEntity.date,
+                visible = eventEntity.visible,
+                videos = listOf(
+                    Video(
+                        id = videoEntity.id,
+                        url = videoEntity.url,
+                        title = videoEntity.title,
+                        uploadedAt = videoEntity.uploadedAt,
+                        visible = videoEntity.visible
+                    )
                 )
             )
-        )
+        }
     }
 
     @Test

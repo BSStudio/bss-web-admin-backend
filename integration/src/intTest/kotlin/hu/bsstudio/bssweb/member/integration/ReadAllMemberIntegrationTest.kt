@@ -4,6 +4,7 @@ import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.model.Member
+import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
@@ -19,8 +20,10 @@ class ReadAllMemberIntegrationTest(
     fun `it should return 200 and empty list`() {
         val actual = client.getAllMembers()
 
-        actual.body.shouldBeEmpty()
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        assertSoftly(actual) {
+            body.shouldBeEmpty()
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        }
     }
 
     @Test
@@ -29,19 +32,21 @@ class ReadAllMemberIntegrationTest(
 
         val actual = client.getAllMembers()
 
-        actual.body.shouldContainExactly(
-            Member(
-                id = entity.id,
-                url = entity.url,
-                name = entity.name,
-                nickname = entity.nickname,
-                joinedAt = entity.joinedAt,
-                description = entity.description,
-                role = entity.role,
-                status = entity.status,
-                archived = entity.archived
+        assertSoftly(actual) {
+            body.shouldContainExactly(
+                Member(
+                    id = entity.id,
+                    url = entity.url,
+                    name = entity.name,
+                    nickname = entity.nickname,
+                    joinedAt = entity.joinedAt,
+                    description = entity.description,
+                    role = entity.role,
+                    status = entity.status,
+                    archived = entity.archived
+                )
             )
-        )
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        }
     }
 }

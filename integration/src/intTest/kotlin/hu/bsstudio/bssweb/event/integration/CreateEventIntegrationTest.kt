@@ -6,6 +6,7 @@ import hu.bsstudio.bssweb.event.client.EventClient
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.Event
+import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.should
@@ -26,16 +27,18 @@ class CreateEventIntegrationTest(
     fun `it should return 201 and event`() {
         val actual = client.createEvent(CREATE_EVENT)
 
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(201)
-        actual.body!! shouldBeEqual Event(
-            id = actual.body!!.id,
-            url = CREATE_EVENT.url,
-            title = CREATE_EVENT.title,
-            description = "",
-            date = LocalDate.now(),
-            visible = false
-        )
-        actual.headers.location!! shouldBeEqual URI.create("$url/api/v1/event/${actual.body!!.id}")
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(201)
+            body!! shouldBeEqual Event(
+                id = actual.body!!.id,
+                url = CREATE_EVENT.url,
+                title = CREATE_EVENT.title,
+                description = "",
+                date = LocalDate.now(),
+                visible = false
+            )
+            headers.location!! shouldBeEqual URI.create("$url/api/v1/event/${actual.body!!.id}")
+        }
     }
 
     @Test

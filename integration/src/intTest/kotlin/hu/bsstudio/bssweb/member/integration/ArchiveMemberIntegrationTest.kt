@@ -3,6 +3,7 @@ package hu.bsstudio.bssweb.member.integration
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
+import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
@@ -21,8 +22,10 @@ class ArchiveMemberIntegrationTest(
 
         val actual = client.archiveMembers(listOf(entity.id), true)
 
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-        actual.body.shouldContainExactly(entity.id)
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            body.shouldContainExactly(entity.id)
+        }
     }
 
     @Test
@@ -31,15 +34,19 @@ class ArchiveMemberIntegrationTest(
 
         val actual = client.archiveMembers(listOf(entity.id), false)
 
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-        actual.body.shouldContainExactly(entity.id)
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            body.shouldContainExactly(entity.id)
+        }
     }
 
     @Test
     fun `it should return 200 and empty list when id can't be found`() {
         val actual = client.archiveMembers(listOf(UUID.fromString("00000000-0000-0000-0000-000000000000")), true)
 
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-        actual.body.shouldBeEmpty()
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            body.shouldBeEmpty()
+        }
     }
 }

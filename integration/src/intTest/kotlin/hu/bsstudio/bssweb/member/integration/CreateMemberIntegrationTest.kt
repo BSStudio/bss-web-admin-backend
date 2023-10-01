@@ -7,6 +7,7 @@ import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
+import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.should
@@ -27,19 +28,21 @@ class CreateMemberIntegrationTest(
     fun `it should return 201 and member body`() {
         val actual = client.createMember(CREATE_MEMBER)
 
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(201)
-        actual.body!! shouldBeEqual Member(
-            id = actual.body!!.id,
-            url = CREATE_MEMBER.url,
-            name = CREATE_MEMBER.name,
-            nickname = "",
-            description = "",
-            joinedAt = LocalDate.now(),
-            role = "",
-            status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-            archived = false
-        )
-        actual.headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual.body!!.id}")
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(201)
+            body!! shouldBeEqual Member(
+                id = actual.body!!.id,
+                url = CREATE_MEMBER.url,
+                name = CREATE_MEMBER.name,
+                nickname = "",
+                description = "",
+                joinedAt = LocalDate.now(),
+                role = "",
+                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                archived = false
+            )
+            headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual.body!!.id}")
+        }
     }
 
     @Test

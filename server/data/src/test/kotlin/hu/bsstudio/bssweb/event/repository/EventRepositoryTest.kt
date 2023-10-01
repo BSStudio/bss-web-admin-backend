@@ -20,19 +20,17 @@ class EventRepositoryTest(
 
         val id = underTest.save(SimpleEventEntity(url = URL, title = TITLE)).id
 
-        underTest.findById(id)
-            .shouldBePresent()
-            .shouldBeEqualToComparingFields(
-                SimpleEventEntity(
-                    url = URL,
-                    title = TITLE,
-                    description = "",
-                    date = LocalDate.now(),
-                    visible = false
-                ).apply {
-                    this.id = id
-                }
-            )
+        underTest.findById(id) shouldBePresent {
+            it shouldBeEqualToComparingFields SimpleEventEntity(
+                url = URL,
+                title = TITLE,
+                description = "",
+                date = LocalDate.now(),
+                visible = false
+            ).apply {
+                this.id = id
+            }
+        }
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()

@@ -4,6 +4,7 @@ import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.model.Event
+import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
@@ -20,8 +21,10 @@ class ReadEventIntegrationTest(
     fun `it should return 200 and empty list`() {
         val actual = client.findAllEvent()
 
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-        actual.body.shouldBeEmpty()
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            body.shouldBeEmpty()
+        }
     }
 
     @Test
@@ -30,17 +33,19 @@ class ReadEventIntegrationTest(
 
         val actual = client.findAllEvent()
 
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-        actual.body.shouldContainExactly(
-            Event(
-                id = entity.id,
-                url = URL,
-                title = TITLE,
-                description = "",
-                date = LocalDate.now(),
-                visible = false
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            body.shouldContainExactly(
+                Event(
+                    id = entity.id,
+                    url = URL,
+                    title = TITLE,
+                    description = "",
+                    date = LocalDate.now(),
+                    visible = false
+                )
             )
-        )
+        }
     }
 
     private companion object {

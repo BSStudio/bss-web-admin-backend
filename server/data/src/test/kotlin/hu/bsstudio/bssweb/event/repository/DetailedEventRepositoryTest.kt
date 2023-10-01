@@ -34,7 +34,7 @@ class DetailedEventRepositoryTest(
         entityManager.run { flush(); clear() }
 
         val expected = createExpected(id)
-        underTest.findById(id).shouldBePresent().shouldBeEqualToComparingFields(expected)
+        underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()

@@ -6,6 +6,7 @@ import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
+import org.assertj.core.error.OptionalShouldBePresent.shouldBePresent
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
@@ -21,18 +22,16 @@ class SimpleVideoRepositoryTest(
         val entity = SimpleVideoEntity(url = URL, title = TITLE)
         val id = underTest.save(entity).id
 
-        underTest.findById(id)
-            .shouldBePresent()
-            .shouldBeEqualToComparingFields(
-                SimpleVideoEntity(
-                    url = URL,
-                    title = TITLE,
-                    uploadedAt = LocalDate.now(),
-                    visible = false
-                ).apply {
-                    this.id = id
-                }
-            )
+        underTest.findById(id) shouldBePresent {
+            it shouldBeEqualToComparingFields SimpleVideoEntity(
+                url = URL,
+                title = TITLE,
+                uploadedAt = LocalDate.now(),
+                visible = false
+            ).apply {
+                this.id = id
+            }
+        }
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()

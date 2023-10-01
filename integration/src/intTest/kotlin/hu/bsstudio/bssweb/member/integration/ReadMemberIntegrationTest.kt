@@ -5,6 +5,7 @@ import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.model.Member
+import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
@@ -22,18 +23,20 @@ class ReadMemberIntegrationTest(
 
         val actual = client.getMemberById(entity.id)
 
-        actual.body!! shouldBeEqual Member(
-            id = entity.id,
-            url = entity.url,
-            name = entity.name,
-            nickname = entity.nickname,
-            description = entity.description,
-            joinedAt = entity.joinedAt,
-            role = entity.role,
-            status = entity.status,
-            archived = entity.archived
-        )
-        actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        assertSoftly(actual) {
+            body!! shouldBeEqual Member(
+                id = entity.id,
+                url = entity.url,
+                name = entity.name,
+                nickname = entity.nickname,
+                description = entity.description,
+                joinedAt = entity.joinedAt,
+                role = entity.role,
+                status = entity.status,
+                archived = entity.archived
+            )
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        }
     }
 
     @Test

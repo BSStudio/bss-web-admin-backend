@@ -14,6 +14,7 @@ import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
+import org.assertj.core.error.OptionalShouldBePresent.shouldBePresent
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
@@ -36,9 +37,7 @@ class DetailedVideoRepositoryTest(
         entityManager.run { flush(); clear() }
 
         val expected = createExpected(id)
-        underTest.findById(id)
-            .shouldBePresent()
-            .shouldBeEqualToComparingFields(expected)
+        underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()
