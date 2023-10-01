@@ -10,7 +10,6 @@ import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
 import io.kotest.matchers.shouldBe
-import org.assertj.core.error.OptionalShouldBePresent.shouldBePresent
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
