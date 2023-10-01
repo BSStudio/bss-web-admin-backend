@@ -5,12 +5,14 @@ import hu.bsstudio.bssweb.fileserver.model.FileUpdate
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.Optional
@@ -29,9 +31,9 @@ internal class FileUpdatingMemberServiceTest(
     internal fun `should return all members`() {
         every { mockService.findAllMembers() } returns MEMBER_LIST
 
-        val response = underTest.findAllMembers()
+        val actual = underTest.findAllMembers()
 
-        assertThat(response).isEqualTo(MEMBER_LIST)
+        actual.shouldBeEqual(MEMBER_LIST)
     }
 
     @Test
@@ -41,9 +43,9 @@ internal class FileUpdatingMemberServiceTest(
         every { MEMBER.url } returns URL
         every { mockClient.createMemberFolder(FILE_UPDATE) } returns FILE_UPDATE
 
-        val response = underTest.insertMember(CREATE_MEMBER)
+        val actual = underTest.insertMember(CREATE_MEMBER)
 
-        assertThat(response).isEqualTo(MEMBER)
+        actual.shouldBeEqual(MEMBER)
     }
 
     @Test
@@ -51,9 +53,9 @@ internal class FileUpdatingMemberServiceTest(
         val memberIds = listOf(MEMBER_ID)
         every { mockService.archiveMembers(memberIds) } returns memberIds
 
-        val response = underTest.archiveMembers(memberIds)
+        val actual = underTest.archiveMembers(memberIds)
 
-        assertThat(response).isEqualTo(memberIds)
+        actual.shouldBeEqual(memberIds)
     }
 
     @Test
@@ -61,36 +63,36 @@ internal class FileUpdatingMemberServiceTest(
         val memberIds = listOf(MEMBER_ID)
         every { mockService.archiveMembers(memberIds, true) } returns memberIds
 
-        val response = underTest.archiveMembers(memberIds, true)
+        val actual = underTest.archiveMembers(memberIds, true)
 
-        assertThat(response).isEqualTo(memberIds)
+        actual.shouldBeEqual(memberIds)
     }
 
     @Test
     internal fun `should find member by id`() {
         every { mockService.findMemberById(MEMBER_ID) } returns Optional.of(MEMBER)
 
-        val response = underTest.findMemberById(MEMBER_ID)
+        val actual = underTest.findMemberById(MEMBER_ID)
 
-        assertThat(response).hasValue(MEMBER)
+        actual.shouldBePresent().shouldBeEqual(MEMBER)
     }
 
     @Test
     internal fun `should return empty if member was not found`() {
         every { mockService.findMemberById(MEMBER_ID) } returns Optional.empty()
 
-        val response = underTest.findMemberById(MEMBER_ID)
+        val actual = underTest.findMemberById(MEMBER_ID)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
     internal fun `should not update member if id was not found`() {
         every { mockService.updateMember(MEMBER_ID, UPDATE_MEMBER) } returns Optional.empty()
 
-        val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
+        val actual = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
@@ -100,9 +102,9 @@ internal class FileUpdatingMemberServiceTest(
         every { MEMBER.url } returns URL
         every { mockClient.updateMemberFolder(FILE_UPDATE) } returns FILE_UPDATE
 
-        val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
+        val actual = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        assertThat(response).hasValue(MEMBER)
+        actual.shouldBePresent().shouldBeEqual(MEMBER)
     }
 
     @Test

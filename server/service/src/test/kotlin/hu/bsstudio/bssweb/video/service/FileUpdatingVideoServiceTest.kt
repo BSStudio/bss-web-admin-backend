@@ -6,12 +6,15 @@ import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.Page
@@ -32,18 +35,18 @@ internal class FileUpdatingVideoServiceTest(
     internal fun `should return all videos`() {
         every { mockService.findAllVideos() } returns VIDEO_LIST
 
-        val response = underTest.findAllVideos()
+        val actual = underTest.findAllVideos()
 
-        assertThat(response).isEqualTo(VIDEO_LIST)
+        actual.shouldBeEqual(VIDEO_LIST)
     }
 
     @Test
     internal fun `should return all videos paged`() {
         every { mockService.findAllVideos(PAGEABLE) } returns PAGED_VIDEOS
 
-        val response = underTest.findAllVideos(PAGEABLE)
+        val actual = underTest.findAllVideos(PAGEABLE)
 
-        assertThat(response).isEqualTo(PAGED_VIDEOS)
+        actual.shouldBeEqual(PAGED_VIDEOS)
     }
 
     @Test
@@ -53,9 +56,9 @@ internal class FileUpdatingVideoServiceTest(
         every { VIDEO.url } returns URL
         every { mockClient.createVideoFolder(FILE_UPDATE) } returns FILE_UPDATE
 
-        val response = underTest.insertVideo(CREATE_VIDEO)
+        val actual = underTest.insertVideo(CREATE_VIDEO)
 
-        assertThat(response).isEqualTo(VIDEO)
+        actual.shouldBeEqual(VIDEO)
     }
 
     @Test
@@ -63,36 +66,36 @@ internal class FileUpdatingVideoServiceTest(
         val videoIds = listOf(VIDEO_ID)
         every { mockService.changeVideoVisibility(videoIds, false) } returns listOf(VIDEO_ID)
 
-        val response = underTest.changeVideoVisibility(videoIds, false)
+        val actual = underTest.changeVideoVisibility(videoIds, false)
 
-        assertThat(response).isEqualTo(listOf(VIDEO_ID))
+        actual.shouldContainExactly(VIDEO_ID)
     }
 
     @Test
     internal fun `should find video by id`() {
         every { mockService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO)
 
-        val response = underTest.findVideoById(VIDEO_ID)
+        val actual = underTest.findVideoById(VIDEO_ID)
 
-        assertThat(response).hasValue(DETAILED_VIDEO)
+        actual.shouldBePresent().shouldBeEqual(DETAILED_VIDEO)
     }
 
     @Test
     internal fun `should return empty if video was not found`() {
         every { mockService.findVideoById(VIDEO_ID) } returns Optional.empty()
 
-        val response = underTest.findVideoById(VIDEO_ID)
+        val actual = underTest.findVideoById(VIDEO_ID)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
     internal fun `should not update video if id was not found`() {
         every { mockService.updateVideo(VIDEO_ID, UPDATE_VIDEO) } returns Optional.empty()
 
-        val response = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
+        val actual = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
@@ -102,9 +105,9 @@ internal class FileUpdatingVideoServiceTest(
         every { DETAILED_VIDEO.url } returns URL
         every { mockClient.updateVideoFolder(FILE_UPDATE) } returns FILE_UPDATE
 
-        val response = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
+        val actual = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
-        assertThat(response).hasValue(DETAILED_VIDEO)
+        actual.shouldBePresent().shouldBeEqual(DETAILED_VIDEO)
     }
 
     @Test

@@ -7,10 +7,10 @@ import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.SimpleMember
 import hu.bsstudio.bssweb.member.model.UpdateMember
+import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
@@ -24,30 +24,30 @@ internal class MemberMapperTest {
 
     @Test
     internal fun `should map entity to model`() {
-        val result = underTest.entityToModel(MEMBER_ENTITY)
+        val actual = underTest.entityToModel(MEMBER_ENTITY)
 
-        assertThat(result).isEqualTo(MEMBER)
+        actual.shouldBeEqual(MEMBER)
     }
 
     @Test
     internal fun `should map simple entity to model`() {
-        val result = underTest.entityToModel(SIMPLE_MEMBER_ENTITY)
+        val actual = underTest.entityToModel(SIMPLE_MEMBER_ENTITY)
 
-        assertThat(result).isEqualTo(SIMPLE_MEMBER)
+        actual.shouldBeEqual(SIMPLE_MEMBER)
     }
 
     @Test
     internal fun `should map model to entity`() {
-        val result = underTest.modelToEntity(CREATE_MEMBER).apply { id = ID }
+        val actual = underTest.modelToEntity(CREATE_MEMBER).apply { id = ID }
 
-        assertThat(result).isEqualTo(CREATE_MEMBER_ENTITY)
+        actual.shouldBeEqual(CREATE_MEMBER_ENTITY)
     }
 
     @Test
     internal fun `should map update model to entity`() {
-        val result = underTest.updateToEntity(MEMBER_ENTITY, MEMBER_UPDATE)
+        val actual = underTest.updateToEntity(MEMBER_ENTITY, MEMBER_UPDATE)
 
-        assertThat(result).isEqualTo(UPDATED_MEMBER_ENTITY)
+        actual.shouldBeEqual(UPDATED_MEMBER_ENTITY)
     }
 
     private companion object {

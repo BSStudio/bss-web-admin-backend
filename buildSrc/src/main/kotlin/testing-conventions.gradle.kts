@@ -10,6 +10,7 @@ dependencies {
     }
     testImplementation("io.mockk:mockk-jvm:1.13.8")
     testImplementation("com.ninja-squad:springmockk:4.0.2")
+    testImplementation("io.kotest:kotest-runner-junit5:5.7.2")
 }
 
 tasks.test {

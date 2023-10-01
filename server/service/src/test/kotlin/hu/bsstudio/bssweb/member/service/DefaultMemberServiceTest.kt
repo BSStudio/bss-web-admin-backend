@@ -6,12 +6,15 @@ import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.repository.MemberRepository
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.Optional
@@ -31,9 +34,9 @@ internal class DefaultMemberServiceTest(
         every { mockRepository.findAll() } returns listOf(MEMBER_ENTITY)
         every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
 
-        val response = underTest.findAllMembers()
+        val actual = underTest.findAllMembers()
 
-        assertThat(response).containsExactly(MEMBER)
+        actual.shouldContainExactly(MEMBER)
     }
 
     @Test
@@ -42,9 +45,9 @@ internal class DefaultMemberServiceTest(
         every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
         every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
 
-        val response = underTest.insertMember(CREATE_MEMBER)
+        val actual = underTest.insertMember(CREATE_MEMBER)
 
-        assertThat(response).isEqualTo(MEMBER)
+        actual.shouldBeEqual(MEMBER)
     }
 
     @Test
@@ -55,9 +58,9 @@ internal class DefaultMemberServiceTest(
         every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
         every { MEMBER_ENTITY.id } returns MEMBER_ID
 
-        val response = underTest.archiveMembers(memberIds)
+        val actual = underTest.archiveMembers(memberIds)
 
-        assertThat(response).isEqualTo(listOf(MEMBER_ID))
+        actual.shouldContainExactly(MEMBER_ID)
     }
 
     @Test
@@ -68,9 +71,9 @@ internal class DefaultMemberServiceTest(
         every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
         every { MEMBER_ENTITY.id } returns MEMBER_ID
 
-        val response = underTest.archiveMembers(memberIds, true)
+        val actual = underTest.archiveMembers(memberIds, true)
 
-        assertThat(response).isEqualTo(listOf(MEMBER_ID))
+        actual.shouldContainExactly(MEMBER_ID)
     }
 
     @Test
@@ -78,27 +81,27 @@ internal class DefaultMemberServiceTest(
         every { mockRepository.findById(MEMBER_ID) } returns Optional.of(MEMBER_ENTITY)
         every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
 
-        val response = underTest.findMemberById(MEMBER_ID)
+        val actual = underTest.findMemberById(MEMBER_ID)
 
-        assertThat(response).hasValue(MEMBER)
+        actual.shouldBePresent().shouldBeEqual(MEMBER)
     }
 
     @Test
     internal fun `should return empty if member was not found`() {
         every { mockRepository.findById(MEMBER_ID) } returns Optional.empty()
 
-        val response = underTest.findMemberById(MEMBER_ID)
+        val actual = underTest.findMemberById(MEMBER_ID)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
     internal fun `should not update member if id was not found`() {
         every { mockRepository.findById(MEMBER_ID) } returns Optional.empty()
 
-        val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
+        val actual = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
@@ -108,9 +111,9 @@ internal class DefaultMemberServiceTest(
         every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
         every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
 
-        val response = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
+        val actual = underTest.updateMember(MEMBER_ID, UPDATE_MEMBER)
 
-        assertThat(response).hasValue(MEMBER)
+        actual.shouldBePresent().shouldBeEqual(MEMBER)
     }
 
     @Test

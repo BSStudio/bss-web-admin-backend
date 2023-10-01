@@ -9,12 +9,12 @@ import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
+import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
@@ -30,32 +30,32 @@ internal class VideoMapperTest(
 
     @Test
     internal fun `should map entity model to model`() {
-        val result = underTest.entityToModel(VIDEO_ENTITY)
+        val actual = underTest.entityToModel(VIDEO_ENTITY)
 
-        assertThat(result).isEqualTo(VIDEO)
+        actual.shouldBeEqual(VIDEO)
     }
 
     @Test
     internal fun `should map detailed entity to detailed model`() {
         every { mockVideoCrewMapper.entityToModel(CREW_ENTITY) } returns CREW_MODEL
 
-        val result = underTest.entityToModel(DETAILED_VIDEO_ENTITY)
+        val actual = underTest.entityToModel(DETAILED_VIDEO_ENTITY)
 
-        assertThat(result).isEqualTo(DETAILED_VIDEO)
+        actual.shouldBeEqual(DETAILED_VIDEO)
     }
 
     @Test
     internal fun `should map map model to entity`() {
-        val result = underTest.modelToEntity(CREATE_VIDEO).apply { id = VIDEO_ID }
+        val actual = underTest.modelToEntity(CREATE_VIDEO).apply { id = VIDEO_ID }
 
-        assertThat(result).isEqualTo(CREATED_VIDEO_ENTITY)
+        actual.shouldBeEqual(CREATED_VIDEO_ENTITY)
     }
 
     @Test
     internal fun `should map update model to entity`() {
-        val result = underTest.updateToEntity(DETAILED_VIDEO_ENTITY, UPDATE_VIDEO)
+        val actual = underTest.updateToEntity(DETAILED_VIDEO_ENTITY, UPDATE_VIDEO)
 
-        assertThat(result).isEqualTo(UPDATED_VIDEO_ENTITY)
+        actual.shouldBeEqual(UPDATED_VIDEO_ENTITY)
     }
 
     private companion object {

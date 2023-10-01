@@ -4,11 +4,11 @@ import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.metrics.model.BssMetrics
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
+import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -28,9 +28,9 @@ internal class DefaultMetricsServiceTest(
         every { eventRepository.count() } returns EVENT_COUNT
         every { memberRepository.count() } returns MEMBER_COUNT
 
-        val result = underTest.getMetrics()
+        val actual = underTest.getMetrics()
 
-        assertThat(result).isEqualTo(BSS_METRICS)
+        actual.shouldBeEqual(BSS_METRICS)
     }
 
     private companion object {

@@ -8,12 +8,12 @@ import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
+import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.UUID
@@ -28,25 +28,25 @@ internal class VideoCrewMapperTest(
 
     @Test
     internal fun `should map model to entity id`() {
-        val result = underTest.modelToId(VIDEO_CREW_REQUEST)
+        val actual = underTest.modelToId(VIDEO_CREW_REQUEST)
 
-        assertThat(result).isEqualTo(VIDEO_CREW_ENTITY_ID)
+        actual.shouldBeEqual(VIDEO_CREW_ENTITY_ID)
     }
 
     @Test
     internal fun `should map model to entity`() {
-        val result = underTest.modelToEntity(VIDEO_CREW_REQUEST)
+        val actual = underTest.modelToEntity(VIDEO_CREW_REQUEST)
 
-        assertThat(result).isEqualTo(VIDEO_CREW_ENTITY)
+        actual.shouldBeEqual(VIDEO_CREW_ENTITY)
     }
 
     @Test
     internal fun `should map entity to model`() {
         every { memberMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
 
-        val result = underTest.entityToModel(DETAILED_VIDEO_CREW_ENTITY)
+        val actual = underTest.entityToModel(DETAILED_VIDEO_CREW_ENTITY)
 
-        assertThat(result).isEqualTo(VIDEO_CREW)
+        actual.shouldBeEqual(VIDEO_CREW)
     }
 
     private companion object {
