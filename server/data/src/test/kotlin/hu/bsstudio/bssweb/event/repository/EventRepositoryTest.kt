@@ -2,7 +2,10 @@ package hu.bsstudio.bssweb.event.repository
 
 import hu.bsstudio.bssweb.DataTest
 import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.longs.shouldBeZero
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
@@ -13,15 +16,13 @@ class EventRepositoryTest(
 
     @Test
     fun `create read delete`() {
-        assertThat(underTest.count()).isZero
+        underTest.count().shouldBeZero()
 
         val id = underTest.save(SimpleEventEntity(url = URL, title = TITLE)).id
 
-        assertThat(underTest.findById(id))
-            .isPresent()
-            .get()
-            .usingRecursiveComparison()
-            .isEqualTo(
+        underTest.findById(id)
+            .shouldBePresent()
+            .shouldBeEqualToComparingFields(
                 SimpleEventEntity(
                     url = URL,
                     title = TITLE,
@@ -34,7 +35,7 @@ class EventRepositoryTest(
             )
 
         underTest.deleteById(id)
-        assertThat(underTest.findById(id)).isEmpty()
+        underTest.findById(id).shouldBeEmpty()
     }
 
     private companion object {
