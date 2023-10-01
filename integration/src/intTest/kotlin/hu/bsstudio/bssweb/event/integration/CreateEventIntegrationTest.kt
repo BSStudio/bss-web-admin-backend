@@ -10,12 +10,9 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.should
 import io.kotest.matchers.string.shouldContain
-import org.bouncycastle.asn1.x500.style.RFC4519Style.description
-import org.bouncycastle.asn1.x500.style.RFC4519Style.title
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.http.HttpStatusCode
 import java.net.URI
 import java.time.LocalDate
