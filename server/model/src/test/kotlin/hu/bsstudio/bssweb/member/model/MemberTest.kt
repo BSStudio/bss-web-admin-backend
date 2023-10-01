@@ -1,7 +1,8 @@
 package hu.bsstudio.bssweb.member.model
 
 import hu.bsstudio.bssweb.member.common.MemberStatus
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.assertions.json.shouldEqualJson
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
@@ -20,14 +21,14 @@ internal class MemberTest(
     internal fun `test serialisation`() {
         val actual = this.underTest.write(MEMBER)
 
-        assertThat(actual).isEqualToJson(JSON)
+        actual.json shouldEqualJson JSON
     }
 
     @Test
     internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
-        assertThat(actual).isEqualTo(MEMBER)
+        actual shouldBeEqual MEMBER
     }
 
     private companion object {
