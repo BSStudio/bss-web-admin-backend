@@ -7,7 +7,10 @@ import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -25,15 +28,11 @@ class VideoCrewRepositoryTest(
         val id = VideoCrewEntityId(videoId, "cameraMan", memberId)
         val entity = VideoCrewEntity(id)
         underTest.save(entity)
-        assertThat(underTest.findById(id))
-            .isPresent()
-            .get()
-            .usingRecursiveComparison()
-            .isEqualTo(entity)
+        underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields entity }
 
         underTest.deleteById(id)
-        assertThat(underTest.findById(id)).isEmpty()
-        assertThat(memberRepository.count()).isOne()
-        assertThat(videoRepository.count()).isOne()
+        underTest.findById(id).shouldBeEmpty()
+        memberRepository.count().shouldBe(1L)
+        videoRepository.count().shouldBe(1L)
     }
 }

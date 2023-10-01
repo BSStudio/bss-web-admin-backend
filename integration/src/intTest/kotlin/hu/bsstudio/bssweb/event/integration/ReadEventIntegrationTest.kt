@@ -4,7 +4,10 @@ import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.model.Event
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
@@ -18,8 +21,10 @@ class ReadEventIntegrationTest(
     fun `it should return 200 and empty list`() {
         val actual = client.findAllEvent()
 
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual.body).isEmpty()
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            body.shouldBeEmpty()
+        }
     }
 
     @Test
@@ -28,17 +33,19 @@ class ReadEventIntegrationTest(
 
         val actual = client.findAllEvent()
 
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual.body).containsExactly(
-            Event(
-                id = entity.id,
-                url = URL,
-                title = TITLE,
-                description = "",
-                date = LocalDate.now(),
-                visible = false
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            body.shouldContainExactly(
+                Event(
+                    id = entity.id,
+                    url = URL,
+                    title = TITLE,
+                    description = "",
+                    date = LocalDate.now(),
+                    visible = false
+                )
             )
-        )
+        }
     }
 
     private companion object {

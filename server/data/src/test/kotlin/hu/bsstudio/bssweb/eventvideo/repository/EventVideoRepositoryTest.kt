@@ -6,7 +6,10 @@ import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
 import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -24,15 +27,11 @@ class EventVideoRepositoryTest(
         val entity = EventVideoEntity(eventId, videoId)
         underTest.save(entity)
 
-        assertThat(underTest.findById(entity))
-            .isPresent()
-            .get()
-            .usingRecursiveComparison()
-            .isEqualTo(entity)
+        underTest.findById(entity) shouldBePresent { it shouldBeEqualToComparingFields entity }
 
         underTest.deleteById(entity)
-        assertThat(underTest.findById(entity)).isEmpty()
-        assertThat(videoRepository.count()).isOne()
-        assertThat(eventRepository.count()).isOne()
+        underTest.findById(entity).shouldBeEmpty()
+        videoRepository.count().shouldBe(1L)
+        eventRepository.count().shouldBe(1L)
     }
 }

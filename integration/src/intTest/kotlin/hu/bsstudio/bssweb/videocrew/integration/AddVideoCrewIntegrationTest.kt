@@ -1,3 +1,9 @@
 package hu.bsstudio.bssweb.videocrew.integration
 
-class AddVideoCrewIntegrationTest
+import hu.bsstudio.bssweb.IntegrationTest
+import hu.bsstudio.bssweb.videocrew.client.VideoCrewClient
+import org.springframework.beans.factory.annotation.Autowired
+
+class AddVideoCrewIntegrationTest(
+    @Autowired private val client: VideoCrewClient
+) : IntegrationTest()

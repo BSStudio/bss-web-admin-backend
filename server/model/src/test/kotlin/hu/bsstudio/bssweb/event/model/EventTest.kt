@@ -1,6 +1,8 @@
 package hu.bsstudio.bssweb.event.model
 
-import org.assertj.core.api.Assertions.assertThat
+import hu.bsstudio.bssweb.BssModelConfig
+import io.kotest.assertions.json.shouldEqualJson
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
@@ -10,7 +12,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @JsonTest
-@ContextConfiguration(classes = [EventTest::class])
+@ContextConfiguration(classes = [BssModelConfig::class])
 internal class EventTest(
     @Autowired private val underTest: JacksonTester<Event>
 ) {
@@ -19,14 +21,14 @@ internal class EventTest(
     internal fun `test serialisation`() {
         val actual = this.underTest.write(EVENT)
 
-        assertThat(actual).isEqualToJson(JSON)
+        actual.json shouldEqualJson JSON
     }
 
     @Test
     internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
-        assertThat(actual).isEqualTo(EVENT)
+        actual shouldBeEqual EVENT
     }
 
     private companion object {

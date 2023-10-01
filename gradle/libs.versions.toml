@@ -3,9 +3,11 @@ springdoc = "2.2.0"
 springBoot = "3.1.4"
 gradleKtlintPlugin = "11.6.0"
 springDependencyManagementPlugin = "1.1.3"
+kotest = "5.7.2"
 
 [libraries]
 springdocOpenapiStarterWebmvcUi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
+kotestAssertionsJson = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
 
 plugin-springBoot = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
 plugin-springDependencyManagement = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "springDependencyManagementPlugin" }

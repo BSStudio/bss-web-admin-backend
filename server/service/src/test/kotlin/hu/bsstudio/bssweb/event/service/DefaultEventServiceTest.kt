@@ -9,12 +9,15 @@ import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.Optional
@@ -35,9 +38,9 @@ internal class DefaultEventServiceTest(
         every { mockRepository.findAll() } returns listOf(EVENT_ENTITY)
         every { mockMapper.entityToModel(EVENT_ENTITY) } returns EVENT
 
-        val response = underTest.findAllEvent()
+        val actual = underTest.findAllEvent()
 
-        assertThat(response).containsExactly(EVENT)
+        actual.shouldContainExactly(EVENT)
     }
 
     @Test
@@ -46,9 +49,9 @@ internal class DefaultEventServiceTest(
         every { mockRepository.save(EVENT_ENTITY) } returns EVENT_ENTITY
         every { mockMapper.entityToModel(EVENT_ENTITY) } returns EVENT
 
-        val response = underTest.insertEvent(CREATE_EVENT)
+        val actual = underTest.insertEvent(CREATE_EVENT)
 
-        assertThat(response).isEqualTo(EVENT)
+        actual shouldBeEqual EVENT
     }
 
     @Test
@@ -59,9 +62,9 @@ internal class DefaultEventServiceTest(
         every { mockRepository.save(EVENT_ENTITY) } returns EVENT_ENTITY
         every { mockMapper.entityToModel(EVENT_ENTITY) } returns EVENT
 
-        val response = underTest.changeVisibility(eventIds)
+        val actual = underTest.changeVisibility(eventIds)
 
-        assertThat(response).isEqualTo(listOf(EVENT_ID))
+        actual.shouldContainExactly(EVENT_ID)
     }
 
     @Test
@@ -72,9 +75,9 @@ internal class DefaultEventServiceTest(
         every { mockRepository.save(EVENT_ENTITY) } returns EVENT_ENTITY
         every { EVENT_ENTITY.id } returns EVENT_ID
 
-        val response = underTest.changeVisibility(eventIds, true)
+        val actual = underTest.changeVisibility(eventIds, true)
 
-        assertThat(response).isEqualTo(listOf(EVENT_ID))
+        actual.shouldContainExactly(EVENT_ID)
     }
 
     @Test
@@ -82,27 +85,27 @@ internal class DefaultEventServiceTest(
         every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_ENTITY)
         every { mockMapper.entityToModel(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT
 
-        val response = underTest.findEventById(EVENT_ID)
+        val actual = underTest.findEventById(EVENT_ID)
 
-        assertThat(response).hasValue(DETAILED_EVENT)
+        actual shouldBePresent { it shouldBeEqual DETAILED_EVENT }
     }
 
     @Test
     internal fun `should return empty if event was not found`() {
         every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.empty()
 
-        val response = underTest.findEventById(EVENT_ID)
+        val actual = underTest.findEventById(EVENT_ID)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
     internal fun `should not update event if id was not found`() {
         every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.empty()
 
-        val response = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
+        val actual = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
@@ -112,9 +115,9 @@ internal class DefaultEventServiceTest(
         every { mockDetailedRepository.save(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT_ENTITY
         every { mockMapper.entityToModel(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT
 
-        val response = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
+        val actual = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
-        assertThat(response).hasValue(DETAILED_EVENT)
+        actual shouldBePresent { it shouldBeEqual DETAILED_EVENT }
     }
 
     @Test

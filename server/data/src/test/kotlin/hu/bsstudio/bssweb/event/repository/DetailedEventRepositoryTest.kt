@@ -7,7 +7,11 @@ import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
 import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.longs.shouldBeZero
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
@@ -23,21 +27,17 @@ class DetailedEventRepositoryTest(
 ) : DataTest() {
     @Test
     internal fun `create read delete`() {
-        assertThat(underTest.count()).isZero
+        underTest.count().shouldBeZero()
 
         val entity = DetailedEventEntity(url = URL, title = TITLE)
         val id = underTest.save(entity).id
         entityManager.run { flush(); clear() }
 
         val expected = createExpected(id)
-        assertThat(underTest.findById(id))
-            .isPresent()
-            .get()
-            .usingRecursiveComparison()
-            .isEqualTo(expected)
+        underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
 
         underTest.deleteById(id)
-        assertThat(underTest.findById(id)).isEmpty()
+        underTest.findById(id).shouldBeEmpty()
     }
 
     @Test
@@ -50,13 +50,11 @@ class DetailedEventRepositoryTest(
 
         val actual = underTest.findById(eventId).orElseThrow()
         val expected = createExpected(eventId, listOf(video))
-        assertThat(actual)
-            .usingRecursiveComparison()
-            .isEqualTo(expected)
+        actual.shouldBeEqualToComparingFields(expected)
 
         underTest.deleteById(eventId)
-        assertThat(underTest.findById(eventId)).isEmpty()
-        assertThat(simpleVideoRepository.count()).isOne()
+        underTest.findById(eventId).shouldBeEmpty()
+        simpleVideoRepository.count().shouldBe(1L)
     }
 
     private fun createExpected(id: UUID, videos: List<SimpleVideoEntity> = emptyList()) =

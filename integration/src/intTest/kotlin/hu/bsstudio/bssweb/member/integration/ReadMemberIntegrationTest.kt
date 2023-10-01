@@ -5,8 +5,9 @@ import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.model.Member
-import org.assertj.core.api.Assertions
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.assertions.assertSoftly
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
@@ -22,8 +23,8 @@ class ReadMemberIntegrationTest(
 
         val actual = client.getMemberById(entity.id)
 
-        assertThat(actual.body).isEqualTo(
-            Member(
+        assertSoftly(actual) {
+            body!! shouldBeEqual Member(
                 id = entity.id,
                 url = entity.url,
                 name = entity.name,
@@ -34,13 +35,14 @@ class ReadMemberIntegrationTest(
                 status = entity.status,
                 archived = entity.archived
             )
-        )
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        }
     }
 
     @Test
     fun `it should return 404 when member not found`() {
-        Assertions.assertThatExceptionOfType(FeignException.NotFound::class.java)
-            .isThrownBy { client.getMemberById(UUID.fromString("00000000-0000-0000-0000-000000000000")) }
+        shouldThrow<FeignException.NotFound> {
+            client.getMemberById(UUID.fromString("00000000-0000-0000-0000-000000000000"))
+        }
     }
 }

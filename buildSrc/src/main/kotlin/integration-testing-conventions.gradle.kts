@@ -18,8 +18,10 @@ configurations["intTestRuntimeOnly"].extendsFrom(configurations.runtimeOnly.get(
 
 dependencies {
     intTestImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(module = "hamcrest") // require developers to use assertJ
+        exclude(module = "hamcrest") // require developers to use KoTest
+        exclude(module = "org.assertj") // require developers to use KoTest
     }
+    intTestImplementation("io.kotest:kotest-runner-junit5:5.7.2")
 }
 
 val integrationTest = task<Test>("integrationTest") {

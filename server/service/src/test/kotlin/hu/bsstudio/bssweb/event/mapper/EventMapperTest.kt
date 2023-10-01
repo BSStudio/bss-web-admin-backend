@@ -9,12 +9,12 @@ import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.Video
+import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
@@ -30,32 +30,32 @@ internal class EventMapperTest(
 
     @Test
     internal fun `should map entity to model`() {
-        val result = underTest.entityToModel(ENTITY)
+        val actual = underTest.entityToModel(ENTITY)
 
-        assertThat(result).isEqualTo(MODEL)
+        actual shouldBeEqual MODEL
     }
 
     @Test
     internal fun `should map detailed entity to detailed model`() {
         every { mockVideoMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
 
-        val result = underTest.entityToModel(DETAILED_ENTITY)
+        val actual = underTest.entityToModel(DETAILED_ENTITY)
 
-        assertThat(result).isEqualTo(DETAILED_MODEL)
+        actual shouldBeEqual DETAILED_MODEL
     }
 
     @Test
     internal fun `should map model to entity`() {
-        val result = underTest.modelToEntity(CREATE_EVENT).apply { id = ID }
+        val actual = underTest.modelToEntity(CREATE_EVENT).apply { id = ID }
 
-        assertThat(result).isEqualTo(CREATED_ENTITY)
+        actual shouldBeEqual CREATED_ENTITY
     }
 
     @Test
     internal fun `should map update to entity`() {
-        val result = underTest.updateToEntity(DETAILED_ENTITY, UPDATE_EVENT)
+        val actual = underTest.updateToEntity(DETAILED_ENTITY, UPDATE_EVENT)
 
-        assertThat(result).isEqualTo(UPDATED_ENTITY)
+        actual shouldBeEqual UPDATED_ENTITY
     }
 
     private companion object {

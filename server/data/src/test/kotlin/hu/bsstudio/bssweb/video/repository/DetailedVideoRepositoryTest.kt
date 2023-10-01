@@ -10,7 +10,10 @@ import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.longs.shouldBeZero
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
@@ -26,21 +29,17 @@ class DetailedVideoRepositoryTest(
 ) : DataTest() {
     @Test
     internal fun `create read delete`() {
-        assertThat(underTest.count()).isZero
+        underTest.count().shouldBeZero()
 
         val entity = DetailedVideoEntity(url = URL, title = TITLE)
         val id = underTest.save(entity).id
         entityManager.run { flush(); clear() }
 
         val expected = createExpected(id)
-        assertThat(underTest.findById(id))
-            .isPresent()
-            .get()
-            .usingRecursiveComparison()
-            .isEqualTo(expected)
+        underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
 
         underTest.deleteById(id)
-        assertThat(underTest.findById(id)).isEmpty()
+        underTest.findById(id).shouldBeEmpty()
     }
 
     @Test
@@ -56,11 +55,9 @@ class DetailedVideoRepositoryTest(
         entityManager.run { flush(); clear() }
 
         val expected = createExpected(videoId, listOf(DetailedVideoCrewEntity(videoCrewId, SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId })))
-        assertThat(underTest.findById(videoId))
-            .isPresent()
-            .get()
-            .usingRecursiveComparison()
-            .isEqualTo(expected)
+        underTest.findById(videoId)
+            .shouldBePresent()
+            .shouldBeEqualToComparingFields(expected)
     }
 
     private fun createExpected(id: UUID, videoCrew: List<DetailedVideoCrewEntity> = emptyList()) =

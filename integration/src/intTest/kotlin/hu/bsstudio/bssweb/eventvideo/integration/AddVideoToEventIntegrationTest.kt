@@ -7,8 +7,9 @@ import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.eventvideo.client.EventVideoClient
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.model.Video
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import io.kotest.assertions.assertSoftly
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
@@ -25,9 +26,9 @@ class AddVideoToEventIntegrationTest(
 
         val actual = client.addVideoToEvent(eventEntity.id, videoEntity.id)
 
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
-        assertThat(actual.body).isEqualTo(
-            DetailedEvent(
+        assertSoftly(actual) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+            body!! shouldBeEqual DetailedEvent(
                 id = eventEntity.id,
                 url = eventEntity.url,
                 title = eventEntity.title,
@@ -44,32 +45,30 @@ class AddVideoToEventIntegrationTest(
                     )
                 )
             )
-        )
+        }
     }
 
     @Test
     fun `it should return 500 when event does not exist`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
 
-        assertThatExceptionOfType(FeignException.InternalServerError::class.java)
-            .isThrownBy {
-                client.addVideoToEvent(
-                    UUID.fromString("00000000-0000-0000-0000-000000000000"),
-                    videoEntity.id
-                )
-            }
+        shouldThrow<FeignException.InternalServerError> {
+            client.addVideoToEvent(
+                UUID.fromString("00000000-0000-0000-0000-000000000000"),
+                videoEntity.id
+            )
+        }
     }
 
     @Test
     fun `it should return 404 when video does not exist`() {
         val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
 
-        assertThatExceptionOfType(FeignException.InternalServerError::class.java)
-            .isThrownBy {
-                client.addVideoToEvent(
-                    eventEntity.id,
-                    UUID.fromString("00000000-0000-0000-0000-000000000000")
-                )
-            }
+        shouldThrow<FeignException.InternalServerError> {
+            client.addVideoToEvent(
+                eventEntity.id,
+                UUID.fromString("00000000-0000-0000-0000-000000000000")
+            )
+        }
     }
 }

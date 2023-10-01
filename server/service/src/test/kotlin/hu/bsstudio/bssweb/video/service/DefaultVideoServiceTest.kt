@@ -9,12 +9,15 @@ import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.optional.shouldBeEmpty
+import io.kotest.matchers.optional.shouldBePresent
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.PageImpl
@@ -37,9 +40,9 @@ internal class DefaultVideoServiceTest(
         every { mockRepository.findAll() } returns listOf(VIDEO_ENTITY)
         every { mockMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
 
-        val response = underTest.findAllVideos()
+        val actual = underTest.findAllVideos()
 
-        assertThat(response).isEqualTo(listOf(VIDEO))
+        actual.shouldContainExactly(VIDEO)
     }
 
     @Test
@@ -47,9 +50,9 @@ internal class DefaultVideoServiceTest(
         every { mockRepository.findAll(PAGEABLE) } returns PageImpl(VIDEO_ENTITY_LIST)
         every { mockMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
 
-        val response = underTest.findAllVideos(PAGEABLE)
+        val actual = underTest.findAllVideos(PAGEABLE)
 
-        assertThat(response).isEqualTo(PAGED_VIDEOS)
+        actual shouldBeEqual PAGED_VIDEOS
     }
 
     @Test
@@ -58,9 +61,9 @@ internal class DefaultVideoServiceTest(
         every { mockRepository.save(VIDEO_ENTITY) } returns VIDEO_ENTITY
         every { mockMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
 
-        val response = underTest.insertVideo(CREATE_VIDEO)
+        val actual = underTest.insertVideo(CREATE_VIDEO)
 
-        assertThat(response).isEqualTo(VIDEO)
+        actual shouldBeEqual VIDEO
     }
 
     @Test
@@ -71,9 +74,9 @@ internal class DefaultVideoServiceTest(
         every { mockRepository.save(VIDEO_ENTITY) } returns VIDEO_ENTITY
         every { VIDEO_ENTITY.id } returns VIDEO_ID
 
-        val response = underTest.changeVideoVisibility(videoIds, false)
+        val actual = underTest.changeVideoVisibility(videoIds, false)
 
-        assertThat(response).isEqualTo(listOf(VIDEO_ID))
+        actual.shouldContainExactly(VIDEO_ID)
     }
 
     @Test
@@ -81,27 +84,27 @@ internal class DefaultVideoServiceTest(
         every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_ENTITY)
         every { mockMapper.entityToModel(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO
 
-        val response = underTest.findVideoById(VIDEO_ID)
+        val actual = underTest.findVideoById(VIDEO_ID)
 
-        assertThat(response).hasValue(DETAILED_VIDEO)
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
     }
 
     @Test
     internal fun `should return empty if video was not found`() {
         every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.empty()
 
-        val response = underTest.findVideoById(VIDEO_ID)
+        val actual = underTest.findVideoById(VIDEO_ID)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
     internal fun `should not update video if id was not found`() {
         every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.empty()
 
-        val response = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
+        val actual = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
-        assertThat(response).isEmpty
+        actual.shouldBeEmpty()
     }
 
     @Test
@@ -111,9 +114,9 @@ internal class DefaultVideoServiceTest(
         every { mockDetailedRepository.save(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO_ENTITY
         every { mockMapper.entityToModel(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO
 
-        val response = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
+        val actual = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
-        assertThat(response).hasValue(DETAILED_VIDEO)
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
     }
 
     @Test

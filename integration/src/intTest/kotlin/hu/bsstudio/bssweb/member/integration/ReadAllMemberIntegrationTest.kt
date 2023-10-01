@@ -4,7 +4,10 @@ import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.model.Member
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.assertions.assertSoftly
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
@@ -17,8 +20,10 @@ class ReadAllMemberIntegrationTest(
     fun `it should return 200 and empty list`() {
         val actual = client.getAllMembers()
 
-        assertThat(actual.body).isEmpty()
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
+        assertSoftly(actual) {
+            body.shouldBeEmpty()
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        }
     }
 
     @Test
@@ -27,19 +32,21 @@ class ReadAllMemberIntegrationTest(
 
         val actual = client.getAllMembers()
 
-        assertThat(actual.body).containsExactly(
-            Member(
-                id = entity.id,
-                url = entity.url,
-                name = entity.name,
-                nickname = entity.nickname,
-                joinedAt = entity.joinedAt,
-                description = entity.description,
-                role = entity.role,
-                status = entity.status,
-                archived = entity.archived
+        assertSoftly(actual) {
+            body.shouldContainExactly(
+                Member(
+                    id = entity.id,
+                    url = entity.url,
+                    name = entity.name,
+                    nickname = entity.nickname,
+                    joinedAt = entity.joinedAt,
+                    description = entity.description,
+                    role = entity.role,
+                    status = entity.status,
+                    archived = entity.archived
+                )
             )
-        )
-        assertThat(actual.statusCode).isEqualTo(HttpStatusCode.valueOf(200))
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        }
     }
 }

@@ -1,6 +1,8 @@
 package hu.bsstudio.bssweb.video.model
 
-import org.assertj.core.api.Assertions.assertThat
+import hu.bsstudio.bssweb.BssModelConfig
+import io.kotest.assertions.json.shouldEqualJson
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
@@ -10,7 +12,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 @JsonTest
-@ContextConfiguration(classes = [VideoTest::class])
+@ContextConfiguration(classes = [BssModelConfig::class])
 internal class VideoTest(
     @Autowired private val underTest: JacksonTester<Video>
 ) {
@@ -19,14 +21,14 @@ internal class VideoTest(
     internal fun `test serialisation`() {
         val actual = this.underTest.write(VIDEO)
 
-        assertThat(actual).isEqualToJson(JSON)
+        actual.json shouldEqualJson JSON
     }
 
     @Test
     internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
-        assertThat(actual).isEqualTo(VIDEO)
+        actual shouldBeEqual VIDEO
     }
 
     private companion object {

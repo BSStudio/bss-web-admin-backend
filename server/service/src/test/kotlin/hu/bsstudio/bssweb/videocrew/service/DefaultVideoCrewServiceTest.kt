@@ -7,12 +7,14 @@ import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
+import io.kotest.matchers.collections.shouldContainExactly
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.optional.shouldBePresent
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.Optional
@@ -32,9 +34,9 @@ internal class DefaultVideoCrewServiceTest(
     internal fun `should return all positions sorted`() {
         every { mockRepository.getPositions() } returns setOf("POSITION_2", "POSITION_1")
 
-        val result = underTest.getPositions()
+        val actual = underTest.getPositions()
 
-        assertThat(result).isEqualTo(listOf("POSITION_1", "POSITION_2"))
+        actual.shouldContainExactly("POSITION_1", "POSITION_2")
     }
 
     @Test
@@ -44,9 +46,9 @@ internal class DefaultVideoCrewServiceTest(
         every { VIDEO_CREW.videoId } returns VIDEO_ID
         every { mockVideoService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO)
 
-        val result = underTest.addPosition(VIDEO_CREW)
+        val actual = underTest.addPosition(VIDEO_CREW)
 
-        assertThat(result).hasValue(DETAILED_VIDEO)
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
     }
 
     @Test
@@ -56,9 +58,9 @@ internal class DefaultVideoCrewServiceTest(
         every { VIDEO_CREW.videoId } returns VIDEO_ID
         every { mockVideoService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_OTHER)
 
-        val result = underTest.removePosition(VIDEO_CREW)
+        val actual = underTest.removePosition(VIDEO_CREW)
 
-        assertThat(result).hasValue(DETAILED_VIDEO_OTHER)
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO_OTHER }
     }
 
     private companion object {

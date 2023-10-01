@@ -15,7 +15,7 @@ jobs:
     parameters:
       command:
         type: string
-        default: test --continue --parallel
+        default: test --continue
       after:
         type: steps
         default: []
@@ -30,6 +30,7 @@ jobs:
           version: 20.10.24
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
+          cache_key: v2
           steps:
             - run: ./gradlew << parameters.command >>
       - steps: << parameters.after >>
@@ -38,7 +39,11 @@ jobs:
     steps:
       - checkout
       - run: docker compose up -d
-      - run: ./gradlew integrationTest --continue --parallel
+      - gradle/with_cache:
+          deps_checksum_file: build.gradle.kts
+          cache_key: v2
+          steps:
+            - run: ./gradlew integrationTest --continue
       - gradle/collect_test_results:
           reports_path: integration/build/reports
           test_results_path: integration/build/test-results
@@ -66,18 +71,20 @@ workflows:
     jobs:
       - gradle/run:
           name: Lint
-          command: ktlintCheck --parallel
+          command: ktlintCheck
           deps_checksum_file: build.gradle.kts
+          cache_key: v2
           executor: jdk
       - gradle_integration:
           name: Integration test
       - gradle_docker:
           name: Coverage verification
-          command: jacocoTestCoverageVerification --parallel
+          command: jacocoTestCoverageVerification
       - gradle/run:
           name: Build boot jar
-          command: bootJar --parallel
+          command: bootJar
           deps_checksum_file: build.gradle.kts
+          cache_key: v2
           executor: jdk
       - gradle_docker:
           name: Unit test

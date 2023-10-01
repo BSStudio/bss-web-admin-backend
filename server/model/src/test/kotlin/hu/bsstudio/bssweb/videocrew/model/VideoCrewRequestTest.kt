@@ -1,6 +1,8 @@
 package hu.bsstudio.bssweb.videocrew.model
 
-import org.assertj.core.api.Assertions.assertThat
+import hu.bsstudio.bssweb.BssModelConfig
+import io.kotest.assertions.json.shouldEqualJson
+import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
@@ -9,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration
 import java.util.UUID
 
 @JsonTest
-@ContextConfiguration(classes = [VideoCrewRequestTest::class])
+@ContextConfiguration(classes = [BssModelConfig::class])
 internal class VideoCrewRequestTest(
     @Autowired private val underTest: JacksonTester<VideoCrewRequest>
 ) {
@@ -18,14 +20,14 @@ internal class VideoCrewRequestTest(
     internal fun `test serialisation`() {
         val actual = this.underTest.write(VIDEO_CREW_REQUEST)
 
-        assertThat(actual).isEqualToJson(JSON)
+        actual.json shouldEqualJson JSON
     }
 
     @Test
     internal fun `test deserialization`() {
         val actual = this.underTest.parseObject(JSON)
 
-        assertThat(actual).isEqualTo(VIDEO_CREW_REQUEST)
+        actual shouldBeEqual VIDEO_CREW_REQUEST
     }
 
     private companion object {
