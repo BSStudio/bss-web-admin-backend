@@ -10,13 +10,11 @@ import hu.bsstudio.bssweb.video.service.VideoService
 import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.http.MediaType
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -26,14 +24,11 @@ import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
-@WebMvcTest(VideoController::class, excludeAutoConfiguration = [SecurityAutoConfiguration::class])
-@ContextConfiguration(classes = [VideoController::class])
-internal class VideoControllerTest {
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
-
-    @Autowired
-    private lateinit var mockMvc: MockMvc
+@WebMvcTest(VideoController::class)
+internal class VideoControllerTest(
+    @Autowired private val mockMvc: MockMvc,
+    @Autowired private val objectMapper: ObjectMapper
+) {
 
     @MockkBean
     private lateinit var mockService: VideoService

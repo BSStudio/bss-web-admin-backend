@@ -10,10 +10,8 @@ import hu.bsstudio.bssweb.member.service.MemberService
 import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
-import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -23,14 +21,11 @@ import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
-@WebMvcTest(MemberController::class, excludeAutoConfiguration = [SecurityAutoConfiguration::class])
-@ContextConfiguration(classes = [MemberController::class])
-internal class MemberControllerTest {
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
-
-    @Autowired
-    private lateinit var mockMvc: MockMvc
+@WebMvcTest(MemberController::class)
+internal class MemberControllerTest(
+    @Autowired private val mockMvc: MockMvc,
+    @Autowired private val objectMapper: ObjectMapper
+) {
 
     @MockkBean
     private lateinit var mockService: MemberService
