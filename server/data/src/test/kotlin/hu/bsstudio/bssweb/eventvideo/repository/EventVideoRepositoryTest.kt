@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.eventvideo.repository
 
-import hu.bsstudio.bssweb.DataTest
 import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
 import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
@@ -12,12 +11,16 @@ import io.kotest.matchers.optional.shouldBePresent
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class EventVideoRepositoryTest(
     @Autowired private val eventRepository: SimpleEventRepository,
     @Autowired private val videoRepository: SimpleVideoRepository,
     @Autowired private val underTest: EventVideoRepository
-) : DataTest() {
+) {
 
     @Test
     fun `create read delete`() {

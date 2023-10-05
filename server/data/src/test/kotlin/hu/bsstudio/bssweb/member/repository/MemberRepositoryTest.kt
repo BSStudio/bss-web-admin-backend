@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.member.repository
 
-import hu.bsstudio.bssweb.DataTest
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
@@ -9,11 +8,15 @@ import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import java.time.LocalDate
 
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MemberRepositoryTest(
     @Autowired private val underTest: MemberRepository
-) : DataTest() {
+) {
     @Test
     fun `create read delete`() {
         underTest.count().shouldBeZero()

@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.videocrew.repository
 
-import hu.bsstudio.bssweb.DataTest
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
@@ -13,12 +12,16 @@ import io.kotest.matchers.optional.shouldBePresent
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class VideoCrewRepositoryTest(
     @Autowired private val underTest: VideoCrewRepository,
     @Autowired private val memberRepository: MemberRepository,
     @Autowired private val videoRepository: SimpleVideoRepository
-) : DataTest() {
+) {
 
     @Test
     fun `create read delete`() {
