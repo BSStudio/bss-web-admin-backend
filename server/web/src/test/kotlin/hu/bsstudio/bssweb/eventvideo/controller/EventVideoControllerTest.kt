@@ -8,6 +8,8 @@ import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.post
@@ -28,9 +30,11 @@ internal class EventVideoControllerTest(
     fun addVideoToEvent() {
         every { mockService.addVideoToEvent(EVENT_ID, VIDEO_ID) } returns Optional.of(DETAILED_EVENT)
 
-        mockMvc.post("/api/v1/eventVideo") {
+        mockMvc.post(BASE_URL) {
             param("eventId", EVENT_ID.toString())
             param("videoId", VIDEO_ID.toString())
+            with(httpBasic(USERNAME, PASSWORD))
+            with(csrf())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(DETAILED_EVENT) }
@@ -41,9 +45,11 @@ internal class EventVideoControllerTest(
     fun removeVideoFromEvent() {
         every { mockService.removeVideoFromEvent(EVENT_ID, VIDEO_ID) } returns Optional.of(DETAILED_EVENT)
 
-        mockMvc.delete("/api/v1/eventVideo") {
+        mockMvc.delete(BASE_URL) {
             param("eventId", EVENT_ID.toString())
             param("videoId", VIDEO_ID.toString())
+            with(httpBasic(USERNAME, PASSWORD))
+            with(csrf())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(DETAILED_EVENT) }
@@ -51,6 +57,9 @@ internal class EventVideoControllerTest(
     }
 
     private companion object {
+        private const val BASE_URL = "/api/v1/eventVideo"
+        private const val USERNAME = "user"
+        private const val PASSWORD = "password"
         private val EVENT_ID = UUID.randomUUID()
         private val VIDEO_ID = UUID.randomUUID()
         private val DETAILED_EVENT = DetailedEvent(

@@ -37,8 +37,8 @@ internal class EventControllerTest(
     internal fun findAllEvent() {
         every { mockService.findAllEvent() } returns EVENT_LIST
 
-        mockMvc.get("/api/v1/event") {
-            with(httpBasic("user", "password"))
+        mockMvc.get(BASE_URL) {
+            with(httpBasic(USERNAME, PASSWORD))
         }.andExpect {
             status { isOk() }
             content { json(objectMapper.writeValueAsString(EVENT_LIST)) }
@@ -49,15 +49,15 @@ internal class EventControllerTest(
     internal fun createEvent() {
         every { mockService.insertEvent(CREATE_EVENT) } returns EVENT
 
-        mockMvc.post("/api/v1/event") {
+        mockMvc.post(BASE_URL) {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(CREATE_EVENT)
-            with(httpBasic("user", "password"))
+            with(httpBasic(USERNAME, PASSWORD))
             with(csrf())
         }.andExpect {
             status { isCreated() }
             content { json(objectMapper.writeValueAsString(EVENT)) }
-            header { string("Location", "http://localhost/api/v1/event/$EVENT_ID") }
+            header { string("Location", "http://localhost$BASE_URL/$EVENT_ID") }
         }
     }
 
@@ -65,8 +65,8 @@ internal class EventControllerTest(
     internal fun findEventById1() {
         every { mockService.findEventById(EVENT_ID) } returns Optional.of(DETAILED_EVENT)
 
-        mockMvc.get("/api/v1/event/$EVENT_ID") {
-            with(httpBasic("user", "password"))
+        mockMvc.get("$BASE_URL/$EVENT_ID") {
+            with(httpBasic(USERNAME, PASSWORD))
         }.andExpect {
             status { isOk() }
             content { json(objectMapper.writeValueAsString(DETAILED_EVENT)) }
@@ -77,8 +77,8 @@ internal class EventControllerTest(
     internal fun findEventById2() {
         every { mockService.findEventById(EVENT_ID) } returns Optional.empty()
 
-        mockMvc.get("/api/v1/event/$EVENT_ID") {
-            with(httpBasic("user", "password"))
+        mockMvc.get("$BASE_URL/$EVENT_ID") {
+            with(httpBasic(USERNAME, PASSWORD))
         }.andExpect {
             status { isNotFound() }
             content { string("") }
@@ -89,10 +89,10 @@ internal class EventControllerTest(
     internal fun updateEvent1() {
         every { mockService.updateEvent(EVENT_ID, UPDATE_EVENT) } returns Optional.of(DETAILED_EVENT)
 
-        mockMvc.put("/api/v1/event/$EVENT_ID") {
+        mockMvc.put("$BASE_URL/$EVENT_ID") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(UPDATE_EVENT)
-            with(httpBasic("user", "password"))
+            with(httpBasic(USERNAME, PASSWORD))
             with(csrf())
         }.andExpect {
             status { isOk() }
@@ -104,10 +104,10 @@ internal class EventControllerTest(
     internal fun updateEvent2() {
         every { mockService.updateEvent(EVENT_ID, UPDATE_EVENT) } returns Optional.empty()
 
-        mockMvc.put("/api/v1/event/$EVENT_ID") {
+        mockMvc.put("$BASE_URL/$EVENT_ID") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(UPDATE_EVENT)
-            with(httpBasic("user", "password"))
+            with(httpBasic(USERNAME, PASSWORD))
             with(csrf())
         }.andExpect {
             status { isNotFound() }
@@ -119,8 +119,8 @@ internal class EventControllerTest(
     internal fun deleteEvent() {
         every { mockService.removeEvent(EVENT_ID) } returns Unit
 
-        mockMvc.delete("/api/v1/event/$EVENT_ID") {
-            with(httpBasic("user", "password"))
+        mockMvc.delete("$BASE_URL/$EVENT_ID") {
+            with(httpBasic(USERNAME, PASSWORD))
             with(csrf())
         }.andExpect {
             status { isNoContent() }
@@ -129,6 +129,9 @@ internal class EventControllerTest(
     }
 
     private companion object {
+        private const val BASE_URL = "/api/v1/event"
+        private const val USERNAME = "user"
+        private const val PASSWORD = "password"
         private const val URL = "url"
         private const val TITLE = "title"
         private const val DESCRIPTION = "description"
