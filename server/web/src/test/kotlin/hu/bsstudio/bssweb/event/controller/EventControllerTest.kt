@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -35,7 +37,9 @@ internal class EventControllerTest(
     internal fun findAllEvent() {
         every { mockService.findAllEvent() } returns EVENT_LIST
 
-        mockMvc.get("/api/v1/event").andExpect {
+        mockMvc.get("/api/v1/event") {
+            with(httpBasic("user", "password"))
+        }.andExpect {
             status { isOk() }
             content { json(objectMapper.writeValueAsString(EVENT_LIST)) }
         }
@@ -48,6 +52,8 @@ internal class EventControllerTest(
         mockMvc.post("/api/v1/event") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(CREATE_EVENT)
+            with(httpBasic("user", "password"))
+            with(csrf())
         }.andExpect {
             status { isCreated() }
             content { json(objectMapper.writeValueAsString(EVENT)) }
@@ -59,7 +65,9 @@ internal class EventControllerTest(
     internal fun findEventById1() {
         every { mockService.findEventById(EVENT_ID) } returns Optional.of(DETAILED_EVENT)
 
-        mockMvc.get("/api/v1/event/$EVENT_ID").andExpect {
+        mockMvc.get("/api/v1/event/$EVENT_ID") {
+            with(httpBasic("user", "password"))
+        }.andExpect {
             status { isOk() }
             content { json(objectMapper.writeValueAsString(DETAILED_EVENT)) }
         }
@@ -69,7 +77,9 @@ internal class EventControllerTest(
     internal fun findEventById2() {
         every { mockService.findEventById(EVENT_ID) } returns Optional.empty()
 
-        mockMvc.get("/api/v1/event/$EVENT_ID").andExpect {
+        mockMvc.get("/api/v1/event/$EVENT_ID") {
+            with(httpBasic("user", "password"))
+        }.andExpect {
             status { isNotFound() }
             content { string("") }
         }
@@ -82,6 +92,8 @@ internal class EventControllerTest(
         mockMvc.put("/api/v1/event/$EVENT_ID") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(UPDATE_EVENT)
+            with(httpBasic("user", "password"))
+            with(csrf())
         }.andExpect {
             status { isOk() }
             content { json(objectMapper.writeValueAsString(DETAILED_EVENT)) }
@@ -95,6 +107,8 @@ internal class EventControllerTest(
         mockMvc.put("/api/v1/event/$EVENT_ID") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(UPDATE_EVENT)
+            with(httpBasic("user", "password"))
+            with(csrf())
         }.andExpect {
             status { isNotFound() }
             content { string("") }
@@ -105,7 +119,10 @@ internal class EventControllerTest(
     internal fun deleteEvent() {
         every { mockService.removeEvent(EVENT_ID) } returns Unit
 
-        mockMvc.delete("/api/v1/event/$EVENT_ID").andExpect {
+        mockMvc.delete("/api/v1/event/$EVENT_ID") {
+            with(httpBasic("user", "password"))
+            with(csrf())
+        }.andExpect {
             status { isNoContent() }
             content { string("") }
         }
