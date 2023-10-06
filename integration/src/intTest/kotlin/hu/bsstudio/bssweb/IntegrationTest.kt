@@ -1,7 +1,6 @@
 package hu.bsstudio.bssweb
 
 import hu.bsstudio.bssweb.config.BssFeignConfig
-import hu.bsstudio.bssweb.config.DataConfig
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
 import hu.bsstudio.bssweb.member.repository.MemberRepository
