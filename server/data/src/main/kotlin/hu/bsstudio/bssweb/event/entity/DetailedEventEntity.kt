@@ -25,7 +25,7 @@ data class DetailedEventEntity(
     @GeneratedValue
     override lateinit var id: UUID
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinTable(
         name = "event_video",
         joinColumns = [JoinColumn(name = "event_id")],

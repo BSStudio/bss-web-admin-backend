@@ -24,7 +24,7 @@ data class DetailedVideoEntity(
     @GeneratedValue
     override lateinit var id: UUID
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "video_id")
     lateinit var videoCrew: List<DetailedVideoCrewEntity>
 
