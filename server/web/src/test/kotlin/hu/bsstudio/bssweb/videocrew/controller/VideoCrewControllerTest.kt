@@ -8,9 +8,9 @@ import hu.bsstudio.bssweb.videocrew.service.VideoCrewService
 import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -19,14 +19,11 @@ import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
 
-@WebMvcTest(VideoCrewController::class, excludeAutoConfiguration = [SecurityAutoConfiguration::class])
-@ContextConfiguration(classes = [VideoCrewController::class])
-internal class VideoCrewControllerTest {
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
-
-    @Autowired
-    private lateinit var mockMvc: MockMvc
+@WebMvcTest(VideoCrewController::class)
+internal class VideoCrewControllerTest(
+    @Autowired private val mockMvc: MockMvc,
+    @Autowired private val objectMapper: ObjectMapper
+) {
 
     @MockkBean
     private lateinit var mockService: VideoCrewService
@@ -35,7 +32,9 @@ internal class VideoCrewControllerTest {
     internal fun getPositions() {
         every { mockService.getPositions() } returns listOf(POSITION)
 
-        mockMvc.get("/api/v1/videoCrew/position").andExpectAll {
+        mockMvc.get("$BASE_URL/position") {
+            with(httpBasic(USERNAME, PASSWORD))
+        }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(listOf(POSITION)) }
         }
@@ -45,10 +44,12 @@ internal class VideoCrewControllerTest {
     internal fun addPosition() {
         every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
-        mockMvc.put("/api/v1/videoCrew") {
+        mockMvc.put(BASE_URL) {
             param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
             param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
             param("position", VIDEO_CREW_REQUEST.position)
+            with(httpBasic(USERNAME, PASSWORD))
+            with(csrf())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
@@ -59,10 +60,12 @@ internal class VideoCrewControllerTest {
     internal fun addPositionEmpty() {
         every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
-        mockMvc.put("/api/v1/videoCrew") {
+        mockMvc.put(BASE_URL) {
             param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
             param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
             param("position", VIDEO_CREW_REQUEST.position)
+            with(httpBasic(USERNAME, PASSWORD))
+            with(csrf())
         }.andExpectAll {
             status { isNotFound() }
             content { string("") }
@@ -73,10 +76,12 @@ internal class VideoCrewControllerTest {
     internal fun removePosition() {
         every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
-        mockMvc.delete("/api/v1/videoCrew") {
+        mockMvc.delete(BASE_URL) {
             param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
             param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
             param("position", VIDEO_CREW_REQUEST.position)
+            with(httpBasic(USERNAME, PASSWORD))
+            with(csrf())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
@@ -87,10 +92,12 @@ internal class VideoCrewControllerTest {
     internal fun removePositionEmpty() {
         every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
-        mockMvc.delete("/api/v1/videoCrew") {
+        mockMvc.delete(BASE_URL) {
             param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
             param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
             param("position", VIDEO_CREW_REQUEST.position)
+            with(httpBasic(USERNAME, PASSWORD))
+            with(csrf())
         }.andExpectAll {
             status { isNotFound() }
             content { string("") }
@@ -98,6 +105,9 @@ internal class VideoCrewControllerTest {
     }
 
     private companion object {
+        private const val BASE_URL = "/api/v1/videoCrew"
+        private const val USERNAME = "user"
+        private const val PASSWORD = "password"
         private val VIDEO_ID = UUID.randomUUID()
         private const val POSITION = "position"
         private val MEMBER_ID = UUID.randomUUID()

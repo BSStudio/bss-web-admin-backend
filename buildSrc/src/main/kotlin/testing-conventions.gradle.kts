@@ -27,8 +27,8 @@ tasks.check {
 
 val excluded = setOf(
     "**/entity/**",
-    "**/config/**",
-    "**/exception/**"
+    "**/exception/**",
+    "**/**Config**",
 )
 
 tasks.jacocoTestReport {

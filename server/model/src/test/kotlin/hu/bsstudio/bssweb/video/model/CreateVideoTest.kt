@@ -1,16 +1,13 @@
 package hu.bsstudio.bssweb.video.model
 
-import hu.bsstudio.bssweb.BssModelConfig
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.json.JsonTest
 import org.springframework.boot.test.json.JacksonTester
-import org.springframework.test.context.ContextConfiguration
 
 @JsonTest
-@ContextConfiguration(classes = [BssModelConfig::class])
 internal class CreateVideoTest(
     @Autowired private val underTest: JacksonTester<CreateVideo>
 ) {
