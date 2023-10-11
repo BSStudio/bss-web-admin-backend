@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.video.entity
 
 import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -24,7 +25,7 @@ data class DetailedVideoEntity(
     @GeneratedValue
     override lateinit var id: UUID
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(cascade = [CascadeType.REMOVE])
     @JoinColumn(name = "video_id")
     lateinit var videoCrew: List<DetailedVideoCrewEntity>
 

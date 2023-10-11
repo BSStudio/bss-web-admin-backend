@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.videocrew.entity
 
 import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
+import jakarta.persistence.CascadeType
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
 import jakarta.persistence.JoinColumn
@@ -13,10 +14,12 @@ import org.hibernate.Hibernate
 data class DetailedVideoCrewEntity(
     @EmbeddedId
     var id: VideoCrewEntityId,
+) {
+
     @ManyToOne
     @JoinColumn(insertable = false, updatable = false)
-    var member: SimpleMemberEntity
-) {
+    lateinit var member: SimpleMemberEntity
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false

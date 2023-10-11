@@ -11,6 +11,7 @@ import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
 import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
@@ -28,6 +29,12 @@ class DetailedEventRepositoryTest(
     @Autowired private val eventVideoRepository: EventVideoRepository,
     @Autowired private val entityManager: TestEntityManager
 ) {
+
+    @AfterEach
+    fun tearDown() {
+        entityManager.flush()
+    }
+
     @Test
     internal fun `create read delete`() {
         underTest.count().shouldBeZero()
@@ -40,6 +47,8 @@ class DetailedEventRepositoryTest(
         underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
 
         underTest.deleteById(id)
+        entityManager.flush()
+
         underTest.findById(id).shouldBeEmpty()
     }
 
@@ -51,13 +60,15 @@ class DetailedEventRepositoryTest(
         eventVideoRepository.save(EventVideoEntity(eventId = eventId, videoId = video.id))
         entityManager.run { flush(); clear() }
 
-        val actual = underTest.findById(eventId).orElseThrow()
+        val actual = underTest.findById(eventId)
         val expected = createExpected(eventId, listOf(video))
-        actual.shouldBeEqualToComparingFields(expected)
+        actual shouldBePresent { it shouldBeEqualToComparingFields expected }
 
         underTest.deleteById(eventId)
+        entityManager.flush()
+
         underTest.findById(eventId).shouldBeEmpty()
-        simpleVideoRepository.count().shouldBe(1L)
+        simpleVideoRepository.findById(video.id).shouldBePresent()
     }
 
     private fun createExpected(id: UUID, videos: List<SimpleVideoEntity> = emptyList()) =

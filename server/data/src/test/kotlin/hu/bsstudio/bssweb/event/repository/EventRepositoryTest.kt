@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import java.time.LocalDate
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class EventRepositoryTest(
-    @Autowired private val underTest: SimpleEventRepository
+    @Autowired private val underTest: SimpleEventRepository,
+    @Autowired private val entityManager: TestEntityManager
 ) {
 
     @Test
@@ -36,6 +38,8 @@ class EventRepositoryTest(
         }
 
         underTest.deleteById(id)
+        entityManager.flush()
+
         underTest.findById(id).shouldBeEmpty()
     }
 

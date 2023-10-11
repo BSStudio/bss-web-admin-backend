@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.event.entity
 
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -25,7 +26,7 @@ data class DetailedEventEntity(
     @GeneratedValue
     override lateinit var id: UUID
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany // (cascade = [CascadeType.DETACH])
     @JoinTable(
         name = "event_video",
         joinColumns = [JoinColumn(name = "event_id")],
