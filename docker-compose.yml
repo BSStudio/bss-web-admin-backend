@@ -57,7 +57,7 @@ services:
       DOCKER_INFLUXDB_INIT_BUCKET: "bucket"
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "token"
   mock-file-api:
-    image: "wiremock/wiremock:2.35.0"
+    image: "wiremock/wiremock:3.2.0"
     ports:
       - "127.0.0.1:8888:8080"
     healthcheck:
