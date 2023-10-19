@@ -3,14 +3,12 @@ package hu.bsstudio.bssweb.event.repository
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
-import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
-import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.longs.shouldBeZero
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
-import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,9 +22,6 @@ import java.util.UUID
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class DetailedEventRepositoryTest(
     @Autowired private val underTest: DetailedEventRepository,
-    @Autowired private val simpleEventRepository: SimpleEventRepository,
-    @Autowired private val simpleVideoRepository: SimpleVideoRepository,
-    @Autowired private val eventVideoRepository: EventVideoRepository,
     @Autowired private val entityManager: TestEntityManager
 ) {
 
@@ -54,11 +49,9 @@ class DetailedEventRepositoryTest(
 
     @Test
     internal fun `create read delete with video`() {
-        val eventId = simpleEventRepository.save(SimpleEventEntity(url = URL, title = TITLE)).id
-        val video = simpleVideoRepository.save(SimpleVideoEntity(url = "url", title = "title"))
-
-        eventVideoRepository.save(EventVideoEntity(eventId = eventId, videoId = video.id))
-        entityManager.run { flush(); clear() }
+        val eventId = entityManager.persistAndGetId(SimpleEventEntity(url = URL, title = TITLE), UUID::class.java)
+        val video = entityManager.persist(SimpleVideoEntity(url = "url", title = "title"))
+        entityManager.persistAndFlush(EventVideoEntity(eventId = eventId, videoId = video.id))
 
         val actual = underTest.findById(eventId)
         val expected = createExpected(eventId, listOf(video))
@@ -68,7 +61,7 @@ class DetailedEventRepositoryTest(
         entityManager.flush()
 
         underTest.findById(eventId).shouldBeEmpty()
-        simpleVideoRepository.findById(video.id).shouldBePresent()
+        entityManager.find(SimpleVideoEntity::class.java, video.id).shouldNotBeNull()
     }
 
     private fun createExpected(id: UUID, videos: List<SimpleVideoEntity> = emptyList()) =

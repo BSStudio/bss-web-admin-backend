@@ -26,7 +26,7 @@ data class DetailedEventEntity(
     @GeneratedValue
     override lateinit var id: UUID
 
-    @OneToMany // (cascade = [CascadeType.DETACH])
+    @OneToMany
     @JoinTable(
         name = "event_video",
         joinColumns = [JoinColumn(name = "event_id")],

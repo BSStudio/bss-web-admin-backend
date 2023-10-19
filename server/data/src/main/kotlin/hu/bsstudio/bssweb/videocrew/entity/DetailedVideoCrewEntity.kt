@@ -1,7 +1,6 @@
 package hu.bsstudio.bssweb.videocrew.entity
 
 import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
-import jakarta.persistence.CascadeType
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
 import jakarta.persistence.JoinColumn
