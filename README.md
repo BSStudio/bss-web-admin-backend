@@ -29,6 +29,8 @@ classDiagram
     web ..> service
     service ..> data
     operation ..> model
+    model ..> common
+    data ..> common
     service ..> model
     integration ..> client
     src ..> web
