@@ -18,11 +18,7 @@ class VideoCrewMapper(private val memberMapper: MemberMapper) {
     }
 
     fun modelToEntity(model: VideoCrewRequest): VideoCrewEntity {
-        return VideoCrewEntity(
-            videoId = model.videoId,
-            position = model.position,
-            memberId = model.memberId
-        )
+        return VideoCrewEntity(this.modelToId(model))
     }
 
     fun entityToModel(entity: DetailedVideoCrewEntity): VideoCrew {
