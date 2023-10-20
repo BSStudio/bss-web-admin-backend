@@ -12,7 +12,7 @@ import org.hibernate.Hibernate
 @Table(name = "crew")
 data class DetailedVideoCrewEntity(
     @EmbeddedId
-    var id: VideoCrewEntityId,
+    var id: VideoCrewEntityId
 ) {
 
     @ManyToOne
