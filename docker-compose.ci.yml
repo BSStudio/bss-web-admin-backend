@@ -1,32 +1,8 @@
 version: "3.9"
 services:
   app:
-    build:
-      context: "./"
     ports:
       - "8080"
-    healthcheck:
-      test: "wget --tries=1 --no-verbose -qO- http://localhost:8080/actuator/health | grep -q UP"
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    depends_on:
-      - postgres
-      - influx
-    environment:
-      bss.file-api.url: "http://mock-file-api:8080"
-      spring.security.user.password: "password"
-      spring.datasource.url: "jdbc:postgresql://db:5432/postgres?currentSchema=bss_web"
-      spring.datasource.username: "postgres"
-      spring.datasource.password: "postgres"
-      spring.flyway.default-schema: "bss_web"
-      management.influx.metrics.export.uri: "http://influx:8086"
-      management.influx.metrics.export.token: "token"
-      management.influx.metrics.export.org: "org"
-      management.influx.metrics.export.user-name: "user"
-      management.influx.metrics.export.password: "password"
-      management.influx.metrics.export.bucket: "bucket"
   db:
     ports:
       - "5432"
