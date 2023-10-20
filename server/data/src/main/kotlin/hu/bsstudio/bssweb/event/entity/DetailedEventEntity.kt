@@ -1,7 +1,6 @@
 package hu.bsstudio.bssweb.event.entity
 
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
