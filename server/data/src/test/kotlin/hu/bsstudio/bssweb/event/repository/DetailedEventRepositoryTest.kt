@@ -3,6 +3,8 @@ package hu.bsstudio.bssweb.event.repository
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
+import hu.bsstudio.bssweb.find
+import hu.bsstudio.bssweb.persistAndGetId
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.longs.shouldBeZero
@@ -25,11 +27,6 @@ class DetailedEventRepositoryTest(
     @Autowired private val entityManager: TestEntityManager
 ) {
 
-    @AfterEach
-    fun tearDown() {
-        entityManager.flush()
-    }
-
     @Test
     internal fun `create read delete`() {
         underTest.count().shouldBeZero()
@@ -49,7 +46,7 @@ class DetailedEventRepositoryTest(
 
     @Test
     internal fun `create read delete with video`() {
-        val eventId = entityManager.persistAndGetId(SimpleEventEntity(url = URL, title = TITLE), UUID::class.java)
+        val eventId = entityManager.persistAndGetId<UUID>(SimpleEventEntity(url = URL, title = TITLE))
         val video = entityManager.persist(SimpleVideoEntity(url = "url", title = "title"))
         entityManager.persistAndFlush(EventVideoEntity(eventId = eventId, videoId = video.id))
 
@@ -61,7 +58,7 @@ class DetailedEventRepositoryTest(
         entityManager.flush()
 
         underTest.findById(eventId).shouldBeEmpty()
-        entityManager.find(SimpleVideoEntity::class.java, video.id).shouldNotBeNull()
+        entityManager.find<SimpleVideoEntity>(video.id).shouldNotBeNull()
     }
 
     private fun createExpected(id: UUID, videos: List<SimpleVideoEntity> = emptyList()) =
