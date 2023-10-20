@@ -2,7 +2,6 @@ package hu.bsstudio.bssweb.video.entity
 
 import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import jakarta.persistence.Entity
-import jakarta.persistence.ForeignKey
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
