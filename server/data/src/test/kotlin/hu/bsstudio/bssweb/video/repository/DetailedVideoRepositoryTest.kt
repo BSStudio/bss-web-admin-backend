@@ -1,7 +1,6 @@
 package hu.bsstudio.bssweb.video.repository
 
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
-import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
@@ -26,7 +25,7 @@ class DetailedVideoRepositoryTest(
 
         val entity = DetailedVideoEntity(url = URL, title = TITLE)
         val id = underTest.save(entity).id
-        // entityManager.run { flush(); clear() }
+        entityManager.run { flush(); clear() }
 
         val expected = createExpected(id)
         underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
@@ -37,7 +36,7 @@ class DetailedVideoRepositoryTest(
         underTest.findById(id).shouldBeEmpty()
     }
 
-    private fun createExpected(id: UUID, videoCrew: List<DetailedVideoCrewEntity> = emptyList()) =
+    private fun createExpected(id: UUID) =
         DetailedVideoEntity(
             url = URL,
             title = TITLE,
@@ -46,7 +45,7 @@ class DetailedVideoRepositoryTest(
             visible = false
         ).apply {
             this.id = id
-            this.videoCrew = videoCrew
+            this.videoCrew = emptyList()
         }
 
     private companion object {
