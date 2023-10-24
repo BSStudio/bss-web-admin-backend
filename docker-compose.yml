@@ -40,7 +40,7 @@ services:
       retries: 5
       start_period: 10s
   influx:
-    image: "influxdb:2.7.1-alpine"
+    image: "influxdb:2.7.3-alpine"
     ports:
       - "127.0.0.1:8086:8086"
     healthcheck:
