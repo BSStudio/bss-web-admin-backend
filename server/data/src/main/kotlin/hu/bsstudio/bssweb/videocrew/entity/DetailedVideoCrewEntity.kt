@@ -12,11 +12,13 @@ import org.hibernate.Hibernate
 @Table(name = "crew")
 data class DetailedVideoCrewEntity(
     @EmbeddedId
-    var id: VideoCrewEntityId,
+    var id: VideoCrewEntityId
+) {
+
     @ManyToOne
     @JoinColumn(insertable = false, updatable = false)
-    var member: SimpleMemberEntity
-) {
+    lateinit var member: SimpleMemberEntity
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false

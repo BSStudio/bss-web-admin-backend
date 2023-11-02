@@ -3,6 +3,11 @@ spring:
     name: BSS Web admin API
   jpa:
     open-in-view: false
+  cloud:
+    discovery:
+      client:
+        composite-indicator:
+          enabled: false
 springdoc:
   swagger-ui:
     url: /open-api.yaml

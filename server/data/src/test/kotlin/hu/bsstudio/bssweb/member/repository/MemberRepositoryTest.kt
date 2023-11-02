@@ -10,12 +10,14 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import java.time.LocalDate
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MemberRepositoryTest(
-    @Autowired private val underTest: MemberRepository
+    @Autowired private val underTest: MemberRepository,
+    @Autowired private val entityManager: TestEntityManager
 ) {
     @Test
     fun `create read delete`() {
@@ -40,6 +42,8 @@ class MemberRepositoryTest(
         }
 
         underTest.deleteById(id)
+        entityManager.flush()
+
         underTest.findById(id).shouldBeEmpty()
     }
 

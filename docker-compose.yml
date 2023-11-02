@@ -12,12 +12,12 @@ services:
       retries: 5
       start_period: 20s
     depends_on:
-      - db
+      - postgres
       - influx
     environment:
       bss.file-api.url: "http://mock-file-api:8080"
       spring.security.user.password: "password"
-      spring.datasource.url: "jdbc:postgresql://db:5432/postgres?currentSchema=bss_web"
+      spring.datasource.url: "jdbc:postgresql://postgres:5432/postgres?currentSchema=bss_web"
       spring.datasource.username: "postgres"
       spring.datasource.password: "postgres"
       spring.flyway.default-schema: "bss_web"
@@ -27,7 +27,7 @@ services:
       management.influx.metrics.export.user-name: "user"
       management.influx.metrics.export.password: "password"
       management.influx.metrics.export.bucket: "bucket"
-  db:
+  postgres:
     image: "postgres:16.0-alpine3.18"
     environment:
       POSTGRES_PASSWORD: "postgres"
