@@ -19,7 +19,7 @@ class RemoveVideoCrewIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    @Disabled
+    @Disabled //todo remove
     fun `it should return 200 and delete video crew`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
         val memberEntity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
