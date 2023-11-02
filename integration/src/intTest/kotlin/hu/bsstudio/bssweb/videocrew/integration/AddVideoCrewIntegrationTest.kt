@@ -12,6 +12,7 @@ import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatusCode
 
 class AddVideoCrewIntegrationTest(
     @Autowired private val client: VideoCrewClient
@@ -22,10 +23,10 @@ class AddVideoCrewIntegrationTest(
         val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
         val memberEntity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
-        val actual = client.addPosition(VideoCrewRequest(videoEntity.id, "position", memberEntity.id))
+        val actual = client.addPosition(videoEntity.id, "position", memberEntity.id)
 
         assertSoftly(actual) {
-            statusCode shouldBeEqual 200
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
             body!! shouldBeEqual DetailedVideo(
                 id = videoEntity.id,
                 url = videoEntity.url,
