@@ -5,7 +5,6 @@ import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import hu.bsstudio.bssweb.videocrew.operation.VideoCrewOperation
 import hu.bsstudio.bssweb.videocrew.service.VideoCrewService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
 

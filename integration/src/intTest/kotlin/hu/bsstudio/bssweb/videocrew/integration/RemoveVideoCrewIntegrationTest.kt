@@ -7,7 +7,6 @@ import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.videocrew.client.VideoCrewClient
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
-import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
