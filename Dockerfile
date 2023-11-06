@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-openjdk-alpine-musl:17.0.8-7 AS build
+FROM bellsoft/liberica-openjdk-alpine-musl:21. AS build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                         ./
