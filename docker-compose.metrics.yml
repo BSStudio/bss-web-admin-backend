@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  app:
+    depends_on:
+      - influx
+    environment:
+      management.influx.metrics.export.uri: "http://influx:8086"
+      management.influx.metrics.export.token: "token"
+      management.influx.metrics.export.org: "org"
+      management.influx.metrics.export.user-name: "user"
+      management.influx.metrics.export.password: "password"
+      management.influx.metrics.export.bucket: "bucket"
+  influx:
+    image: "influxdb:2.7.4-alpine"
+    ports:
+      - "127.0.0.1:8086:8086"
+    healthcheck:
+      test: "influx ping"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: "setup"
+      DOCKER_INFLUXDB_INIT_USERNAME: "user"
+      DOCKER_INFLUXDB_INIT_PASSWORD: "password"
+      DOCKER_INFLUXDB_INIT_ORG: "org"
+      DOCKER_INFLUXDB_INIT_BUCKET: "bucket"
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "token"
