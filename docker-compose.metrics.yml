@@ -2,28 +2,20 @@ version: "3.9"
 services:
   app:
     depends_on:
-      - influx
+      - prometheus
     environment:
-      management.influx.metrics.export.uri: "http://influx:8086"
-      management.influx.metrics.export.token: "token"
-      management.influx.metrics.export.org: "org"
-      management.influx.metrics.export.user-name: "user"
-      management.influx.metrics.export.password: "password"
-      management.influx.metrics.export.bucket: "bucket"
-  influx:
-    image: "influxdb:2.7.4-alpine"
+      management.endpoints.web.exposure.include: "prometheus,health"
+  grafana:
+    image: "grafana/grafana:10.2.2-ubuntu"
     ports:
-      - "127.0.0.1:8086:8086"
-    healthcheck:
-      test: "influx ping"
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - prometheus
     environment:
-      DOCKER_INFLUXDB_INIT_MODE: "setup"
-      DOCKER_INFLUXDB_INIT_USERNAME: "user"
-      DOCKER_INFLUXDB_INIT_PASSWORD: "password"
-      DOCKER_INFLUXDB_INIT_ORG: "org"
-      DOCKER_INFLUXDB_INIT_BUCKET: "bucket"
-      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: "token"
+      todo: "set up grafana"
+  prometheus:
+    image: "prom/prometheus:v2.48.0"
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - "./docker/prometheus.yml:/etc/prometheus/prometheus.yml"
