@@ -6,7 +6,7 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
     healthcheck:
-      test: "wget --tries=1 --no-verbose -qO- http://localhost:8080/actuator/health | grep -q UP"
+      test: "curl -fs http://localhost:8080/actuator/health | grep -q UP"
       interval: 10s
       timeout: 5s
       retries: 5
