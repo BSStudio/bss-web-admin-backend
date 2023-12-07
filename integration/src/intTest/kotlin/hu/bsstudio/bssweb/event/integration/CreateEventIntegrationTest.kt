@@ -18,10 +18,12 @@ import org.springframework.http.HttpStatusCode
 import java.net.URI
 import java.time.LocalDate
 
-class CreateEventIntegrationTest(
-    @Autowired private val client: EventClient,
-    @Value("\${bss.client.url}") private val url: String
-) : IntegrationTest() {
+class CreateEventIntegrationTest : IntegrationTest() {
+
+    @Autowired
+    private lateinit var client: EventClient
+    @Value("\${bss.client.url}")
+    private lateinit var url: String
 
     @Test
     fun `it should return 201 and event`() {
