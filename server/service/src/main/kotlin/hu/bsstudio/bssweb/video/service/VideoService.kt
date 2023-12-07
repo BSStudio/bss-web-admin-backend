@@ -11,10 +11,22 @@ import java.util.UUID
 
 interface VideoService {
     fun findAllVideos(): List<Video>
+
     fun findAllVideos(pageable: Pageable): Page<Video>
+
     fun insertVideo(createVideo: CreateVideo): Video
-    fun changeVideoVisibility(videoIds: List<UUID>, visible: Boolean): List<UUID>
+
+    fun changeVideoVisibility(
+        videoIds: List<UUID>,
+        visible: Boolean,
+    ): List<UUID>
+
     fun findVideoById(videoId: UUID): Optional<DetailedVideo>
-    fun updateVideo(videoId: UUID, updateVideo: UpdateVideo): Optional<DetailedVideo>
+
+    fun updateVideo(
+        videoId: UUID,
+        updateVideo: UpdateVideo,
+    ): Optional<DetailedVideo>
+
     fun deleteVideoById(videoId: UUID)
 }

@@ -9,7 +9,6 @@ import java.util.Optional
 import java.util.UUID
 
 class FileUpdatingMemberService(private val server: MemberService, private val fileClient: FileApiClient) : MemberService {
-
     override fun findAllMembers(): List<Member> {
         return this.server.findAllMembers()
     }
@@ -19,7 +18,10 @@ class FileUpdatingMemberService(private val server: MemberService, private val f
             .also { fileClient.createMemberFolder(FileUpdate(it.id, it.url)) }
     }
 
-    override fun archiveMembers(memberIds: List<UUID>, archive: Boolean): List<UUID> {
+    override fun archiveMembers(
+        memberIds: List<UUID>,
+        archive: Boolean,
+    ): List<UUID> {
         return this.server.archiveMembers(memberIds)
     }
 
@@ -27,9 +29,15 @@ class FileUpdatingMemberService(private val server: MemberService, private val f
         return this.server.findMemberById(memberIds)
     }
 
-    override fun updateMember(memberId: UUID, updateMember: UpdateMember): Optional<Member> {
+    override fun updateMember(
+        memberId: UUID,
+        updateMember: UpdateMember,
+    ): Optional<Member> {
         return this.server.updateMember(memberId, updateMember)
-            .map { fileClient.updateMemberFolder(FileUpdate(it.id, it.url)); it }
+            .map {
+                fileClient.updateMemberFolder(FileUpdate(it.id, it.url))
+                it
+            }
     }
 
     override fun removeMember(memberId: UUID) {

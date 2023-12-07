@@ -8,9 +8,20 @@ import java.util.UUID
 
 interface MemberService {
     fun findAllMembers(): List<Member>
+
     fun insertMember(createMember: CreateMember): Member
-    fun archiveMembers(memberIds: List<UUID>, archive: Boolean = true): List<UUID>
+
+    fun archiveMembers(
+        memberIds: List<UUID>,
+        archive: Boolean = true,
+    ): List<UUID>
+
     fun findMemberById(memberIds: UUID): Optional<Member>
-    fun updateMember(memberId: UUID, updateMember: UpdateMember): Optional<Member>
+
+    fun updateMember(
+        memberId: UUID,
+        updateMember: UpdateMember,
+    ): Optional<Member>
+
     fun removeMember(memberId: UUID)
 }

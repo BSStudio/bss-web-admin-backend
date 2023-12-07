@@ -12,9 +12,8 @@ import org.springframework.context.annotation.Configuration
 class VideoCrewServiceConfig(
     private val repository: VideoCrewRepository,
     private val videoService: VideoService,
-    private val videoCrewMapper: VideoCrewMapper
+    private val videoCrewMapper: VideoCrewMapper,
 ) {
-
     @Bean
     fun defaultVideoCrewService(): VideoCrewService {
         return DefaultVideoCrewService(repository, videoService, videoCrewMapper)

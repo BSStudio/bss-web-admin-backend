@@ -22,7 +22,7 @@ data class DetailedMemberEntity(
     var role: String = "",
     @Enumerated(EnumType.STRING)
     var status: MemberStatus = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-    var archived: Boolean = false
+    var archived: Boolean = false,
 ) {
     @Id
     @GeneratedValue
@@ -35,7 +35,5 @@ data class DetailedMemberEntity(
         return this.id == other.id
     }
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    override fun hashCode() = id.hashCode()
 }

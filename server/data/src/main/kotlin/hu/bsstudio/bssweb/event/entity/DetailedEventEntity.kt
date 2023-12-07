@@ -19,7 +19,7 @@ data class DetailedEventEntity(
     override var title: String,
     override var description: String = "",
     override var date: LocalDate = LocalDate.now(),
-    override var visible: Boolean = false
+    override var visible: Boolean = false,
 ) : EventEntity {
     @Id
     @GeneratedValue
@@ -29,7 +29,7 @@ data class DetailedEventEntity(
     @JoinTable(
         name = "event_video",
         joinColumns = [JoinColumn(name = "event_id")],
-        inverseJoinColumns = [JoinColumn(name = "video_id")]
+        inverseJoinColumns = [JoinColumn(name = "video_id")],
     )
     lateinit var videos: List<SimpleVideoEntity>
 
@@ -44,8 +44,14 @@ data class DetailedEventEntity(
         return id.hashCode()
     }
 
-    @Override
-    override fun toString(): String {
-        return this::class.simpleName + "(id = $id , url = $url , title = $title , description = $description , date = $date , visible = $visible )"
-    }
+    override fun toString() =
+        this::class.simpleName + "(" +
+            "url='$url', " +
+            "title='$title', " +
+            "description='$description', " +
+            "date=$date, " +
+            "visible=$visible, " +
+            "id=$id, " +
+            "videos=$videos" +
+            ")"
 }

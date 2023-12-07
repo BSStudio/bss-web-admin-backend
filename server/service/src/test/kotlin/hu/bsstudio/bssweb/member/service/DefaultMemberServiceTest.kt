@@ -23,9 +23,8 @@ import java.util.UUID
 @ExtendWith(MockKExtension::class)
 internal class DefaultMemberServiceTest(
     @MockK private val mockRepository: MemberRepository,
-    @MockK private val mockMapper: MemberMapper
+    @MockK private val mockMapper: MemberMapper,
 ) {
-
     @InjectMockKs
     private lateinit var underTest: DefaultMemberService
 

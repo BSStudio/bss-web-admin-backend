@@ -9,14 +9,13 @@ import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 
 class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
-
     fun entityToModel(entity: SimpleVideoEntity): Video {
         return Video(
             id = entity.id,
             url = entity.url,
             title = entity.title,
             uploadedAt = entity.uploadedAt,
-            visible = entity.visible
+            visible = entity.visible,
         )
     }
 
@@ -28,7 +27,7 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
             description = entity.description,
             uploadedAt = entity.uploadedAt,
             visible = entity.visible,
-            crew = entity.videoCrew.map(videoCrewMapper::entityToModel)
+            crew = entity.videoCrew.map(videoCrewMapper::entityToModel),
         )
     }
 
@@ -36,7 +35,10 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
         return SimpleVideoEntity(url = model.url, title = model.title)
     }
 
-    fun updateToEntity(videoEntity: DetailedVideoEntity, updateVideo: UpdateVideo): DetailedVideoEntity {
+    fun updateToEntity(
+        videoEntity: DetailedVideoEntity,
+        updateVideo: UpdateVideo,
+    ): DetailedVideoEntity {
         videoEntity.url = updateVideo.url
         videoEntity.title = updateVideo.title
         videoEntity.description = updateVideo.description

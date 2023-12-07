@@ -11,5 +11,5 @@ data class VideoCrewEntityId(
     var videoId: UUID,
     var position: String,
     @Column(name = "member_id")
-    var memberId: UUID
+    var memberId: UUID,
 ) : Serializable

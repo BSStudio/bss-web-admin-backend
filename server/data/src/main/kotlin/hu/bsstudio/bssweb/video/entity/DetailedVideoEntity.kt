@@ -18,7 +18,7 @@ data class DetailedVideoEntity(
     override var title: String,
     var description: String = "",
     override var uploadedAt: LocalDate = LocalDate.now(),
-    override var visible: Boolean = false
+    override var visible: Boolean = false,
 ) : VideoEntity {
     @Id
     @GeneratedValue
@@ -35,11 +35,15 @@ data class DetailedVideoEntity(
         return this.id == other.id
     }
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    override fun hashCode() = id.hashCode()
 
-    override fun toString(): String {
-        return "DetailedVideoEntity(url='$url', title='$title', description='$description', uploadedAt=$uploadedAt, visible=$visible, id=$id)"
-    }
+    override fun toString(): String =
+        this::class.simpleName + "(" +
+            "url='$url', " +
+            "title='$title', " +
+            "description='$description', " +
+            "uploadedAt=$uploadedAt, " +
+            "visible=$visible, " +
+            "id=$id" +
+            ")"
 }

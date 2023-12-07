@@ -14,9 +14,8 @@ import java.time.LocalDate
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class EventRepositoryTest(
-    @Autowired private val underTest: SimpleEventRepository
+    @Autowired private val underTest: SimpleEventRepository,
 ) {
-
     @Test
     fun `create read delete`() {
         underTest.count().shouldBeZero()
@@ -24,15 +23,16 @@ class EventRepositoryTest(
         val id = underTest.save(SimpleEventEntity(url = URL, title = TITLE)).id
 
         underTest.findById(id) shouldBePresent {
-            it shouldBeEqualToComparingFields SimpleEventEntity(
-                url = URL,
-                title = TITLE,
-                description = "",
-                date = LocalDate.now(),
-                visible = false
-            ).apply {
-                this.id = id
-            }
+            it shouldBeEqualToComparingFields
+                SimpleEventEntity(
+                    url = URL,
+                    title = TITLE,
+                    description = "",
+                    date = LocalDate.now(),
+                    visible = false,
+                ).apply {
+                    this.id = id
+                }
         }
 
         underTest.deleteById(id)

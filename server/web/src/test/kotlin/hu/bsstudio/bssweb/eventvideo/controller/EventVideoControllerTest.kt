@@ -20,9 +20,8 @@ import java.util.UUID
 @WebMvcTest(EventVideoController::class)
 internal class EventVideoControllerTest(
     @Autowired private val mockMvc: MockMvc,
-    @Autowired private val objectMapper: ObjectMapper
+    @Autowired private val objectMapper: ObjectMapper,
 ) {
-
     @MockkBean
     private lateinit var mockService: EventVideoService
 
@@ -62,14 +61,15 @@ internal class EventVideoControllerTest(
         private const val PASSWORD = "password"
         private val EVENT_ID = UUID.randomUUID()
         private val VIDEO_ID = UUID.randomUUID()
-        private val DETAILED_EVENT = DetailedEvent(
-            id = EVENT_ID,
-            url = "url",
-            title = "title",
-            description = "description",
-            date = LocalDate.now(),
-            visible = false,
-            videos = listOf()
-        )
+        private val DETAILED_EVENT =
+            DetailedEvent(
+                id = EVENT_ID,
+                url = "url",
+                title = "title",
+                description = "description",
+                date = LocalDate.now(),
+                visible = false,
+                videos = listOf(),
+            )
     }
 }

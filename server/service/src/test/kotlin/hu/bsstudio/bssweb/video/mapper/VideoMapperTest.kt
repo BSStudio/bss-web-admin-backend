@@ -22,9 +22,8 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class VideoMapperTest(
-    @MockK private val mockVideoCrewMapper: VideoCrewMapper
+    @MockK private val mockVideoCrewMapper: VideoCrewMapper,
 ) {
-
     @InjectMockKs
     private lateinit var underTest: VideoMapper
 
@@ -71,7 +70,11 @@ internal class VideoMapperTest(
         private val CREW = listOf(CREW_MODEL)
         private val VIDEO_ENTITY = SimpleVideoEntity(URL, TITLE, UPLOADED_AT, VISIBLE).apply { id = VIDEO_ID }
         private val VIDEO = Video(VIDEO_ID, URL, TITLE, UPLOADED_AT, VISIBLE)
-        private val DETAILED_VIDEO_ENTITY = DetailedVideoEntity(URL, TITLE, DESCRIPTION, UPLOADED_AT, VISIBLE).apply { id = VIDEO_ID; videoCrew = VIDEO_CREW }
+        private val DETAILED_VIDEO_ENTITY =
+            DetailedVideoEntity(URL, TITLE, DESCRIPTION, UPLOADED_AT, VISIBLE).apply {
+                id = VIDEO_ID
+                videoCrew = VIDEO_CREW
+            }
         private val DETAILED_VIDEO = DetailedVideo(VIDEO_ID, URL, TITLE, DESCRIPTION, UPLOADED_AT, VISIBLE, CREW)
         private val CREATE_VIDEO = CreateVideo(URL, TITLE)
         private val CREATED_VIDEO_ENTITY = SimpleVideoEntity(url = URL, title = TITLE).apply { id = VIDEO_ID }
@@ -81,6 +84,10 @@ internal class VideoMapperTest(
         private val NEW_UPLOADED_AT = mockk<LocalDate>()
         private const val NEW_VISIBLE = false
         private val UPDATE_VIDEO = UpdateVideo(NEW_URL, NEW_TITLE, NEW_DESCRIPTION, NEW_UPLOADED_AT, NEW_VISIBLE)
-        private val UPDATED_VIDEO_ENTITY = DetailedVideoEntity(NEW_URL, NEW_TITLE, NEW_DESCRIPTION, NEW_UPLOADED_AT, NEW_VISIBLE).apply { id = VIDEO_ID; videoCrew = VIDEO_CREW }
+        private val UPDATED_VIDEO_ENTITY =
+            DetailedVideoEntity(NEW_URL, NEW_TITLE, NEW_DESCRIPTION, NEW_UPLOADED_AT, NEW_VISIBLE).apply {
+                id = VIDEO_ID
+                videoCrew = VIDEO_CREW
+            }
     }
 }

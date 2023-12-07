@@ -26,7 +26,7 @@ class DetailedEventRepositoryTest(
     @Autowired private val simpleEventRepository: SimpleEventRepository,
     @Autowired private val simpleVideoRepository: SimpleVideoRepository,
     @Autowired private val eventVideoRepository: EventVideoRepository,
-    @Autowired private val entityManager: TestEntityManager
+    @Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
     internal fun `create read delete`() {
@@ -34,7 +34,10 @@ class DetailedEventRepositoryTest(
 
         val entity = DetailedEventEntity(url = URL, title = TITLE)
         val id = underTest.save(entity).id
-        entityManager.run { flush(); clear() }
+        entityManager.run {
+            flush()
+            clear()
+        }
 
         val expected = createExpected(id)
         underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
@@ -49,7 +52,10 @@ class DetailedEventRepositoryTest(
         val video = simpleVideoRepository.save(SimpleVideoEntity(url = "url", title = "title"))
 
         eventVideoRepository.save(EventVideoEntity(eventId = eventId, videoId = video.id))
-        entityManager.run { flush(); clear() }
+        entityManager.run {
+            flush()
+            clear()
+        }
 
         val actual = underTest.findById(eventId).orElseThrow()
         val expected = createExpected(eventId, listOf(video))
@@ -60,17 +66,19 @@ class DetailedEventRepositoryTest(
         simpleVideoRepository.count().shouldBe(1L)
     }
 
-    private fun createExpected(id: UUID, videos: List<SimpleVideoEntity> = emptyList()) =
-        DetailedEventEntity(
-            url = URL,
-            title = TITLE,
-            description = "",
-            date = LocalDate.now(),
-            visible = false
-        ).apply {
-            this.id = id
-            this.videos = videos
-        }
+    private fun createExpected(
+        id: UUID,
+        videos: List<SimpleVideoEntity> = emptyList(),
+    ) = DetailedEventEntity(
+        url = URL,
+        title = TITLE,
+        description = "",
+        date = LocalDate.now(),
+        visible = false,
+    ).apply {
+        this.id = id
+        this.videos = videos
+    }
 
     private companion object {
         private const val URL = "szobakommando"

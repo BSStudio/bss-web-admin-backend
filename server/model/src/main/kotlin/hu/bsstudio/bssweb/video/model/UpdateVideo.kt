@@ -7,5 +7,5 @@ data class UpdateVideo(
     val title: String,
     val description: String,
     val uploadedAt: LocalDate,
-    val visible: Boolean
+    val visible: Boolean,
 )

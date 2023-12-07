@@ -13,7 +13,6 @@ import java.util.UUID
 
 @RestController
 class EventController(private val service: EventService) : EventOperation {
-
     override fun findAllEvent(): ResponseEntity<List<Event>> {
         return service.findAllEvent()
             .let { ResponseEntity.ok(it) }
@@ -29,7 +28,10 @@ class EventController(private val service: EventService) : EventOperation {
             .let { ResponseEntity.of(it) }
     }
 
-    override fun updateEvent(eventId: UUID, updateEvent: UpdateEvent): ResponseEntity<DetailedEvent> {
+    override fun updateEvent(
+        eventId: UUID,
+        updateEvent: UpdateEvent,
+    ): ResponseEntity<DetailedEvent> {
         return service.updateEvent(eventId, updateEvent)
             .let { ResponseEntity.of(it) }
     }
@@ -39,8 +41,9 @@ class EventController(private val service: EventService) : EventOperation {
         return ResponseEntity.noContent().build()
     }
 
-    private fun locationUri(id: UUID) = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(id)
-        .toUri()
+    private fun locationUri(id: UUID) =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(id)
+            .toUri()
 }

@@ -5,6 +5,7 @@ plugins {
 spotless {
     kotlin {
         ktlint()
+        toggleOffOn()
     }
     kotlinGradle{
         ktlint()

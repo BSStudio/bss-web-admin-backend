@@ -9,7 +9,6 @@ import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 
 class EventMapper(private val videoMapper: VideoMapper) {
-
     fun entityToModel(entity: SimpleEventEntity): Event {
         return Event(
             id = entity.id,
@@ -17,7 +16,7 @@ class EventMapper(private val videoMapper: VideoMapper) {
             title = entity.title,
             description = entity.description,
             date = entity.date,
-            visible = entity.visible
+            visible = entity.visible,
         )
     }
 
@@ -29,18 +28,21 @@ class EventMapper(private val videoMapper: VideoMapper) {
             description = entity.description,
             date = entity.date,
             visible = entity.visible,
-            videos = entity.videos.map(videoMapper::entityToModel)
+            videos = entity.videos.map(videoMapper::entityToModel),
         )
     }
 
     fun modelToEntity(model: CreateEvent): SimpleEventEntity {
         return SimpleEventEntity(
             url = model.url,
-            title = model.title
+            title = model.title,
         )
     }
 
-    fun updateToEntity(eventEntity: DetailedEventEntity, updateEvent: UpdateEvent): DetailedEventEntity {
+    fun updateToEntity(
+        eventEntity: DetailedEventEntity,
+        updateEvent: UpdateEvent,
+    ): DetailedEventEntity {
         eventEntity.url = updateEvent.url
         eventEntity.title = updateEvent.title
         eventEntity.description = updateEvent.description

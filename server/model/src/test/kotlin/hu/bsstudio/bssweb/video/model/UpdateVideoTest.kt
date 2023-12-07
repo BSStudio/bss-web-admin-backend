@@ -10,9 +10,8 @@ import java.time.LocalDate
 
 @JsonTest
 internal class UpdateVideoTest(
-    @Autowired private val underTest: JacksonTester<UpdateVideo>
+    @Autowired private val underTest: JacksonTester<UpdateVideo>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(UPDATE_VIDEO)
@@ -28,26 +27,28 @@ internal class UpdateVideoTest(
     }
 
     private companion object {
-        private const val url = "video_url"
-        private const val title = "video_title"
-        private const val description = "video_description"
-        private val uploadedAt = LocalDate.now()
-        private const val visible = true
-        private val UPDATE_VIDEO = UpdateVideo(
-            url = url,
-            title = title,
-            description = description,
-            uploadedAt = uploadedAt,
-            visible = visible
-        )
-        private val JSON = """
+        private const val URL = "video_url"
+        private const val TITLE = "video_title"
+        private const val DESCRIPTION = "video_description"
+        private val UPLOADED_AT = LocalDate.now()
+        private const val VISIBLE = true
+        private val UPDATE_VIDEO =
+            UpdateVideo(
+                url = URL,
+                title = TITLE,
+                description = DESCRIPTION,
+                uploadedAt = UPLOADED_AT,
+                visible = VISIBLE,
+            )
+        private val JSON =
+            """
             {
-                "url": "$url",
-                "title": "$title",
-                "description": "$description",
-                "uploadedAt": "$uploadedAt",
-                "visible": $visible
+                "url": "$URL",
+                "title": "$TITLE",
+                "description": "$DESCRIPTION",
+                "uploadedAt": "$UPLOADED_AT",
+                "visible": $VISIBLE
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

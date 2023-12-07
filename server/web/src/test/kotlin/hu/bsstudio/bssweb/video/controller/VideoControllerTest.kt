@@ -29,9 +29,8 @@ import java.util.UUID
 @WebMvcTest(VideoController::class)
 internal class VideoControllerTest(
     @Autowired private val mockMvc: MockMvc,
-    @Autowired private val objectMapper: ObjectMapper
+    @Autowired private val objectMapper: ObjectMapper,
 ) {
-
     @MockkBean
     private lateinit var mockService: VideoService
 
@@ -177,7 +176,17 @@ internal class VideoControllerTest(
         private val VIDEO = Video(id = VIDEO_ID, url = URL, title = TITLE, uploadedAt = UPLOADED_AT, visible = VISIBLE)
         private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
         private val CREATE_VIDEO = CreateVideo(url = URL, title = TITLE)
-        private val DETAILED_VIDEO = DetailedVideo(id = VIDEO_ID, url = URL, title = TITLE, description = DESCRIPTION, uploadedAt = UPLOADED_AT, visible = VISIBLE, crew = listOf())
-        private val UPDATE_VIDEO = UpdateVideo(url = URL, title = TITLE, description = DESCRIPTION, uploadedAt = UPLOADED_AT, visible = VISIBLE)
+        private val DETAILED_VIDEO =
+            DetailedVideo(
+                id = VIDEO_ID,
+                url = URL,
+                title = TITLE,
+                description = DESCRIPTION,
+                uploadedAt = UPLOADED_AT,
+                visible = VISIBLE,
+                crew = listOf(),
+            )
+        private val UPDATE_VIDEO =
+            UpdateVideo(url = URL, title = TITLE, description = DESCRIPTION, uploadedAt = UPLOADED_AT, visible = VISIBLE)
     }
 }

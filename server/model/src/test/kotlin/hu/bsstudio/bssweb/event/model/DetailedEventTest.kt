@@ -11,9 +11,8 @@ import java.util.UUID
 
 @JsonTest
 internal class DetailedEventTest(
-    @Autowired private val underTest: JacksonTester<DetailedEvent>
+    @Autowired private val underTest: JacksonTester<DetailedEvent>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(DETAILED_EVENT)
@@ -30,30 +29,32 @@ internal class DetailedEventTest(
 
     private companion object {
         private val ID = UUID.randomUUID()
-        private const val url = "url"
-        private const val title = "title"
-        private const val description = "description"
-        private val date = LocalDate.now()
-        private const val visible = true
-        private val DETAILED_EVENT = DetailedEvent(
-            id = ID,
-            url = url,
-            title = title,
-            description = description,
-            date = date,
-            visible = visible,
-            videos = listOf()
-        )
-        private val JSON = """
+        private const val URL = "url"
+        private const val TITLE = "title"
+        private const val DESCRIPTION = "description"
+        private val DATE = LocalDate.now()
+        private const val VISIBLE = true
+        private val DETAILED_EVENT =
+            DetailedEvent(
+                id = ID,
+                url = URL,
+                title = TITLE,
+                description = DESCRIPTION,
+                date = DATE,
+                visible = VISIBLE,
+                videos = listOf(),
+            )
+        private val JSON =
+            """
             {
                 "id": "$ID",
-                "url": "$url",
-                "title": "$title",
-                "description": "$description",
-                "date": "$date",
-                "visible": $visible,
+                "url": "$URL",
+                "title": "$TITLE",
+                "description": "$DESCRIPTION",
+                "date": "$DATE",
+                "visible": $VISIBLE,
                 "videos": []
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

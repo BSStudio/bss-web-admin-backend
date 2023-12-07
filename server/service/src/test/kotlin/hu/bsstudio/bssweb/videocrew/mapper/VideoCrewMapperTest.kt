@@ -20,9 +20,8 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class VideoCrewMapperTest(
-    @MockK private val memberMapper: MemberMapper
+    @MockK private val memberMapper: MemberMapper,
 ) {
-
     @InjectMockKs
     private lateinit var underTest: VideoCrewMapper
 

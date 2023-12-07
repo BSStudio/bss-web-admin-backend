@@ -10,9 +10,8 @@ import java.time.LocalDate
 
 @JsonTest
 internal class UpdateEventTest(
-    @Autowired private val underTest: JacksonTester<UpdateEvent>
+    @Autowired private val underTest: JacksonTester<UpdateEvent>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(UPDATE_EVENT)
@@ -28,26 +27,28 @@ internal class UpdateEventTest(
     }
 
     private companion object {
-        private const val url = "url"
-        private const val title = "title"
-        private const val description = "description"
-        private val date = LocalDate.now()
-        private const val visible = true
-        private val UPDATE_EVENT = UpdateEvent(
-            url = url,
-            title = title,
-            description = description,
-            date = date,
-            visible = visible
-        )
-        private val JSON = """
+        private const val URL = "url"
+        private const val TITLE = "title"
+        private const val DESCRIPTION = "description"
+        private val DATE = LocalDate.now()
+        private const val VISIBLE = true
+        private val UPDATE_EVENT =
+            UpdateEvent(
+                url = URL,
+                title = TITLE,
+                description = DESCRIPTION,
+                date = DATE,
+                visible = VISIBLE,
+            )
+        private val JSON =
+            """
             {
-                "url": "$url",
-                "title": "$title",
-                "description": "$description",
-                "date": "$date",
-                "visible": $visible
+                "url": "$URL",
+                "title": "$TITLE",
+                "description": "$DESCRIPTION",
+                "date": "$DATE",
+                "visible": $VISIBLE
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

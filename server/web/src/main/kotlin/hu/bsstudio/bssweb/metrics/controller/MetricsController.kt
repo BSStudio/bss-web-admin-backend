@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class MetricsController(private val service: MetricsService) : MetricsOperation {
-
     override fun getMetrics(): ResponseEntity<BssMetrics> {
         return service.getMetrics()
             .let { ResponseEntity.ok(it) }

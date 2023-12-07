@@ -29,9 +29,8 @@ import java.util.UUID
 internal class DefaultVideoServiceTest(
     @MockK private val mockRepository: SimpleVideoRepository,
     @MockK private val mockDetailedRepository: DetailedVideoRepository,
-    @MockK private val mockMapper: VideoMapper
+    @MockK private val mockMapper: VideoMapper,
 ) {
-
     @InjectMockKs
     private lateinit var underTest: DefaultVideoService
 

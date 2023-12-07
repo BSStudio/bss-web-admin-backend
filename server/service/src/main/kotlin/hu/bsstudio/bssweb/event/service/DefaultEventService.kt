@@ -16,9 +16,8 @@ import java.util.UUID
 open class DefaultEventService(
     private val repository: SimpleEventRepository,
     private val detailedRepository: DetailedEventRepository,
-    private val mapper: EventMapper
+    private val mapper: EventMapper,
 ) : EventService {
-
     override fun findAllEvent(): List<Event> {
         return repository.findAll()
             .map(mapper::entityToModel)
@@ -31,9 +30,15 @@ open class DefaultEventService(
             .let(mapper::entityToModel)
     }
 
-    override fun changeVisibility(eventIds: List<UUID>, visible: Boolean): List<UUID> {
+    override fun changeVisibility(
+        eventIds: List<UUID>,
+        visible: Boolean,
+    ): List<UUID> {
         return repository.findAllById(eventIds)
-            .map { it.visible = visible; it }
+            .map {
+                it.visible = visible
+                it
+            }
             .map(repository::save)
             .map(SimpleEventEntity::id)
     }
@@ -43,7 +48,10 @@ open class DefaultEventService(
             .map(mapper::entityToModel)
     }
 
-    override fun updateEvent(eventId: UUID, updateEvent: UpdateEvent): Optional<DetailedEvent> {
+    override fun updateEvent(
+        eventId: UUID,
+        updateEvent: UpdateEvent,
+    ): Optional<DetailedEvent> {
         return detailedRepository.findById(eventId)
             .map { mapper.updateToEntity(it, updateEvent) }
             .map(detailedRepository::save)

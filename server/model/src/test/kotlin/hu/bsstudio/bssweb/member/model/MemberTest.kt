@@ -12,9 +12,8 @@ import java.util.UUID
 
 @JsonTest
 internal class MemberTest(
-    @Autowired private val underTest: JacksonTester<Member>
+    @Autowired private val underTest: JacksonTester<Member>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(MEMBER)
@@ -31,37 +30,39 @@ internal class MemberTest(
 
     private companion object {
         private val ID = UUID.randomUUID()
-        private const val url = "member_url"
-        private const val name = "member_name"
-        private const val nickname = "member_nickname"
-        private const val description = "member_description"
-        private val joinedAt = LocalDate.now()
-        private const val role = "member_role"
-        private val status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE
-        private const val archived = false
-        private val MEMBER = Member(
-            id = ID,
-            url = url,
-            name = name,
-            nickname = nickname,
-            description = description,
-            joinedAt = joinedAt,
-            role = role,
-            status = status,
-            archived = archived
-        )
-        private val JSON = """
+        private const val URL = "member_url"
+        private const val NAME = "member_name"
+        private const val NICKNAME = "member_nickname"
+        private const val DESCRIPTION = "member_description"
+        private val JOINED_AT = LocalDate.now()
+        private const val ROLE = "member_role"
+        private val STATUS = MemberStatus.MEMBER_CANDIDATE_CANDIDATE
+        private const val ARCHIVED = false
+        private val MEMBER =
+            Member(
+                id = ID,
+                url = URL,
+                name = NAME,
+                nickname = NICKNAME,
+                description = DESCRIPTION,
+                joinedAt = JOINED_AT,
+                role = ROLE,
+                status = STATUS,
+                archived = ARCHIVED,
+            )
+        private val JSON =
+            """
             {
                 "id": "$ID",
-                "url": "$url",
-                "name": "$name",
-                "nickname": "$nickname",
-                "description": "$description",
-                "joinedAt": "$joinedAt",
-                "role": "$role",
-                "status": "${status.name}",
-                "archived": $archived
+                "url": "$URL",
+                "name": "$NAME",
+                "nickname": "$NICKNAME",
+                "description": "$DESCRIPTION",
+                "joinedAt": "$JOINED_AT",
+                "role": "$ROLE",
+                "status": "${STATUS.name}",
+                "archived": $ARCHIVED
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

@@ -22,9 +22,8 @@ import java.util.UUID
 @WebMvcTest(VideoCrewController::class)
 internal class VideoCrewControllerTest(
     @Autowired private val mockMvc: MockMvc,
-    @Autowired private val objectMapper: ObjectMapper
+    @Autowired private val objectMapper: ObjectMapper,
 ) {
-
     @MockkBean
     private lateinit var mockService: VideoCrewService
 
@@ -112,6 +111,15 @@ internal class VideoCrewControllerTest(
         private const val POSITION = "position"
         private val MEMBER_ID = UUID.randomUUID()
         private val VIDEO_CREW_REQUEST = VideoCrewRequest(VIDEO_ID, POSITION, MEMBER_ID)
-        private val DETAILED_VIDEO = DetailedVideo(id = VIDEO_ID, url = "url", title = "title", description = "description", uploadedAt = LocalDate.now(), visible = false, crew = listOf())
+        private val DETAILED_VIDEO =
+            DetailedVideo(
+                id = VIDEO_ID,
+                url = "url",
+                title = "title",
+                description = "description",
+                uploadedAt = LocalDate.now(),
+                visible = false,
+                crew = listOf(),
+            )
     }
 }

@@ -15,9 +15,8 @@ import org.springframework.test.web.servlet.get
 @WebMvcTest(MetricsController::class)
 internal class MetricsControllerTest(
     @Autowired private val mockMvc: MockMvc,
-    @Autowired private val objectMapper: ObjectMapper
+    @Autowired private val objectMapper: ObjectMapper,
 ) {
-
     @MockkBean
     private lateinit var service: MetricsService
 
