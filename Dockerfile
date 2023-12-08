@@ -19,7 +19,7 @@ COPY ./server   ./server
 ARG BUILD_ARG="bootJar --parallel"
 RUN ./gradlew $BUILD_ARG
 
-FROM bellsoft/liberica-openjre-alpine-musl:21.0.1-16 AS app
+FROM bellsoft/liberica-openjre-alpine-musl:21.0.1-12 AS app
 # use non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
