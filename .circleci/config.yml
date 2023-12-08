@@ -37,6 +37,12 @@ jobs:
   gradle_integration:
     executor: jdk-machine
     steps:
+      - run:
+          name: Install OpenJDK 21
+          command: |
+            sudo apt-get update && sudo apt-get install openjdk-21-jdk
+            sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-21-openjdk-amd64/bin/javac
       - checkout
       - run: docker compose up -d
       - gradle/with_cache:
