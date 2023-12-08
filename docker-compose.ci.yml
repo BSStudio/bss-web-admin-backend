@@ -3,12 +3,9 @@ services:
   app:
     ports:
       - "8080"
-  db:
+  postgres:
     ports:
       - "5432"
-  influx:
-    ports:
-      - "8086"
   mock-file-api:
     ports:
       - "8080"
