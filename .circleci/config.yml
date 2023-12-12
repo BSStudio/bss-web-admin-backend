@@ -6,10 +6,10 @@ orbs:
 executors:
   jdk:
     docker:
-      - image: cimg/openjdk:17.0.9
+      - image: cimg/openjdk:21.0.0
   jdk-machine:
     machine:
-      image: ubuntu-2204:2022.10.2
+      image: ubuntu-2204:2023.10.1
 jobs:
   gradle_docker:
     parameters:
@@ -37,6 +37,12 @@ jobs:
   gradle_integration:
     executor: jdk-machine
     steps:
+      - run:
+          name: Install OpenJDK 21
+          command: |
+            sudo apt-get update && sudo apt-get install openjdk-21-jdk
+            sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-21-openjdk-amd64/bin/javac
       - checkout
       - run: docker compose up -d
       - gradle/with_cache:
