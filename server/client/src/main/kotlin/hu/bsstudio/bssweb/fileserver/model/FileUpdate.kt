@@ -4,5 +4,5 @@ import java.util.UUID
 
 data class FileUpdate(
     val id: UUID,
-    val url: String
+    val url: String,
 )

@@ -9,9 +9,8 @@ import org.springframework.boot.test.json.JacksonTester
 
 @JsonTest
 internal class CreateMemberTest(
-    @Autowired private val underTest: JacksonTester<CreateMember>
+    @Autowired private val underTest: JacksonTester<CreateMember>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(CREATE_MEMBER)
@@ -27,17 +26,19 @@ internal class CreateMemberTest(
     }
 
     private companion object {
-        private const val url = "member_url"
-        private const val name = "member_name"
-        private val CREATE_MEMBER = CreateMember(
-            url = url,
-            name = name
-        )
-        private val JSON = """
+        private const val URL = "member_url"
+        private const val NAME = "member_name"
+        private val CREATE_MEMBER =
+            CreateMember(
+                url = URL,
+                name = NAME,
+            )
+        private val JSON =
+            """
             {
-                "url": "$url",
-                "name": "$name"
+                "url": "$URL",
+                "name": "$NAME"
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

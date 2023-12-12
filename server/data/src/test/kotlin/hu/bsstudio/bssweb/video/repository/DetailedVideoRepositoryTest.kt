@@ -28,7 +28,7 @@ class DetailedVideoRepositoryTest(
     @Autowired private val memberRepository: MemberRepository,
     @Autowired private val simpleVideoRepository: SimpleVideoRepository,
     @Autowired private val videoCrewRepository: VideoCrewRepository,
-    @Autowired private val entityManager: TestEntityManager
+    @Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
     internal fun `create read delete`() {
@@ -36,7 +36,10 @@ class DetailedVideoRepositoryTest(
 
         val entity = DetailedVideoEntity(url = URL, title = TITLE)
         val id = underTest.save(entity).id
-        entityManager.run { flush(); clear() }
+        entityManager.run {
+            flush()
+            clear()
+        }
 
         val expected = createExpected(id)
         underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
@@ -47,33 +50,51 @@ class DetailedVideoRepositoryTest(
 
     @Test
     internal fun `create read delete with crew`() {
-        val memberId = DetailedMemberEntity(name = MEMBER_NAME, url = MEMBER_URL, nickname = MEMBER_NICKNAME)
-            .let { this.memberRepository.save(it) }
-            .id
-        val videoId = SimpleVideoEntity(url = URL, title = TITLE)
-            .let { this.simpleVideoRepository.save(it) }
-            .id
+        val memberId =
+            DetailedMemberEntity(name = MEMBER_NAME, url = MEMBER_URL, nickname = MEMBER_NICKNAME)
+                .let { this.memberRepository.save(it) }
+                .id
+        val videoId =
+            SimpleVideoEntity(url = URL, title = TITLE)
+                .let { this.simpleVideoRepository.save(it) }
+                .id
         val videoCrewId = VideoCrewEntityId(videoId, "cameraman", memberId)
         this.videoCrewRepository.save(VideoCrewEntity(videoCrewId))
-        entityManager.run { flush(); clear() }
+        entityManager.run {
+            flush()
+            clear()
+        }
 
-        val expected = createExpected(videoId, listOf(DetailedVideoCrewEntity(videoCrewId, SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply { id = memberId })))
+        val expected =
+            createExpected(
+                videoId,
+                listOf(
+                    DetailedVideoCrewEntity(
+                        videoCrewId,
+                        SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply {
+                            id = memberId
+                        },
+                    ),
+                ),
+            )
         underTest.findById(videoId)
             .shouldBePresent()
             .shouldBeEqualToComparingFields(expected)
     }
 
-    private fun createExpected(id: UUID, videoCrew: List<DetailedVideoCrewEntity> = emptyList()) =
-        DetailedVideoEntity(
-            url = URL,
-            title = TITLE,
-            description = "",
-            uploadedAt = LocalDate.now(),
-            visible = false
-        ).apply {
-            this.id = id
-            this.videoCrew = videoCrew
-        }
+    private fun createExpected(
+        id: UUID,
+        videoCrew: List<DetailedVideoCrewEntity> = emptyList(),
+    ) = DetailedVideoEntity(
+        url = URL,
+        title = TITLE,
+        description = "",
+        uploadedAt = LocalDate.now(),
+        visible = false,
+    ).apply {
+        this.id = id
+        this.videoCrew = videoCrew
+    }
 
     private companion object {
         private const val URL = "szobakommando"

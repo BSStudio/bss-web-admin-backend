@@ -11,9 +11,8 @@ import org.springframework.context.annotation.Configuration
 class MetricsServiceConfig(
     private val videoRepository: SimpleVideoRepository,
     private val eventRepository: SimpleEventRepository,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
 ) {
-
     @Bean
     fun metricsService() = DefaultMetricsService(videoRepository, eventRepository, memberRepository)
 }

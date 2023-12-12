@@ -5,6 +5,13 @@ import java.util.Optional
 import java.util.UUID
 
 interface EventVideoService {
-    fun addVideoToEvent(eventId: UUID, videoId: UUID): Optional<DetailedEvent>
-    fun removeVideoFromEvent(eventId: UUID, videoId: UUID): Optional<DetailedEvent>
+    fun addVideoToEvent(
+        eventId: UUID,
+        videoId: UUID,
+    ): Optional<DetailedEvent>
+
+    fun removeVideoFromEvent(
+        eventId: UUID,
+        videoId: UUID,
+    ): Optional<DetailedEvent>
 }

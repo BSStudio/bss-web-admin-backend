@@ -25,7 +25,10 @@ class FileUpdatingVideoService(private val service: VideoService, private val fi
             .also { this.fileClient.createVideoFolder(FileUpdate(it.id, it.url)) }
     }
 
-    override fun changeVideoVisibility(videoIds: List<UUID>, visible: Boolean): List<UUID> {
+    override fun changeVideoVisibility(
+        videoIds: List<UUID>,
+        visible: Boolean,
+    ): List<UUID> {
         return this.service.changeVideoVisibility(videoIds, visible)
     }
 
@@ -33,9 +36,15 @@ class FileUpdatingVideoService(private val service: VideoService, private val fi
         return this.service.findVideoById(videoId)
     }
 
-    override fun updateVideo(videoId: UUID, updateVideo: UpdateVideo): Optional<DetailedVideo> {
+    override fun updateVideo(
+        videoId: UUID,
+        updateVideo: UpdateVideo,
+    ): Optional<DetailedVideo> {
         return this.service.updateVideo(videoId, updateVideo)
-            .map { this.fileClient.updateVideoFolder(FileUpdate(it.id, it.url)) ; it }
+            .map {
+                this.fileClient.updateVideoFolder(FileUpdate(it.id, it.url))
+                it
+            }
     }
 
     override fun deleteVideoById(videoId: UUID) {

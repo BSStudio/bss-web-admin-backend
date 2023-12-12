@@ -13,9 +13,8 @@ import org.springframework.context.annotation.Primary
 @Configuration
 class MemberServiceConfig(
     private val repository: MemberRepository,
-    private val fileClient: FileApiClient
+    private val fileClient: FileApiClient,
 ) {
-
     @Bean
     @Primary
     fun memberService(defaultMemberService: MemberService): MemberService {

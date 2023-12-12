@@ -18,9 +18,8 @@ import java.util.UUID
 open class DefaultVideoService(
     private val repository: SimpleVideoRepository,
     private val detailedRepository: DetailedVideoRepository,
-    private val mapper: VideoMapper
+    private val mapper: VideoMapper,
 ) : VideoService {
-
     override fun findAllVideos(): List<Video> {
         return repository.findAll()
             .map(mapper::entityToModel)
@@ -38,9 +37,15 @@ open class DefaultVideoService(
             .let(mapper::entityToModel)
     }
 
-    override fun changeVideoVisibility(videoIds: List<UUID>, visible: Boolean): List<UUID> {
+    override fun changeVideoVisibility(
+        videoIds: List<UUID>,
+        visible: Boolean,
+    ): List<UUID> {
         return repository.findAllById(videoIds)
-            .map { it.visible = visible; it }
+            .map {
+                it.visible = visible
+                it
+            }
             .map(repository::save)
             .map(SimpleVideoEntity::id)
     }
@@ -50,7 +55,10 @@ open class DefaultVideoService(
             .map(mapper::entityToModel)
     }
 
-    override fun updateVideo(videoId: UUID, updateVideo: UpdateVideo): Optional<DetailedVideo> {
+    override fun updateVideo(
+        videoId: UUID,
+        updateVideo: UpdateVideo,
+    ): Optional<DetailedVideo> {
         return detailedRepository.findById(videoId)
             .map { mapper.updateToEntity(it, updateVideo) }
             .map(detailedRepository::save)

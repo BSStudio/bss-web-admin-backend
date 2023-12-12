@@ -11,9 +11,8 @@ import java.util.UUID
 
 class DefaultMemberService(
     private val repository: MemberRepository,
-    private val mapper: MemberMapper
+    private val mapper: MemberMapper,
 ) : MemberService {
-
     override fun findAllMembers(): List<Member> {
         return repository.findAll()
             .map(mapper::entityToModel)
@@ -26,14 +25,23 @@ class DefaultMemberService(
             .let(mapper::entityToModel)
     }
 
-    override fun archiveMembers(memberIds: List<UUID>, archive: Boolean): List<UUID> {
+    override fun archiveMembers(
+        memberIds: List<UUID>,
+        archive: Boolean,
+    ): List<UUID> {
         return repository.findAllById(memberIds)
-            .map { it.archived = archive; it }
+            .map {
+                it.archived = archive
+                it
+            }
             .map(repository::save)
             .map(DetailedMemberEntity::id)
     }
 
-    override fun updateMember(memberId: UUID, updateMember: UpdateMember): Optional<Member> {
+    override fun updateMember(
+        memberId: UUID,
+        updateMember: UpdateMember,
+    ): Optional<Member> {
         return repository.findById(memberId)
             .map { mapper.updateToEntity(it, updateMember) }
             .map(repository::save)

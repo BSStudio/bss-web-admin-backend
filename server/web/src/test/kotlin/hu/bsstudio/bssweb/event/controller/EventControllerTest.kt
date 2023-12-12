@@ -27,9 +27,8 @@ import java.util.UUID
 @WebMvcTest(EventController::class)
 internal class EventControllerTest(
     @Autowired private val mockMvc: MockMvc,
-    @Autowired private val objectMapper: ObjectMapper
+    @Autowired private val objectMapper: ObjectMapper,
 ) {
-
     @MockkBean
     private lateinit var mockService: EventService
 
@@ -141,7 +140,16 @@ internal class EventControllerTest(
         private val VIDEOS = listOf<Video>()
         private val EVENT = Event(id = EVENT_ID, url = URL, title = TITLE, description = DESCRIPTION, date = DATE, visible = VISIBLE)
         private val CREATE_EVENT = CreateEvent(url = URL, title = TITLE)
-        private val DETAILED_EVENT = DetailedEvent(id = EVENT_ID, url = URL, title = TITLE, description = DESCRIPTION, date = DATE, visible = VISIBLE, videos = VIDEOS)
+        private val DETAILED_EVENT =
+            DetailedEvent(
+                id = EVENT_ID,
+                url = URL,
+                title = TITLE,
+                description = DESCRIPTION,
+                date = DATE,
+                visible = VISIBLE,
+                videos = VIDEOS,
+            )
         private val UPDATE_EVENT = UpdateEvent(url = URL, title = TITLE, description = DESCRIPTION, date = DATE, visible = VISIBLE)
         private val EVENT_LIST = listOf(EVENT)
     }

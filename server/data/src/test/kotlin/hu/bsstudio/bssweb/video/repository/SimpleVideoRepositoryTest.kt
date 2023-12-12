@@ -14,9 +14,8 @@ import java.time.LocalDate
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class SimpleVideoRepositoryTest(
-    @Autowired private val underTest: SimpleVideoRepository
+    @Autowired private val underTest: SimpleVideoRepository,
 ) {
-
     @Test
     fun `create read delete`() {
         underTest.count().shouldBeZero()
@@ -25,14 +24,15 @@ class SimpleVideoRepositoryTest(
         val id = underTest.save(entity).id
 
         underTest.findById(id) shouldBePresent {
-            it shouldBeEqualToComparingFields SimpleVideoEntity(
-                url = URL,
-                title = TITLE,
-                uploadedAt = LocalDate.now(),
-                visible = false
-            ).apply {
-                this.id = id
-            }
+            it shouldBeEqualToComparingFields
+                SimpleVideoEntity(
+                    url = URL,
+                    title = TITLE,
+                    uploadedAt = LocalDate.now(),
+                    visible = false,
+                ).apply {
+                    this.id = id
+                }
         }
 
         underTest.deleteById(id)

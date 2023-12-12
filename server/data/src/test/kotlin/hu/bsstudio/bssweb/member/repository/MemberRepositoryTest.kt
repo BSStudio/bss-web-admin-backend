@@ -15,7 +15,7 @@ import java.time.LocalDate
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class MemberRepositoryTest(
-    @Autowired private val underTest: MemberRepository
+    @Autowired private val underTest: MemberRepository,
 ) {
     @Test
     fun `create read delete`() {
@@ -25,18 +25,19 @@ class MemberRepositoryTest(
         val id = underTest.save(entity).id
 
         underTest.findById(id) shouldBePresent {
-            it shouldBeEqualToComparingFields DetailedMemberEntity(
-                name = NAME,
-                url = URL,
-                nickname = "",
-                description = "",
-                joinedAt = LocalDate.now(),
-                role = "",
-                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-                archived = false
-            ).apply {
-                this.id = id
-            }
+            it shouldBeEqualToComparingFields
+                DetailedMemberEntity(
+                    name = NAME,
+                    url = URL,
+                    nickname = "",
+                    description = "",
+                    joinedAt = LocalDate.now(),
+                    role = "",
+                    status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                    archived = false,
+                ).apply {
+                    this.id = id
+                }
         }
 
         underTest.deleteById(id)

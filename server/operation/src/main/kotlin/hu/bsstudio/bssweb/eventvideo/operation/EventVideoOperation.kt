@@ -8,10 +8,15 @@ import org.springframework.web.bind.annotation.RequestParam
 import java.util.UUID
 
 interface EventVideoOperation {
-
     @PostMapping("/api/v1/eventVideo")
-    fun addVideoToEvent(@RequestParam eventId: UUID, @RequestParam videoId: UUID): ResponseEntity<DetailedEvent>
+    fun addVideoToEvent(
+        @RequestParam eventId: UUID,
+        @RequestParam videoId: UUID,
+    ): ResponseEntity<DetailedEvent>
 
     @DeleteMapping("/api/v1/eventVideo")
-    fun removeVideoFromEvent(@RequestParam eventId: UUID, @RequestParam videoId: UUID): ResponseEntity<DetailedEvent>
+    fun removeVideoFromEvent(
+        @RequestParam eventId: UUID,
+        @RequestParam videoId: UUID,
+    ): ResponseEntity<DetailedEvent>
 }

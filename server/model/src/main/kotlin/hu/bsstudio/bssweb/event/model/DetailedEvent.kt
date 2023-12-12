@@ -11,5 +11,5 @@ data class DetailedEvent(
     val description: String,
     val date: LocalDate,
     val visible: Boolean,
-    val videos: List<Video>
+    val videos: List<Video>,
 )

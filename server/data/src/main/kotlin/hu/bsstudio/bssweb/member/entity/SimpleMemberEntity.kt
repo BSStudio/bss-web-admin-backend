@@ -11,7 +11,7 @@ import java.util.UUID
 @Table(name = "member")
 data class SimpleMemberEntity(
     var name: String,
-    var nickname: String
+    var nickname: String,
 ) {
     @Id
     @GeneratedValue
@@ -24,7 +24,5 @@ data class SimpleMemberEntity(
         return this.id == other.id
     }
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    override fun hashCode() = id.hashCode()
 }

@@ -13,5 +13,5 @@ data class Member(
     val joinedAt: LocalDate,
     val role: String,
     val status: MemberStatus,
-    val archived: Boolean
+    val archived: Boolean,
 )

@@ -26,9 +26,8 @@ import java.util.UUID
 @WebMvcTest(MemberController::class)
 internal class MemberControllerTest(
     @Autowired private val mockMvc: MockMvc,
-    @Autowired private val objectMapper: ObjectMapper
+    @Autowired private val objectMapper: ObjectMapper,
 ) {
-
     @MockkBean
     private lateinit var mockService: MemberService
 
@@ -158,8 +157,29 @@ internal class MemberControllerTest(
         private const val ROLE = "Director"
         private val STATUS = MemberStatus.ACTIVE_ALUMNI
         private const val ARCHIVED = false
-        private val UPDATE_MEMBER = UpdateMember(url = URL, name = NAME, nickname = NICKNAME, description = DESCRIPTION, joinedAt = JOINED_AT, role = ROLE, status = STATUS, archived = ARCHIVED)
-        private val MEMBER = Member(url = URL, name = NAME, id = MEMBER_ID, nickname = NICKNAME, description = DESCRIPTION, joinedAt = JOINED_AT, role = ROLE, status = STATUS, archived = ARCHIVED)
+        private val UPDATE_MEMBER =
+            UpdateMember(
+                url = URL,
+                name = NAME,
+                nickname = NICKNAME,
+                description = DESCRIPTION,
+                joinedAt = JOINED_AT,
+                role = ROLE,
+                status = STATUS,
+                archived = ARCHIVED,
+            )
+        private val MEMBER =
+            Member(
+                url = URL,
+                name = NAME,
+                id = MEMBER_ID,
+                nickname = NICKNAME,
+                description = DESCRIPTION,
+                joinedAt = JOINED_AT,
+                role = ROLE,
+                status = STATUS,
+                archived = ARCHIVED,
+            )
         private val MEMBER_LIST = listOf(MEMBER)
     }
 }

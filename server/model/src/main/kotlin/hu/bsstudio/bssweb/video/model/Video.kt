@@ -8,5 +8,5 @@ data class Video(
     val url: String,
     val title: String,
     val uploadedAt: LocalDate,
-    val visible: Boolean
+    val visible: Boolean,
 )

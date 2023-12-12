@@ -11,9 +11,8 @@ import java.util.UUID
 
 @JsonTest
 internal class EventTest(
-    @Autowired private val underTest: JacksonTester<Event>
+    @Autowired private val underTest: JacksonTester<Event>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(EVENT)
@@ -30,28 +29,30 @@ internal class EventTest(
 
     private companion object {
         private val ID = UUID.randomUUID()
-        private const val url = "url"
-        private const val title = "title"
-        private const val description = "description"
-        private val date = LocalDate.now()
-        private const val visible = true
-        private val EVENT = Event(
-            id = ID,
-            url = url,
-            title = title,
-            description = description,
-            date = date,
-            visible = visible
-        )
-        private val JSON = """
+        private const val URL = "url"
+        private const val TITLE = "title"
+        private const val DESCRIPTION = "description"
+        private val DATE = LocalDate.now()
+        private const val VISIBLE = true
+        private val EVENT =
+            Event(
+                id = ID,
+                url = URL,
+                title = TITLE,
+                description = DESCRIPTION,
+                date = DATE,
+                visible = VISIBLE,
+            )
+        private val JSON =
+            """
             {
                 "id": "$ID",
-                "url": "$url",
-                "title": "$title",
-                "description": "$description",
-                "date": "$date",
-                "visible": $visible
+                "url": "$URL",
+                "title": "$TITLE",
+                "description": "$DESCRIPTION",
+                "date": "$DATE",
+                "visible": $VISIBLE
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

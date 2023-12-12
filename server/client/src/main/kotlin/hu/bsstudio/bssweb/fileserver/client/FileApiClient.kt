@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PutMapping
 
 @FeignClient(name = "member", url = "\${bss.file-api.url}")
 interface FileApiClient {
-
     @PostMapping("/api/v1/member")
     fun createMemberFolder(fileUpdate: FileUpdate): FileUpdate
 

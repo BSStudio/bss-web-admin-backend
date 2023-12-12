@@ -9,13 +9,20 @@ import org.springframework.web.bind.annotation.RequestParam
 import java.util.UUID
 
 interface VideoCrewOperation {
-
     @GetMapping("/api/v1/videoCrew/position")
     fun getPositions(): ResponseEntity<List<String>>
 
     @PutMapping("/api/v1/videoCrew")
-    fun addPosition(@RequestParam videoId: UUID, @RequestParam position: String, @RequestParam memberId: UUID): ResponseEntity<DetailedVideo>
+    fun addPosition(
+        @RequestParam videoId: UUID,
+        @RequestParam position: String,
+        @RequestParam memberId: UUID,
+    ): ResponseEntity<DetailedVideo>
 
     @DeleteMapping("/api/v1/videoCrew")
-    fun removePosition(@RequestParam videoId: UUID, @RequestParam position: String, @RequestParam memberId: UUID): ResponseEntity<DetailedVideo>
+    fun removePosition(
+        @RequestParam videoId: UUID,
+        @RequestParam position: String,
+        @RequestParam memberId: UUID,
+    ): ResponseEntity<DetailedVideo>
 }

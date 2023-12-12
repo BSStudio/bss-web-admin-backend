@@ -20,9 +20,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 class VideoCrewRepositoryTest(
     @Autowired private val underTest: VideoCrewRepository,
     @Autowired private val memberRepository: MemberRepository,
-    @Autowired private val videoRepository: SimpleVideoRepository
+    @Autowired private val videoRepository: SimpleVideoRepository,
 ) {
-
     @Test
     fun `create read delete`() {
         val memberId = memberRepository.save(DetailedMemberEntity(url = "url", name = "name")).id

@@ -1,5 +1,4 @@
 plugins {
-    id("ktlint-conventions")
     id("integration-testing-conventions")
 }
 

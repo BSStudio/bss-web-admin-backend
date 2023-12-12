@@ -11,5 +11,5 @@ data class UpdateMember(
     val joinedAt: LocalDate,
     val role: String,
     val status: MemberStatus,
-    val archived: Boolean
+    val archived: Boolean,
 )
