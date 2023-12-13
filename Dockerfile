@@ -17,7 +17,7 @@ RUN ./gradlew
 COPY ./buildSrc ./buildSrc
 COPY ./server   ./server
 ARG BUILD_ARG="bootJar --parallel"
-RUN ./gradlew $BUILD_ARG
+RUN ./gradlew ${BUILD_ARG}
 
 FROM bellsoft/liberica-openjre-alpine-musl:21.0.1-12 AS app
 # use non-root user

@@ -9,7 +9,6 @@ import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.equals.shouldBeEqual
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
