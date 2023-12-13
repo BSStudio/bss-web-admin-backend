@@ -19,13 +19,12 @@ class RemoveVideoCrewIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    @Disabled // todo remove
     fun `it should return 200 and delete video crew`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
         val memberEntity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
         videoCrewRepository.save(VideoCrewEntity(VideoCrewEntityId(videoEntity.id, "position", memberEntity.id)))
 
-        val actual = client.removePosition(videoEntity.id, "postition", memberEntity.id)
+        val actual = client.removePosition(videoEntity.id, "position", memberEntity.id)
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
