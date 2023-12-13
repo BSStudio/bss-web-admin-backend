@@ -174,7 +174,7 @@ internal class VideoControllerTest(
         private const val VISIBLE = false
         private const val DESCRIPTION = "description"
         private val VIDEO = Video(id = VIDEO_ID, url = URL, title = TITLE, uploadedAt = UPLOADED_AT, visible = VISIBLE)
-        private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
+        private val PAGED_VIDEOS = PageImpl(listOf(VIDEO), PAGEABLE, 1)
         private val CREATE_VIDEO = CreateVideo(url = URL, title = TITLE)
         private val DETAILED_VIDEO =
             DetailedVideo(
