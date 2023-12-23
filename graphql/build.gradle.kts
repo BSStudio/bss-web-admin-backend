@@ -1,7 +1,7 @@
 plugins {
     id("spring-app-conventions")
     id("testing-conventions")
-    id("com.netflix.dgs.codegen") version "6.0.3"
+    id("dgs-codegen-conventions")
 }
 
 dependencies {
@@ -12,10 +12,4 @@ dependencies {
     // testing
     testImplementation("org.springframework.graphql:spring-graphql-test")
     testImplementation("org.springframework:spring-webflux")
-}
-
-tasks.generateJava {
-    schemaPaths.add("$projectDir/src/main/resources/graphql")
-    packageName = "hu.bsstudio.bssweb.codegen"
-    generateClient = true
 }

@@ -10,6 +10,7 @@ dependencies {
     implementation(libs.plugin.springBoot)
     implementation(libs.plugin.springDependencyManagement)
     implementation(libs.plugin.spotless)
+    implementation(libs.plugin.dgsCodegen)
     implementation(kotlin("allopen", "1.9.21"))
     implementation(kotlin("gradle-plugin", "1.9.21"))
     // required for kotlin plugin jpa
