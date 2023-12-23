@@ -8,6 +8,7 @@ include(
     "server:data",
     "server:common",
     "server:client",
+    "graphql",
     "client",
     "integration"
 )
