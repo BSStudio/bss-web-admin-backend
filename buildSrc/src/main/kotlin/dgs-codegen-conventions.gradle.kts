@@ -3,7 +3,10 @@ plugins {
 }
 
 tasks.generateJava {
-    schemaPaths.add("$projectDir/src/main/resources/graphql")
+    schemaPaths.apply {
+        clear()
+        add("$projectDir/src/main/resources/graphql")
+    }
     packageName = "hu.bsstudio.bssweb.codegen"
     generateClient = true
 }
