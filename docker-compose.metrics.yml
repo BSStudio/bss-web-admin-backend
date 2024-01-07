@@ -11,7 +11,7 @@ services:
       management.influx.metrics.export.password: "password"
       management.influx.metrics.export.bucket: "bucket"
   influx:
-    image: "influxdb:2.7.4-alpine"
+    image: "influxdb:2.7.5-alpine"
     ports:
       - "127.0.0.1:8086:8086"
     healthcheck:
