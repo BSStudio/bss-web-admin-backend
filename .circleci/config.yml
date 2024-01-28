@@ -1,6 +1,6 @@
 version: 2.1
 orbs: 
-  codecov: codecov/codecov@3.3.0
+  codecov: codecov/codecov@4.0.0
   gradle: circleci/gradle@3.0.0
   docker: circleci/docker@2.5.0
 executors:
@@ -103,7 +103,8 @@ workflows:
             - gradle/collect_test_results:
                 reports_path: server/build/reports
                 test_results_path: test-results
-            - codecov/upload
+            - codecov/upload:
+                flags: unit
       - docker/hadolint:
           name: Lint Dockerfile
           dockerfiles: Dockerfile
