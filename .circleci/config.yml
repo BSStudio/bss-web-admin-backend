@@ -115,17 +115,8 @@ workflows:
           use-remote-docker: true
           remote-docker-dlc: true
           use-buildkit: true
-          before_build:
-            - restore_cache:
-                key: docker-layers-v1
-                paths:
-                  - bss-web-admin-backend.tar
           after_build:
             - run: docker save --output bss-web-admin-backend.tar ghcr.io/bsstudio/bss-web-admin-backend:latest
-            - save_cache:
-                key: docker-layers-v1
-                paths:
-                  - bss-web-admin-backend.tar
             - persist_to_workspace:
                 root: ./
                 paths:
@@ -153,8 +144,10 @@ workflows:
 #          registry: ghcr.io
 #          use-docker-credentials-store: true
   Release:
-    unless:
-      equal: [ << pipeline.git.tag >>, "" ]
+    when:
+      matches:
+        value: << pipeline.git.tag >>
+        pattern: /v(\d+\.){2}\d+/
     jobs:
       - github-cli/release:
           name: Create release
