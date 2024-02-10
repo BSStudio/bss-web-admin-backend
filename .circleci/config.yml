@@ -59,6 +59,7 @@ jobs:
       - image: alpine:latest
     steps:
       - run: echo "Fork!"
+      - run: echo ${CIRCLE_TAG}
   docker_publish:
     executor: docker/machine
     steps:
@@ -150,4 +151,4 @@ workflows:
             - Fork join build
           filters:
             tags:
-              only: /.+/
+              ignore: /^$/
