@@ -147,6 +147,6 @@ workflows:
             - Integration test
             - Build image
             - Lint Dockerfile
-        filters:
-          tags:
-            only: /^v(\d+\.){2}\d+$/
+          filters:
+            tags:
+              only: /^v(\d+\.){2}\d+$/
