@@ -69,7 +69,7 @@ jobs:
           registry: ghcr.io
           use-docker-credentials-store: true
       - docker/push:
-          image: bsstudio/bss-web-admin-backend:latest
+          image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
           tag: ${CIRCLE_TAG},latest
 workflows:
