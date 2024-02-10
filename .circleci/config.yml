@@ -149,5 +149,7 @@ workflows:
           version: << pipeline.git.tag >>
           additional_args: --notes-from-tag --latest
           filters: &tagged
+            branches:
+              ignore: /.*/
             tags:
-              only: /^v(\d+\.){2}\d+$/
+              only: /.*/
