@@ -143,15 +143,15 @@ workflows:
           filters:
             tags:
               only: /^v(\d+\.){2}\d+$/
-  Publish:
-    unless:
-      matches:
-        pattern: /v(\d+\.){2}\d+/
-        value: << pipeline.git.tag >>
-    jobs:
-      - docker/check:
-          registry: ghcr.io
-          use-docker-credentials-store: true
+#  Publish:
+#    unless:
+#      matches:
+#        pattern: /v(\d+\.){2}\d+/
+#        value: << pipeline.git.tag >>
+#    jobs:
+#      - docker/check:
+#          registry: ghcr.io
+#          use-docker-credentials-store: true
   Release:
     unless:
       equal: [ << pipeline.git.tag >>, "" ]
