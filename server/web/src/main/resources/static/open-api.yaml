@@ -9,8 +9,14 @@ info:
 servers:
   - description: "Local"
     url: http://localhost:8080
-  - description: "Dev"
+  - description: "Local (test)"
+    url: /
+  - description: "Dev - BSS"
     url: https://dev-admin.bsstudio.hu
+  - description: "Dev - Bence"
+    url: https://bss.vault.csik.dev
+  - description: "Prod"
+    url: https://admin.bsstudio.hu
 tags:
   - name: Member
     description: "REST operations for members"
