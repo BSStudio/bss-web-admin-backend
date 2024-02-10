@@ -11,11 +11,17 @@ services:
       - "127.0.0.1:3000:3000"
     depends_on:
       - prometheus
-    environment:
-      todo: "set up grafana"
+    healthcheck:
+      test: curl -fs http://localhost:3000/api/health | grep -q "\"ok\""
   prometheus:
     image: "prom/prometheus:v2.48.0"
     ports:
       - "127.0.0.1:9090:9090"
     volumes:
       - "./docker/prometheus.yml:/etc/prometheus/prometheus.yml"
+    healthcheck:
+      test: wget --tries=1 --no-verbose -qO- http://localhost:9090/-/ready | grep -q "Prometheus Server is Ready."
+      start_period: 5s
+      interval: 30s
+      timeout: 5s
+      retries: 3
