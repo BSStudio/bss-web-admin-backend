@@ -154,8 +154,7 @@ workflows:
           use-docker-credentials-store: true
   Release:
     unless:
-      equal:
-        - [ << pipeline.git.tag >>, "" ]
+      equal: [ << pipeline.git.tag >>, "" ]
     jobs:
       - github-cli/release:
           name: Create release
