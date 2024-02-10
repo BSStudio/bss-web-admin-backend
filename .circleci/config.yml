@@ -136,12 +136,6 @@ workflows:
                 paths:
                   - bss-web-admin-backend.tar
   Publish app:
-    when:
-      and:
-        - matches:
-            pattern: /^v.+$/
-            value: << pipeline.git.tag >>
-        - equal: [master, << pipeline.git.branch >>]
     jobs:
       - docker_publish:
           name: Publish image
@@ -153,3 +147,6 @@ workflows:
             - Integration test
             - Build image
             - Lint Dockerfile
+        filters:
+          tags:
+            only: /^v(\d+\.){2}\d+$/
