@@ -72,7 +72,7 @@ jobs:
       - docker/push:
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
-          tag: ${CIRCLE_TAG},latest
+          tag: latest
 workflows:
   Build app:
     jobs:
