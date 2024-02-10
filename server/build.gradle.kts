@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
     api(project(":server:web"))
-    runtimeOnly("io.micrometer:micrometer-registry-influx")
+    runtimeOnly("io.micrometer:micrometer-registry-prometheus")
 }

@@ -6,7 +6,7 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
     healthcheck:
-      test: "curl -fs http://localhost:8080/actuator/health | grep -q UP"
+      test: "wget --tries=1 --no-verbose -qO- http://localhost:8080/actuator/health | grep -q UP"
       interval: 10s
       timeout: 5s
       retries: 5
@@ -28,19 +28,19 @@ services:
       - "127.0.0.1:5432:5432"
     healthcheck:
       test: "pg_isready -q -U postgres"
-      interval: 10s
+      start_period: 5s
+      interval: 30s
       timeout: 5s
-      retries: 5
-      start_period: 10s
+      retries: 3
   mock-file-api:
     image: "wiremock/wiremock:2.35.0"
     ports:
       - "127.0.0.1:8888:8080"
     healthcheck:
       test: "curl -fs http://localhost:8080/__admin/docs > /dev/null || exit 1"
-      interval: 10s
-      timeout: 5s
-      retries: 5
       start_period: 5s
+      interval: 30s
+      timeout: 5s
+      retries: 3
     volumes:
       - "./stubs:/home/wiremock/mappings"
