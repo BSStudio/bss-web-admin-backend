@@ -1,8 +1,9 @@
 version: 2.1
-orbs: 
+orbs:
   codecov: codecov/codecov@4.0.1
   gradle: circleci/gradle@3.0.0
   docker: circleci/docker@2.5.0
+  github-cli: circleci/github-cli@2.3.0
 executors:
   jdk:
     docker:
@@ -54,12 +55,6 @@ jobs:
           reports_path: integration/build/reports
           test_results_path: integration/build/test-results
       - run: docker compose down
-  fork_join:
-    docker:
-      - image: alpine:latest
-    steps:
-      - run: echo "Fork!"
-      - run: echo ${CIRCLE_TAG}
   docker_publish:
     executor: docker/machine
     steps:
@@ -148,3 +143,23 @@ workflows:
           filters:
             tags:
               only: /^v(\d+\.){2}\d+$/
+  Publish:
+    unless:
+      matches:
+        pattern: /v(\d+\.){2}\d+/
+        value: <<pipeline.git.tag>>
+    jobs:
+      - docker/check:
+          registry: ghcr.io
+          use-docker-credentials-store: true
+  Release:
+    unless:
+      equal:
+        - [ <<pipeline.git.tag>>, "" ]
+    jobs:
+      - github-cli/release:
+          name: Create release
+          tag: <<pipeline.git.tag>>
+          title: <<pipeline.git.tag>>
+          version: <<pipeline.git.tag>>
+          additional_args: --notes-from-tag --latest
