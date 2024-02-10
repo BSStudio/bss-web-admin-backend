@@ -8,5 +8,5 @@ import jakarta.persistence.Table
 @Table(name = "crew")
 data class VideoCrewEntity(
     @EmbeddedId
-    var id: VideoCrewEntityId
+    var id: VideoCrewEntityId,
 )

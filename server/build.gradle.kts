@@ -1,6 +1,5 @@
 plugins {
     id("spring-app-conventions")
-    id("ktlint-conventions")
 }
 
 dependencies {

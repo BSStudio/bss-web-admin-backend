@@ -11,9 +11,8 @@ import java.util.UUID
 
 @JsonTest
 internal class VideoTest(
-    @Autowired private val underTest: JacksonTester<Video>
+    @Autowired private val underTest: JacksonTester<Video>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(VIDEO)
@@ -30,25 +29,27 @@ internal class VideoTest(
 
     private companion object {
         private val ID = UUID.randomUUID()
-        private const val url = "video_url"
-        private const val title = "video_title"
-        private val uploadedAt = LocalDate.now()
-        private const val visible = true
-        private val VIDEO = Video(
-            id = ID,
-            url = url,
-            title = title,
-            uploadedAt = uploadedAt,
-            visible = visible
-        )
-        private val JSON = """
+        private const val URL = "video_url"
+        private const val TITLE = "video_title"
+        private val UPLOADED_AT = LocalDate.now()
+        private const val VISIBLE = true
+        private val VIDEO =
+            Video(
+                id = ID,
+                url = URL,
+                title = TITLE,
+                uploadedAt = UPLOADED_AT,
+                visible = VISIBLE,
+            )
+        private val JSON =
+            """
             {
                 "id": "$ID",
-                "url": "$url",
-                "title": "$title",
-                "uploadedAt": "$uploadedAt",
-                "visible": $visible
+                "url": "$URL",
+                "title": "$TITLE",
+                "uploadedAt": "$UPLOADED_AT",
+                "visible": $VISIBLE
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

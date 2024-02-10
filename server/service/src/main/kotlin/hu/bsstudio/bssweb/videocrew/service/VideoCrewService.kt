@@ -5,8 +5,9 @@ import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import java.util.Optional
 
 interface VideoCrewService {
-
     fun getPositions(): List<String>
+
     fun addPosition(videoCrew: VideoCrewRequest): Optional<DetailedVideo>
+
     fun removePosition(videoCrew: VideoCrewRequest): Optional<DetailedVideo>
 }

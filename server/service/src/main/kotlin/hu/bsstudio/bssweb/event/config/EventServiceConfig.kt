@@ -12,9 +12,8 @@ import org.springframework.context.annotation.Configuration
 class EventServiceConfig(
     private val repository: SimpleEventRepository,
     private val detailedRepository: DetailedEventRepository,
-    private val videoMapper: VideoMapper
+    private val videoMapper: VideoMapper,
 ) {
-
     @Bean
     fun defaultEventService(eventMapper: EventMapper): DefaultEventService {
         return DefaultEventService(repository, detailedRepository, eventMapper)

@@ -9,9 +9,8 @@ import org.springframework.boot.test.json.JacksonTester
 
 @JsonTest
 internal class CreateVideoTest(
-    @Autowired private val underTest: JacksonTester<CreateVideo>
+    @Autowired private val underTest: JacksonTester<CreateVideo>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(CREATE_VIDEO)
@@ -27,17 +26,19 @@ internal class CreateVideoTest(
     }
 
     private companion object {
-        private const val url = "video_url"
-        private const val title = "video_title"
-        private val CREATE_VIDEO = CreateVideo(
-            url = url,
-            title = title
-        )
-        private val JSON = """
+        private const val URL = "video_url"
+        private const val TITLE = "video_title"
+        private val CREATE_VIDEO =
+            CreateVideo(
+                url = URL,
+                title = TITLE,
+            )
+        private val JSON =
+            """
             {
-                "url": "$url",
-                "title": "$title"
+                "url": "$URL",
+                "title": "$TITLE"
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

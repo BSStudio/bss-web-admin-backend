@@ -11,9 +11,8 @@ import java.time.LocalDate
 
 @JsonTest
 internal class UpdateMemberTest(
-    @Autowired private val underTest: JacksonTester<UpdateMember>
+    @Autowired private val underTest: JacksonTester<UpdateMember>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(UPDATE_MEMBER)
@@ -29,35 +28,37 @@ internal class UpdateMemberTest(
     }
 
     private companion object {
-        private const val url = "member_url"
-        private const val name = "member_name"
-        private const val nickname = "member_nickname"
-        private const val description = "member_description"
-        private val joinedAt = LocalDate.now()
-        private const val role = "member_role"
-        private val status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE
-        private const val archived = false
-        private val UPDATE_MEMBER = UpdateMember(
-            url = url,
-            name = name,
-            nickname = nickname,
-            description = description,
-            joinedAt = joinedAt,
-            role = role,
-            status = status,
-            archived = archived
-        )
-        private val JSON = """
+        private const val URL = "member_url"
+        private const val NAME = "member_name"
+        private const val NICKNAME = "member_nickname"
+        private const val DESCRIPTION = "member_description"
+        private val JOINED_AT = LocalDate.now()
+        private const val ROLE = "member_role"
+        private val STATUS = MemberStatus.MEMBER_CANDIDATE_CANDIDATE
+        private const val ARCHIVED = false
+        private val UPDATE_MEMBER =
+            UpdateMember(
+                url = URL,
+                name = NAME,
+                nickname = NICKNAME,
+                description = DESCRIPTION,
+                joinedAt = JOINED_AT,
+                role = ROLE,
+                status = STATUS,
+                archived = ARCHIVED,
+            )
+        private val JSON =
+            """
             {
-                "url": "$url",
-                "name": "$name",
-                "nickname": "$nickname",
-                "description": "$description",
-                "joinedAt": "$joinedAt",
-                "role": "$role",
-                "status": "${status.name}",
-                "archived": $archived
+                "url": "$URL",
+                "name": "$NAME",
+                "nickname": "$NICKNAME",
+                "description": "$DESCRIPTION",
+                "joinedAt": "$JOINED_AT",
+                "role": "$ROLE",
+                "status": "${STATUS.name}",
+                "archived": $ARCHIVED
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

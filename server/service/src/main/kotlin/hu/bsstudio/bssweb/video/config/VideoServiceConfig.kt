@@ -17,9 +17,8 @@ class VideoServiceConfig(
     private val videoRepository: SimpleVideoRepository,
     private val detailedRepository: DetailedVideoRepository,
     private val fileClient: FileApiClient,
-    private val videoCrewMapper: VideoCrewMapper
+    private val videoCrewMapper: VideoCrewMapper,
 ) {
-
     @Bean
     @Primary
     fun videoService(defaultVideoService: VideoService): VideoService {

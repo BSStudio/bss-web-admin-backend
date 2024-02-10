@@ -11,9 +11,8 @@ import java.util.UUID
 
 @JsonTest
 internal class DetailedVideoTest(
-    @Autowired private val underTest: JacksonTester<DetailedVideo>
+    @Autowired private val underTest: JacksonTester<DetailedVideo>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(DETAILED_VIDEO)
@@ -30,30 +29,32 @@ internal class DetailedVideoTest(
 
     private companion object {
         private val ID = UUID.randomUUID()
-        private const val url = "video_url"
-        private const val title = "video_title"
-        private const val description = "video_description"
-        private val uploadedAt = LocalDate.now()
-        private const val visible = true
-        private val DETAILED_VIDEO = DetailedVideo(
-            id = ID,
-            url = url,
-            title = title,
-            description = description,
-            uploadedAt = uploadedAt,
-            visible = visible,
-            crew = listOf()
-        )
-        private val JSON = """
+        private const val URL = "video_url"
+        private const val TITLE = "video_title"
+        private const val DESCRIPTION = "video_description"
+        private val UPLOADED_AT = LocalDate.now()
+        private const val VISIBLE = true
+        private val DETAILED_VIDEO =
+            DetailedVideo(
+                id = ID,
+                url = URL,
+                title = TITLE,
+                description = DESCRIPTION,
+                uploadedAt = UPLOADED_AT,
+                visible = VISIBLE,
+                crew = listOf(),
+            )
+        private val JSON =
+            """
             {
                 "id": "$ID",
-                "url": "$url",
-                "title": "$title",
-                "description": "$description",
-                "uploadedAt": "$uploadedAt",
-                "visible": $visible,
+                "url": "$URL",
+                "title": "$TITLE",
+                "description": "$DESCRIPTION",
+                "uploadedAt": "$UPLOADED_AT",
+                "visible": $VISIBLE,
                 "crew": []
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

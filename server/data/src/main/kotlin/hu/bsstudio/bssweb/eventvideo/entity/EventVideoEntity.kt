@@ -17,5 +17,5 @@ data class EventVideoEntity(
     var eventId: UUID,
     @Id
     @Column(name = "video_id")
-    var videoId: UUID
+    var videoId: UUID,
 ) : Serializable

@@ -19,9 +19,8 @@ import java.util.UUID
 @ExtendWith(MockKExtension::class)
 internal class DefaultEventVideoServiceTest(
     @MockK private val mockRepository: EventVideoRepository,
-    @MockK private val mockEventService: EventService
+    @MockK private val mockEventService: EventService,
 ) {
-
     @InjectMockKs
     private lateinit var underTest: DefaultEventVideoService
 

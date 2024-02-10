@@ -12,7 +12,6 @@ import java.util.UUID
 
 @RestController
 class MemberController(val service: MemberService) : MemberOperation {
-
     override fun getAllMembers(): ResponseEntity<List<Member>> {
         return service.findAllMembers()
             .let { ResponseEntity.ok(it) }
@@ -23,12 +22,18 @@ class MemberController(val service: MemberService) : MemberOperation {
             .let { ResponseEntity.created(locationUri(it.id)).body(it) }
     }
 
-    override fun updateMember(memberId: UUID, updateMember: UpdateMember): ResponseEntity<Member> {
+    override fun updateMember(
+        memberId: UUID,
+        updateMember: UpdateMember,
+    ): ResponseEntity<Member> {
         return service.updateMember(memberId, updateMember)
             .let { ResponseEntity.of(it) }
     }
 
-    override fun archiveMembers(memberIds: List<UUID>, archive: Boolean): ResponseEntity<List<UUID>> {
+    override fun archiveMembers(
+        memberIds: List<UUID>,
+        archive: Boolean,
+    ): ResponseEntity<List<UUID>> {
         return service.archiveMembers(memberIds, archive)
             .let { ResponseEntity.ok(it) }
     }
@@ -43,8 +48,9 @@ class MemberController(val service: MemberService) : MemberOperation {
         return ResponseEntity.noContent().build()
     }
 
-    private fun locationUri(id: UUID) = ServletUriComponentsBuilder.fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(id)
-        .toUri()
+    private fun locationUri(id: UUID) =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(id)
+            .toUri()
 }

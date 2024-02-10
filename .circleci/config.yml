@@ -1,15 +1,15 @@
 version: 2.1
 orbs: 
-  codecov: codecov/codecov@3.3.0
+  codecov: codecov/codecov@4.0.1
   gradle: circleci/gradle@3.0.0
-  docker: circleci/docker@2.4.0
+  docker: circleci/docker@2.5.0
 executors:
   jdk:
     docker:
-      - image: cimg/openjdk:17.0.9
+      - image: cimg/openjdk:21.0.2
   jdk-machine:
     machine:
-      image: ubuntu-2204:2022.10.2
+      image: ubuntu-2204:2023.10.1
 jobs:
   gradle_docker:
     parameters:
@@ -37,6 +37,12 @@ jobs:
   gradle_integration:
     executor: jdk-machine
     steps:
+      - run:
+          name: Install OpenJDK 21
+          command: |
+            sudo apt-get update && sudo apt-get install openjdk-21-jdk
+            sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-21-openjdk-amd64/bin/javac
       - checkout
       - run: docker compose up -d
       - gradle/with_cache:
@@ -71,7 +77,7 @@ workflows:
     jobs:
       - gradle/run:
           name: Lint
-          command: ktlintCheck
+          command: spotlessCheck
           deps_checksum_file: build.gradle.kts
           cache_key: v2
           executor: jdk
@@ -97,7 +103,8 @@ workflows:
             - gradle/collect_test_results:
                 reports_path: server/build/reports
                 test_results_path: test-results
-            - codecov/upload
+            - codecov/upload:
+                flags: unit
       - docker/hadolint:
           name: Lint Dockerfile
           dockerfiles: Dockerfile

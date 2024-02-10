@@ -25,9 +25,8 @@ import java.util.UUID
 @ExtendWith(MockKExtension::class)
 internal class FileUpdatingVideoServiceTest(
     @MockK private val mockService: VideoService,
-    @MockK private val mockClient: FileApiClient
+    @MockK private val mockClient: FileApiClient,
 ) {
-
     @InjectMockKs
     private lateinit var underTest: FileUpdatingVideoService
 

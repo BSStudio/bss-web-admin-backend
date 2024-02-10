@@ -14,7 +14,7 @@ data class SimpleVideoEntity(
     override var url: String,
     override var title: String,
     override var uploadedAt: LocalDate = LocalDate.now(),
-    override var visible: Boolean = false
+    override var visible: Boolean = false,
 ) : VideoEntity {
     @Id
     @GeneratedValue
@@ -27,7 +27,5 @@ data class SimpleVideoEntity(
         return this.id == other.id
     }
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    override fun hashCode() = id.hashCode()
 }

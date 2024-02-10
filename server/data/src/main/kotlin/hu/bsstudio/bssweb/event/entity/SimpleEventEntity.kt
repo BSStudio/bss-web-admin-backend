@@ -15,7 +15,7 @@ data class SimpleEventEntity(
     override var title: String,
     override var description: String = "",
     override var date: LocalDate = LocalDate.now(),
-    override var visible: Boolean = false
+    override var visible: Boolean = false,
 ) : EventEntity {
     @Id
     @GeneratedValue
@@ -28,7 +28,5 @@ data class SimpleEventEntity(
         return this.id == other.id
     }
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    override fun hashCode() = id.hashCode()
 }

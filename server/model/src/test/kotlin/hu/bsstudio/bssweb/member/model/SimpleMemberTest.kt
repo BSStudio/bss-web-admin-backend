@@ -10,9 +10,8 @@ import java.util.UUID
 
 @JsonTest
 internal class SimpleMemberTest(
-    @Autowired private val underTest: JacksonTester<SimpleMember>
+    @Autowired private val underTest: JacksonTester<SimpleMember>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(SIMPLE_MEMBER)
@@ -29,19 +28,21 @@ internal class SimpleMemberTest(
 
     private companion object {
         private val ID = UUID.randomUUID()
-        private const val name = "John Doe"
-        private const val nickname = "JD"
-        private val SIMPLE_MEMBER = SimpleMember(
-            id = ID,
-            name = name,
-            nickname = nickname
-        )
-        private val JSON = """
+        private const val NAME = "John Doe"
+        private const val NICKNAME = "JD"
+        private val SIMPLE_MEMBER =
+            SimpleMember(
+                id = ID,
+                name = NAME,
+                nickname = NICKNAME,
+            )
+        private val JSON =
+            """
             {
                 "id": "$ID",
-                "name": "$name",
-                "nickname": "$nickname"
+                "name": "$NAME",
+                "nickname": "$NICKNAME"
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

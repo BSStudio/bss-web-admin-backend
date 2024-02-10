@@ -9,13 +9,18 @@ import java.util.UUID
 
 @RestController
 class EventVideoController(private val service: EventVideoService) : EventVideoOperation {
-
-    override fun addVideoToEvent(eventId: UUID, videoId: UUID): ResponseEntity<DetailedEvent> {
+    override fun addVideoToEvent(
+        eventId: UUID,
+        videoId: UUID,
+    ): ResponseEntity<DetailedEvent> {
         return service.addVideoToEvent(eventId, videoId)
             .let { ResponseEntity.of(it) }
     }
 
-    override fun removeVideoFromEvent(eventId: UUID, videoId: UUID): ResponseEntity<DetailedEvent> {
+    override fun removeVideoFromEvent(
+        eventId: UUID,
+        videoId: UUID,
+    ): ResponseEntity<DetailedEvent> {
         return service.removeVideoFromEvent(eventId, videoId)
             .let { ResponseEntity.of(it) }
     }

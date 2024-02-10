@@ -24,9 +24,8 @@ import java.util.UUID
 internal class DefaultVideoCrewServiceTest(
     @MockK private val mockRepository: VideoCrewRepository,
     @MockK private val mockMapper: VideoCrewMapper,
-    @MockK private val mockVideoService: VideoService
+    @MockK private val mockVideoService: VideoService,
 ) {
-
     @InjectMockKs
     private lateinit var underTest: DefaultVideoCrewService
 

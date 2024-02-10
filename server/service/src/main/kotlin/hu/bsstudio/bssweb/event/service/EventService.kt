@@ -9,9 +9,20 @@ import java.util.UUID
 
 interface EventService {
     fun findAllEvent(): List<Event>
+
     fun insertEvent(createEvent: CreateEvent): Event
-    fun changeVisibility(eventIds: List<UUID>, visible: Boolean = true): List<UUID>
+
+    fun changeVisibility(
+        eventIds: List<UUID>,
+        visible: Boolean = true,
+    ): List<UUID>
+
     fun findEventById(eventId: UUID): Optional<DetailedEvent>
-    fun updateEvent(eventId: UUID, updateEvent: UpdateEvent): Optional<DetailedEvent>
+
+    fun updateEvent(
+        eventId: UUID,
+        updateEvent: UpdateEvent,
+    ): Optional<DetailedEvent>
+
     fun removeEvent(eventId: UUID)
 }

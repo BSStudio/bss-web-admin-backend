@@ -11,5 +11,5 @@ data class DetailedVideo(
     val description: String,
     val uploadedAt: LocalDate,
     val visible: Boolean,
-    val crew: List<VideoCrew>
+    val crew: List<VideoCrew>,
 )

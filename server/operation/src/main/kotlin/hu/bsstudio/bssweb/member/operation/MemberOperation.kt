@@ -14,22 +14,33 @@ import org.springframework.web.bind.annotation.RequestParam
 import java.util.UUID
 
 interface MemberOperation {
-
     @GetMapping("/api/v1/member")
     fun getAllMembers(): ResponseEntity<List<Member>>
 
     @PostMapping("/api/v1/member")
-    fun createMember(@RequestBody member: CreateMember): ResponseEntity<Member>
+    fun createMember(
+        @RequestBody member: CreateMember,
+    ): ResponseEntity<Member>
 
     @PutMapping("/api/v1/member/{memberId}")
-    fun updateMember(@PathVariable memberId: UUID, @RequestBody updateMember: UpdateMember): ResponseEntity<Member>
+    fun updateMember(
+        @PathVariable memberId: UUID,
+        @RequestBody updateMember: UpdateMember,
+    ): ResponseEntity<Member>
 
     @PutMapping("/api/v1/member/archive")
-    fun archiveMembers(@RequestParam memberIds: List<UUID>, @RequestParam(defaultValue = "true") archive: Boolean): ResponseEntity<List<UUID>>
+    fun archiveMembers(
+        @RequestParam memberIds: List<UUID>,
+        @RequestParam(defaultValue = "true") archive: Boolean,
+    ): ResponseEntity<List<UUID>>
 
     @GetMapping("/api/v1/member/{memberId}")
-    fun getMemberById(@PathVariable memberId: UUID): ResponseEntity<Member>
+    fun getMemberById(
+        @PathVariable memberId: UUID,
+    ): ResponseEntity<Member>
 
     @DeleteMapping("/api/v1/member/{memberId}")
-    fun removeMember(@PathVariable memberId: UUID): ResponseEntity<Void>
+    fun removeMember(
+        @PathVariable memberId: UUID,
+    ): ResponseEntity<Void>
 }

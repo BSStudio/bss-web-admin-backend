@@ -18,7 +18,6 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class MemberMapperTest {
-
     @InjectMockKs
     private lateinit var underTest: MemberMapper
 
@@ -60,7 +59,17 @@ internal class MemberMapperTest {
         private const val ROLE = "role"
         private val STATUS = mockk<MemberStatus>()
         private const val ARCHIVED = false
-        private val MEMBER_ENTITY = DetailedMemberEntity(URL, NAME, NICKNAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED).apply { id = ID }
+        private val MEMBER_ENTITY =
+            DetailedMemberEntity(
+                URL,
+                NAME,
+                NICKNAME,
+                DESCRIPTION,
+                JOINED_AT,
+                ROLE,
+                STATUS,
+                ARCHIVED,
+            ).apply { id = ID }
         private val MEMBER = Member(ID, URL, NAME, NICKNAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
         private val SIMPLE_MEMBER_ENTITY = SimpleMemberEntity(NAME, NICKNAME).apply { id = ID }
         private val SIMPLE_MEMBER = SimpleMember(ID, NAME, NICKNAME)
@@ -74,7 +83,20 @@ internal class MemberMapperTest {
         private const val NEW_ROLE = "NEW_ROLE"
         private val NEW_STATUS = mockk<MemberStatus>()
         private const val NEW_ARCHIVED = true
-        private val MEMBER_UPDATE = UpdateMember(NEW_URL, NEW_NAME, NEW_NICKNAME, NEW_DESCRIPTION, NEW_JOINED_AT, NEW_ROLE, NEW_STATUS, NEW_ARCHIVED)
-        private val UPDATED_MEMBER_ENTITY = DetailedMemberEntity(NEW_URL, NEW_NAME, NEW_NICKNAME, NEW_DESCRIPTION, NEW_JOINED_AT, NEW_ROLE, NEW_STATUS, NEW_ARCHIVED).apply { id = ID }
+        private val MEMBER_UPDATE =
+            UpdateMember(NEW_URL, NEW_NAME, NEW_NICKNAME, NEW_DESCRIPTION, NEW_JOINED_AT, NEW_ROLE, NEW_STATUS, NEW_ARCHIVED)
+        private val UPDATED_MEMBER_ENTITY =
+            DetailedMemberEntity(
+                NEW_URL,
+                NEW_NAME,
+                NEW_NICKNAME,
+                NEW_DESCRIPTION,
+                NEW_JOINED_AT,
+                NEW_ROLE,
+                NEW_STATUS,
+                NEW_ARCHIVED,
+            ).apply {
+                id = ID
+            }
     }
 }

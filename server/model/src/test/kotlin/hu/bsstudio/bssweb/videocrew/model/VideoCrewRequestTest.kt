@@ -10,9 +10,8 @@ import java.util.UUID
 
 @JsonTest
 internal class VideoCrewRequestTest(
-    @Autowired private val underTest: JacksonTester<VideoCrewRequest>
+    @Autowired private val underTest: JacksonTester<VideoCrewRequest>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(VIDEO_CREW_REQUEST)
@@ -28,20 +27,22 @@ internal class VideoCrewRequestTest(
     }
 
     private companion object {
-        private val videoId = UUID.randomUUID()
-        private const val position = "Director"
-        private val memberId = UUID.randomUUID()
-        private val VIDEO_CREW_REQUEST = VideoCrewRequest(
-            videoId = videoId,
-            position = position,
-            memberId = memberId
-        )
-        private val JSON = """
+        private val VIDEO_ID = UUID.randomUUID()
+        private const val POSITION = "Director"
+        private val MEMBER_ID = UUID.randomUUID()
+        private val VIDEO_CREW_REQUEST =
+            VideoCrewRequest(
+                videoId = VIDEO_ID,
+                position = POSITION,
+                memberId = MEMBER_ID,
+            )
+        private val JSON =
+            """
             {
-                "videoId": "$videoId",
-                "position": "$position",
-                "memberId": "$memberId"
+                "videoId": "$VIDEO_ID",
+                "position": "$POSITION",
+                "memberId": "$MEMBER_ID"
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }

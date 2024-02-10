@@ -9,9 +9,8 @@ import org.springframework.boot.test.json.JacksonTester
 
 @JsonTest
 internal class BssMetricsTest(
-    @Autowired private val underTest: JacksonTester<BssMetrics>
+    @Autowired private val underTest: JacksonTester<BssMetrics>,
 ) {
-
     @Test
     internal fun `test serialisation`() {
         val actual = this.underTest.write(BSS_METRICS)
@@ -27,20 +26,22 @@ internal class BssMetricsTest(
     }
 
     private companion object {
-        private const val videoCount = 10L
-        private const val eventCount = 5L
-        private const val memberCount = 100L
-        private val BSS_METRICS = BssMetrics(
-            videoCount = videoCount,
-            eventCount = eventCount,
-            memberCount = memberCount
-        )
-        private val JSON = """
+        private const val VIDEO_COUNT = 10L
+        private const val EVENT_COUNT = 5L
+        private const val MEMBER_COUNT = 100L
+        private val BSS_METRICS =
+            BssMetrics(
+                videoCount = VIDEO_COUNT,
+                eventCount = EVENT_COUNT,
+                memberCount = MEMBER_COUNT,
+            )
+        private val JSON =
+            """
             {
-                "videoCount": $videoCount,
-                "eventCount": $eventCount,
-                "memberCount": $memberCount
+                "videoCount": $VIDEO_COUNT,
+                "eventCount": $EVENT_COUNT,
+                "memberCount": $MEMBER_COUNT
             }
-        """.trimIndent()
+            """.trimIndent()
     }
 }
