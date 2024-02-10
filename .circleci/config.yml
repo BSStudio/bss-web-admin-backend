@@ -135,8 +135,17 @@ workflows:
                 root: ./
                 paths:
                   - bss-web-admin-backend.tar
-      - fork_join:
-          name: Fork join build
+  Publish app:
+    when:
+      and:
+        - matches:
+            pattern: /^v.+$/
+            value: << pipeline.git.tag >>
+        - equal: [master, << pipeline.git.branch >>]
+        - equal: [true, << pipeline.git.pr >>]
+    jobs:
+      - docker_publish:
+          name: Publish image
           requires:
             - Lint
             - Coverage verification
@@ -145,10 +154,6 @@ workflows:
             - Integration test
             - Build image
             - Lint Dockerfile
-      - docker_publish:
-          name: Publish image
-          requires:
-            - Fork join build
           filters:
             tags:
               ignore: /^v.+$/
