@@ -142,7 +142,6 @@ workflows:
             pattern: /^v.+$/
             value: << pipeline.git.tag >>
         - equal: [master, << pipeline.git.branch >>]
-        - equal: [true, << pipeline.git.pr >>]
     jobs:
       - docker_publish:
           name: Publish image
