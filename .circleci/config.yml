@@ -149,5 +149,7 @@ workflows:
           requires:
             - Fork join build
           filters:
+            branches:
+              only: main
             tags:
-              ignore: /^$/
+              only: /.+/
