@@ -153,6 +153,3 @@ workflows:
             - Integration test
             - Build image
             - Lint Dockerfile
-          filters:
-            tags:
-              ignore: /^v.+$/
