@@ -131,9 +131,6 @@ workflows:
             - Integration test
             - Build image
             - Lint Dockerfile
-          filters:
-            tags:
-              only: /^v(\d+\.){2}\d+$/
 #  Publish:
 #    unless:
 #      matches:
@@ -144,10 +141,6 @@ workflows:
 #          registry: ghcr.io
 #          use-docker-credentials-store: true
   Release:
-    when:
-      matches:
-        value: << pipeline.git.tag >>
-        pattern: /v(\d+\.){2}\d+/
     jobs:
       - github-cli/release:
           name: Create release
@@ -155,3 +148,6 @@ workflows:
           title: << pipeline.git.tag >>
           version: << pipeline.git.tag >>
           additional_args: --notes-from-tag --latest
+          filters: &tagged
+            tags:
+              only: /^v(\d+\.){2}\d+$/
