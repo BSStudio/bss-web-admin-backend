@@ -8,14 +8,10 @@ info:
     url: https://github.com/csikb
 servers:
   - description: "Local"
-    url: http://localhost:8080
-  - description: "Local (test)"
     url: /
-  - description: "Dev - BSS"
+  - description: "Integration"
     url: https://dev-admin.bsstudio.hu
-  - description: "Dev - Bence"
-    url: https://bss.vault.csik.dev
-  - description: "Prod"
+  - description: "Production"
     url: https://admin.bsstudio.hu
 tags:
   - name: Member
