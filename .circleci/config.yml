@@ -146,7 +146,6 @@ workflows:
           name: Create release
           tag: << pipeline.git.tag >>
           title: << pipeline.git.tag >>
-          version: << pipeline.git.tag >>
           additional_args: --notes-from-tag --latest
           filters: &tagged
             branches:
