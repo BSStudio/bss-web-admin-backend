@@ -64,7 +64,7 @@ jobs:
           version: 2.43.1
       - github-cli/setup:
           version: 2.43.1
-      - run: gh release create $CIRCLE_TAG -t $CIRCLE_TAG
+      - run: gh release create << pipeline.git.tag >> -t << pipeline.git.tag >> --notes-from-tag
 workflows:
   Build app:
     jobs:
@@ -123,7 +123,7 @@ workflows:
               only: /.*/
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
-          tag: latest,<< pipeline.git.tag >>,$CIRCLE_SHA1
+          tag: latest,<< pipeline.git.tag >>
           executor: docker/docker
           remote-docker-version: 20.10.24
           use-remote-docker: true
