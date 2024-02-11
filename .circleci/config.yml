@@ -110,10 +110,16 @@ workflows:
                   - bss-web-admin-backend.tar
   Release:
     jobs:
-      - docker/push:
+      - docker/publish:
+          name: Publish image
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
-          tag: latest
+          tag: latest,<< pipeline.git.tag >>
+          executor: docker/docker
+          remote-docker-version: 20.10.24
+          use-remote-docker: true
+          remote-docker-dlc: true
+          use-buildkit: true
           before_build:
             - attach_workspace:
                 at: ./
