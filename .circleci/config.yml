@@ -131,7 +131,7 @@ workflows:
             - run: docker load < bss-web-admin-backend.tar
       - github-cli/release:
           name: Create release
-          tag: << pipeline.git.tag >>
+          tag: $CIRCLE_TAG
           filters: &tagged
             branches:
               ignore: /.*/
