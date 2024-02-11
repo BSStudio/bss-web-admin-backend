@@ -59,6 +59,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - checkout
       - github-cli/install:
           version: 2.43.1
       - github-cli/setup:
