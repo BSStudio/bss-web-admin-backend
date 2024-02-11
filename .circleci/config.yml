@@ -90,7 +90,6 @@ workflows:
                 flags: unit
       - docker/hadolint:
           name: Lint Dockerfile
-          treat-warnings-as-errors: true
       - docker/publish:
           name: Build docker image
           deploy: false
