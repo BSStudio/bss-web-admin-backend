@@ -105,9 +105,12 @@ workflows:
           after:
             - gradle/collect_test_results:
                 reports_path: server/build/reports
-                test_results_path: server/build/reports/unit-test
+                test_results_path: server/build/reports/tests/unit-test
+      ## This job will lint the Dockerfile for best practices
       - docker/hadolint:
           name: Lint Dockerfile
+      ## This job will create a new image without pushing it to the registry
+      ## It should verify that the image can be built successfully
       - docker/publish:
           name: Build docker image
           <<: *docker_publish
