@@ -11,9 +11,25 @@ executors:
   jdk-machine:
     machine:
       image: ubuntu-2204:2023.10.1
-gradle_defaults: &gradle
-  deps_checksum_file: build.gradle.kts
-  cache_key: v2
+defaults:
+  gradle: &gradle
+    deps_checksum_file: build.gradle.kts
+    cache_key: v2
+    executor: jdk
+  docker_publish: &docker_publish
+    image: bsstudio/bss-web-admin-backend
+    registry: ghcr.io
+    executor: docker/docker
+    remote-docker-version: 20.10.24
+    use-remote-docker: true
+    remote-docker-dlc: true
+    use-buildkit: true
+  tag_only: &tag_only
+    filters:
+      branches:
+        ignore: /.*/
+      tags:
+        only: /.*/
 jobs:
   gradle_docker:
     parameters:
@@ -23,17 +39,15 @@ jobs:
       after:
         type: steps
         default: []
-      executor:
-        type: executor
-        default: jdk
-    executor: << parameters.executor >>
+    executor: jdk
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
           version: 20.10.24
       - gradle/with_cache:
-          <<: *gradle
+          deps_checksum_file: build.gradle.kts
+          cache_key: v2
           steps:
             - run: ./gradlew << parameters.command >>
       - steps: << parameters.after >>
@@ -49,7 +63,8 @@ jobs:
       - checkout
       - run: docker compose up -d
       - gradle/with_cache:
-          <<: *gradle
+          deps_checksum_file: build.gradle.kts
+          cache_key: v2
           steps:
             - run: ./gradlew integrationTest --continue
       - gradle/collect_test_results:
@@ -73,17 +88,15 @@ workflows:
           name: Lint
           command: spotlessCheck
           <<: *gradle
-          executor: jdk
+      - gradle/run:
+          name: Build boot jar
+          command: bootJar
+          <<: *gradle
       - gradle_integration:
           name: Integration test
       - gradle_docker:
           name: Coverage verification
           command: jacocoTestCoverageVerification
-      - gradle/run:
-          name: Build boot jar
-          command: bootJar
-          <<: *gradle
-          executor: jdk
       - gradle_docker:
           name: Unit test
           after:
@@ -101,38 +114,17 @@ workflows:
           name: Lint Dockerfile
       - docker/publish:
           name: Build docker image
+          <<: *docker_publish
           deploy: false
-          image: bsstudio/bss-web-admin-backend
-          registry: ghcr.io
-          executor: docker/docker
-          remote-docker-version: 20.10.24
-          use-remote-docker: true
-          remote-docker-dlc: true
-          use-buildkit: true
   Release:
     jobs:
       ## Publish image to GitHub Container Registry
       ## Docker Layer Caching is enabled to speed up the build
       - docker/publish:
           name: Publish image
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
-          image: bsstudio/bss-web-admin-backend
-          registry: ghcr.io
+          <<: [*docker_publish, *tag_only]
           tag: latest,<< pipeline.git.tag >>
-          executor: docker/docker
-          remote-docker-version: 20.10.24
-          use-remote-docker: true
-          remote-docker-dlc: true
-          use-buildkit: true
       ## Create a release on GitHub
       - github_release:
           name: Create release
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
+          <<: *tag_only
