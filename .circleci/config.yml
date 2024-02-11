@@ -106,7 +106,7 @@ workflows:
       ## Docker Layer Caching is enabled to speed up the build
       - docker/publish:
           name: Publish image
-          filters: &tagged
+          filters:
             branches:
               ignore: /.*/
             tags:
@@ -122,5 +122,10 @@ workflows:
       ## Create a release on GitHub
       - github-cli/release:
           name: Create release
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
           tag: $CIRCLE_TAG
           title: $CIRCLE_TAG
