@@ -98,14 +98,9 @@ workflows:
           name: Unit test
           command: test --continue
           after:
-            - run:
-                name: Save test results
-                command: |
-                  mkdir -p test-results/junit/
-                  find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} test-results/junit/ \;
             - gradle/collect_test_results:
                 reports_path: server/build/reports
-                test_results_path: test-results
+                test_results_path: server/build/reports/unit-test
       - docker/hadolint:
           name: Lint Dockerfile
       - docker/publish:
