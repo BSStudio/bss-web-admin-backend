@@ -132,6 +132,8 @@ workflows:
             - Build image
             - Lint Dockerfile
           filters:
+            branches:
+              ignore: /.*/
             tags:
               only: /.*/
 #  Publish:
