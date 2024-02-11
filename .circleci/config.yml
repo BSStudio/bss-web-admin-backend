@@ -80,7 +80,7 @@ jobs:
           version: 2.43.1
       - github-cli/setup:
           version: 2.43.1
-      - run: gh release create << pipeline.git.tag >> -t << pipeline.git.tag >> --notes-from-tag
+      - run: gh release create << pipeline.git.tag >> -t << pipeline.git.tag >> --generate-notes
 workflows:
   Build app:
     jobs:
