@@ -114,7 +114,7 @@ workflows:
           after:
             - gradle/collect_test_results:
                 reports_path: server/build/reports
-                test_results_path: server/build/reports/tests/unit-test
+                test_results_path: server/build/reports/tests/unit-test/aggregated-results/classes
       ## This job will lint the Dockerfile for best practices
       - docker/hadolint:
           name: Lint Dockerfile
