@@ -90,9 +90,9 @@ workflows:
                 flags: unit
       - docker/hadolint:
           name: Lint Dockerfile
-          dockerfiles: Dockerfile
+          treat-warnings-as-errors: true
       - docker/publish:
-          name: Build image
+          name: Build docker image
           deploy: false
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
@@ -120,8 +120,9 @@ workflows:
           use-remote-docker: true
           remote-docker-dlc: true
           use-buildkit: true
+      ## Create a release on GitHub
       - github-cli/release:
           name: Create release
+          <<: *tagged
           tag: $CIRCLE_TAG
           title: $CIRCLE_TAG
-          <<: *tagged
