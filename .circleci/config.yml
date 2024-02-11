@@ -125,10 +125,6 @@ workflows:
           use-remote-docker: true
           remote-docker-dlc: true
           use-buildkit: true
-          before_build:
-            - attach_workspace:
-                at: ./
-            - run: docker load < bss-web-admin-backend.tar
       - github-cli/release:
           name: Create release
           tag: $CIRCLE_TAG
