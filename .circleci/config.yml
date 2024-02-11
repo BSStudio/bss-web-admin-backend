@@ -53,6 +53,7 @@ jobs:
   gradle_integration:
     executor: jdk-machine
     steps:
+      ## Remove this once the machine executor supports java 21
       - run:
           name: Install OpenJDK 21
           command: |
@@ -91,14 +92,22 @@ workflows:
           name: Build boot jar
           command: bootJar
           <<: *gradle
+      ## This job will run the integration tests
+      ## it will also collect the test results and upload them to CircleCI
+      ## along with the reports
       - gradle_integration:
           name: Integration test
+      ## This job will run the unit tests and verify the coverage
+      ## it will upload the coverage report to Codecov
       - gradle_docker:
           name: Coverage verification
           command: jacocoTestCoverageVerification
           after:
             - codecov/upload:
                 flags: unit
+      ## This job will run the unit tests (without coverage verification)
+      ## it will also collect the test results and upload them to CircleCI
+      ## along with the reports
       - gradle_docker:
           name: Unit test
           command: test --continue
@@ -115,6 +124,7 @@ workflows:
           name: Build docker image
           <<: *docker_publish
           deploy: false
+  ## The jobs in this workflow will only run when a new tag is pushed
   Release:
     jobs:
       ## Publish image to GitHub Container Registry
