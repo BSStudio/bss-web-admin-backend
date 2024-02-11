@@ -31,6 +31,8 @@ defaults:
       tags:
         only: /.*/
 jobs:
+  ## Some of the unit tests require a docker container to be running
+  ## This job will set up the docker environment and run the specified command
   gradle_docker:
     parameters:
       command:
@@ -50,6 +52,12 @@ jobs:
           steps:
             - run: ./gradlew << parameters.command >>
       - steps: << parameters.after >>
+  ## The integration test requires the docker compose environment to be running
+  ## This job will set up the docker environment
+  ## start the docker compose environment
+  ## run the integration tests
+  ## collect the test results and upload them to CircleCI
+  ## and finally stop the docker compose environment
   gradle_integration:
     executor: jdk-machine
     steps:
@@ -112,9 +120,16 @@ workflows:
           name: Unit test
           command: test --continue
           after:
+            ## This step will collect the XML test results from all subprojects
+            ## and put them in the /test-results/junit/ directory
+            - run:
+                name: Save test results
+                command: |
+                  mkdir -p test-results/junit/
+                  find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} test-results/junit/ \;
             - gradle/collect_test_results:
                 reports_path: server/build/reports
-                test_results_path: server/build/reports/tests/unit-test/aggregated-results/classes
+                test_results_path: test-results
       ## This job will lint the Dockerfile for best practices
       - docker/hadolint:
           name: Lint Dockerfile
