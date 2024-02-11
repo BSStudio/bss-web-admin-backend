@@ -35,7 +35,6 @@ jobs:
     parameters:
       command:
         type: string
-        default: test --continue
       after:
         type: steps
         default: []
@@ -99,6 +98,7 @@ workflows:
           command: jacocoTestCoverageVerification
       - gradle_docker:
           name: Unit test
+          command: test --continue
           after:
             - run:
                 name: Save test results
