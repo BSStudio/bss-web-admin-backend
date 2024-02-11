@@ -55,6 +55,15 @@ jobs:
           reports_path: integration/build/reports
           test_results_path: integration/build/test-results
       - run: docker compose down
+  github_release:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - github-cli/install:
+          version: 2.43.1
+      - github-cli/setup:
+          version: 2.43.1
+      - run: gh release create $CIRCLE_TAG -t $CIRCLE_TAG
 workflows:
   Build app:
     jobs:
@@ -120,12 +129,10 @@ workflows:
           remote-docker-dlc: true
           use-buildkit: true
       ## Create a release on GitHub
-      - github-cli/release:
+      - github_release:
           name: Create release
           filters:
             branches:
               ignore: /.*/
             tags:
               only: /.*/
-          tag: $CIRCLE_TAG
-          title: $CIRCLE_TAG
