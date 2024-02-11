@@ -126,5 +126,4 @@ workflows:
       - github-cli/release:
           name: Create release
           tag: << pipeline.git.tag >>
-          title: << pipeline.git.tag >>
           <<: *tagged
