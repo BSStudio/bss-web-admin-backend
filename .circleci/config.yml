@@ -118,7 +118,7 @@ workflows:
             - attach_workspace:
                 at: ./
             - run: docker load < bss-web-admin-backend.tar
-          filters:
+          filters: &tagged
             branches:
               ignore: /.*/
             tags:
@@ -127,9 +127,4 @@ workflows:
           name: Create release
           tag: << pipeline.git.tag >>
           title: << pipeline.git.tag >>
-#          additional_args: --notes-from-tag --latest
-          filters: &tagged
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
+          <<: *tagged
