@@ -8,9 +8,6 @@ executors:
   jdk:
     docker:
       - image: cimg/openjdk:21.0.2
-  jdk-machine:
-    machine:
-      image: ubuntu-2204:2023.10.1
 defaults:
   gradle: &gradle
     deps_checksum_file: build.gradle.kts
@@ -51,15 +48,13 @@ jobs:
             - run: ./gradlew << parameters.command >>
       - steps: << parameters.after >>
   gradle_integration:
-    executor: jdk-machine
+    docker:
+      - image: cimg/openjdk:21.0.2
     steps:
-      - run:
-          name: Install OpenJDK 21
-          command: |
-            sudo apt-get update && sudo apt-get install openjdk-21-jdk
-            sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java
-            sudo update-alternatives --set javac /usr/lib/jvm/java-21-openjdk-amd64/bin/javac
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 20.10.24
       - run: docker compose up -d
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
