@@ -96,20 +96,15 @@ workflows:
           deploy: false
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
-          tag: latest
           executor: docker/docker
           remote-docker-version: 20.10.24
           use-remote-docker: true
           remote-docker-dlc: true
           use-buildkit: true
-          after_build:
-            - run: docker save --output bss-web-admin-backend.tar ghcr.io/bsstudio/bss-web-admin-backend:latest
-            - persist_to_workspace:
-                root: ./
-                paths:
-                  - bss-web-admin-backend.tar
   Release:
     jobs:
+      ## Publish image to GitHub Container Registry
+      ## Docker Layer Caching is enabled to speed up the build
       - docker/publish:
           name: Publish image
           filters: &tagged
@@ -119,7 +114,7 @@ workflows:
               only: /.*/
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
-          tag: latest,<< pipeline.git.tag >>
+          tag: latest,<< pipeline.git.tag >>,$CIRCLE_SHA1
           executor: docker/docker
           remote-docker-version: 20.10.24
           use-remote-docker: true
@@ -128,8 +123,5 @@ workflows:
       - github-cli/release:
           name: Create release
           tag: $CIRCLE_TAG
-          filters: &tagged
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
+          title: $CIRCLE_TAG
+          <<: *tagged
