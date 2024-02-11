@@ -11,6 +11,9 @@ executors:
   jdk-machine:
     machine:
       image: ubuntu-2204:2023.10.1
+gradle_defaults: &gradle
+  deps_checksum_file: build.gradle.kts
+  cache_key: v2
 jobs:
   gradle_docker:
     parameters:
@@ -30,8 +33,7 @@ jobs:
           docker_layer_caching: true
           version: 20.10.24
       - gradle/with_cache:
-          deps_checksum_file: build.gradle.kts
-          cache_key: v2
+          <<: *gradle
           steps:
             - run: ./gradlew << parameters.command >>
       - steps: << parameters.after >>
@@ -47,8 +49,7 @@ jobs:
       - checkout
       - run: docker compose up -d
       - gradle/with_cache:
-          deps_checksum_file: build.gradle.kts
-          cache_key: v2
+          <<: *gradle
           steps:
             - run: ./gradlew integrationTest --continue
       - gradle/collect_test_results:
@@ -71,8 +72,7 @@ workflows:
       - gradle/run:
           name: Lint
           command: spotlessCheck
-          deps_checksum_file: build.gradle.kts
-          cache_key: v2
+          <<: *gradle
           executor: jdk
       - gradle_integration:
           name: Integration test
@@ -82,8 +82,7 @@ workflows:
       - gradle/run:
           name: Build boot jar
           command: bootJar
-          deps_checksum_file: build.gradle.kts
-          cache_key: v2
+          <<: *gradle
           executor: jdk
       - gradle_docker:
           name: Unit test
@@ -116,7 +115,7 @@ workflows:
       ## Docker Layer Caching is enabled to speed up the build
       - docker/publish:
           name: Publish image
-          filters: &tagged
+          filters:
             branches:
               ignore: /.*/
             tags:
@@ -132,4 +131,8 @@ workflows:
       ## Create a release on GitHub
       - github_release:
           name: Create release
-          <<: *tagged
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
