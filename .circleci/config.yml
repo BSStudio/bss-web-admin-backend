@@ -91,6 +91,9 @@ workflows:
       - gradle_docker:
           name: Coverage verification
           command: jacocoTestCoverageVerification
+          after:
+            - codecov/upload:
+                flags: unit
       - gradle_docker:
           name: Unit test
           command: test --continue
@@ -103,8 +106,6 @@ workflows:
             - gradle/collect_test_results:
                 reports_path: server/build/reports
                 test_results_path: test-results
-            - codecov/upload:
-                flags: unit
       - docker/hadolint:
           name: Lint Dockerfile
       - docker/publish:
