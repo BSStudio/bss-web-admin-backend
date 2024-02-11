@@ -11,6 +11,7 @@ executors:
   jdk-machine:
     machine:
       image: ubuntu-2204:2023.10.1
+      docker_layer_caching: true
 defaults:
   gradle: &gradle
     deps_checksum_file: build.gradle.kts
@@ -31,8 +32,6 @@ defaults:
       tags:
         only: /.*/
 jobs:
-  ## Some of the unit tests require a docker container to be running
-  ## This job will set up the docker environment and run the specified command
   gradle_docker:
     parameters:
       command:
@@ -52,16 +51,9 @@ jobs:
           steps:
             - run: ./gradlew << parameters.command >>
       - steps: << parameters.after >>
-  ## The integration test requires the docker compose environment to be running
-  ## This job will set up the docker environment
-  ## start the docker compose environment
-  ## run the integration tests
-  ## collect the test results and upload them to CircleCI
-  ## and finally stop the docker compose environment
   gradle_integration:
     executor: jdk-machine
     steps:
-      ## Remove this once the machine executor supports java 21
       - run:
           name: Install OpenJDK 21
           command: |
@@ -100,28 +92,18 @@ workflows:
           name: Build boot jar
           command: bootJar
           <<: *gradle
-      ## This job will run the integration tests
-      ## it will also collect the test results and upload them to CircleCI
-      ## along with the reports
       - gradle_integration:
           name: Integration test
-      ## This job will run the unit tests and verify the coverage
-      ## it will upload the coverage report to Codecov
       - gradle_docker:
           name: Coverage verification
           command: jacocoTestCoverageVerification
           after:
             - codecov/upload:
                 flags: unit
-      ## This job will run the unit tests (without coverage verification)
-      ## it will also collect the test results and upload them to CircleCI
-      ## along with the reports
       - gradle_docker:
           name: Unit test
           command: test --continue
           after:
-            ## This step will collect the XML test results from all subprojects
-            ## and put them in the /test-results/junit/ directory
             - run:
                 name: Save test results
                 command: |
@@ -130,25 +112,18 @@ workflows:
             - gradle/collect_test_results:
                 reports_path: server/build/reports
                 test_results_path: test-results
-      ## This job will lint the Dockerfile for best practices
       - docker/hadolint:
           name: Lint Dockerfile
-      ## This job will create a new image without pushing it to the registry
-      ## It should verify that the image can be built successfully
       - docker/publish:
           name: Build docker image
           <<: *docker_publish
           deploy: false
-  ## The jobs in this workflow will only run when a new tag is pushed
   Release:
     jobs:
-      ## Publish image to GitHub Container Registry
-      ## Docker Layer Caching is enabled to speed up the build
       - docker/publish:
           name: Publish image
           <<: [*docker_publish, *tag_only]
           tag: latest,<< pipeline.git.tag >>
-      ## Create a release on GitHub
       - github_release:
           name: Create release
           <<: *tag_only
