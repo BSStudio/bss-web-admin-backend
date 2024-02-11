@@ -112,6 +112,11 @@ workflows:
     jobs:
       - docker/publish:
           name: Publish image
+          filters: &tagged
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
           image: bsstudio/bss-web-admin-backend
           registry: ghcr.io
           tag: latest,<< pipeline.git.tag >>
@@ -124,12 +129,11 @@ workflows:
             - attach_workspace:
                 at: ./
             - run: docker load < bss-web-admin-backend.tar
+      - github-cli/release:
+          name: Create release
+          tag: << pipeline.git.tag >>
           filters: &tagged
             branches:
               ignore: /.*/
             tags:
               only: /.*/
-      - github-cli/release:
-          name: Create release
-          tag: << pipeline.git.tag >>
-          <<: *tagged
