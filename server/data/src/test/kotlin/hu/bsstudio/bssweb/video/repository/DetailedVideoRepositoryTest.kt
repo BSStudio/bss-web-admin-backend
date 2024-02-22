@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
@@ -77,9 +78,7 @@ class DetailedVideoRepositoryTest(
                     ),
                 ),
             )
-        underTest.findById(videoId)
-            .shouldBePresent()
-            .shouldBeEqualToComparingFields(expected)
+        underTest.findById(videoId) shouldBePresent { it shouldBeEqualToComparingFields expected }
     }
 
     private fun createExpected(
@@ -94,6 +93,8 @@ class DetailedVideoRepositoryTest(
     ).apply {
         this.id = id
         this.videoCrew = videoCrew
+        this.createdAt = Instant.now()
+        this.updatedAt = Instant.now()
     }
 
     private companion object {

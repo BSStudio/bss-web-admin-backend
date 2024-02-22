@@ -7,6 +7,7 @@ import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
@@ -78,6 +80,8 @@ class DetailedEventRepositoryTest(
     ).apply {
         this.id = id
         this.videos = videos
+        this.createdAt = Instant.now()
+        this.updatedAt = Instant.now()
     }
 
     private companion object {

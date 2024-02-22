@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.Hibernate
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
+import java.time.Instant
 import java.util.UUID
 
 @Entity
@@ -16,6 +19,10 @@ data class SimpleMemberEntity(
     @Id
     @GeneratedValue
     lateinit var id: UUID
+    @CreationTimestamp
+    lateinit var createdAt: Instant
+    @UpdateTimestamp
+    lateinit var updatedAt: Instant
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
