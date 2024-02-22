@@ -8,6 +8,9 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.Hibernate
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
@@ -23,6 +26,12 @@ data class DetailedVideoEntity(
     @Id
     @GeneratedValue
     override lateinit var id: UUID
+
+    @CreationTimestamp
+    override lateinit var createdAt: Instant
+
+    @UpdateTimestamp
+    override lateinit var updatedAt: Instant
 
     @OneToMany
     @JoinColumn(name = "video_id")

@@ -9,7 +9,8 @@ import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
-import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.date.shouldBeCloseTo
+import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
@@ -18,8 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
+import kotlin.time.Duration.Companion.minutes
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -42,7 +45,11 @@ class DetailedVideoRepositoryTest(
         }
 
         val expected = createExpected(id)
-        underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
+        underTest.findById(id) shouldBePresent {
+            it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
+            it.createdAt.shouldBeCloseTo(expected.createdAt, duration = 1.minutes)
+            it.updatedAt.shouldBeCloseTo(expected.updatedAt, duration = 1.minutes)
+        }
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()
@@ -77,9 +84,11 @@ class DetailedVideoRepositoryTest(
                     ),
                 ),
             )
-        underTest.findById(videoId)
-            .shouldBePresent()
-            .shouldBeEqualToComparingFields(expected)
+        underTest.findById(videoId) shouldBePresent {
+            it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
+            it.createdAt.shouldBeCloseTo(expected.createdAt, duration = 1.minutes)
+            it.updatedAt.shouldBeCloseTo(expected.updatedAt, duration = 1.minutes)
+        }
     }
 
     private fun createExpected(
@@ -94,6 +103,8 @@ class DetailedVideoRepositoryTest(
     ).apply {
         this.id = id
         this.videoCrew = videoCrew
+        this.createdAt = Instant.now()
+        this.updatedAt = Instant.now()
     }
 
     private companion object {

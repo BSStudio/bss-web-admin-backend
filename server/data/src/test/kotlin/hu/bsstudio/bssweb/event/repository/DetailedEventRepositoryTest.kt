@@ -6,7 +6,8 @@ import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
 import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
-import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.date.shouldBeCloseTo
+import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
@@ -16,8 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
+import kotlin.time.Duration.Companion.minutes
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -40,7 +43,9 @@ class DetailedEventRepositoryTest(
         }
 
         val expected = createExpected(id)
-        underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
+        underTest.findById(id) shouldBePresent {
+            it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
+        }
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()
@@ -57,9 +62,14 @@ class DetailedEventRepositoryTest(
             clear()
         }
 
-        val actual = underTest.findById(eventId).orElseThrow()
+        val actual = underTest.findById(eventId)
+
         val expected = createExpected(eventId, listOf(video))
-        actual.shouldBeEqualToComparingFields(expected)
+        actual shouldBePresent {
+            it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
+            it.createdAt.shouldBeCloseTo(expected.createdAt, duration = 1.minutes)
+            it.updatedAt.shouldBeCloseTo(expected.updatedAt, duration = 1.minutes)
+        }
 
         underTest.deleteById(eventId)
         underTest.findById(eventId).shouldBeEmpty()
@@ -78,6 +88,8 @@ class DetailedEventRepositoryTest(
     ).apply {
         this.id = id
         this.videos = videos
+        this.createdAt = Instant.now()
+        this.updatedAt = Instant.now()
     }
 
     private companion object {
