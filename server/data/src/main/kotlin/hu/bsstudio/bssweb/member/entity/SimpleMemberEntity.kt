@@ -19,8 +19,10 @@ data class SimpleMemberEntity(
     @Id
     @GeneratedValue
     lateinit var id: UUID
+
     @CreationTimestamp
     lateinit var createdAt: Instant
+
     @UpdateTimestamp
     lateinit var updatedAt: Instant
 

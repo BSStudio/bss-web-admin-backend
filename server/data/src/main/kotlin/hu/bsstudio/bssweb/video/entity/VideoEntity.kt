@@ -14,8 +14,10 @@ interface VideoEntity {
     var title: String
     var uploadedAt: LocalDate
     var visible: Boolean
+
     @set:CreationTimestamp
     var createdAt: Instant
+
     @set:UpdateTimestamp
     var updatedAt: Instant
 }

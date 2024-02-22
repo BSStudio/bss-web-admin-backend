@@ -22,8 +22,10 @@ data class SimpleVideoEntity(
     @Id
     @GeneratedValue
     override lateinit var id: UUID
+
     @CreationTimestamp
     override lateinit var createdAt: Instant
+
     @UpdateTimestamp
     override lateinit var updatedAt: Instant
 
