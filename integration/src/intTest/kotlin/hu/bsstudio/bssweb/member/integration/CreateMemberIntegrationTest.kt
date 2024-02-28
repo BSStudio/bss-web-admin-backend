@@ -31,15 +31,15 @@ class CreateMemberIntegrationTest(
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(201)
             body!! shouldBeEqual Member(
-                    id = actual.body!!.id,
-                    url = CREATE_MEMBER.url,
-                    name = CREATE_MEMBER.name,
-                    nickname = "",
-                    description = "",
-                    joinedAt = LocalDate.now(),
-                    role = "",
-                    status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-                    archived = false
+                id = actual.body!!.id,
+                url = CREATE_MEMBER.url,
+                name = CREATE_MEMBER.name,
+                nickname = "",
+                description = "",
+                joinedAt = LocalDate.now(),
+                role = "",
+                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                archived = false
             )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual.body!!.id}")
         }
@@ -53,15 +53,15 @@ class CreateMemberIntegrationTest(
         assertSoftly(actual1) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(201)
             body!! shouldBeEqual Member(
-                    id = actual1.body!!.id,
-                    url = CREATE_MEMBER.url,
-                    name = CREATE_MEMBER.name,
-                    nickname = "",
-                    description = "",
-                    joinedAt = LocalDate.now(),
-                    role = "",
-                    status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-                    archived = false
+                id = actual1.body!!.id,
+                url = CREATE_MEMBER.url,
+                name = CREATE_MEMBER.name,
+                nickname = "",
+                description = "",
+                joinedAt = LocalDate.now(),
+                role = "",
+                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                archived = false
             )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual1.body!!.id}")
         }
@@ -69,15 +69,15 @@ class CreateMemberIntegrationTest(
         assertSoftly(actual2) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(201)
             body!! shouldBeEqual Member(
-                    id = actual2.body!!.id,
-                    url = "${CREATE_MEMBER.url}2",
-                    name = CREATE_MEMBER.name,
-                    nickname = "",
-                    description = "",
-                    joinedAt = LocalDate.now(),
-                    role = "",
-                    status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-                    archived = false
+                id = actual2.body!!.id,
+                url = "${CREATE_MEMBER.url}2",
+                name = CREATE_MEMBER.name,
+                nickname = "",
+                description = "",
+                joinedAt = LocalDate.now(),
+                role = "",
+                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                archived = false
             )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual2.body!!.id}")
         }
