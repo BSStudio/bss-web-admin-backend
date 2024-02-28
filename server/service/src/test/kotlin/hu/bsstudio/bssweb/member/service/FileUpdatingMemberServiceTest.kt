@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.member.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
-import hu.bsstudio.bssweb.fileserver.model.FileUpdate
+import hu.bsstudio.bssweb.fileserver.model.MemberFileUpdate
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
@@ -120,6 +120,6 @@ internal class FileUpdatingMemberServiceTest(
         private val MEMBER_LIST = mockk<List<Member>>()
         private val CREATE_MEMBER = mockk<CreateMember>()
         private val UPDATE_MEMBER = mockk<UpdateMember>()
-        private val FILE_UPDATE = FileUpdate(MEMBER_ID, URL)
+        private val FILE_UPDATE = MemberFileUpdate(MEMBER_ID, URL)
     }
 }

@@ -14,8 +14,6 @@ import io.kotest.matchers.string.shouldContain
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpStatusCode
-import java.net.URI
 import java.time.LocalDate
 
 class CreateVideoIntegrationTest(
@@ -31,7 +29,7 @@ class CreateVideoIntegrationTest(
             statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(201)
             body!! shouldBeEqual Video(
                 id = actual.body!!.id,
-                url = CREATE_EVENT.url,
+                urls = emptyList(),
                 title = CREATE_EVENT.title,
                 visible = false,
                 uploadedAt = LocalDate.now()
@@ -42,7 +40,7 @@ class CreateVideoIntegrationTest(
 
     @Test
     fun `it should retun 500 when duplicate urls were specified`() {
-        videoRepository.save(DetailedVideoEntity(url = CREATE_EVENT.url, title = CREATE_EVENT.title))
+        videoRepository.save(DetailedVideoEntity(title = CREATE_EVENT.title))
 
         shouldThrow<FeignException.InternalServerError> {
             client.createVideo(CREATE_EVENT)
@@ -51,7 +49,6 @@ class CreateVideoIntegrationTest(
 
     private companion object {
         private val CREATE_EVENT = CreateVideo(
-            url = "url",
             title = "title"
         )
     }

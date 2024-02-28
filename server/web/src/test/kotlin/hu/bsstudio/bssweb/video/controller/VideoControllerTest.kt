@@ -168,18 +168,18 @@ internal class VideoControllerTest(
         private const val PASSWORD = "password"
         private val PAGEABLE: Pageable = PageRequest.of(0, 20)
         private val VIDEO_ID = UUID.randomUUID()
-        private const val URL = "url"
+        private val URLS = listOf("url")
         private const val TITLE = "title"
         private val UPLOADED_AT = LocalDate.now()
         private const val VISIBLE = false
         private const val DESCRIPTION = "description"
-        private val VIDEO = Video(id = VIDEO_ID, url = URL, title = TITLE, uploadedAt = UPLOADED_AT, visible = VISIBLE)
+        private val VIDEO = Video(id = VIDEO_ID, urls = URLS, title = TITLE, uploadedAt = UPLOADED_AT, visible = VISIBLE)
         private val PAGED_VIDEOS = PageImpl(listOf(VIDEO), PAGEABLE, 1)
-        private val CREATE_VIDEO = CreateVideo(url = URL, title = TITLE)
+        private val CREATE_VIDEO = CreateVideo(title = TITLE)
         private val DETAILED_VIDEO =
             DetailedVideo(
                 id = VIDEO_ID,
-                url = URL,
+                urls = URLS,
                 title = TITLE,
                 description = DESCRIPTION,
                 uploadedAt = UPLOADED_AT,
@@ -187,6 +187,6 @@ internal class VideoControllerTest(
                 crew = listOf(),
             )
         private val UPDATE_VIDEO =
-            UpdateVideo(url = URL, title = TITLE, description = DESCRIPTION, uploadedAt = UPLOADED_AT, visible = VISIBLE)
+            UpdateVideo(urls = URLS, title = TITLE, description = DESCRIPTION, uploadedAt = UPLOADED_AT, visible = VISIBLE)
     }
 }

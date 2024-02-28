@@ -1,6 +1,9 @@
 package hu.bsstudio.bssweb.video.entity
 
 import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
+import jakarta.persistence.CollectionTable
+import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -17,8 +20,11 @@ import java.util.UUID
 @Entity
 @Table(name = "video")
 data class DetailedVideoEntity(
-    override var url: String,
     override var title: String,
+    @Column(name = "url")
+    @ElementCollection
+    @CollectionTable(name = "video_url", joinColumns = [JoinColumn(name = "video_id")])
+    override var urls: List<String> = emptyList(),
     var description: String = "",
     override var uploadedAt: LocalDate = LocalDate.now(),
     override var visible: Boolean = false,
@@ -48,7 +54,7 @@ data class DetailedVideoEntity(
 
     override fun toString(): String =
         this::class.simpleName + "(" +
-            "url='$url', " +
+            "url='$urls', " +
             "title='$title', " +
             "description='$description', " +
             "uploadedAt=$uploadedAt, " +

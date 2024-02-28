@@ -27,7 +27,7 @@ class ReadVideoIntegrationTest(
 
     @Test
     fun `it should return 200 with video`() {
-        val entity = videoRepository.save(DetailedVideoEntity(url = URL, title = TITLE).apply { id = ID })
+        val entity = videoRepository.save(DetailedVideoEntity(title = TITLE).apply { id = ID })
 
         val actual = client.getVideo(entity.id)
 
@@ -35,7 +35,7 @@ class ReadVideoIntegrationTest(
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
             body!! shouldBeEqual DetailedVideo(
                 id = entity.id,
-                url = URL,
+                urls = emptyList(),
                 title = TITLE,
                 description = "",
                 visible = false,
@@ -47,7 +47,6 @@ class ReadVideoIntegrationTest(
 
     private companion object {
         private val ID = UUID.randomUUID()
-        private const val URL = "url"
         private const val TITLE = "title"
     }
 }

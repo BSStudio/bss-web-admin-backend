@@ -29,7 +29,7 @@ internal class DetailedVideoTest(
 
     private companion object {
         private val ID = UUID.randomUUID()
-        private const val URL = "video_url"
+        private val URLS = listOf("video_url")
         private const val TITLE = "video_title"
         private const val DESCRIPTION = "video_description"
         private val UPLOADED_AT = LocalDate.now()
@@ -37,7 +37,7 @@ internal class DetailedVideoTest(
         private val DETAILED_VIDEO =
             DetailedVideo(
                 id = ID,
-                url = URL,
+                urls = URLS,
                 title = TITLE,
                 description = DESCRIPTION,
                 uploadedAt = UPLOADED_AT,
@@ -48,7 +48,7 @@ internal class DetailedVideoTest(
             """
             {
                 "id": "$ID",
-                "url": "$URL",
+                "urls": ["${URLS[0]}"],
                 "title": "$TITLE",
                 "description": "$DESCRIPTION",
                 "uploadedAt": "$UPLOADED_AT",

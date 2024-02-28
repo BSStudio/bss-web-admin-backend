@@ -15,7 +15,7 @@ class DeleteVideoIntegrationTest(
 
     @Test
     fun `it should return 204 and delete video`() {
-        val entity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+        val entity = videoRepository.save(DetailedVideoEntity(urls = emptyList(), title = "title"))
 
         val actual = client.deleteVideo(entity.id)
 

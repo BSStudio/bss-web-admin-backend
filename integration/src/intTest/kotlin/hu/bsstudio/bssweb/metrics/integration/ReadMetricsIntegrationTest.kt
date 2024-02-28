@@ -28,7 +28,7 @@ class ReadMetricsIntegrationTest(
 
     @Test
     fun `it should return 200 and metrics with 1 for each value`() {
-        this.videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+        this.videoRepository.save(DetailedVideoEntity(urls = "url", title = "title"))
         this.eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
         this.memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
