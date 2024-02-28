@@ -1,0 +1,1 @@
+ALTER TABLE bss_web.member DROP CONSTRAINT member_name_key;
