@@ -22,7 +22,7 @@ class AddVideoToEventIntegrationTest(
     @Test
     fun `it should return 200 and add video to event`() {
         val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
-        val videoEntity = videoRepository.save(DetailedVideoEntity(urls = "url", title = "title"))
+        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
 
         val actual = client.addVideoToEvent(eventEntity.id, videoEntity.id)
 
@@ -38,7 +38,7 @@ class AddVideoToEventIntegrationTest(
                 videos = listOf(
                     Video(
                         id = videoEntity.id,
-                        url = videoEntity.urls,
+                        urls = emptyList(),
                         title = videoEntity.title,
                         uploadedAt = videoEntity.uploadedAt,
                         visible = videoEntity.visible
@@ -50,7 +50,7 @@ class AddVideoToEventIntegrationTest(
 
     @Test
     fun `it should return 500 when event does not exist`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(urls = "url", title = "title"))
+        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
 
         shouldThrow<FeignException.InternalServerError> {
             client.addVideoToEvent(
