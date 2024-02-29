@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
-import hu.bsstudio.bssweb.fileserver.model.FileUpdate
+import hu.bsstudio.bssweb.fileserver.model.VideoFileUpdate
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
@@ -52,7 +52,7 @@ internal class FileUpdatingVideoServiceTest(
     internal fun `should insert new video`() {
         every { mockService.insertVideo(CREATE_VIDEO) } returns VIDEO
         every { VIDEO.id } returns VIDEO_ID
-        every { VIDEO.url } returns URL
+        every { VIDEO.urls } returns URLS
         every { mockClient.createVideoFolder(FILE_UPDATE) } returns FILE_UPDATE
 
         val actual = underTest.insertVideo(CREATE_VIDEO)
@@ -101,7 +101,7 @@ internal class FileUpdatingVideoServiceTest(
     internal fun `should update video`() {
         every { mockService.updateVideo(VIDEO_ID, UPDATE_VIDEO) } returns Optional.of(DETAILED_VIDEO)
         every { DETAILED_VIDEO.id } returns VIDEO_ID
-        every { DETAILED_VIDEO.url } returns URL
+        every { DETAILED_VIDEO.urls } returns URLS
         every { mockClient.updateVideoFolder(FILE_UPDATE) } returns FILE_UPDATE
 
         val actual = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
@@ -119,13 +119,13 @@ internal class FileUpdatingVideoServiceTest(
     private companion object {
         private val PAGEABLE = mockk<Pageable>()
         private val VIDEO_ID = mockk<UUID>()
-        private const val URL = "url"
+        private val URLS = listOf("url")
         private val VIDEO = mockk<Video>()
         private val VIDEO_LIST = mockk<List<Video>>()
         private val PAGED_VIDEOS = mockk<Page<Video>>()
         private val CREATE_VIDEO = mockk<CreateVideo>()
         private val DETAILED_VIDEO = mockk<DetailedVideo>()
         private val UPDATE_VIDEO = mockk<UpdateVideo>()
-        private val FILE_UPDATE = FileUpdate(VIDEO_ID, URL)
+        private val FILE_UPDATE = VideoFileUpdate(VIDEO_ID, URLS)
     }
 }

@@ -1,8 +1,13 @@
 package hu.bsstudio.bssweb.video.entity
 
+import jakarta.persistence.CollectionTable
+import jakarta.persistence.Column
+import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.Table
 import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
@@ -14,8 +19,11 @@ import java.util.UUID
 @Entity
 @Table(name = "video")
 data class SimpleVideoEntity(
-    override var url: String,
     override var title: String,
+    @Column(name = "url")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "video_url", joinColumns = [JoinColumn(name = "video_id")])
+    override var urls: List<String> = emptyList(),
     override var uploadedAt: LocalDate = LocalDate.now(),
     override var visible: Boolean = false,
 ) : VideoEntity {

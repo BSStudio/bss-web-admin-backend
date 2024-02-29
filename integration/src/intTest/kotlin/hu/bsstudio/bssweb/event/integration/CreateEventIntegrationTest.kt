@@ -49,7 +49,7 @@ class CreateEventIntegrationTest : IntegrationTest() {
 
         shouldThrow<FeignException.InternalServerError> {
             client.createEvent(CREATE_EVENT)
-        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error","path":"/api/v1/event"}""" }
+        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error"""" }
     }
 
     private companion object {

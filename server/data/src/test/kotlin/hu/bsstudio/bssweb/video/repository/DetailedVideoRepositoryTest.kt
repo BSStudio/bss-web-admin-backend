@@ -37,7 +37,7 @@ class DetailedVideoRepositoryTest(
     internal fun `create read delete`() {
         underTest.count().shouldBeZero()
 
-        val entity = DetailedVideoEntity(url = URL, title = TITLE)
+        val entity = DetailedVideoEntity(urls = emptyList(), title = TITLE)
         val id = underTest.save(entity).id
         entityManager.run {
             flush()
@@ -62,7 +62,7 @@ class DetailedVideoRepositoryTest(
                 .let { this.memberRepository.save(it) }
                 .id
         val videoId =
-            SimpleVideoEntity(url = URL, title = TITLE)
+            SimpleVideoEntity(urls = emptyList(), title = TITLE)
                 .let { this.simpleVideoRepository.save(it) }
                 .id
         val videoCrewId = VideoCrewEntityId(videoId, "cameraman", memberId)
@@ -95,7 +95,7 @@ class DetailedVideoRepositoryTest(
         id: UUID,
         videoCrew: List<DetailedVideoCrewEntity> = emptyList(),
     ) = DetailedVideoEntity(
-        url = URL,
+        urls = emptyList(),
         title = TITLE,
         description = "",
         uploadedAt = LocalDate.now(),
@@ -108,7 +108,6 @@ class DetailedVideoRepositoryTest(
     }
 
     private companion object {
-        private const val URL = "szobakommando"
         private const val TITLE = "Szobakommando"
         private const val MEMBER_NAME = "Bence Csik"
         private const val MEMBER_URL = "bcsik"

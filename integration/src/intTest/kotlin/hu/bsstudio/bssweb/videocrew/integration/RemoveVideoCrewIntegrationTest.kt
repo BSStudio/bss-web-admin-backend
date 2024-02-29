@@ -19,7 +19,7 @@ class RemoveVideoCrewIntegrationTest(
 
     @Test
     fun `it should return 200 and delete video crew`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
         val memberEntity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
         videoCrewRepository.save(VideoCrewEntity(VideoCrewEntityId(videoEntity.id, "position", memberEntity.id)))
 
@@ -29,7 +29,7 @@ class RemoveVideoCrewIntegrationTest(
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
             body!! shouldBeEqual DetailedVideo(
                 id = videoEntity.id,
-                url = videoEntity.url,
+                urls = videoEntity.urls,
                 title = videoEntity.title,
                 description = videoEntity.description,
                 uploadedAt = videoEntity.uploadedAt,

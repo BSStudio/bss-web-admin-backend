@@ -54,7 +54,7 @@ class DetailedEventRepositoryTest(
     @Test
     internal fun `create read delete with video`() {
         val eventId = simpleEventRepository.save(SimpleEventEntity(url = URL, title = TITLE)).id
-        val video = simpleVideoRepository.save(SimpleVideoEntity(url = "url", title = "title"))
+        val video = simpleVideoRepository.save(SimpleVideoEntity(title = "title"))
 
         eventVideoRepository.save(EventVideoEntity(eventId = eventId, videoId = video.id))
         entityManager.run {

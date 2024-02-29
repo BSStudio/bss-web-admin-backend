@@ -28,7 +28,7 @@ class ReadAllVideoIntegrationTest(
 
     @Test
     fun `it should return 200 and list with 1 video`() {
-        val entity = videoRepository.save(DetailedVideoEntity(url = URL, title = TITLE))
+        val entity = videoRepository.save(DetailedVideoEntity(title = TITLE))
 
         val actual = client.getAllVideos()
 
@@ -36,7 +36,7 @@ class ReadAllVideoIntegrationTest(
             body.shouldContainExactly(
                 Video(
                     id = entity.id,
-                    url = URL,
+                    urls = emptyList(),
                     title = TITLE,
                     visible = false,
                     uploadedAt = LocalDate.now()
@@ -47,7 +47,6 @@ class ReadAllVideoIntegrationTest(
     }
 
     private companion object {
-        private const val URL = "url"
         private const val TITLE = "title"
     }
 }

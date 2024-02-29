@@ -2,6 +2,7 @@ FROM bellsoft/liberica-openjdk-alpine-musl:21.0.1-16 AS build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                         ./
+COPY ./gradle.properties               ./
 COPY ./settings.gradle.kts             ./
 COPY ./gradle                          ./gradle/
 COPY ./buildSrc/src                    ./buildSrc/src/

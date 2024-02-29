@@ -23,7 +23,7 @@ class EventVideoRepositoryTest(
 ) {
     @Test
     fun `create read delete`() {
-        val videoId = videoRepository.save(SimpleVideoEntity(url = "url", title = "title")).id
+        val videoId = videoRepository.save(SimpleVideoEntity(title = "title")).id
         val eventId = eventRepository.save(SimpleEventEntity(url = "url", title = "title")).id
 
         val entity = EventVideoEntity(eventId, videoId)
