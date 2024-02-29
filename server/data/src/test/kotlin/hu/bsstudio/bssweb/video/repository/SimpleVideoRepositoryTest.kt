@@ -25,7 +25,7 @@ class SimpleVideoRepositoryTest(
     fun `create read delete`() {
         underTest.count().shouldBeZero()
 
-        val entity = SimpleVideoEntity(urls = emptyList(), title = TITLE)
+        val entity = SimpleVideoEntity(title = TITLE)
         val id = underTest.save(entity).id
 
         entityManager.flush()
@@ -54,7 +54,6 @@ class SimpleVideoRepositoryTest(
     }
 
     private companion object {
-        private const val URL = "szobakommando"
         private const val TITLE = "Szobakommando"
     }
 }
