@@ -7,9 +7,6 @@
         "bodyPatterns": [
           {
             "matchesJsonPath": "$.id"
-          },
-          {
-            "matchesJsonPath": "$.urls"
           }
         ]
       },
