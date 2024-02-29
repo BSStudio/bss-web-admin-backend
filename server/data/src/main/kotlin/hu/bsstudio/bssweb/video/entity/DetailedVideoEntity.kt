@@ -55,7 +55,7 @@ data class DetailedVideoEntity(
 
     override fun toString(): String =
         this::class.simpleName + "(" +
-            "url='$urls', " +
+            "urls='$urls', " +
             "title='$title', " +
             "description='$description', " +
             "uploadedAt=$uploadedAt, " +
