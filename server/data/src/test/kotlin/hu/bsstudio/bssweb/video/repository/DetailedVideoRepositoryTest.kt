@@ -108,7 +108,6 @@ class DetailedVideoRepositoryTest(
     }
 
     private companion object {
-        private const val URL = "szobakommando"
         private const val TITLE = "Szobakommando"
         private const val MEMBER_NAME = "Bence Csik"
         private const val MEMBER_URL = "bcsik"
