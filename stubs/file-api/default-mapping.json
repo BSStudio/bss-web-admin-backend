@@ -9,7 +9,7 @@
             "matchesJsonPath": "$.id"
           },
           {
-            "matchesJsonPath": "$.url"
+            "matchesJsonPath": "$.urls"
           }
         ]
       },
@@ -20,7 +20,7 @@
         },
         "jsonBody": {
           "id": "01234567-0123-0123-0123-0123456789ab",
-          "url": "url"
+          "urls": ["url"]
         }
       }
     },
@@ -57,7 +57,7 @@
             "matchesJsonPath": "$.id"
           },
           {
-            "matchesJsonPath": "$.url"
+            "matchesJsonPath": "$.urls"
           }
         ]
       },
@@ -68,7 +68,7 @@
         },
         "jsonBody": {
           "id": "01234567-0123-0123-0123-0123456789ab",
-          "url": "url"
+          "urls": ["url"]
         }
       }
     },

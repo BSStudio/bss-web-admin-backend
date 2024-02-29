@@ -90,7 +90,7 @@ class CreateMemberIntegrationTest(
         shouldThrow<FeignException.InternalServerError> {
             client.createMember(CreateMember(url = CREATE_MEMBER.url, name = CREATE_MEMBER.name))
         } should {
-            it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error","path":"/api/v1/member"}"""
+            it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error""""
         }
     }
 

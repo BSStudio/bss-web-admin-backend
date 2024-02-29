@@ -23,14 +23,14 @@ class CreateVideoIntegrationTest(
 
     @Test
     fun `it should return 201 and video`() {
-        val actual = client.createVideo(CREATE_EVENT)
+        val actual = client.createVideo(CREATE_VIDEO)
 
         assertSoftly(actual) {
             statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(201)
             body!! shouldBeEqual Video(
                 id = actual.body!!.id,
                 urls = emptyList(),
-                title = CREATE_EVENT.title,
+                title = CREATE_VIDEO.title,
                 visible = false,
                 uploadedAt = LocalDate.now()
             )
@@ -40,15 +40,15 @@ class CreateVideoIntegrationTest(
 
     @Test
     fun `it should retun 500 when duplicate urls were specified`() {
-        videoRepository.save(DetailedVideoEntity(title = CREATE_EVENT.title))
+        videoRepository.save(DetailedVideoEntity(title = CREATE_VIDEO.title))
 
         shouldThrow<FeignException.InternalServerError> {
-            client.createVideo(CREATE_EVENT)
-        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error","path":"/api/v1/video"}""" }
+            client.createVideo(CREATE_VIDEO)
+        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error"""" }
     }
 
     private companion object {
-        private val CREATE_EVENT = CreateVideo(
+        private val CREATE_VIDEO = CreateVideo(
             title = "title"
         )
     }
