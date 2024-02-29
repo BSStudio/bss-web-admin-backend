@@ -38,7 +38,7 @@ class AddVideoToEventIntegrationTest(
                 videos = listOf(
                     Video(
                         id = videoEntity.id,
-                        urls = emptyList(),
+                        urls = videoEntity.urls,
                         title = videoEntity.title,
                         uploadedAt = videoEntity.uploadedAt,
                         visible = videoEntity.visible
