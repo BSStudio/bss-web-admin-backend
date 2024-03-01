@@ -50,16 +50,40 @@ classDiagram
 
 ## Development
 
+### Pre-requisites
+
+Download sdkman to manage java and gradle versions.
+
+```shell
+git clone git@github.com:BSStudio/bss-web-admin-backend.git
+cd bss-web-admin-backend
+sdk env install
+```
+
 ### Lint
 
 ```shell
-./gradlew ktlintCheck
+./gradlew spotlessCheck
+```
+
+### Apply lint
+
+```shell
+./gradlew spotlessApply
 ```
 
 ### Test
 
 ```shell
 ./gradlew test
+```
+
+### Integration test
+
+```shell
+docker compose up -d
+./gradlew integrationTest
+docker compose down
 ```
 
 ### Build
