@@ -12,7 +12,7 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
     fun entityToModel(entity: SimpleVideoEntity): Video {
         return Video(
             id = entity.id,
-            url = entity.url,
+            urls = entity.urls,
             title = entity.title,
             uploadedAt = entity.uploadedAt,
             visible = entity.visible,
@@ -22,7 +22,7 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
     fun entityToModel(entity: DetailedVideoEntity): DetailedVideo {
         return DetailedVideo(
             id = entity.id,
-            url = entity.url,
+            urls = entity.urls,
             title = entity.title,
             description = entity.description,
             uploadedAt = entity.uploadedAt,
@@ -32,14 +32,14 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
     }
 
     fun modelToEntity(model: CreateVideo): SimpleVideoEntity {
-        return SimpleVideoEntity(url = model.url, title = model.title)
+        return SimpleVideoEntity(title = model.title)
     }
 
     fun updateToEntity(
         videoEntity: DetailedVideoEntity,
         updateVideo: UpdateVideo,
     ): DetailedVideoEntity {
-        videoEntity.url = updateVideo.url
+        videoEntity.urls = updateVideo.urls
         videoEntity.title = updateVideo.title
         videoEntity.description = updateVideo.description
         videoEntity.uploadedAt = updateVideo.uploadedAt

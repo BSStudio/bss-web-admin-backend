@@ -1,33 +1,50 @@
 version: 2.1
-orbs: 
+orbs:
   codecov: codecov/codecov@4.0.1
   gradle: circleci/gradle@3.0.0
   docker: circleci/docker@2.5.0
+  github-cli: circleci/github-cli@2.3.0
 executors:
   jdk:
     docker:
       - image: cimg/openjdk:21.0.2
   jdk-machine:
     machine:
-      image: ubuntu-2204:2023.10.1
+      image: ubuntu-2204:current
+      docker_layer_caching: true
+defaults:
+  gradle: &gradle
+    deps_checksum_file: build.gradle.kts
+    cache_key: v2
+    executor: jdk
+  docker_publish: &docker_publish
+    image: bsstudio/bss-web-admin-backend
+    registry: ghcr.io
+    executor: docker/docker
+    remote-docker-version: default
+    use-remote-docker: true
+    remote-docker-dlc: true
+    use-buildkit: true
+  tag_only: &tag_only
+    filters:
+      branches:
+        ignore: /.*/
+      tags:
+        only: /.*/
 jobs:
   gradle_docker:
     parameters:
       command:
         type: string
-        default: test --continue
       after:
         type: steps
         default: []
-      executor:
-        type: executor
-        default: jdk
-    executor: << parameters.executor >>
+    executor: jdk
     steps:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-          version: 20.10.24
+          version: default
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           cache_key: v2
@@ -44,7 +61,7 @@ jobs:
             sudo update-alternatives --set java /usr/lib/jvm/java-21-openjdk-amd64/bin/java
             sudo update-alternatives --set javac /usr/lib/jvm/java-21-openjdk-amd64/bin/javac
       - checkout
-      - run: docker compose up -d
+      - run: docker compose up -d --build
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           cache_key: v2
@@ -54,46 +71,38 @@ jobs:
           reports_path: integration/build/reports
           test_results_path: integration/build/test-results
       - run: docker compose down
-  fork_join:
+  github_release:
     docker:
-      - image: alpine:latest
+      - image: cimg/base:stable
     steps:
-      - run: echo "Fork!"
-  docker_publish:
-    executor: docker/machine
-    steps:
-      - attach_workspace:
-          at: ./
-      - run: docker load < bss-web-admin-backend.tar
-      - docker/check:
-          registry: ghcr.io
-          use-docker-credentials-store: true
-      - docker/push:
-          image: bsstudio/bss-web-admin-backend
-          registry: ghcr.io
-          tag: ${CIRCLE_TAG},latest
+      - checkout
+      - github-cli/install:
+          version: 2.43.1
+      - github-cli/setup:
+          version: 2.43.1
+      - run: gh release create << pipeline.git.tag >> -t << pipeline.git.tag >> --generate-notes
 workflows:
   Build app:
     jobs:
       - gradle/run:
           name: Lint
           command: spotlessCheck
-          deps_checksum_file: build.gradle.kts
-          cache_key: v2
-          executor: jdk
+          <<: *gradle
+      - gradle/run:
+          name: Build boot jar
+          command: bootJar
+          <<: *gradle
       - gradle_integration:
           name: Integration test
       - gradle_docker:
           name: Coverage verification
           command: jacocoTestCoverageVerification
-      - gradle/run:
-          name: Build boot jar
-          command: bootJar
-          deps_checksum_file: build.gradle.kts
-          cache_key: v2
-          executor: jdk
+          after:
+            - codecov/upload:
+                flags: unit
       - gradle_docker:
           name: Unit test
+          command: test --continue
           after:
             - run:
                 name: Save test results
@@ -103,53 +112,18 @@ workflows:
             - gradle/collect_test_results:
                 reports_path: server/build/reports
                 test_results_path: test-results
-            - codecov/upload:
-                flags: unit
       - docker/hadolint:
           name: Lint Dockerfile
-          dockerfiles: Dockerfile
       - docker/publish:
-          name: Build image
+          name: Build docker image
+          <<: *docker_publish
           deploy: false
-          image: bsstudio/bss-web-admin-backend
-          registry: ghcr.io
-          tag: latest
-          executor: docker/docker
-          remote-docker-version: 20.10.24
-          use-remote-docker: true
-          remote-docker-dlc: true
-          use-buildkit: true
-          before_build:
-            - restore_cache:
-                key: docker-layers-v1
-                paths:
-                  - bss-web-admin-backend.tar
-          after_build:
-            - run: docker save --output bss-web-admin-backend.tar ghcr.io/bsstudio/bss-web-admin-backend:latest
-            - save_cache:
-                key: docker-layers-v1
-                paths:
-                  - bss-web-admin-backend.tar
-            - persist_to_workspace:
-                root: ./
-                paths:
-                  - bss-web-admin-backend.tar
-      - fork_join:
-          name: Fork join build
-          requires:
-            - Lint
-            - Coverage verification
-            - Build boot jar
-            - Unit test
-            - Integration test
-            - Build image
-            - Lint Dockerfile
-      - docker_publish:
+  Release:
+    jobs:
+      - docker/publish:
           name: Publish image
-          requires:
-            - Fork join build
-          filters:
-            branches:
-              only: main
-            tags:
-              ignore: /^$/
+          <<: [*docker_publish, *tag_only]
+          tag: latest,<< pipeline.git.tag >>
+      - github_release:
+          name: Create release
+          <<: *tag_only

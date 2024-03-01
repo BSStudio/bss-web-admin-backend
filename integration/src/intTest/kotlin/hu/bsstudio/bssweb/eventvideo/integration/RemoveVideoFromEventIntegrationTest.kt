@@ -21,12 +21,11 @@ class RemoveVideoFromEventIntegrationTest(
 
     @Test
     fun `it should return 204 and remove video from event`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
         val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
             .apply {
                 this.videos = listOf(
                     SimpleVideoEntity(
-                        url = videoEntity.url,
                         title = videoEntity.title
                     ).apply { this.id = videoEntity.id }
                 )
@@ -50,7 +49,7 @@ class RemoveVideoFromEventIntegrationTest(
 
     @Test
     fun `it should return 404 when event does not exist`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
 
         shouldThrow<FeignException.NotFound> {
             client.removeVideoFromEvent(

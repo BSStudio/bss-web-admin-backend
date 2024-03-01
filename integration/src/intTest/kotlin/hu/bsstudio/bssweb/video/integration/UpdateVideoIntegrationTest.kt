@@ -21,7 +21,7 @@ class UpdateVideoIntegrationTest(
 
     @Test
     fun `it should return 200 and updated video`() {
-        val entity = this.videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+        val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
 
         val actual = client.updateVideo(entity.id, UPDATE_VIDEO)
 
@@ -29,7 +29,7 @@ class UpdateVideoIntegrationTest(
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
             body!! shouldBeEqual DetailedVideo(
                 id = entity.id,
-                url = UPDATE_VIDEO.url,
+                urls = UPDATE_VIDEO.urls,
                 title = UPDATE_VIDEO.title,
                 description = UPDATE_VIDEO.description,
                 visible = UPDATE_VIDEO.visible,
@@ -51,7 +51,7 @@ class UpdateVideoIntegrationTest(
 
     private companion object {
         private val UPDATE_VIDEO = UpdateVideo(
-            url = "updatedUrl",
+            urls = listOf("updatedUrl0", "updatedUrl1"),
             title = "updatedTitle",
             description = "updatedDescription",
             visible = true,

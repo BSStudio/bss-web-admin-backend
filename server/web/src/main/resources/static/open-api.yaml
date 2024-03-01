@@ -620,15 +620,17 @@ components:
     CreateVideo:
       type: object
       properties:
-        url:
-          type: string
-          nullable: false
         title:
           type: string
           nullable: false
     UpdateVideo:
       type: object
       properties:
+        urls:
+          type: array
+          items:
+            type: string
+          nullable: false
         title:
           type: string
           nullable: false
@@ -651,8 +653,10 @@ components:
         id:
           type: string
           nullable: false
-        url:
-          type: string
+        urls:
+          type: array
+          items:
+            type: string
           nullable: false
         title:
           type: string

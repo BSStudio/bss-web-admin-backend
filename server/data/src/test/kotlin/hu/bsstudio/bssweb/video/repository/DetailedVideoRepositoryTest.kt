@@ -9,7 +9,8 @@ import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
-import io.kotest.matchers.equality.shouldBeEqualToComparingFields
+import io.kotest.matchers.date.shouldBeCloseTo
+import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
@@ -18,8 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
+import kotlin.time.Duration.Companion.minutes
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -34,7 +37,7 @@ class DetailedVideoRepositoryTest(
     internal fun `create read delete`() {
         underTest.count().shouldBeZero()
 
-        val entity = DetailedVideoEntity(url = URL, title = TITLE)
+        val entity = DetailedVideoEntity(urls = emptyList(), title = TITLE)
         val id = underTest.save(entity).id
         entityManager.run {
             flush()
@@ -42,7 +45,11 @@ class DetailedVideoRepositoryTest(
         }
 
         val expected = createExpected(id)
-        underTest.findById(id) shouldBePresent { it shouldBeEqualToComparingFields expected }
+        underTest.findById(id) shouldBePresent {
+            it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
+            it.createdAt.shouldBeCloseTo(expected.createdAt, duration = 1.minutes)
+            it.updatedAt.shouldBeCloseTo(expected.updatedAt, duration = 1.minutes)
+        }
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()
@@ -55,7 +62,7 @@ class DetailedVideoRepositoryTest(
                 .let { this.memberRepository.save(it) }
                 .id
         val videoId =
-            SimpleVideoEntity(url = URL, title = TITLE)
+            SimpleVideoEntity(urls = emptyList(), title = TITLE)
                 .let { this.simpleVideoRepository.save(it) }
                 .id
         val videoCrewId = VideoCrewEntityId(videoId, "cameraman", memberId)
@@ -77,16 +84,18 @@ class DetailedVideoRepositoryTest(
                     ),
                 ),
             )
-        underTest.findById(videoId)
-            .shouldBePresent()
-            .shouldBeEqualToComparingFields(expected)
+        underTest.findById(videoId) shouldBePresent {
+            it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
+            it.createdAt.shouldBeCloseTo(expected.createdAt, duration = 1.minutes)
+            it.updatedAt.shouldBeCloseTo(expected.updatedAt, duration = 1.minutes)
+        }
     }
 
     private fun createExpected(
         id: UUID,
         videoCrew: List<DetailedVideoCrewEntity> = emptyList(),
     ) = DetailedVideoEntity(
-        url = URL,
+        urls = emptyList(),
         title = TITLE,
         description = "",
         uploadedAt = LocalDate.now(),
@@ -94,10 +103,11 @@ class DetailedVideoRepositoryTest(
     ).apply {
         this.id = id
         this.videoCrew = videoCrew
+        this.createdAt = Instant.now()
+        this.updatedAt = Instant.now()
     }
 
     private companion object {
-        private const val URL = "szobakommando"
         private const val TITLE = "Szobakommando"
         private const val MEMBER_NAME = "Bence Csik"
         private const val MEMBER_URL = "bcsik"

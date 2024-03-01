@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
-import hu.bsstudio.bssweb.fileserver.model.FileUpdate
+import hu.bsstudio.bssweb.fileserver.model.VideoFileUpdate
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
@@ -22,7 +22,7 @@ class FileUpdatingVideoService(private val service: VideoService, private val fi
 
     override fun insertVideo(createVideo: CreateVideo): Video {
         return this.service.insertVideo(createVideo)
-            .also { this.fileClient.createVideoFolder(FileUpdate(it.id, it.url)) }
+            .also { this.fileClient.createVideoFolder(VideoFileUpdate(it.id, it.urls)) }
     }
 
     override fun changeVideoVisibility(
@@ -42,7 +42,7 @@ class FileUpdatingVideoService(private val service: VideoService, private val fi
     ): Optional<DetailedVideo> {
         return this.service.updateVideo(videoId, updateVideo)
             .map {
-                this.fileClient.updateVideoFolder(FileUpdate(it.id, it.url))
+                this.fileClient.updateVideoFolder(VideoFileUpdate(it.id, it.urls))
                 it
             }
     }
