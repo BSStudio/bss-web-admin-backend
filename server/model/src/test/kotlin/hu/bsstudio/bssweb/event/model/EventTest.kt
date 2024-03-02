@@ -32,7 +32,8 @@ internal class EventTest(
         private const val URL = "url"
         private const val TITLE = "title"
         private const val DESCRIPTION = "description"
-        private val DATE_FROM = LocalDate.now()
+        private val DATE_FROM = LocalDate.EPOCH
+        private val DATE_TO = LocalDate.MAX
         private const val VISIBLE = true
         private val EVENT =
             Event(
@@ -41,6 +42,7 @@ internal class EventTest(
                 title = TITLE,
                 description = DESCRIPTION,
                 dateFrom = DATE_FROM,
+                dateTo = DATE_TO,
                 visible = VISIBLE,
             )
         private val JSON =
@@ -51,6 +53,7 @@ internal class EventTest(
                 "title": "$TITLE",
                 "description": "$DESCRIPTION",
                 "dateFrom": "$DATE_FROM",
+                "dateTo": "$DATE_TO",
                 "visible": $VISIBLE
             }
             """.trimIndent()

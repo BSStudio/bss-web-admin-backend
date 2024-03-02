@@ -37,6 +37,7 @@ class CreateEventIntegrationTest : IntegrationTest() {
                 title = CREATE_EVENT.title,
                 description = "",
                 dateFrom = LocalDate.now(),
+                dateTo = LocalDate.now(),
                 visible = false
             )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/event/${actual.body!!.id}")

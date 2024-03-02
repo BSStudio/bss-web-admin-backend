@@ -9,5 +9,6 @@ data class Event(
     val title: String,
     val description: String,
     val dateFrom: LocalDate,
+    val dateTo: LocalDate,
     val visible: Boolean,
 )

@@ -16,6 +16,7 @@ class EventMapper(private val videoMapper: VideoMapper) {
             title = entity.title,
             description = entity.description,
             dateFrom = entity.dateFrom,
+            dateTo = entity.dateTo,
             visible = entity.visible,
         )
     }
@@ -27,6 +28,7 @@ class EventMapper(private val videoMapper: VideoMapper) {
             title = entity.title,
             description = entity.description,
             dateFrom = entity.dateFrom,
+            dateTo = entity.dateTo,
             visible = entity.visible,
             videos = entity.videos.map(videoMapper::entityToModel),
         )
@@ -47,6 +49,7 @@ class EventMapper(private val videoMapper: VideoMapper) {
         eventEntity.title = updateEvent.title
         eventEntity.description = updateEvent.description
         eventEntity.dateFrom = updateEvent.dateFrom
+        eventEntity.dateTo = updateEvent.dateTo
         eventEntity.visible = updateEvent.visible
         return eventEntity
     }

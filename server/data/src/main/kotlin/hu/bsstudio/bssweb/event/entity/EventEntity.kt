@@ -14,6 +14,7 @@ interface EventEntity {
     var title: String
     var description: String
     var dateFrom: LocalDate
+    var dateTo: LocalDate
     var visible: Boolean
 
     @set:CreationTimestamp

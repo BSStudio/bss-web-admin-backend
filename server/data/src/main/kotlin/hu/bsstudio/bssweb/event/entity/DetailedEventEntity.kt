@@ -22,6 +22,7 @@ data class DetailedEventEntity(
     override var title: String,
     override var description: String = "",
     override var dateFrom: LocalDate = LocalDate.now(),
+    override var dateTo: LocalDate = LocalDate.now(),
     override var visible: Boolean = false,
 ) : EventEntity {
     @Id

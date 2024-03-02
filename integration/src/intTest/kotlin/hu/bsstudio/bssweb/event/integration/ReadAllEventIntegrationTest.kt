@@ -41,6 +41,7 @@ class ReadAllEventIntegrationTest(
                     title = TITLE,
                     description = "",
                     dateFrom = LocalDate.now(),
+                    dateTo = LocalDate.now(),
                     visible = false
                 )
             )
