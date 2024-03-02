@@ -33,7 +33,8 @@ class AddVideoToEventIntegrationTest(
                 url = eventEntity.url,
                 title = eventEntity.title,
                 description = eventEntity.description,
-                date = eventEntity.date,
+                dateFrom = eventEntity.dateFrom,
+                dateTo = eventEntity.dateTo,
                 visible = eventEntity.visible,
                 videos = listOf(
                     Video(

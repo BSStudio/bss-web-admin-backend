@@ -27,15 +27,26 @@ class UpdateEventIntegrationTest(
 
         assertSoftly(actual) {
             body!! shouldBeEqual DetailedEvent(
-                id = entity.id,
-                url = UPDATE_EVENT.url,
-                title = UPDATE_EVENT.title,
-                description = UPDATE_EVENT.description,
-                date = UPDATE_EVENT.date,
-                visible = UPDATE_EVENT.visible,
-                videos = listOf()
+                    id = entity.id,
+                    url = UPDATE_EVENT.url,
+                    title = UPDATE_EVENT.title,
+                    description = UPDATE_EVENT.description,
+                    dateFrom = UPDATE_EVENT.dateFrom,
+                    dateTo = UPDATE_EVENT.dateTo,
+                    visible = UPDATE_EVENT.visible,
+                    videos = listOf()
             )
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
+        }
+    }
+
+    @Test
+    fun `it should return 500 when dateTo is before dateFrom`() {
+        val entity = this.eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
+
+        val updateEvent = UPDATE_EVENT.copy(dateTo = LocalDate.EPOCH)
+        shouldThrow<FeignException.InternalServerError> {
+            client.updateEvent(entity.id, updateEvent)
         }
     }
 
@@ -54,7 +65,8 @@ class UpdateEventIntegrationTest(
             url = "updatedUrl",
             title = "updatedTitle",
             description = "updatedDescription",
-            date = LocalDate.of(2023, 1, 1),
+            dateFrom = LocalDate.of(2023, 1, 1),
+            dateTo = LocalDate.of(2023, 1, 1),
             visible = true
         )
     }

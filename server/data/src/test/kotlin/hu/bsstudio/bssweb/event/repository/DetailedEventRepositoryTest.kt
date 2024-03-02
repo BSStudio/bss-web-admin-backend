@@ -83,7 +83,7 @@ class DetailedEventRepositoryTest(
         url = URL,
         title = TITLE,
         description = "",
-        date = LocalDate.now(),
+        dateFrom = LocalDate.now(),
         visible = false,
     ).apply {
         this.id = id

@@ -40,7 +40,8 @@ class ReadAllEventIntegrationTest(
                     url = URL,
                     title = TITLE,
                     description = "",
-                    date = LocalDate.now(),
+                    dateFrom = LocalDate.now(),
+                    dateTo = LocalDate.now(),
                     visible = false
                 )
             )

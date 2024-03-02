@@ -32,7 +32,8 @@ internal class DetailedEventTest(
         private const val URL = "url"
         private const val TITLE = "title"
         private const val DESCRIPTION = "description"
-        private val DATE = LocalDate.now()
+        private val DATE_FROM = LocalDate.EPOCH
+        private val DATE_TO = LocalDate.MAX
         private const val VISIBLE = true
         private val DETAILED_EVENT =
             DetailedEvent(
@@ -40,7 +41,8 @@ internal class DetailedEventTest(
                 url = URL,
                 title = TITLE,
                 description = DESCRIPTION,
-                date = DATE,
+                dateFrom = DATE_FROM,
+                dateTo = DATE_TO,
                 visible = VISIBLE,
                 videos = listOf(),
             )
@@ -51,7 +53,8 @@ internal class DetailedEventTest(
                 "url": "$URL",
                 "title": "$TITLE",
                 "description": "$DESCRIPTION",
-                "date": "$DATE",
+                "dateFrom": "$DATE_FROM",
+                "dateTo": "$DATE_TO",
                 "visible": $VISIBLE,
                 "videos": []
             }

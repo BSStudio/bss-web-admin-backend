@@ -8,6 +8,7 @@ data class Event(
     val url: String,
     val title: String,
     val description: String,
-    val date: LocalDate,
+    val dateFrom: LocalDate,
+    val dateTo: LocalDate,
     val visible: Boolean,
 )
