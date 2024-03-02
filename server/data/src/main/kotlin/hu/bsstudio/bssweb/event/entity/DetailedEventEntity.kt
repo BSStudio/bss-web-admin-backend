@@ -21,7 +21,7 @@ data class DetailedEventEntity(
     override var url: String,
     override var title: String,
     override var description: String = "",
-    override var date: LocalDate = LocalDate.now(),
+    override var dateFrom: LocalDate = LocalDate.now(),
     override var visible: Boolean = false,
 ) : EventEntity {
     @Id
@@ -58,7 +58,7 @@ data class DetailedEventEntity(
             "url='$url', " +
             "title='$title', " +
             "description='$description', " +
-            "date=$date, " +
+            "date=$dateFrom, " +
             "visible=$visible, " +
             "id=$id, " +
             "videos=$videos" +
