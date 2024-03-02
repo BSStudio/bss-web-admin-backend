@@ -41,6 +41,7 @@ class RemoveVideoFromEventIntegrationTest(
                 title = eventEntity.title,
                 description = eventEntity.description,
                 dateFrom = eventEntity.dateFrom,
+                dateTo = eventEntity.dateTo,
                 visible = eventEntity.visible,
                 videos = listOf()
             )
@@ -75,6 +76,7 @@ class RemoveVideoFromEventIntegrationTest(
             title = eventEntity.title,
             description = eventEntity.description,
             dateFrom = eventEntity.dateFrom,
+            dateTo = eventEntity.dateTo,
             visible = eventEntity.visible,
             videos = listOf()
         )
