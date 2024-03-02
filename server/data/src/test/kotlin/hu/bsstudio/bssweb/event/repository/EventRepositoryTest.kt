@@ -37,6 +37,7 @@ class EventRepositoryTest(
                 title = TITLE,
                 description = "",
                 dateFrom = LocalDate.now(),
+                dateTo = LocalDate.now(),
                 visible = false,
             ).apply {
                 this.id = id

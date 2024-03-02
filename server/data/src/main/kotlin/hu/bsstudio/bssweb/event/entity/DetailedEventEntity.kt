@@ -59,7 +59,8 @@ data class DetailedEventEntity(
             "url='$url', " +
             "title='$title', " +
             "description='$description', " +
-            "date=$dateFrom, " +
+            "dateFrom=$dateFrom, " +
+            "dateTo=$dateTo, " +
             "visible=$visible, " +
             "id=$id, " +
             "videos=$videos" +
