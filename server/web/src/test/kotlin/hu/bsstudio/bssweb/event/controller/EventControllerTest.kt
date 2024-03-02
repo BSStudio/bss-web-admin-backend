@@ -138,7 +138,7 @@ internal class EventControllerTest(
         private const val VISIBLE = true
         private val EVENT_ID = UUID.randomUUID()
         private val VIDEOS = listOf<Video>()
-        private val EVENT = Event(id = EVENT_ID, url = URL, title = TITLE, description = DESCRIPTION, date = DATE, visible = VISIBLE)
+        private val EVENT = Event(id = EVENT_ID, url = URL, title = TITLE, description = DESCRIPTION, dateFrom = DATE, visible = VISIBLE)
         private val CREATE_EVENT = CreateEvent(url = URL, title = TITLE)
         private val DETAILED_EVENT =
             DetailedEvent(
@@ -146,11 +146,11 @@ internal class EventControllerTest(
                 url = URL,
                 title = TITLE,
                 description = DESCRIPTION,
-                date = DATE,
+                dateFrom = DATE,
                 visible = VISIBLE,
                 videos = VIDEOS,
             )
-        private val UPDATE_EVENT = UpdateEvent(url = URL, title = TITLE, description = DESCRIPTION, date = DATE, visible = VISIBLE)
+        private val UPDATE_EVENT = UpdateEvent(url = URL, title = TITLE, description = DESCRIPTION, dateFrom = DATE, visible = VISIBLE)
         private val EVENT_LIST = listOf(EVENT)
     }
 }

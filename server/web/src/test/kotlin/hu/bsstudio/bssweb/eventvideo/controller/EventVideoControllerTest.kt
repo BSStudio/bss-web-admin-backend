@@ -67,7 +67,7 @@ internal class EventVideoControllerTest(
                 url = "url",
                 title = "title",
                 description = "description",
-                date = LocalDate.now(),
+                dateFrom = LocalDate.now(),
                 visible = false,
                 videos = listOf(),
             )

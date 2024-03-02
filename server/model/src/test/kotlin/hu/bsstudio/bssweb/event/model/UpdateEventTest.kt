@@ -37,7 +37,7 @@ internal class UpdateEventTest(
                 url = URL,
                 title = TITLE,
                 description = DESCRIPTION,
-                date = DATE,
+                dateFrom = DATE,
                 visible = VISIBLE,
             )
         private val JSON =

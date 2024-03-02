@@ -31,7 +31,7 @@ class UpdateEventIntegrationTest(
                 url = UPDATE_EVENT.url,
                 title = UPDATE_EVENT.title,
                 description = UPDATE_EVENT.description,
-                date = UPDATE_EVENT.date,
+                dateFrom = UPDATE_EVENT.dateFrom,
                 visible = UPDATE_EVENT.visible,
                 videos = listOf()
             )
@@ -54,7 +54,7 @@ class UpdateEventIntegrationTest(
             url = "updatedUrl",
             title = "updatedTitle",
             description = "updatedDescription",
-            date = LocalDate.of(2023, 1, 1),
+            dateFrom = LocalDate.of(2023, 1, 1),
             visible = true
         )
     }

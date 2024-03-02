@@ -40,7 +40,7 @@ internal class DetailedEventTest(
                 url = URL,
                 title = TITLE,
                 description = DESCRIPTION,
-                date = DATE,
+                dateFrom = DATE,
                 visible = VISIBLE,
                 videos = listOf(),
             )
