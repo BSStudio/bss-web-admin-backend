@@ -26,8 +26,19 @@ title: Project structure
 classDiagram
     direction TB
 
+     namespace server {
+         class src
+         class web
+         class operation
+         class service
+         class model
+         class data
+         class common
+     }
 
+    integration ..> client
     client ..> operation
+    integration ..> data
     web ..> operation
     web ..> service
     service ..> data
@@ -35,18 +46,11 @@ classDiagram
     model ..> common
     data ..> common
     service ..> model
-    integration ..> client
     src ..> web
-
-    %% namespace server {
-    %%     class src
-    %%     class web
-    %%     class operation
-    %%     class service
-    %%     class model
-    %%     class data
-    %% }
 ```
+> Note: client can only access operation, model, common. No business code
+
+> Note: integration can only access client (with everything mentioned above) and data. No business code
 
 ## Development
 
