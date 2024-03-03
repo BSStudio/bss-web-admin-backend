@@ -44,9 +44,9 @@ class UpdateVideoIntegrationTest(
     fun `it should return 500 when dateTo is before dateFrom`() {
         val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
 
-        val updateEvent = UPDATE_VIDEO.copy(shootingDateEnd = LocalDate.EPOCH)
+        val updateVideo = UPDATE_VIDEO.copy(shootingDateEnd = LocalDate.EPOCH)
         shouldThrow<FeignException.InternalServerError> {
-            client.updateVideo(entity.id, updateEvent)
+            client.updateVideo(entity.id, updateVideo)
         }
     }
 

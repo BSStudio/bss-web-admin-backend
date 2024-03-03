@@ -9,4 +9,4 @@ ALTER TABLE video
 -- add constraint to ensure date_to is not before date_from
 ALTER TABLE video
     ADD CONSTRAINT date_to_not_before_date_from
-    CHECK (shooting_date_start >= shooting_date_end);
+    CHECK (shooting_date_end >= video.shooting_date_start);
