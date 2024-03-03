@@ -32,7 +32,8 @@ class CreateVideoIntegrationTest(
                 urls = emptyList(),
                 title = CREATE_VIDEO.title,
                 visible = false,
-                uploadedAt = LocalDate.now()
+                shootingDateStart = LocalDate.now(),
+                shootingDateEnd = LocalDate.now()
             )
             headers.location!! shouldBeEqual java.net.URI.create("$url/api/v1/video/${actual.body!!.id}")
         }

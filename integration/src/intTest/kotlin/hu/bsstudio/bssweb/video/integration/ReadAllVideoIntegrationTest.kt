@@ -39,7 +39,8 @@ class ReadAllVideoIntegrationTest(
                     urls = emptyList(),
                     title = TITLE,
                     visible = false,
-                    uploadedAt = LocalDate.now()
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                 )
             )
             statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(200)

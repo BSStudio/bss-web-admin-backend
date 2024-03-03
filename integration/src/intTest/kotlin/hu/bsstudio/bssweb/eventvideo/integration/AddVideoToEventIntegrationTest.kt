@@ -41,7 +41,8 @@ class AddVideoToEventIntegrationTest(
                         id = videoEntity.id,
                         urls = videoEntity.urls,
                         title = videoEntity.title,
-                        uploadedAt = videoEntity.uploadedAt,
+                        shootingDateStart = videoEntity.shootingDateStart,
+                        shootingDateEnd = videoEntity.shootingDateEnd,
                         visible = videoEntity.visible
                     )
                 )

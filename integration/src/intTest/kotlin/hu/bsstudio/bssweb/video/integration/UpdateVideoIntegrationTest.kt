@@ -33,9 +33,20 @@ class UpdateVideoIntegrationTest(
                 title = UPDATE_VIDEO.title,
                 description = UPDATE_VIDEO.description,
                 visible = UPDATE_VIDEO.visible,
-                uploadedAt = UPDATE_VIDEO.uploadedAt,
+                shootingDateStart = UPDATE_VIDEO.shootingDateStart,
+                shootingDateEnd = UPDATE_VIDEO.shootingDateEnd,
                 crew = listOf()
             )
+        }
+    }
+
+    @Test
+    fun `it should return 500 when dateTo is before dateFrom`() {
+        val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
+
+        val updateVideo = UPDATE_VIDEO.copy(shootingDateEnd = LocalDate.EPOCH)
+        shouldThrow<FeignException.InternalServerError> {
+            client.updateVideo(entity.id, updateVideo)
         }
     }
 
@@ -55,7 +66,8 @@ class UpdateVideoIntegrationTest(
             title = "updatedTitle",
             description = "updatedDescription",
             visible = true,
-            uploadedAt = LocalDate.of(2023, 1, 1)
+            shootingDateStart = LocalDate.of(2023, 1, 1),
+            shootingDateEnd = LocalDate.of(2023, 1, 2)
         )
     }
 }

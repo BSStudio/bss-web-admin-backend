@@ -31,14 +31,16 @@ internal class VideoTest(
         private val ID = UUID.randomUUID()
         private val URLS = listOf("video_url")
         private const val TITLE = "video_title"
-        private val UPLOADED_AT = LocalDate.now()
+        private val SHOOTING_DATE_START = LocalDate.EPOCH
+        private val SHOOTING_DATE_END = LocalDate.MAX
         private const val VISIBLE = true
         private val VIDEO =
             Video(
                 id = ID,
                 urls = URLS,
                 title = TITLE,
-                uploadedAt = UPLOADED_AT,
+                shootingDateStart = SHOOTING_DATE_START,
+                shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
             )
         private val JSON =
@@ -47,7 +49,8 @@ internal class VideoTest(
                 "id": "$ID",
                 "urls": ["${URLS[0]}"],
                 "title": "$TITLE",
-                "uploadedAt": "$UPLOADED_AT",
+                "shootingDateStart": "$SHOOTING_DATE_START",
+                "shootingDateEnd": "$SHOOTING_DATE_END",
                 "visible": $VISIBLE
             }
             """.trimIndent()

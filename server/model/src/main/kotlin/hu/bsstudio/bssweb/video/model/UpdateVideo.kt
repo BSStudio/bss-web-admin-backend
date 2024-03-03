@@ -6,6 +6,7 @@ data class UpdateVideo(
     val urls: List<String>,
     val title: String,
     val description: String,
-    val uploadedAt: LocalDate,
+    val shootingDateStart: LocalDate,
+    val shootingDateEnd: LocalDate,
     val visible: Boolean,
 )

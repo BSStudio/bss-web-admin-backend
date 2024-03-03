@@ -117,7 +117,8 @@ internal class VideoCrewControllerTest(
                 urls = listOf("url"),
                 title = "title",
                 description = "description",
-                uploadedAt = LocalDate.now(),
+                shootingDateStart = LocalDate.now(),
+                shootingDateEnd = LocalDate.now(),
                 visible = false,
                 crew = listOf(),
             )

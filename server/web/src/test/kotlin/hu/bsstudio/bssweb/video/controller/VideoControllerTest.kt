@@ -170,10 +170,19 @@ internal class VideoControllerTest(
         private val VIDEO_ID = UUID.randomUUID()
         private val URLS = listOf("url")
         private const val TITLE = "title"
-        private val UPLOADED_AT = LocalDate.now()
+        private val SHOOTING_DATE_START = LocalDate.EPOCH
+        private val SHOOTING_DATE_END = LocalDate.MAX
         private const val VISIBLE = false
         private const val DESCRIPTION = "description"
-        private val VIDEO = Video(id = VIDEO_ID, urls = URLS, title = TITLE, uploadedAt = UPLOADED_AT, visible = VISIBLE)
+        private val VIDEO =
+            Video(
+                id = VIDEO_ID,
+                urls = URLS,
+                title = TITLE,
+                shootingDateStart = SHOOTING_DATE_START,
+                shootingDateEnd = SHOOTING_DATE_END,
+                visible = VISIBLE,
+            )
         private val PAGED_VIDEOS = PageImpl(listOf(VIDEO), PAGEABLE, 1)
         private val CREATE_VIDEO = CreateVideo(title = TITLE)
         private val DETAILED_VIDEO =
@@ -182,11 +191,19 @@ internal class VideoControllerTest(
                 urls = URLS,
                 title = TITLE,
                 description = DESCRIPTION,
-                uploadedAt = UPLOADED_AT,
+                shootingDateStart = SHOOTING_DATE_START,
+                shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
                 crew = listOf(),
             )
         private val UPDATE_VIDEO =
-            UpdateVideo(urls = URLS, title = TITLE, description = DESCRIPTION, uploadedAt = UPLOADED_AT, visible = VISIBLE)
+            UpdateVideo(
+                urls = URLS,
+                title = TITLE,
+                description = DESCRIPTION,
+                shootingDateStart = SHOOTING_DATE_START,
+                shootingDateEnd = SHOOTING_DATE_END,
+                visible = VISIBLE,
+            )
     }
 }

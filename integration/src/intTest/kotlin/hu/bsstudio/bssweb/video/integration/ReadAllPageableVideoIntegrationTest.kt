@@ -38,14 +38,16 @@ class ReadAllPageableVideoIntegrationTest(
                     id = entity0.id,
                     urls = listOf("url0"),
                     title = "title0",
-                    uploadedAt = LocalDate.now(),
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                     visible = false
                 ),
                 Video(
                     id = entity1.id,
                     urls = listOf("url1"),
                     title = "title1",
-                    uploadedAt = LocalDate.now(),
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                     visible = false
                 )
             )
@@ -57,14 +59,16 @@ class ReadAllPageableVideoIntegrationTest(
                     id = entity2.id,
                     urls = listOf("url2"),
                     title = "title2",
-                    uploadedAt = LocalDate.now(),
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                     visible = false
                 ),
                 Video(
                     id = entity3.id,
                     urls = listOf("url3"),
                     title = "title3",
-                    uploadedAt = LocalDate.now(),
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                     visible = false
                 )
             )

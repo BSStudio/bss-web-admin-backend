@@ -39,7 +39,8 @@ class ReadVideoIntegrationTest(
                 title = TITLE,
                 description = "",
                 visible = false,
-                uploadedAt = LocalDate.now(),
+                shootingDateStart = LocalDate.now(),
+                shootingDateEnd = LocalDate.now(),
                 crew = listOf()
             )
         }
