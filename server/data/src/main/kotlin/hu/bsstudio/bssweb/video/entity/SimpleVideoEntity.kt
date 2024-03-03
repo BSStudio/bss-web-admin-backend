@@ -24,7 +24,8 @@ data class SimpleVideoEntity(
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "video_url", joinColumns = [JoinColumn(name = "video_id")])
     override var urls: List<String> = emptyList(),
-    override var uploadedAt: LocalDate = LocalDate.now(),
+    override var shootingDateStart: LocalDate = LocalDate.now(),
+    override var shootingDateEnd: LocalDate = LocalDate.now(),
     override var visible: Boolean = false,
 ) : VideoEntity {
     @Id

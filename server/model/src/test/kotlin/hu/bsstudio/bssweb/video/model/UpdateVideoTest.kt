@@ -30,14 +30,16 @@ internal class UpdateVideoTest(
         private val URLS = listOf("video_url")
         private const val TITLE = "video_title"
         private const val DESCRIPTION = "video_description"
-        private val UPLOADED_AT = LocalDate.now()
+        private val SHOOTING_DATE_START = LocalDate.EPOCH
+        private val SHOOTING_DATE_END = LocalDate.MAX
         private const val VISIBLE = true
         private val UPDATE_VIDEO =
             UpdateVideo(
                 urls = URLS,
                 title = TITLE,
                 description = DESCRIPTION,
-                uploadedAt = UPLOADED_AT,
+                shootingDateStart = SHOOTING_DATE_START,
+                shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
             )
         private val JSON =
@@ -46,7 +48,8 @@ internal class UpdateVideoTest(
                 "urls": ["${URLS[0]}"],
                 "title": "$TITLE",
                 "description": "$DESCRIPTION",
-                "uploadedAt": "$UPLOADED_AT",
+                "shootingDateStart": "$SHOOTING_DATE_START",
+                "shootingDateEnd": "$SHOOTING_DATE_END",
                 "visible": $VISIBLE
             }
             """.trimIndent()

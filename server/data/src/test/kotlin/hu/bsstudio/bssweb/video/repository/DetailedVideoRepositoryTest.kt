@@ -98,7 +98,8 @@ class DetailedVideoRepositoryTest(
         urls = emptyList(),
         title = TITLE,
         description = "",
-        uploadedAt = LocalDate.now(),
+        shootingDateStart = LocalDate.now(),
+        shootingDateEnd = LocalDate.now(),
         visible = false,
     ).apply {
         this.id = id

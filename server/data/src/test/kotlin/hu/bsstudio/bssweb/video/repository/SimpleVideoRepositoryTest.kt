@@ -36,7 +36,8 @@ class SimpleVideoRepositoryTest(
             SimpleVideoEntity(
                 urls = emptyList(),
                 title = TITLE,
-                uploadedAt = LocalDate.now(),
+                shootingDateStart = LocalDate.now(),
+                shootingDateEnd = LocalDate.now(),
                 visible = false,
             ).apply {
                 this.id = id

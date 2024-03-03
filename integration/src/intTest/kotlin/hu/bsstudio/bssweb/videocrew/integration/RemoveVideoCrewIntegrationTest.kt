@@ -32,7 +32,8 @@ class RemoveVideoCrewIntegrationTest(
                 urls = videoEntity.urls,
                 title = videoEntity.title,
                 description = videoEntity.description,
-                uploadedAt = videoEntity.uploadedAt,
+                shootingDateStart = videoEntity.shootingDateStart,
+                shootingDateEnd = videoEntity.shootingDateEnd,
                 visible = videoEntity.visible,
                 crew = listOf()
             )

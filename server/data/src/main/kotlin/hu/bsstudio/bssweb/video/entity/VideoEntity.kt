@@ -12,7 +12,8 @@ interface VideoEntity {
     var id: UUID
     var urls: List<String>
     var title: String
-    var uploadedAt: LocalDate
+    var shootingDateStart: LocalDate
+    var shootingDateEnd: LocalDate
     var visible: Boolean
 
     @set:CreationTimestamp
