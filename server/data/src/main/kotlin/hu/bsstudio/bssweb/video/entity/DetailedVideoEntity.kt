@@ -35,15 +35,20 @@ data class DetailedVideoEntity(
     @GeneratedValue
     override lateinit var id: UUID
 
+    @OneToMany
+    @JoinColumn(name = "video_id")
+    lateinit var videoCrew: List<DetailedVideoCrewEntity>
+
+    @Column(name = "category")
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "video_category", joinColumns = [JoinColumn(name = "video_id")])
+    lateinit var categories: List<String>
+
     @CreationTimestamp
     override lateinit var createdAt: Instant
 
     @UpdateTimestamp
     override lateinit var updatedAt: Instant
-
-    @OneToMany
-    @JoinColumn(name = "video_id")
-    lateinit var videoCrew: List<DetailedVideoCrewEntity>
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

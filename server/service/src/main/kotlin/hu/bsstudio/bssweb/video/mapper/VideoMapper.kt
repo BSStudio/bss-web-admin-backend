@@ -30,6 +30,7 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
             shootingDateEnd = entity.shootingDateEnd,
             visible = entity.visible,
             crew = entity.videoCrew.map(videoCrewMapper::entityToModel),
+            categories = entity.categories
         )
     }
 
@@ -47,6 +48,7 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
         videoEntity.shootingDateStart = updateVideo.shootingDateStart
         videoEntity.shootingDateEnd = updateVideo.shootingDateEnd
         videoEntity.visible = updateVideo.visible
+        videoEntity.categories = updateVideo.categories
         return videoEntity
     }
 }

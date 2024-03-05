@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.video.repository
 
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
+import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.date.shouldBeCloseTo
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.longs.shouldBeZero
@@ -34,20 +35,22 @@ class SimpleVideoRepositoryTest(
 
         val expected =
             SimpleVideoEntity(
-                urls = emptyList(),
                 title = TITLE,
                 shootingDateStart = LocalDate.now(),
                 shootingDateEnd = LocalDate.now(),
                 visible = false,
             ).apply {
                 this.id = id
+                this.urls = emptyList()
                 this.createdAt = Instant.now()
                 this.updatedAt = Instant.now()
             }
         actual shouldBePresent {
-            it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
-            it.createdAt.shouldBeCloseTo(expected.createdAt, duration = 1.minutes)
-            it.updatedAt.shouldBeCloseTo(expected.updatedAt, duration = 1.minutes)
+            assertSoftly {
+                it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
+                it.createdAt.shouldBeCloseTo(expected.createdAt, duration = 1.minutes)
+                it.updatedAt.shouldBeCloseTo(expected.updatedAt, duration = 1.minutes)
+            }
         }
 
         underTest.deleteById(id)

@@ -9,4 +9,5 @@ data class UpdateVideo(
     val shootingDateStart: LocalDate,
     val shootingDateEnd: LocalDate,
     val visible: Boolean,
+    val categories: List<String>
 )

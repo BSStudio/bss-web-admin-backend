@@ -25,7 +25,7 @@ class VideoCrewRepositoryTest(
     @Test
     fun `create read delete`() {
         val memberId = memberRepository.save(DetailedMemberEntity(url = "url", name = "name")).id
-        val videoId = videoRepository.save(SimpleVideoEntity(urls = listOf("url"), title = "title")).id
+        val videoId = videoRepository.save(SimpleVideoEntity(title = "title")).id
 
         val id = VideoCrewEntityId(videoId, "cameraMan", memberId)
         val entity = VideoCrewEntity(id)
