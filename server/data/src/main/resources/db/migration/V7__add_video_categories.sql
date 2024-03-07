@@ -2,17 +2,17 @@
 CREATE TABLE category
 (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name        VARCHAR(255) UNIQUE NOT NULL CHECK ( TRIM(name) != '' ),
-    description VARCHAR(1023)        NOT NULL CHECK ( TRIM(description) != '' )
+    name        VARCHAR(64)  NOT NULL UNIQUE CHECK ( TRIM(name) != '' ),
+    description VARCHAR(256) NOT NULL CHECK ( TRIM(description) != '' )
 );
 
 -- create video category table
 -- a video only can have one of the same category
 CREATE TABLE video_category
 (
-    category VARCHAR(255) REFERENCES category (name),
+    category_id UUID REFERENCES category (id),
     video_id    UUID REFERENCES video (id),
-    PRIMARY KEY (category, video_id)
+    PRIMARY KEY (category_id, video_id)
 );
 
 INSERT INTO category (name, description)

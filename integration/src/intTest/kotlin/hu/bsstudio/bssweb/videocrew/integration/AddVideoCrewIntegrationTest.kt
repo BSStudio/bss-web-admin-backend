@@ -44,7 +44,8 @@ class AddVideoCrewIntegrationTest(
                             nickname = memberEntity.nickname
                         )
                     )
-                )
+                ),
+                categories = videoEntity.categories
             )
         }
     }

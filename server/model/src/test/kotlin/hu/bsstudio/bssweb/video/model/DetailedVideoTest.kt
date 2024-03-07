@@ -45,6 +45,7 @@ internal class DetailedVideoTest(
                 shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
                 crew = listOf(),
+                categories = listOf(),
             )
         private val JSON =
             """
@@ -56,7 +57,8 @@ internal class DetailedVideoTest(
                 "shootingDateStart": "$SHOOTING_DATE_START",
                 "shootingDateEnd": "$SHOOTING_DATE_END",
                 "visible": $VISIBLE,
-                "crew": []
+                "crew": [],
+                "categories": []
             }
             """.trimIndent()
     }

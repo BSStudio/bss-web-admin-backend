@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.video.entity
 
+import hu.bsstudio.bssweb.category.entity.CategoryEntity
 import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
@@ -9,6 +10,7 @@ import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.Hibernate
@@ -36,13 +38,12 @@ data class DetailedVideoEntity(
     override lateinit var id: UUID
 
     @OneToMany
+    @JoinTable(name = "category_id")
+    lateinit var categories: List<CategoryEntity>
+
+    @OneToMany
     @JoinColumn(name = "video_id")
     lateinit var videoCrew: List<DetailedVideoCrewEntity>
-
-    @Column(name = "category")
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "video_category", joinColumns = [JoinColumn(name = "video_id")])
-    lateinit var categories: List<String>
 
     @CreationTimestamp
     override lateinit var createdAt: Instant

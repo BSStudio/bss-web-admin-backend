@@ -637,9 +637,18 @@ components:
         description:
           type: string
           nullable: false
-        uploadedAt:
+        shootingDateStart:
           type: string
           format: date
+          nullable: false
+        shootingDateEnd:
+          type: string
+          format: date
+          nullable: false
+        categories:
+          type: array
+          items:
+            type: string
           nullable: false
         visible:
           type: boolean

@@ -33,6 +33,7 @@ internal class UpdateVideoTest(
         private val SHOOTING_DATE_START = LocalDate.EPOCH
         private val SHOOTING_DATE_END = LocalDate.MAX
         private const val VISIBLE = true
+        private val CATEGORIES = listOf("category")
         private val UPDATE_VIDEO =
             UpdateVideo(
                 urls = URLS,
@@ -41,6 +42,7 @@ internal class UpdateVideoTest(
                 shootingDateStart = SHOOTING_DATE_START,
                 shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
+                categories = CATEGORIES,
             )
         private val JSON =
             """
@@ -50,7 +52,8 @@ internal class UpdateVideoTest(
                 "description": "$DESCRIPTION",
                 "shootingDateStart": "$SHOOTING_DATE_START",
                 "shootingDateEnd": "$SHOOTING_DATE_END",
-                "visible": $VISIBLE
+                "visible": $VISIBLE,
+                "categories": ["${CATEGORIES[0]}"]
             }
             """.trimIndent()
     }

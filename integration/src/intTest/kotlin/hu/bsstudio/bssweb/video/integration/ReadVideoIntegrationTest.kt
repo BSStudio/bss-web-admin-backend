@@ -41,7 +41,8 @@ class ReadVideoIntegrationTest(
                 visible = false,
                 shootingDateStart = LocalDate.now(),
                 shootingDateEnd = LocalDate.now(),
-                crew = listOf()
+                crew = listOf(),
+                categories = listOf()
             )
         }
     }

@@ -35,7 +35,8 @@ class UpdateVideoIntegrationTest(
                 visible = UPDATE_VIDEO.visible,
                 shootingDateStart = UPDATE_VIDEO.shootingDateStart,
                 shootingDateEnd = UPDATE_VIDEO.shootingDateEnd,
-                crew = listOf()
+                crew = listOf(),
+                categories = listOf()
             )
         }
     }
@@ -67,7 +68,8 @@ class UpdateVideoIntegrationTest(
             description = "updatedDescription",
             visible = true,
             shootingDateStart = LocalDate.of(2023, 1, 1),
-            shootingDateEnd = LocalDate.of(2023, 1, 2)
+            shootingDateEnd = LocalDate.of(2023, 1, 2),
+            categories = listOf()
         )
     }
 }

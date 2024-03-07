@@ -9,7 +9,7 @@ import java.util.UUID
 
 @Entity
 @Table(name = "category")
-data class Category(
+data class CategoryEntity(
     val name: String,
     val description: String,
 ) {
@@ -20,7 +20,7 @@ data class Category(
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Category
+        other as CategoryEntity
         return this.id == other.id
     }
 
