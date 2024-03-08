@@ -7,5 +7,5 @@ import java.util.UUID
 
 @Repository
 interface LabelRepository : JpaRepository<LabelEntity, UUID> {
-    fun findAllByName(names: List<String>): List<LabelEntity>
+    fun findAllByNameIn(names: List<String>): List<LabelEntity>
 }

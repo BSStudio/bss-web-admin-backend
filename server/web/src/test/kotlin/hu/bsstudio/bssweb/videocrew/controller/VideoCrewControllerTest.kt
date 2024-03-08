@@ -121,6 +121,7 @@ internal class VideoCrewControllerTest(
                 shootingDateEnd = LocalDate.now(),
                 visible = false,
                 crew = listOf(),
+                labels = listOf()
             )
     }
 }

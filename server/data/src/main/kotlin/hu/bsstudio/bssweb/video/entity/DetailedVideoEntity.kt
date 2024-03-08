@@ -38,7 +38,11 @@ data class DetailedVideoEntity(
     override lateinit var id: UUID
 
     @OneToMany
-    @JoinTable(name = "label_id")
+    @JoinTable(
+        name = "video_label",
+        joinColumns = [JoinColumn(name = "label_id")],
+        inverseJoinColumns = [JoinColumn(name = "video_id")],
+    )
     lateinit var labels: List<LabelEntity>
 
     @OneToMany

@@ -1,5 +1,7 @@
 package hu.bsstudio.bssweb.video.repository
 
+import hu.bsstudio.bssweb.label.entity.LabelEntity
+import hu.bsstudio.bssweb.label.repository.LabelRepository
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
 import hu.bsstudio.bssweb.member.repository.MemberRepository
@@ -30,6 +32,7 @@ class DetailedVideoRepositoryTest(
     @Autowired private val underTest: DetailedVideoRepository,
     @Autowired private val memberRepository: MemberRepository,
     @Autowired private val videoCrewRepository: VideoCrewRepository,
+    @Autowired private val labelRepository: LabelRepository,
     @Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
@@ -55,13 +58,15 @@ class DetailedVideoRepositoryTest(
     }
 
     @Test
-    internal fun `create read delete with crew and category`() {
+    internal fun `create read delete with crew and label`() {
         val memberId =
             DetailedMemberEntity(name = MEMBER_NAME, url = MEMBER_URL, nickname = MEMBER_NICKNAME)
                 .let { this.memberRepository.save(it) }
                 .id
+        val label = this.labelRepository.save(LabelEntity(name = "Label", description = "Label description"))
         val videoId =
-            DetailedVideoEntity(title = TITLE).apply { this.labels = listOf("BSS") }
+            DetailedVideoEntity(title = TITLE)
+                .apply { this.labels = listOf(label) }
                 .let { this.underTest.save(it) }
                 .id
         val videoCrewId = VideoCrewEntityId(videoId, "cameraman", memberId)
@@ -82,7 +87,7 @@ class DetailedVideoRepositoryTest(
                         },
                     ),
                 ),
-                listOf("BSS"),
+                listOf(label),
             )
         underTest.findById(videoId) shouldBePresent {
             assertSoftly {
@@ -96,7 +101,7 @@ class DetailedVideoRepositoryTest(
     private fun createExpected(
         id: UUID,
         videoCrew: List<DetailedVideoCrewEntity> = emptyList(),
-        categories: List<String> = emptyList(),
+        labels: List<LabelEntity> = emptyList(),
     ) = DetailedVideoEntity(
         urls = emptyList(),
         title = TITLE,
@@ -107,7 +112,7 @@ class DetailedVideoRepositoryTest(
     ).apply {
         this.id = id
         this.videoCrew = videoCrew
-        this.labels = categories
+        this.labels = labels
         this.createdAt = Instant.now()
         this.updatedAt = Instant.now()
     }

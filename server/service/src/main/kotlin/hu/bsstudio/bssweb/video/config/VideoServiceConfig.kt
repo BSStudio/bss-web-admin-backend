@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.video.config
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
+import hu.bsstudio.bssweb.label.repository.LabelRepository
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
@@ -26,8 +27,11 @@ class VideoServiceConfig(
     }
 
     @Bean
-    fun defaultVideoService(videoMapper: VideoMapper): VideoService {
-        return DefaultVideoService(videoRepository, detailedRepository, videoMapper)
+    fun defaultVideoService(
+        videoMapper: VideoMapper,
+        labelRepository: LabelRepository,
+    ): VideoService {
+        return DefaultVideoService(videoRepository, detailedRepository, videoMapper, labelRepository)
     }
 
     @Bean

@@ -40,9 +40,9 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
     }
 
     fun updateToEntity(
-            videoEntity: DetailedVideoEntity,
-            updateVideo: UpdateVideo,
-            labels: List<LabelEntity>,
+        videoEntity: DetailedVideoEntity,
+        updateVideo: UpdateVideo,
+        labels: List<LabelEntity>,
     ): DetailedVideoEntity {
         videoEntity.urls = updateVideo.urls
         videoEntity.title = updateVideo.title

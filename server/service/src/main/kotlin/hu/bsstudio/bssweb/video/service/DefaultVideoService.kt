@@ -22,7 +22,6 @@ open class DefaultVideoService(
     private val mapper: VideoMapper,
     private val labelRepository: LabelRepository,
 ) : VideoService {
-
     override fun findAllVideos(): List<Video> {
         return repository.findAll()
             .map(mapper::entityToModel)
@@ -44,12 +43,11 @@ open class DefaultVideoService(
         videoIds: List<UUID>,
         visible: Boolean,
     ): List<UUID> {
-        val modifiedVideos =
-            repository.findAllById(videoIds).map {
-                it.visible = visible
-                it
-            }
-        return repository.saveAll(modifiedVideos)
+        return repository.findAllById(videoIds).map {
+            it.visible = visible
+            it
+        }
+            .map { repository.save(it) }
             .map(SimpleVideoEntity::id)
     }
 
@@ -62,7 +60,7 @@ open class DefaultVideoService(
         videoId: UUID,
         updateVideo: UpdateVideo,
     ): Optional<DetailedVideo> {
-        val labels = labelRepository.findAllByName(updateVideo.labels)
+        val labels = labelRepository.findAllByNameIn(updateVideo.labels)
         return detailedRepository.findById(videoId)
             .map { mapper.updateToEntity(it, updateVideo, labels) }
             .map(detailedRepository::save)

@@ -35,6 +35,7 @@ internal class DetailedVideoTest(
         private val SHOOTING_DATE_START = LocalDate.EPOCH
         private val SHOOTING_DATE_END = LocalDate.MAX
         private const val VISIBLE = true
+        val LABELS = listOf("label")
         private val DETAILED_VIDEO =
             DetailedVideo(
                 id = ID,
@@ -45,7 +46,7 @@ internal class DetailedVideoTest(
                 shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
                 crew = listOf(),
-                labels = listOf(),
+                labels = LABELS,
             )
         private val JSON =
             """
@@ -58,7 +59,7 @@ internal class DetailedVideoTest(
                 "shootingDateEnd": "$SHOOTING_DATE_END",
                 "visible": $VISIBLE,
                 "crew": [],
-                "categories": []
+                "labels": ["${LABELS[0]}"]
             }
             """.trimIndent()
     }

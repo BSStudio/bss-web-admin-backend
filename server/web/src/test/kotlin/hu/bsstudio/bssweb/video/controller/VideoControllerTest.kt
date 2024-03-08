@@ -195,6 +195,7 @@ internal class VideoControllerTest(
                 shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
                 crew = listOf(),
+                labels = listOf(),
             )
         private val UPDATE_VIDEO =
             UpdateVideo(
@@ -204,6 +205,7 @@ internal class VideoControllerTest(
                 shootingDateStart = SHOOTING_DATE_START,
                 shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
+                labels = listOf(),
             )
     }
 }
