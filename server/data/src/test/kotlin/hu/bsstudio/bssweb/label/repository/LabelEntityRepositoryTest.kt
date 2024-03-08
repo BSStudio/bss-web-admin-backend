@@ -1,6 +1,6 @@
-package hu.bsstudio.bssweb.category.repository
+package hu.bsstudio.bssweb.label.repository
 
-import hu.bsstudio.bssweb.category.entity.LabelEntity
+import hu.bsstudio.bssweb.label.entity.LabelEntity
 import io.kotest.matchers.longs.shouldBeExactly
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,7 @@ class LabelEntityRepositoryTest(
 
     @Test
     fun `it should be able to add and remove category`() {
-        val saved = underTest.save(LabelEntity(name = "Test category", description = "Test description"))
+        val saved = underTest.save(LabelEntity(name = "Test label", description = "Test label description"))
         underTest.count() shouldBeExactly 26
         underTest.deleteById(saved.id)
         underTest.count() shouldBeExactly 25
