@@ -8,7 +8,7 @@ import org.hibernate.Hibernate
 import java.util.UUID
 
 @Entity
-@Table(name = "category")
+@Table(name = "label")
 data class LabelEntity(
     val name: String,
     val description: String,
