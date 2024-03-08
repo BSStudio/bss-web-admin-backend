@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.video.entity
 
-import hu.bsstudio.bssweb.category.entity.CategoryEntity
+import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import jakarta.persistence.CollectionTable
 import jakarta.persistence.Column
@@ -38,8 +38,8 @@ data class DetailedVideoEntity(
     override lateinit var id: UUID
 
     @OneToMany
-    @JoinTable(name = "category_id")
-    lateinit var categories: List<CategoryEntity>
+    @JoinTable(name = "label_id")
+    lateinit var labels: List<LabelEntity>
 
     @OneToMany
     @JoinColumn(name = "video_id")

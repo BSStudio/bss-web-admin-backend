@@ -11,7 +11,7 @@ data class DetailedVideo(
     val description: String,
     val shootingDateStart: LocalDate,
     val shootingDateEnd: LocalDate,
-    val categories: List<String>,
+    val labels: List<String>,
     val visible: Boolean,
     val crew: List<VideoCrew>,
 )

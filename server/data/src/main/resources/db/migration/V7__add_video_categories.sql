@@ -1,21 +1,21 @@
--- create category table with name and description
-CREATE TABLE category
+-- create label table with name and description
+CREATE TABLE label
 (
     id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name        VARCHAR(64)  NOT NULL UNIQUE CHECK ( TRIM(name) != '' ),
-    description VARCHAR(256) NOT NULL CHECK ( TRIM(description) != '' )
+    description VARCHAR(256) NOT NULL        CHECK ( TRIM(description) != '' )
 );
 
 -- create video category table
 -- a video only can have one of the same category
-CREATE TABLE video_category
+CREATE TABLE video_label
 (
-    category_id UUID REFERENCES category (id),
-    video_id    UUID REFERENCES video (id),
-    PRIMARY KEY (category_id, video_id)
+    label_id UUID REFERENCES label (id),
+    video_id UUID REFERENCES video (id),
+    PRIMARY KEY (label_id, video_id)
 );
 
-INSERT INTO category (name, description)
+INSERT INTO label (name, description)
 VALUES ('Archív', '2000 előtti videók.'),
        ('BME', 'Hivatalosabb, komolyabb az egyetemhez és a VIK-hez köthető videók.'),
        ('BSS', 'A stúdiónk közéletéhez tartozó videók.'),

@@ -42,7 +42,7 @@ internal class UpdateVideoTest(
                 shootingDateStart = SHOOTING_DATE_START,
                 shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
-                categories = CATEGORIES,
+                labels = CATEGORIES,
             )
         private val JSON =
             """

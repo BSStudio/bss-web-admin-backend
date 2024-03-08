@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.video.mapper
 
-import hu.bsstudio.bssweb.category.entity.CategoryEntity
+import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.model.CreateVideo
@@ -29,7 +29,7 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
             description = entity.description,
             shootingDateStart = entity.shootingDateStart,
             shootingDateEnd = entity.shootingDateEnd,
-            categories = entity.categories.map { it.name },
+            labels = entity.labels.map { it.name },
             visible = entity.visible,
             crew = entity.videoCrew.map(videoCrewMapper::entityToModel),
         )
@@ -40,16 +40,16 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
     }
 
     fun updateToEntity(
-        videoEntity: DetailedVideoEntity,
-        updateVideo: UpdateVideo,
-        categories: List<CategoryEntity>
+            videoEntity: DetailedVideoEntity,
+            updateVideo: UpdateVideo,
+            labels: List<LabelEntity>,
     ): DetailedVideoEntity {
         videoEntity.urls = updateVideo.urls
         videoEntity.title = updateVideo.title
         videoEntity.description = updateVideo.description
         videoEntity.shootingDateStart = updateVideo.shootingDateStart
         videoEntity.shootingDateEnd = updateVideo.shootingDateEnd
-        videoEntity.categories = categories
+        videoEntity.labels = labels
         videoEntity.visible = updateVideo.visible
         return videoEntity
     }

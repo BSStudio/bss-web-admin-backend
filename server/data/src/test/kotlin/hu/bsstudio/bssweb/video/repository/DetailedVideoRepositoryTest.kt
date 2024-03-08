@@ -61,7 +61,7 @@ class DetailedVideoRepositoryTest(
                 .let { this.memberRepository.save(it) }
                 .id
         val videoId =
-            DetailedVideoEntity(title = TITLE).apply { this.categories = listOf("BSS") }
+            DetailedVideoEntity(title = TITLE).apply { this.labels = listOf("BSS") }
                 .let { this.underTest.save(it) }
                 .id
         val videoCrewId = VideoCrewEntityId(videoId, "cameraman", memberId)
@@ -107,7 +107,7 @@ class DetailedVideoRepositoryTest(
     ).apply {
         this.id = id
         this.videoCrew = videoCrew
-        this.categories = categories
+        this.labels = categories
         this.createdAt = Instant.now()
         this.updatedAt = Instant.now()
     }

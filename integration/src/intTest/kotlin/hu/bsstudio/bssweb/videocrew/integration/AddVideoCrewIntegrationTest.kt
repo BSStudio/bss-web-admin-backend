@@ -45,7 +45,7 @@ class AddVideoCrewIntegrationTest(
                         )
                     )
                 ),
-                categories = videoEntity.categories
+                labels = videoEntity.labels
             )
         }
     }

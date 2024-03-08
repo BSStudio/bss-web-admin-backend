@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.video.service
 
-import hu.bsstudio.bssweb.category.repository.CategoryRepository
+import hu.bsstudio.bssweb.label.repository.LabelRepository
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.CreateVideo
@@ -20,8 +20,9 @@ open class DefaultVideoService(
     private val repository: SimpleVideoRepository,
     private val detailedRepository: DetailedVideoRepository,
     private val mapper: VideoMapper,
-    private val categoryRepository: CategoryRepository
+    private val labelRepository: LabelRepository,
 ) : VideoService {
+
     override fun findAllVideos(): List<Video> {
         return repository.findAll()
             .map(mapper::entityToModel)
@@ -43,10 +44,11 @@ open class DefaultVideoService(
         videoIds: List<UUID>,
         visible: Boolean,
     ): List<UUID> {
-        val modifiedVideos = repository.findAllById(videoIds).map {
-            it.visible = visible
-            it
-        }
+        val modifiedVideos =
+            repository.findAllById(videoIds).map {
+                it.visible = visible
+                it
+            }
         return repository.saveAll(modifiedVideos)
             .map(SimpleVideoEntity::id)
     }
@@ -60,9 +62,9 @@ open class DefaultVideoService(
         videoId: UUID,
         updateVideo: UpdateVideo,
     ): Optional<DetailedVideo> {
-        val categories = categoryRepository.findAllByName(updateVideo.categories)
+        val labels = labelRepository.findAllByName(updateVideo.labels)
         return detailedRepository.findById(videoId)
-            .map { mapper.updateToEntity(it, updateVideo, categories) }
+            .map { mapper.updateToEntity(it, updateVideo, labels) }
             .map(detailedRepository::save)
             .map(mapper::entityToModel)
     }
