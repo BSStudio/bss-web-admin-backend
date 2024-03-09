@@ -35,7 +35,8 @@ class RemoveVideoCrewIntegrationTest(
                 shootingDateStart = videoEntity.shootingDateStart,
                 shootingDateEnd = videoEntity.shootingDateEnd,
                 visible = videoEntity.visible,
-                crew = listOf()
+                crew = listOf(),
+                labels = listOf()
             )
         }
     }

@@ -43,10 +43,11 @@ open class DefaultVideoService(
         videoIds: List<UUID>,
         visible: Boolean,
     ): List<UUID> {
-        return repository.findAllById(videoIds).map {
-            it.visible = visible
-            it
-        }
+        return repository.findAllById(videoIds)
+            .map {
+                it.visible = visible
+                it
+            }
             .map { repository.save(it) }
             .map(SimpleVideoEntity::id)
     }
