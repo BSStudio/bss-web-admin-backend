@@ -41,7 +41,7 @@ internal class LabelTest(
             {
                 "id": "$ID",
                 "name": "$NAME",
-                "description": "$DESCRIPTION",
+                "description": "$DESCRIPTION"
             }
             """.trimIndent()
     }

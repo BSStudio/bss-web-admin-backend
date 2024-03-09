@@ -37,7 +37,7 @@ internal class CreateLabelTest(
             """
             {
                 "name": "$NAME",
-                "description": "$DESCRIPTION",
+                "description": "$DESCRIPTION"
             }
             """.trimIndent()
     }
