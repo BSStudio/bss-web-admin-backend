@@ -12,6 +12,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.UUID
@@ -50,6 +51,8 @@ internal class DefaultLabelServiceTest(
         every { mockRepository.deleteById(LABEL_ID) } returns Unit
 
         underTest.removeLabel(LABEL_ID)
+
+        verify { mockRepository.deleteById(LABEL_ID) }
     }
 
     private companion object {
