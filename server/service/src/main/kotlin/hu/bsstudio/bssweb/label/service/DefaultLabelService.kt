@@ -12,13 +12,13 @@ class DefaultLabelService(
 ) : LabelService {
     override fun findAllLabels(): List<Label> {
         return repository.findAll()
-            .map { mapper.toModel(it) }
+            .map { mapper.entityToModel(it) }
     }
 
     override fun insertLabel(model: CreateLabel): Label {
-        return mapper.toEntity(model)
+        return mapper.modelToEntity(model)
             .let { repository.save(it) }
-            .let { mapper.toModel(it) }
+            .let { mapper.entityToModel(it) }
     }
 
     override fun removeLabel(id: UUID) {

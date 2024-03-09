@@ -5,7 +5,7 @@ import hu.bsstudio.bssweb.label.model.CreateLabel
 import hu.bsstudio.bssweb.label.model.Label
 
 class LabelMapper {
-    fun toModel(entity: LabelEntity): Label {
+    fun entityToModel(entity: LabelEntity): Label {
         return Label(
             id = entity.id,
             name = entity.name,
@@ -13,7 +13,7 @@ class LabelMapper {
         )
     }
 
-    fun toEntity(model: CreateLabel): LabelEntity {
+    fun modelToEntity(model: CreateLabel): LabelEntity {
         return LabelEntity(
             name = model.name,
             description = model.description,
