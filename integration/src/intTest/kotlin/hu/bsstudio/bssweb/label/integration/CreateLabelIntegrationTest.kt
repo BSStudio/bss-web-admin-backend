@@ -25,7 +25,7 @@ class CreateLabelIntegrationTest: IntegrationTest() {
     private lateinit var url: String
 
     @Test
-    fun `it should return 201 and event`() {
+    fun `it should return 201 and label`() {
         val actual = client.createLabel(CREATE_LABEL)
 
         assertSoftly(actual) {
