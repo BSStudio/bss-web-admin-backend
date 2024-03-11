@@ -40,8 +40,8 @@ data class DetailedVideoEntity(
     @OneToMany
     @JoinTable(
         name = "video_label",
-        joinColumns = [JoinColumn(name = "label_id")],
-        inverseJoinColumns = [JoinColumn(name = "video_id")],
+        joinColumns = [JoinColumn(name = "video_id")],
+        inverseJoinColumns = [JoinColumn(name = "label_id")],
     )
     lateinit var labels: List<LabelEntity>
 

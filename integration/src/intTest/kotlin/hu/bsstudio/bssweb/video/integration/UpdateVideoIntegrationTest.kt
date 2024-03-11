@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.video.integration
 
 import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
+import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.video.client.VideoClient
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -21,6 +22,7 @@ class UpdateVideoIntegrationTest(
 
     @Test
     fun `it should return 200 and updated video`() {
+        this.labelRepository.save(LabelEntity(name = LABEL_NAME, description = "description"))
         val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
 
         val actual = client.updateVideo(entity.id, UPDATE_VIDEO)
@@ -36,7 +38,7 @@ class UpdateVideoIntegrationTest(
                 shootingDateStart = UPDATE_VIDEO.shootingDateStart,
                 shootingDateEnd = UPDATE_VIDEO.shootingDateEnd,
                 crew = listOf(),
-                labels = listOf()
+                labels = UPDATE_VIDEO.labels
             )
         }
     }
@@ -62,6 +64,7 @@ class UpdateVideoIntegrationTest(
     }
 
     private companion object {
+        private const val LABEL_NAME = "label"
         private val UPDATE_VIDEO = UpdateVideo(
             urls = listOf("updatedUrl0", "updatedUrl1"),
             title = "updatedTitle",
@@ -69,7 +72,7 @@ class UpdateVideoIntegrationTest(
             visible = true,
             shootingDateStart = LocalDate.of(2023, 1, 1),
             shootingDateEnd = LocalDate.of(2023, 1, 2),
-            labels = listOf()
+            labels = listOf(LABEL_NAME)
         )
     }
 }
