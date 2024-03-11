@@ -16,7 +16,7 @@ class LabelEntityRepositoryTest(
     @Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
-    fun `it should be able to add and remove category`() {
+    fun `it should be able to add and remove label`() {
         underTest.count() shouldBeExactly 0
         val saved = underTest.save(LABEL_0)
         underTest.count() shouldBeExactly 1

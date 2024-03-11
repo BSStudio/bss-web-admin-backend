@@ -33,7 +33,7 @@ internal class UpdateVideoTest(
         private val SHOOTING_DATE_START = LocalDate.EPOCH
         private val SHOOTING_DATE_END = LocalDate.MAX
         private const val VISIBLE = true
-        private val LABELS = listOf("category")
+        private val LABELS = listOf("label")
         private val UPDATE_VIDEO =
             UpdateVideo(
                 urls = URLS,

@@ -645,7 +645,7 @@ components:
           type: string
           format: date
           nullable: false
-        categories:
+        labels:
           type: array
           items:
             type: string

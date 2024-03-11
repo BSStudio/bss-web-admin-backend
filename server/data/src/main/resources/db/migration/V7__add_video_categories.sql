@@ -6,8 +6,8 @@ CREATE TABLE label
     description VARCHAR(256) NOT NULL        CHECK ( TRIM(description) != '' )
 );
 
--- create video category table
--- a video only can have one of the same category
+-- create video label table
+-- a video only can have one of the same labels
 CREATE TABLE video_label
 (
     label_id UUID REFERENCES label (id),
