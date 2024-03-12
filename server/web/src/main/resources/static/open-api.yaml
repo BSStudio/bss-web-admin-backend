@@ -550,6 +550,7 @@ components:
     Status:
       type: string
       nullable: false
+      required: true
       enum:
         - ALUMNI
         - ACTIVE_ALUMNI
@@ -558,65 +559,61 @@ components:
         - MEMBER_CANDIDATE_CANDIDATE
     CreateMember:
       type: object
-      required:
-        - url
-        - name
       properties:
         url:
           type: string
           nullable: false
+          required: true
         name:
           type: string
           nullable: false
+          required: true
     UpdateMember:
-      type: object
-      properties:
-        name:
-          type: string
-          nullable: false
-        url:
-          type: string
-          nullable: false
-        description:
-          type: string
-          nullable: false
-        joinedAt:
-          type: string
-          nullable: false
-        role:
-          type: string
-          nullable: false
-        status:
-          $ref: '#/components/schemas/Status'
-        archived:
-          type: boolean
-          nullable: false
+      allOf:
+        - $ref: '#/components/schemas/CreateMember'
+        - type: object
+          properties:
+            url:
+              type: string
+              nullable: false
+              required: true
+            name:
+              type: string
+              nullable: false
+              required: true
+            nickname:
+              type: string
+              nullable: false
+              required: true
+            description:
+              type: string
+              nullable: false
+              required: true
+            joinedAt:
+              type: string
+              nullable: false
+              required: true
+            role:
+              type: string
+              nullable: false
+              required: true
+            status:
+              $ref: '#/components/schemas/Status'
+              # Status is not null by default
+              # status is required by default
+            archived:
+              type: boolean
+              nullable: false
+              required: true
     Member:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: false
-        url:
-          type: string
-          nullable: false
-        name:
-          type: string
-          nullable: false
-        description:
-          type: string
-          nullable: false
-        joinedAt:
-          type: string
-          nullable: false
-        role:
-          type: string
-          nullable: false
-        status:
-          $ref: '#/components/schemas/Status'
-        archived:
-          type: boolean
-          nullable: false
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              nullable: false
+        - $ref: '#/components/schemas/UpdateMember'
     CreateVideo:
       type: object
       properties:
