@@ -573,14 +573,6 @@ components:
         - $ref: '#/components/schemas/CreateMember'
         - type: object
           properties:
-            url:
-              type: string
-              nullable: false
-              required: true
-            name:
-              type: string
-              nullable: false
-              required: true
             nickname:
               type: string
               nullable: false
