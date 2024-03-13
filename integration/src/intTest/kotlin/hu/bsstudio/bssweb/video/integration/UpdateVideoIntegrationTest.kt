@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.video.integration
 
 import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
+import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.video.client.VideoClient
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -20,7 +21,8 @@ class UpdateVideoIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and updated video`() {
+    internal fun `it should return 200 and updated video`() {
+        this.labelRepository.save(LabelEntity(name = LABEL_NAME, description = "description"))
         val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
 
         val actual = client.updateVideo(entity.id, UPDATE_VIDEO)
@@ -35,13 +37,14 @@ class UpdateVideoIntegrationTest(
                 visible = UPDATE_VIDEO.visible,
                 shootingDateStart = UPDATE_VIDEO.shootingDateStart,
                 shootingDateEnd = UPDATE_VIDEO.shootingDateEnd,
-                crew = listOf()
+                crew = listOf(),
+                labels = UPDATE_VIDEO.labels
             )
         }
     }
 
     @Test
-    fun `it should return 500 when dateTo is before dateFrom`() {
+    internal fun `it should return 500 when dateTo is before dateFrom`() {
         val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
 
         val updateVideo = UPDATE_VIDEO.copy(shootingDateEnd = LocalDate.EPOCH)
@@ -51,7 +54,7 @@ class UpdateVideoIntegrationTest(
     }
 
     @Test
-    fun `it should return 404 when video not found`() {
+    internal fun `it should return 404 when video not found`() {
         shouldThrow<FeignException.NotFound> {
             client.updateVideo(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),
@@ -61,13 +64,15 @@ class UpdateVideoIntegrationTest(
     }
 
     private companion object {
+        private const val LABEL_NAME = "label"
         private val UPDATE_VIDEO = UpdateVideo(
             urls = listOf("updatedUrl0", "updatedUrl1"),
             title = "updatedTitle",
             description = "updatedDescription",
             visible = true,
             shootingDateStart = LocalDate.of(2023, 1, 1),
-            shootingDateEnd = LocalDate.of(2023, 1, 2)
+            shootingDateEnd = LocalDate.of(2023, 1, 2),
+            labels = listOf(LABEL_NAME)
         )
     }
 }

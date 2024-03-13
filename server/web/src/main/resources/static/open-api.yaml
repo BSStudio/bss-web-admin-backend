@@ -20,6 +20,8 @@ tags:
     description: "REST operations for videos"
   - name: VideoCrew
     description: "REST operations for video crews"
+  - name: Label
+    description: "REST operations for labels"
   - name: Event
     description: "REST operations for events"
   - name: EventVideo
@@ -28,21 +30,6 @@ tags:
     description: "REST operations for metrics"
 paths:
   /api/v1/member:
-    get:
-      operationId: "getAllMembers"
-      summary: "Read all member"
-      description: "Read all member"
-      tags:
-        - Member
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Member'
     post:
       operationId: "createMember"
       summary: "Create member"
@@ -61,6 +48,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Member'
+    get:
+      operationId: "getAllMembers"
+      summary: "Read all member"
+      description: "Read all member"
+      tags:
+        - Member
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Member'
   /api/v1/member/{memberId}:
     put:
       operationId: "updateMember"
@@ -69,12 +71,7 @@ paths:
       tags:
         - Member
       parameters:
-        - name: memberId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/memberId'
       requestBody:
         content:
           application/json:
@@ -94,12 +91,7 @@ paths:
       tags:
         - Member
       parameters:
-        - name: memberId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/memberId'
       responses:
         "200":
           description: "Ok"
@@ -114,16 +106,29 @@ paths:
       tags:
         - Member
       parameters:
-        - name: memberId
-          in: path
-          required: true
-          explode: false
-          schema:
-            type: string
+        - $ref: '#/components/parameters/memberId'
       responses:
-        "200":
-          description: "OK"
+        "204":
+          description: "No content"
   /api/v1/video:
+    post:
+      operationId: "createVideo"
+      summary: "Create video"
+      description: "Create video"
+      tags:
+        - Video
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVideo'
+      responses:
+        "201":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
     get:
       operationId: "getAllVideos"
       summary: "Read all video (paginated)"
@@ -153,31 +158,13 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/Page"
                   - type: object
                     properties:
                       content:
                         type: array
                         items:
                           $ref: "#/components/schemas/Video"
-    post:
-      operationId: "createVideo"
-      summary: "Create video"
-      description: "Create video"
-      tags:
-        - Video
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateVideo'
-      responses:
-        "201":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Video'
+                  - $ref: "#/components/schemas/Page"
   /api/v1/video/visible:
     put:
       operationId: "changeVideoVisibility"
@@ -194,9 +181,10 @@ paths:
             type: array
             items:
               type: string
+              format: uuid
         - name: visible
-          description: Defaults to false if no value was provided
           in: query
+          required: true
           schema:
             type: boolean
       responses:
@@ -216,11 +204,7 @@ paths:
       tags:
         - Video
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/videoId'
       requestBody:
         content:
           application/json:
@@ -240,11 +224,7 @@ paths:
       tags:
         - Video
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/videoId'
       responses:
         "200":
           description: "OK"
@@ -259,20 +239,10 @@ paths:
       tags:
         - Video
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/videoId'
       responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
+        "204":
+          description: "No content"
   /api/v1/videoCrew:
     put:
       operationId: "addPosition"
@@ -317,6 +287,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
         - name: position
           in: query
           required: true
@@ -327,6 +298,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
       responses:
         "200":
           description: "OK"
@@ -336,6 +308,57 @@ paths:
                 $ref: '#/components/schemas/DetailedVideo'
         "404":
           description: "Not found"
+  /api/v1/label:
+    post:
+      operationId: "createLabel"
+      summary: "Create label"
+      description: "Create label"
+      tags:
+        - Label
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLabel'
+      responses:
+        "201":
+          description: "Created"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+    get:
+      operationId: "getAllLabels"
+      summary: "Read all label"
+      description: "Read all label"
+      tags:
+        - Label
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+  /api/v1/label/{labelId}:
+    delete:
+      operationId: "removeLabel"
+      summary: "Delete label"
+      description: "Delete label"
+      tags:
+        - Label
+      parameters:
+        - name: labelId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: "No content"
   /api/v1/event:
     get:
       operationId: "findAllEvent"
@@ -378,12 +401,7 @@ paths:
       tags:
         - Event
       parameters:
-        - name: eventId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/eventId'
       responses:
         "200":
           description: "OK"
@@ -398,12 +416,7 @@ paths:
       tags:
         - Event
       parameters:
-        - name: eventId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/eventId'
       responses:
         "200":
           description: "OK"
@@ -418,15 +431,10 @@ paths:
       tags:
         - Event
       parameters:
-        - name: eventId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - $ref: '#/components/parameters/eventId'
       responses:
-        "200":
-          description: "OK"
+        "204":
+          description: "No content"
   /api/v1/eventVideo:
     put:
       operationId: "addVideoToEvent"
@@ -453,7 +461,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Event"
+                $ref: "#/components/schemas/DetailedEvent"
     delete:
       operationId: "removeVideoFromEvent"
       summary: "Delete video from event"
@@ -501,55 +509,93 @@ components:
     basicAuth:
       type: http
       scheme: basic
+  parameters:
+    memberId:
+      name: memberId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    videoId:
+      name: videoId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    eventId:
+      name: eventId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
     Sort:
       type: object
       properties:
-        empty:
+        direction:
+          type: string
+          enum:
+            - ASC
+            - DESC
+        property:
+          type: string
+        ignoreCase:
           type: boolean
-        sorted:
+        nullHandling:
+          type: string
+          enum:
+            - NATIVE
+            - NULLS_FIRST
+            - NULLS_LAST
+        ascending:
           type: boolean
-        unsorted:
+        descending:
           type: boolean
     Pageable:
       type: object
       properties:
-        offset:
-          type: integer
         pageNumber:
           type: integer
         pageSize:
           type: integer
-        paged:
-          type: boolean
         sort:
           $ref: "#/components/schemas/Sort"
+        offset:
+          type: integer
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
     Page:
       type: object
       properties:
-        empty:
-          type: boolean
-        first:
-          type: boolean
-        last:
-          type: boolean
-        number:
-          type: integer
-        numberOfElements:
-          type: integer
         pageable:
           $ref: "#/components/schemas/Pageable"
+        last:
+          type: boolean
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        first:
+          type: boolean
         size:
+          type: integer
+        number:
           type: integer
         sort:
           $ref: "#/components/schemas/Sort"
-        totalElements:
+        numberOfElements:
           type: integer
-        totalPages:
-          type: integer
+        empty:
+          type: boolean
     Status:
       type: string
       nullable: false
+      required: true
       enum:
         - ALUMNI
         - ACTIVE_ALUMNI
@@ -558,124 +604,107 @@ components:
         - MEMBER_CANDIDATE_CANDIDATE
     CreateMember:
       type: object
-      required:
-        - url
-        - name
       properties:
         url:
           type: string
           nullable: false
+          required: true
         name:
           type: string
           nullable: false
+          required: true
     UpdateMember:
-      type: object
-      properties:
-        name:
-          type: string
-          nullable: false
-        url:
-          type: string
-          nullable: false
-        description:
-          type: string
-          nullable: false
-        joinedAt:
-          type: string
-          nullable: false
-        role:
-          type: string
-          nullable: false
-        status:
-          $ref: '#/components/schemas/Status'
-        archived:
-          type: boolean
-          nullable: false
+      allOf:
+        - $ref: '#/components/schemas/CreateMember'
+        - type: object
+          properties:
+            nickname:
+              type: string
+              nullable: false
+              required: true
+            description:
+              type: string
+              nullable: false
+              required: true
+            joinedAt:
+              type: string
+              nullable: false
+              required: true
+            role:
+              type: string
+              nullable: false
+              required: true
+            status:
+              $ref: '#/components/schemas/Status'
+              # Status is not null by default
+              # status is required by default
+            archived:
+              type: boolean
+              nullable: false
+              required: true
     Member:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: false
-        url:
-          type: string
-          nullable: false
-        name:
-          type: string
-          nullable: false
-        description:
-          type: string
-          nullable: false
-        joinedAt:
-          type: string
-          nullable: false
-        role:
-          type: string
-          nullable: false
-        status:
-          $ref: '#/components/schemas/Status'
-        archived:
-          type: boolean
-          nullable: false
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              nullable: false
+        - $ref: '#/components/schemas/UpdateMember'
     CreateVideo:
       type: object
       properties:
         title:
           type: string
           nullable: false
+          required: true
     UpdateVideo:
-      type: object
-      properties:
-        urls:
-          type: array
-          items:
-            type: string
-          nullable: false
-        title:
-          type: string
-          nullable: false
-        description:
-          type: string
-          nullable: false
-        uploadedAt:
-          type: string
-          format: date
-          nullable: false
-        visible:
-          type: boolean
-          nullable: false
-        archived:
-          type: boolean
-          nullable: false
+      allOf:
+        - $ref: '#/components/schemas/CreateVideo'
+        - type: object
+          properties:
+            urls:
+              type: array
+              items:
+                type: string
+              nullable: false
+            description:
+              type: string
+              nullable: false
+              required: true
+            shootingDateStart:
+              type: string
+              format: date
+              nullable: false
+              required: true
+            shootingDateEnd:
+              type: string
+              format: date
+              nullable: false
+              required: true
+            visible:
+              type: boolean
+              nullable: false
+              required: true
+            labels:
+              type: array
+              items:
+                type: string
+              nullable: false
     Video:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: false
-        urls:
-          type: array
-          items:
-            type: string
-          nullable: false
-        title:
-          type: string
-          nullable: false
-        uploadedAt:
-          type: string
-          format: date
-          nullable: false
-        visible:
-          type: boolean
-          nullable: false
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              nullable: false
+        - $ref: '#/components/schemas/UpdateVideo'
     DetailedVideo:
       allOf:
         - $ref: '#/components/schemas/Video'
         - type: object
           properties:
-            description:
-              type: string
-              nullable: false
             crew:
               type: array
               items:
@@ -683,11 +712,11 @@ components:
     VideoCrew:
       type: object
       properties:
-        position:
-          type: string
         videoId:
           type: string
           format: uuid
+        position:
+          type: string
         member:
           type: object
           properties:
@@ -696,52 +725,73 @@ components:
               format: uuid
             name:
               type: string
+            nickname:
+              type: string
+    CreateLabel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+          required: true
+        description:
+          type: string
+          nullable: false
+          required: true
+    Label:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
               format: uuid
+              nullable: false
+        - $ref: '#/components/schemas/CreateLabel'
     CreateEvent:
       type: object
       properties:
         url:
           type: string
+          required: true
         title:
           type: string
-    DetailedEvent:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        url:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        date:
-          type: string
-          format: date
-        visible:
-          type: boolean
-        videos:
-          type: array
-          items:
-            $ref: "#/components/schemas/Video"
+          required: true
+    UpdateEvent:
+      allOf:
+        - $ref: '#/components/schemas/CreateEvent'
+        - type: object
+          properties:
+            description:
+              type: string
+              required: true
+            dateFrom:
+              type: string
+              format: date
+              required: true
+            dateTo:
+              type: string
+              format: date
+              required: true
+            visible:
+              type: boolean
+              required: true
     Event:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        url:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-        date:
-          type: string
-          format: date
-        visible:
-          type: boolean
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+        - $ref: '#/components/schemas/UpdateEvent'
+    DetailedEvent:
+      allOf:
+        - $ref: '#/components/schemas/Event'
+        - type: object
+          properties:
+            videos:
+              type: array
+              items:
+                $ref: "#/components/schemas/Video"
     BssMetrics:
       type: object
       properties:

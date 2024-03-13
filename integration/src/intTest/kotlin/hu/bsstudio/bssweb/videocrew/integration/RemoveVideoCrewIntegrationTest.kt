@@ -18,7 +18,7 @@ class RemoveVideoCrewIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and delete video crew`() {
+    internal fun `it should return 200 and delete video crew`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
         val memberEntity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
         videoCrewRepository.save(VideoCrewEntity(VideoCrewEntityId(videoEntity.id, "position", memberEntity.id)))
@@ -35,7 +35,8 @@ class RemoveVideoCrewIntegrationTest(
                 shootingDateStart = videoEntity.shootingDateStart,
                 shootingDateEnd = videoEntity.shootingDateEnd,
                 visible = videoEntity.visible,
-                crew = listOf()
+                crew = listOf(),
+                labels = listOf()
             )
         }
     }

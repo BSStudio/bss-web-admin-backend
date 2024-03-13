@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.video.service
 
-import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
+import hu.bsstudio.bssweb.label.repository.LabelRepository
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -19,6 +19,7 @@ open class DefaultVideoService(
     private val repository: SimpleVideoRepository,
     private val detailedRepository: DetailedVideoRepository,
     private val mapper: VideoMapper,
+    private val labelRepository: LabelRepository,
 ) : VideoService {
     override fun findAllVideos(): List<Video> {
         return repository.findAll()
@@ -47,7 +48,7 @@ open class DefaultVideoService(
                 it
             }
             .map(repository::save)
-            .map(SimpleVideoEntity::id)
+            .map { it.id }
     }
 
     override fun findVideoById(videoId: UUID): Optional<DetailedVideo> {
@@ -59,8 +60,9 @@ open class DefaultVideoService(
         videoId: UUID,
         updateVideo: UpdateVideo,
     ): Optional<DetailedVideo> {
+        val labels = labelRepository.findAllByNameIn(updateVideo.labels)
         return detailedRepository.findById(videoId)
-            .map { mapper.updateToEntity(it, updateVideo) }
+            .map { mapper.updateToEntity(it, updateVideo, labels) }
             .map(detailedRepository::save)
             .map(mapper::entityToModel)
     }

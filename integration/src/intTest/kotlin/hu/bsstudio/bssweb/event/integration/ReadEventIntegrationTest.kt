@@ -14,19 +14,19 @@ import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 import java.util.UUID
 
-class ReadEventIntegrationTest(
+internal class ReadEventIntegrationTest(
     @Autowired private val client: EventClient
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 404`() {
+    internal fun `it should return 404`() {
         assertThrows<FeignException.NotFound> {
             client.findEventById(ID)
         }
     }
 
     @Test
-    fun `it should return 200 and event`() {
+    internal fun `it should return 200 and event`() {
         val entity = eventRepository.save(DetailedEventEntity(url = URL, title = TITLE).apply { id = ID })
 
         val actual = client.findEventById(entity.id)

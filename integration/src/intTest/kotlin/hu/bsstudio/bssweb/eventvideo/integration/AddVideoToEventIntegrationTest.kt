@@ -20,7 +20,7 @@ class AddVideoToEventIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and add video to event`() {
+    internal fun `it should return 200 and add video to event`() {
         val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
         val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
 
@@ -39,8 +39,9 @@ class AddVideoToEventIntegrationTest(
                 videos = listOf(
                     Video(
                         id = videoEntity.id,
-                        urls = videoEntity.urls,
                         title = videoEntity.title,
+                        urls = videoEntity.urls,
+                        description = videoEntity.description,
                         shootingDateStart = videoEntity.shootingDateStart,
                         shootingDateEnd = videoEntity.shootingDateEnd,
                         visible = videoEntity.visible
@@ -51,7 +52,7 @@ class AddVideoToEventIntegrationTest(
     }
 
     @Test
-    fun `it should return 500 when event does not exist`() {
+    internal fun `it should return 500 when event does not exist`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
 
         shouldThrow<FeignException.InternalServerError> {
@@ -63,7 +64,7 @@ class AddVideoToEventIntegrationTest(
     }
 
     @Test
-    fun `it should return 404 when video does not exist`() {
+    internal fun `it should return 404 when video does not exist`() {
         val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
 
         shouldThrow<FeignException.InternalServerError> {

@@ -34,6 +34,7 @@ internal class DetailedVideoTest(
         private const val DESCRIPTION = "video_description"
         private val SHOOTING_DATE_START = LocalDate.EPOCH
         private val SHOOTING_DATE_END = LocalDate.MAX
+        private val LABELS = listOf("label")
         private const val VISIBLE = true
         private val DETAILED_VIDEO =
             DetailedVideo(
@@ -43,6 +44,7 @@ internal class DetailedVideoTest(
                 description = DESCRIPTION,
                 shootingDateStart = SHOOTING_DATE_START,
                 shootingDateEnd = SHOOTING_DATE_END,
+                labels = LABELS,
                 visible = VISIBLE,
                 crew = listOf(),
             )
@@ -55,6 +57,7 @@ internal class DetailedVideoTest(
                 "description": "$DESCRIPTION",
                 "shootingDateStart": "$SHOOTING_DATE_START",
                 "shootingDateEnd": "$SHOOTING_DATE_END",
+                "labels": ["${LABELS[0]}"],
                 "visible": $VISIBLE,
                 "crew": []
             }

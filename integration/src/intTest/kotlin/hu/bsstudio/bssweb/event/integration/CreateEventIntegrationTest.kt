@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatusCode
 import java.net.URI
 import java.time.LocalDate
 
-class CreateEventIntegrationTest : IntegrationTest() {
+internal class CreateEventIntegrationTest : IntegrationTest() {
 
     @Autowired
     private lateinit var client: EventClient
@@ -26,7 +26,7 @@ class CreateEventIntegrationTest : IntegrationTest() {
     private lateinit var url: String
 
     @Test
-    fun `it should return 201 and event`() {
+    internal fun `it should return 201 and event`() {
         val actual = client.createEvent(CREATE_EVENT)
 
         assertSoftly(actual) {
@@ -45,7 +45,7 @@ class CreateEventIntegrationTest : IntegrationTest() {
     }
 
     @Test
-    fun `it should retun 500 when duplicate urls were specified`() {
+    internal fun `it should retun 500 when duplicate urls were specified`() {
         eventRepository.save(DetailedEventEntity(url = CREATE_EVENT.url, title = CREATE_EVENT.title))
 
         shouldThrow<FeignException.InternalServerError> {

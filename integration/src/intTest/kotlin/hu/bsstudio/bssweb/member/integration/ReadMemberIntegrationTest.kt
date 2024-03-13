@@ -18,7 +18,7 @@ class ReadMemberIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and member`() {
+    internal fun `it should return 200 and member`() {
         val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
         val actual = client.getMemberById(entity.id)
@@ -40,7 +40,7 @@ class ReadMemberIntegrationTest(
     }
 
     @Test
-    fun `it should return 404 when member not found`() {
+    internal fun `it should return 404 when member not found`() {
         shouldThrow<FeignException.NotFound> {
             client.getMemberById(UUID.fromString("00000000-0000-0000-0000-000000000000"))
         }

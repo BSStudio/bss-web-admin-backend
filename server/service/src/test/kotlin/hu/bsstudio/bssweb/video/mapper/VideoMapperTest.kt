@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.video.mapper
 
+import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.model.CreateVideo
@@ -37,6 +38,7 @@ internal class VideoMapperTest(
     @Test
     internal fun `should map detailed entity to detailed model`() {
         every { mockVideoCrewMapper.entityToModel(CREW_ENTITY) } returns CREW_MODEL
+        every { LABEL_ENTITY.name } returns LABEL_NAME
 
         val actual = underTest.entityToModel(DETAILED_VIDEO_ENTITY)
 
@@ -52,7 +54,7 @@ internal class VideoMapperTest(
 
     @Test
     internal fun `should map update model to entity`() {
-        val actual = underTest.updateToEntity(DETAILED_VIDEO_ENTITY, UPDATE_VIDEO)
+        val actual = underTest.updateToEntity(DETAILED_VIDEO_ENTITY, UPDATE_VIDEO, LABEL_ENTITIES)
 
         actual shouldBeEqual UPDATED_VIDEO_ENTITY
     }
@@ -65,19 +67,27 @@ internal class VideoMapperTest(
         private val SHOOTING_DATE_START = mockk<LocalDate>()
         private val SHOOTING_DATE_END = mockk<LocalDate>()
         private const val VISIBLE = true
+        private val LABEL_NAME = "label"
+        private val LABELS = listOf(LABEL_NAME)
         private val CREW_ENTITY = mockk<DetailedVideoCrewEntity>()
         private val VIDEO_CREW = listOf(CREW_ENTITY)
         private val CREW_MODEL = mockk<VideoCrew>()
         private val CREW = listOf(CREW_MODEL)
-        private val VIDEO_ENTITY = SimpleVideoEntity(TITLE, URLS, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE).apply { id = VIDEO_ID }
-        private val VIDEO = Video(VIDEO_ID, URLS, TITLE, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE)
+        private val VIDEO_ENTITY =
+            SimpleVideoEntity(TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE).apply {
+                id = VIDEO_ID
+            }
+        private val VIDEO = Video(VIDEO_ID, TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE)
+        private val LABEL_ENTITY = mockk<LabelEntity>()
+        private val LABEL_ENTITIES = listOf(LABEL_ENTITY)
         private val DETAILED_VIDEO_ENTITY =
             DetailedVideoEntity(TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE).apply {
                 id = VIDEO_ID
+                labels = LABEL_ENTITIES
                 videoCrew = VIDEO_CREW
             }
         private val DETAILED_VIDEO =
-            DetailedVideo(VIDEO_ID, URLS, TITLE, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE, CREW)
+            DetailedVideo(VIDEO_ID, TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE, LABELS, CREW)
         private val CREATE_VIDEO = CreateVideo(TITLE)
         private val CREATED_VIDEO_ENTITY = SimpleVideoEntity(urls = URLS, title = TITLE).apply { id = VIDEO_ID }
         private val NEW_URLS = listOf("newUrl")
@@ -86,11 +96,13 @@ internal class VideoMapperTest(
         private val NEW_SHOOTING_DATE_START = mockk<LocalDate>()
         private val NEW_SHOOTING_DATE_END = mockk<LocalDate>()
         private const val NEW_VISIBLE = false
+        private val NEW_LABELS = listOf("newLabel")
         private val UPDATE_VIDEO =
-            UpdateVideo(NEW_URLS, NEW_TITLE, NEW_DESCRIPTION, NEW_SHOOTING_DATE_START, NEW_SHOOTING_DATE_END, NEW_VISIBLE)
+            UpdateVideo(NEW_TITLE, NEW_URLS, NEW_DESCRIPTION, NEW_SHOOTING_DATE_START, NEW_SHOOTING_DATE_END, NEW_VISIBLE, NEW_LABELS)
         private val UPDATED_VIDEO_ENTITY =
             DetailedVideoEntity(NEW_TITLE, NEW_URLS, NEW_DESCRIPTION, NEW_SHOOTING_DATE_START, NEW_SHOOTING_DATE_END, NEW_VISIBLE).apply {
                 id = VIDEO_ID
+                labels = LABEL_ENTITIES
                 videoCrew = VIDEO_CREW
             }
     }

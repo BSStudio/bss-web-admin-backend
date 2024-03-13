@@ -3,6 +3,7 @@ package hu.bsstudio.bssweb
 import hu.bsstudio.bssweb.config.BssFeignConfig
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
+import hu.bsstudio.bssweb.label.repository.LabelRepository
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
@@ -34,8 +35,11 @@ open class IntegrationTest {
 
     @Autowired protected lateinit var videoCrewRepository: VideoCrewRepository
 
+    @Autowired protected lateinit var labelRepository: LabelRepository
+
     @BeforeEach
     fun setUp() {
+        this.labelRepository.deleteAll()
         this.videoCrewRepository.deleteAll()
         this.eventVideoRepository.deleteAll()
         this.memberRepository.deleteAll()

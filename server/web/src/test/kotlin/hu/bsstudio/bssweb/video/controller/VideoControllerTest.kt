@@ -177,8 +177,9 @@ internal class VideoControllerTest(
         private val VIDEO =
             Video(
                 id = VIDEO_ID,
-                urls = URLS,
                 title = TITLE,
+                urls = URLS,
+                description = DESCRIPTION,
                 shootingDateStart = SHOOTING_DATE_START,
                 shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
@@ -188,22 +189,24 @@ internal class VideoControllerTest(
         private val DETAILED_VIDEO =
             DetailedVideo(
                 id = VIDEO_ID,
-                urls = URLS,
                 title = TITLE,
+                urls = URLS,
                 description = DESCRIPTION,
                 shootingDateStart = SHOOTING_DATE_START,
                 shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
+                labels = listOf(),
                 crew = listOf(),
             )
         private val UPDATE_VIDEO =
             UpdateVideo(
-                urls = URLS,
                 title = TITLE,
+                urls = URLS,
                 description = DESCRIPTION,
                 shootingDateStart = SHOOTING_DATE_START,
                 shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
+                labels = listOf(),
             )
     }
 }

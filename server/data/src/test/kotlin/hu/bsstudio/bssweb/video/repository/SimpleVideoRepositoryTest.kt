@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.video.repository
 
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
+import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.date.shouldBeCloseTo
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.longs.shouldBeZero
@@ -17,12 +18,12 @@ import kotlin.time.Duration.Companion.minutes
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class SimpleVideoRepositoryTest(
+internal class SimpleVideoRepositoryTest(
     @Autowired private val underTest: SimpleVideoRepository,
     @Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
-    fun `create read delete`() {
+    internal fun `create read delete`() {
         underTest.count().shouldBeZero()
 
         val entity = SimpleVideoEntity(title = TITLE)
@@ -34,20 +35,22 @@ class SimpleVideoRepositoryTest(
 
         val expected =
             SimpleVideoEntity(
-                urls = emptyList(),
                 title = TITLE,
                 shootingDateStart = LocalDate.now(),
                 shootingDateEnd = LocalDate.now(),
                 visible = false,
             ).apply {
                 this.id = id
+                this.urls = emptyList()
                 this.createdAt = Instant.now()
                 this.updatedAt = Instant.now()
             }
         actual shouldBePresent {
-            it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
-            it.createdAt.shouldBeCloseTo(expected.createdAt, duration = 1.minutes)
-            it.updatedAt.shouldBeCloseTo(expected.updatedAt, duration = 1.minutes)
+            assertSoftly {
+                it.shouldBeEqualToIgnoringFields(expected, ::createdAt, ::updatedAt)
+                it.createdAt.shouldBeCloseTo(expected.createdAt, duration = 1.minutes)
+                it.updatedAt.shouldBeCloseTo(expected.updatedAt, duration = 1.minutes)
+            }
         }
 
         underTest.deleteById(id)

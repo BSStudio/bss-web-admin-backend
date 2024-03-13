@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.member.service
 
-import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.mapper.MemberMapper
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
@@ -35,7 +34,7 @@ class DefaultMemberService(
                 it
             }
             .map(repository::save)
-            .map(DetailedMemberEntity::id)
+            .map { it.id }
     }
 
     override fun updateMember(

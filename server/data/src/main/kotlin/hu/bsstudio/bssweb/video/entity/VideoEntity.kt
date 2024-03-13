@@ -1,5 +1,7 @@
 package hu.bsstudio.bssweb.video.entity
 
+import jakarta.persistence.ElementCollection
+import jakarta.persistence.FetchType
 import jakarta.persistence.MappedSuperclass
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
@@ -10,8 +12,11 @@ import java.util.UUID
 @MappedSuperclass
 interface VideoEntity {
     var id: UUID
-    var urls: List<String>
     var title: String
+
+    @get:ElementCollection(fetch = FetchType.EAGER)
+    var urls: List<String>
+    var description: String
     var shootingDateStart: LocalDate
     var shootingDateEnd: LocalDate
     var visible: Boolean
