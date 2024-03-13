@@ -1,7 +1,6 @@
 package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.label.repository.LabelRepository
-import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -49,7 +48,7 @@ open class DefaultVideoService(
                 it
             }
             .map { repository.save(it) }
-            .map(SimpleVideoEntity::id)
+            .map { it.id }
     }
 
     override fun findVideoById(videoId: UUID): Optional<DetailedVideo> {

@@ -13,9 +13,10 @@ import java.util.UUID
 interface VideoEntity {
     var id: UUID
 
+    var title: String
     @get:ElementCollection(fetch = FetchType.EAGER)
     var urls: List<String>
-    var title: String
+    var description: String
     var shootingDateStart: LocalDate
     var shootingDateEnd: LocalDate
     var visible: Boolean
