@@ -12,8 +12,8 @@ import java.util.UUID
 @MappedSuperclass
 interface VideoEntity {
     var id: UUID
-
     var title: String
+
     @get:ElementCollection(fetch = FetchType.EAGER)
     var urls: List<String>
     var description: String
