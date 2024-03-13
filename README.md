@@ -52,6 +52,88 @@ classDiagram
 
 > Note: integration can only access client (with everything mentioned above) and data. No business code
 
+```mermaid
+erDiagram
+
+
+crew {
+   uuid video_id FK
+   uuid member_id FK
+   varchar(250) position
+}
+
+event {
+   uuid id PK
+   varchar(250) url
+   varchar(250) title
+   varchar(8192) description
+   date date_from
+   boolean visible
+   timestamp created_at
+   timestamp updated_at
+   date date_to
+}
+
+event_video {
+   uuid event_id FK
+   uuid video_id FK
+}
+
+label {
+   uuid id PK
+   varchar(64) name
+   varchar(256) description
+}
+
+member {
+   uuid id PK
+   varchar(250) url
+   varchar(250) name
+   varchar(250) nickname
+   varchar(2000) description
+   date joined_at
+   varchar(250) role
+   varchar(250) status
+   boolean archived
+   timestamp created_at
+   timestamp updated_at
+}
+
+status {
+   varchar(250) name PK
+}
+
+video {
+   uuid id PK
+   varchar(250) title
+   varchar(2000) description
+   date shooting_date_start
+   boolean visible
+   timestamp created_at
+   timestamp updated_at
+   date shooting_date_end
+}
+
+video_label {
+   uuid label_id FK
+   uuid video_id FK
+}
+
+video_url {
+   uuid video_id FK
+   varchar(255) url
+}
+
+member ||--|| status: has
+crew ||--|{ member: has
+crew ||--|{ video: has
+event_video ||--|{ event: has
+event_video ||--|{ video: has
+video_label ||--|{ video: has
+video_label ||--|{ label: has
+video_url ||--|{ video: has
+``` 
+
 ## Development
 
 ### Pre-requisites
