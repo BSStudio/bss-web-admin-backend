@@ -595,7 +595,6 @@ components:
     Status:
       type: string
       nullable: false
-      required: true
       enum:
         - ALUMNI
         - ACTIVE_ALUMNI
@@ -608,11 +607,9 @@ components:
         url:
           type: string
           nullable: false
-          required: true
         name:
           type: string
           nullable: false
-          required: true
     UpdateMember:
       allOf:
         - $ref: '#/components/schemas/CreateMember'
@@ -621,19 +618,15 @@ components:
             nickname:
               type: string
               nullable: false
-              required: true
             description:
               type: string
               nullable: false
-              required: true
             joinedAt:
               type: string
               nullable: false
-              required: true
             role:
               type: string
               nullable: false
-              required: true
             status:
               $ref: '#/components/schemas/Status'
               # Status is not null by default
@@ -641,7 +634,6 @@ components:
             archived:
               type: boolean
               nullable: false
-              required: true
     Member:
       allOf:
         - type: object
@@ -657,7 +649,6 @@ components:
         title:
           type: string
           nullable: false
-          required: true
     UpdateVideo:
       allOf:
         - $ref: '#/components/schemas/CreateVideo'
@@ -671,21 +662,17 @@ components:
             description:
               type: string
               nullable: false
-              required: true
             shootingDateStart:
               type: string
               format: date
               nullable: false
-              required: true
             shootingDateEnd:
               type: string
               format: date
               nullable: false
-              required: true
             visible:
               type: boolean
               nullable: false
-              required: true
             labels:
               type: array
               items:
@@ -733,11 +720,9 @@ components:
         name:
           type: string
           nullable: false
-          required: true
         description:
           type: string
           nullable: false
-          required: true
     Label:
       allOf:
         - type: object
@@ -752,10 +737,8 @@ components:
       properties:
         url:
           type: string
-          required: true
         title:
           type: string
-          required: true
     UpdateEvent:
       allOf:
         - $ref: '#/components/schemas/CreateEvent'
@@ -763,18 +746,14 @@ components:
           properties:
             description:
               type: string
-              required: true
             dateFrom:
               type: string
               format: date
-              required: true
             dateTo:
               type: string
               format: date
-              required: true
             visible:
               type: boolean
-              required: true
     Event:
       allOf:
         - type: object
