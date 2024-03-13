@@ -19,14 +19,14 @@ class ReadVideoIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 404`() {
+    internal fun `it should return 404`() {
         shouldThrow<FeignException.NotFound> {
             client.getVideo(ID)
         }
     }
 
     @Test
-    fun `it should return 200 with video`() {
+    internal fun `it should return 200 with video`() {
         val entity = videoRepository.save(DetailedVideoEntity(title = TITLE).apply { id = ID })
 
         val actual = client.getVideo(entity.id)

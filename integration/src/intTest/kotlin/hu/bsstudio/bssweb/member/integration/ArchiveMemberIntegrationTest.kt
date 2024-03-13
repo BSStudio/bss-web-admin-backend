@@ -17,7 +17,7 @@ class ArchiveMemberIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and archive member`() {
+    internal fun `it should return 200 and archive member`() {
         val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
         val actual = client.archiveMembers(listOf(entity.id), true)
@@ -29,7 +29,7 @@ class ArchiveMemberIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 and unarchive member`() {
+    internal fun `it should return 200 and unarchive member`() {
         val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name", archived = true))
 
         val actual = client.archiveMembers(listOf(entity.id), false)
@@ -41,7 +41,7 @@ class ArchiveMemberIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 and empty list when id can't be found`() {
+    internal fun `it should return 200 and empty list when id can't be found`() {
         val actual = client.archiveMembers(listOf(UUID.fromString("00000000-0000-0000-0000-000000000000")), true)
 
         assertSoftly(actual) {

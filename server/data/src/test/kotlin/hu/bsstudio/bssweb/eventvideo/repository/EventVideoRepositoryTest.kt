@@ -16,13 +16,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class EventVideoRepositoryTest(
+internal class EventVideoRepositoryTest(
     @Autowired private val eventRepository: SimpleEventRepository,
     @Autowired private val videoRepository: SimpleVideoRepository,
     @Autowired private val underTest: EventVideoRepository,
 ) {
     @Test
-    fun `create read delete`() {
+    internal fun `create read delete`() {
         val videoId = videoRepository.save(SimpleVideoEntity(title = "title")).id
         val eventId = eventRepository.save(SimpleEventEntity(url = "url", title = "title")).id
 

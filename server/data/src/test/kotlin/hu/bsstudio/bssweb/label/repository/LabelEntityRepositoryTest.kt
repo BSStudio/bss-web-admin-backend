@@ -11,12 +11,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class LabelEntityRepositoryTest(
+internal class LabelEntityRepositoryTest(
     @Autowired private val underTest: LabelRepository,
     @Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
-    fun `it should be able to add and remove label`() {
+    internal fun `it should be able to add and remove label`() {
         underTest.count() shouldBeExactly 0
         val saved = underTest.save(LABEL_0)
         underTest.count() shouldBeExactly 1
@@ -25,7 +25,7 @@ class LabelEntityRepositoryTest(
     }
 
     @Test
-    fun `it should be able to find all labels by name`() {
+    internal fun `it should be able to find all labels by name`() {
         underTest.count() shouldBeExactly 0
         val savedLabels = underTest.saveAll(listOf(LABEL_0, LABEL_1))
         entityManager.flush()

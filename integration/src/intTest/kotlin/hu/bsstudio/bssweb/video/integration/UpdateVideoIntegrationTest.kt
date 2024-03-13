@@ -21,7 +21,7 @@ class UpdateVideoIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and updated video`() {
+    internal fun `it should return 200 and updated video`() {
         this.labelRepository.save(LabelEntity(name = LABEL_NAME, description = "description"))
         val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
 
@@ -44,7 +44,7 @@ class UpdateVideoIntegrationTest(
     }
 
     @Test
-    fun `it should return 500 when dateTo is before dateFrom`() {
+    internal fun `it should return 500 when dateTo is before dateFrom`() {
         val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
 
         val updateVideo = UPDATE_VIDEO.copy(shootingDateEnd = LocalDate.EPOCH)
@@ -54,7 +54,7 @@ class UpdateVideoIntegrationTest(
     }
 
     @Test
-    fun `it should return 404 when video not found`() {
+    internal fun `it should return 404 when video not found`() {
         shouldThrow<FeignException.NotFound> {
             client.updateVideo(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),

@@ -18,12 +18,12 @@ import kotlin.time.Duration.Companion.minutes
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class MemberRepositoryTest(
+internal class MemberRepositoryTest(
     @Autowired private val underTest: MemberRepository,
     @Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
-    fun `create read delete`() {
+    internal fun `create read delete`() {
         underTest.count().shouldBeZero()
 
         val entity = DetailedMemberEntity(name = NAME, url = URL)

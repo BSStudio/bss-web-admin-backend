@@ -18,12 +18,12 @@ import kotlin.time.Duration.Companion.minutes
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class SimpleVideoRepositoryTest(
+internal class SimpleVideoRepositoryTest(
     @Autowired private val underTest: SimpleVideoRepository,
     @Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
-    fun `create read delete`() {
+    internal fun `create read delete`() {
         underTest.count().shouldBeZero()
 
         val entity = SimpleVideoEntity(title = TITLE)

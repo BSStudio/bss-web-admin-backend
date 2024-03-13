@@ -25,7 +25,7 @@ class CreateMemberIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 201 and member body`() {
+    internal fun `it should return 201 and member body`() {
         val actual = client.createMember(CREATE_MEMBER)
 
         assertSoftly(actual) {
@@ -46,7 +46,7 @@ class CreateMemberIntegrationTest(
     }
 
     @Test
-    fun `it should return 201 and member body on duplicate names`() {
+    internal fun `it should return 201 and member body on duplicate names`() {
         val actual1 = client.createMember(CREATE_MEMBER)
         val actual2 = client.createMember(CREATE_MEMBER.copy( url = "${CREATE_MEMBER.url}2" ))
 
@@ -84,7 +84,7 @@ class CreateMemberIntegrationTest(
     }
 
     @Test
-    fun `it should return 500 when duplicate urls were specified`() {
+    internal fun `it should return 500 when duplicate urls were specified`() {
         memberRepository.save(DetailedMemberEntity(url = CREATE_MEMBER.url, name = CREATE_MEMBER.name))
 
         shouldThrow<FeignException.InternalServerError> {

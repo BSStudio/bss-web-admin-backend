@@ -28,7 +28,7 @@ import kotlin.time.Duration.Companion.minutes
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class DetailedVideoRepositoryTest(
+internal class DetailedVideoRepositoryTest(
     @Autowired private val underTest: DetailedVideoRepository,
     @Autowired private val memberRepository: MemberRepository,
     @Autowired private val videoCrewRepository: VideoCrewRepository,

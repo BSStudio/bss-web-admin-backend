@@ -17,7 +17,7 @@ class ReadAllMemberIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and empty list`() {
+    internal fun `it should return 200 and empty list`() {
         val actual = client.getAllMembers()
 
         assertSoftly(actual) {
@@ -27,7 +27,7 @@ class ReadAllMemberIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 and list with 1 member`() {
+    internal fun `it should return 200 and list with 1 member`() {
         val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
         val actual = client.getAllMembers()

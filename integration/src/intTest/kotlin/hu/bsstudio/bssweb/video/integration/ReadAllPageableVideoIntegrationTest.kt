@@ -19,10 +19,10 @@ class ReadAllPageableVideoIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and paged`() {
+    internal fun `it should return 200 and paged`() {
         val (entity0, entity1, entity2, entity3) = videoRepository.saveAll(
             IntRange(0, 3).map { i ->
-                DetailedVideoEntity(urls = listOf("url$i"), title = "title$i").apply {
+                DetailedVideoEntity(title = "title$i").apply {
                     id = UUID.fromString("00000000-0000-0000-0000-00000000000$i")
                 }
             }
@@ -36,16 +36,18 @@ class ReadAllPageableVideoIntegrationTest(
             body!!.content.shouldContainExactly(
                 Video(
                     id = entity0.id,
-                    urls = listOf("url0"),
                     title = "title0",
+                    urls = listOf(),
+                    description = "",
                     shootingDateStart = LocalDate.now(),
                     shootingDateEnd = LocalDate.now(),
                     visible = false
                 ),
                 Video(
                     id = entity1.id,
-                    urls = listOf("url1"),
                     title = "title1",
+                    urls = listOf(),
+                    description = "",
                     shootingDateStart = LocalDate.now(),
                     shootingDateEnd = LocalDate.now(),
                     visible = false
@@ -57,16 +59,18 @@ class ReadAllPageableVideoIntegrationTest(
             body!!.content.shouldContainExactly(
                 Video(
                     id = entity2.id,
-                    urls = listOf("url2"),
                     title = "title2",
+                    urls = listOf(),
+                    description = "",
                     shootingDateStart = LocalDate.now(),
                     shootingDateEnd = LocalDate.now(),
                     visible = false
                 ),
                 Video(
                     id = entity3.id,
-                    urls = listOf("url3"),
                     title = "title3",
+                    urls = listOf(),
+                    description = "",
                     shootingDateStart = LocalDate.now(),
                     shootingDateEnd = LocalDate.now(),
                     visible = false

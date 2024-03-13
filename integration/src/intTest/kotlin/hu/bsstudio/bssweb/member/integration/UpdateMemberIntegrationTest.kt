@@ -21,7 +21,7 @@ class UpdateMemberIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and updated member`() {
+    internal fun `it should return 200 and updated member`() {
         val entity = this.memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
         val actual = client.updateMember(entity.id, UPDATE_MEMBER)
@@ -43,7 +43,7 @@ class UpdateMemberIntegrationTest(
     }
 
     @Test
-    fun `it should return 404 when member not found`() {
+    internal fun `it should return 404 when member not found`() {
         shouldThrow<FeignException.NotFound> {
             client.updateMember(UUID.fromString("00000000-0000-0000-0000-000000000000"), UPDATE_MEMBER)
         }

@@ -14,7 +14,7 @@ class DeleteLabelIntegrationTest(
 ): IntegrationTest() {
 
     @Test
-    fun `it should return 204 and delete label`() {
+    internal fun `it should return 204 and delete label`() {
         val entity = labelRepository.save(LabelEntity(name = "url", description = "description"))
 
         val actual = client.removeLabel(entity.id)
@@ -23,7 +23,7 @@ class DeleteLabelIntegrationTest(
     }
 
     @Test
-    fun `it should return 204 when label not found`() {
+    internal fun `it should return 204 when label not found`() {
         val actual = client.removeLabel(UUID.fromString("00000000-0000-0000-0000-000000000000"))
 
         actual.statusCode shouldBeEqual HttpStatusCode.valueOf(204)

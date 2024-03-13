@@ -1,9 +1,9 @@
-package hu.bsstudio.bssweb.event.integration
+package hu.bsstudio.bssweb.label.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
-import hu.bsstudio.bssweb.event.client.EventClient
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
-import hu.bsstudio.bssweb.event.model.Event
+import hu.bsstudio.bssweb.label.client.LabelClient
+import hu.bsstudio.bssweb.label.entity.LabelEntity
+import hu.bsstudio.bssweb.label.model.Label
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainExactly
@@ -11,15 +11,14 @@ import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
-import java.time.LocalDate
 
-internal class ReadAllEventIntegrationTest(
-    @Autowired private val client: EventClient
+internal class ReadAllLabelTest(
+    @Autowired private val client: LabelClient
 ) : IntegrationTest() {
 
     @Test
     internal fun `it should return 200 and empty list`() {
-        val actual = client.findAllEvent()
+        val actual = client.getAllLabels()
 
         assertSoftly(actual) {
             body.shouldBeEmpty()
@@ -28,21 +27,17 @@ internal class ReadAllEventIntegrationTest(
     }
 
     @Test
-    internal fun `it should return 200 and list with 1 event`() {
-        val entity = eventRepository.save(DetailedEventEntity(url = URL, title = TITLE))
+    internal fun `it should return 200 and list with 1 label`() {
+        val entity = labelRepository.save(LabelEntity(name = NAME, description = DESCRIPTION))
 
-        val actual = client.findAllEvent()
+        val actual = client.getAllLabels()
 
         assertSoftly(actual) {
             body.shouldContainExactly(
-                Event(
+                Label(
                     id = entity.id,
-                    url = URL,
-                    title = TITLE,
-                    description = "",
-                    dateFrom = LocalDate.now(),
-                    dateTo = LocalDate.now(),
-                    visible = false
+                    name = NAME,
+                    description = DESCRIPTION
                 )
             )
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
@@ -50,7 +45,7 @@ internal class ReadAllEventIntegrationTest(
     }
 
     private companion object {
-        private const val URL = "url"
-        private const val TITLE = "title"
+        private const val NAME = "name"
+        private const val DESCRIPTION = "description"
     }
 }

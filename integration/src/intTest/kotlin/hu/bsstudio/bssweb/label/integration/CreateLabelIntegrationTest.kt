@@ -25,7 +25,7 @@ class CreateLabelIntegrationTest: IntegrationTest() {
     private lateinit var url: String
 
     @Test
-    fun `it should return 201 and label`() {
+    internal fun `it should return 201 and label`() {
         val actual = client.createLabel(CREATE_LABEL)
 
         assertSoftly(actual) {
@@ -40,7 +40,7 @@ class CreateLabelIntegrationTest: IntegrationTest() {
     }
 
     @Test
-    fun `it should retun 500 when duplicate urls were specified`() {
+    internal fun `it should retun 500 when duplicate urls were specified`() {
         labelRepository.save(LabelEntity(name = CREATE_LABEL.name, description = CREATE_LABEL.description))
 
         shouldThrow<FeignException.InternalServerError> {

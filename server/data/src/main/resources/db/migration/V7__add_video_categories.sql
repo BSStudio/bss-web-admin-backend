@@ -10,7 +10,7 @@ CREATE TABLE label
 -- a video only can have one of the same labels
 CREATE TABLE video_label
 (
-    label_id UUID REFERENCES label (id),
+    label_id UUID REFERENCES label (id) ON DELETE CASCADE,
     video_id UUID REFERENCES video (id),
     PRIMARY KEY (label_id, video_id)
 );

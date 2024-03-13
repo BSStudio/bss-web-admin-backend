@@ -15,7 +15,7 @@ class UpdateVideoVisibilityIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and updated ids`() {
+    internal fun `it should return 200 and updated ids`() {
         val entities = videoRepository.saveAll(
             listOf(
                 DetailedVideoEntity(title = TITLE_1),
@@ -32,7 +32,7 @@ class UpdateVideoVisibilityIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 and updated ids wheen videos are being hidden`() {
+    internal fun `it should return 200 and updated ids wheen videos are being hidden`() {
         val entities = videoRepository.saveAll(
             listOf(
                 DetailedVideoEntity(title = TITLE_1, visible = true),
@@ -49,7 +49,7 @@ class UpdateVideoVisibilityIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 and empty list`() {
+    internal fun `it should return 200 and empty list`() {
         val actual = client.changeVideoVisibility(listOf(), true)
 
         assertSoftly(actual) {

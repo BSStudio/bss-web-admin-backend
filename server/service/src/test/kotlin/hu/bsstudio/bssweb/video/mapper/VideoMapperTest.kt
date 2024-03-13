@@ -73,8 +73,11 @@ internal class VideoMapperTest(
         private val VIDEO_CREW = listOf(CREW_ENTITY)
         private val CREW_MODEL = mockk<VideoCrew>()
         private val CREW = listOf(CREW_MODEL)
-        private val VIDEO_ENTITY = SimpleVideoEntity(TITLE, URLS, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE).apply { id = VIDEO_ID }
-        private val VIDEO = Video(VIDEO_ID, URLS, TITLE, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE)
+        private val VIDEO_ENTITY =
+            SimpleVideoEntity(TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE).apply {
+                id = VIDEO_ID
+            }
+        private val VIDEO = Video(VIDEO_ID, TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE)
         private val LABEL_ENTITY = mockk<LabelEntity>()
         private val LABEL_ENTITIES = listOf(LABEL_ENTITY)
         private val DETAILED_VIDEO_ENTITY =
@@ -84,7 +87,7 @@ internal class VideoMapperTest(
                 videoCrew = VIDEO_CREW
             }
         private val DETAILED_VIDEO =
-            DetailedVideo(VIDEO_ID, URLS, TITLE, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, LABELS, VISIBLE, CREW)
+            DetailedVideo(VIDEO_ID, TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE, LABELS, CREW)
         private val CREATE_VIDEO = CreateVideo(TITLE)
         private val CREATED_VIDEO_ENTITY = SimpleVideoEntity(urls = URLS, title = TITLE).apply { id = VIDEO_ID }
         private val NEW_URLS = listOf("newUrl")
@@ -95,7 +98,7 @@ internal class VideoMapperTest(
         private const val NEW_VISIBLE = false
         private val NEW_LABELS = listOf("newLabel")
         private val UPDATE_VIDEO =
-            UpdateVideo(NEW_URLS, NEW_TITLE, NEW_DESCRIPTION, NEW_SHOOTING_DATE_START, NEW_SHOOTING_DATE_END, NEW_LABELS, NEW_VISIBLE)
+            UpdateVideo(NEW_TITLE, NEW_URLS, NEW_DESCRIPTION, NEW_SHOOTING_DATE_START, NEW_SHOOTING_DATE_END, NEW_VISIBLE, NEW_LABELS)
         private val UPDATED_VIDEO_ENTITY =
             DetailedVideoEntity(NEW_TITLE, NEW_URLS, NEW_DESCRIPTION, NEW_SHOOTING_DATE_START, NEW_SHOOTING_DATE_END, NEW_VISIBLE).apply {
                 id = VIDEO_ID

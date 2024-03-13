@@ -22,25 +22,26 @@ class CreateVideoIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 201 and video`() {
+    internal fun `it should return 201 and video`() {
         val actual = client.createVideo(CREATE_VIDEO)
 
         assertSoftly(actual) {
             statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(201)
             body!! shouldBeEqual Video(
                 id = actual.body!!.id,
-                urls = emptyList(),
                 title = CREATE_VIDEO.title,
-                visible = false,
+                urls = emptyList(),
+                description = "",
                 shootingDateStart = LocalDate.now(),
-                shootingDateEnd = LocalDate.now()
+                shootingDateEnd = LocalDate.now(),
+                visible = false
             )
             headers.location!! shouldBeEqual java.net.URI.create("$url/api/v1/video/${actual.body!!.id}")
         }
     }
 
     @Test
-    fun `it should retun 500 when duplicate urls were specified`() {
+    internal fun `it should retun 500 when duplicate urls were specified`() {
         videoRepository.save(DetailedVideoEntity(title = CREATE_VIDEO.title))
 
         shouldThrow<FeignException.InternalServerError> {

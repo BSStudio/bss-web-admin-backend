@@ -18,7 +18,7 @@ class AddVideoCrewIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should add a member to a video`() {
+    internal fun `it should add a member to a video`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
         val memberEntity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
