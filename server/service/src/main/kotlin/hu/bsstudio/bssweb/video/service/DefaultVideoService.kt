@@ -47,7 +47,7 @@ open class DefaultVideoService(
                 it.visible = visible
                 it
             }
-            .map { repository.save(it) }
+            .map(repository::save)
             .map { it.id }
     }
 
