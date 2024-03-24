@@ -3,7 +3,7 @@ This module holds all the interfaces for every controller and their respective c
 
 This module will require the developers
 to keep their controllers and clients consistent with each other,
-as the clients will be generated from the controllers.
+as they would have to implement the operation interfaces.
 
 ## Caveats
 Unfortunately Spring Cloud OpenFeign does not support class level `@RequestMapping` annotations.  

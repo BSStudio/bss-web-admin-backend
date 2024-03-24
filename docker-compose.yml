@@ -21,6 +21,7 @@ services:
       spring.datasource.password: "postgres"
       spring.flyway.default-schema: "bss_web"
   postgres:
+    # update server/data/src/test/resources/application.yml
     image: "postgres:16.2-alpine3.18"
     environment:
       POSTGRES_PASSWORD: "postgres"
