@@ -7,7 +7,7 @@ Testcontainers didn't have a clean way to start the compose file before all the 
 So it's required to start the compose file manually before running the tests.
 Each test will clear the database tables.
 
-Each Integration test have to extend the `IntegrationTest` class.
+Each Integration test has to extend the `IntegrationTest` class.
 
 ```shell
 docker compose up -d
