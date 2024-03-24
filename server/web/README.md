@@ -12,7 +12,7 @@ Read the docs to see how to disable/customise the open api endpoint.
 The server currently uses basic auth for the endpoints.
 This will be replaced in the future.
 
-For now you can change the default user and password in the `application.yml` file.
+You can change the default user and password using the following properties:
 ```yaml
 spring:
   security:
@@ -20,6 +20,10 @@ spring:
       # name: "user" # it's user by default if not specified
       password: "password"
 ```
+
+## Testing
+The `ControllerTestConfig` class creates a Spring environment for the tests in this module.
+The `application.yml` in the `test/resources` folder will set the default user password for the controller tests.
 
 [springdoc]: https://springdoc.org/
 [open-api-yaml]: server/web/src/main/resources/static/open-api.yaml

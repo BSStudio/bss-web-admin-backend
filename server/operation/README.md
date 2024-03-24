@@ -7,7 +7,7 @@ as they would have to implement the operation interfaces.
 
 ## Caveats
 Unfortunately Spring Cloud OpenFeign does not support class level `@RequestMapping` annotations.  
-So paths must be defined in the method level. [see][1]
+So paths must be defined in the method level. [See][1]
 
 Default values for `@RequestParam` are not supported either.
 
