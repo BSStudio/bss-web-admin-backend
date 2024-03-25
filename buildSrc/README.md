@@ -56,7 +56,7 @@ Will set up dependency management and enforce spotless conventions.
 
 ## Spring app conventions
 Will set up aggregated jacoco and test reports.
-It also enforce the [`module-conventions`](#spring-module-conventions).
+It also enforces the [`module-conventions`](#spring-module-conventions).
 It will pull in the `org.springframework.boot` plugin to enable the `bootJar` task.
 It will enable the configuration processor and the devtools dependency.
 The latter is only enabled in the developmentOnly scope.
