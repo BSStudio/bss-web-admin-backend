@@ -17,7 +17,7 @@ class ReadAllVideoIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and empty list`() {
+    internal fun `it should return 200 and empty list`() {
         val actual = client.getAllVideos()
 
         assertSoftly(actual) {
@@ -27,8 +27,8 @@ class ReadAllVideoIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 and list with 1 video`() {
-        val entity = videoRepository.save(DetailedVideoEntity(url = URL, title = TITLE))
+    internal fun `it should return 200 and list with 1 video`() {
+        val entity = videoRepository.save(DetailedVideoEntity(title = TITLE))
 
         val actual = client.getAllVideos()
 
@@ -36,10 +36,12 @@ class ReadAllVideoIntegrationTest(
             body.shouldContainExactly(
                 Video(
                     id = entity.id,
-                    url = URL,
                     title = TITLE,
+                    urls = emptyList(),
+                    description = "",
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                     visible = false,
-                    uploadedAt = LocalDate.now()
                 )
             )
             statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(200)
@@ -47,7 +49,6 @@ class ReadAllVideoIntegrationTest(
     }
 
     private companion object {
-        private const val URL = "url"
         private const val TITLE = "title"
     }
 }

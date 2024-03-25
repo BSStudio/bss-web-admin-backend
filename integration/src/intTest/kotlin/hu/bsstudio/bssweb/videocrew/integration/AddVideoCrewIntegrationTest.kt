@@ -18,8 +18,8 @@ class AddVideoCrewIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should add a member to a video`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+    internal fun `it should add a member to a video`() {
+        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
         val memberEntity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
         val actual = client.addPosition(videoEntity.id, "position", memberEntity.id)
@@ -28,10 +28,11 @@ class AddVideoCrewIntegrationTest(
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
             body!! shouldBeEqual DetailedVideo(
                 id = videoEntity.id,
-                url = videoEntity.url,
+                urls = videoEntity.urls,
                 title = videoEntity.title,
                 description = videoEntity.description,
-                uploadedAt = videoEntity.uploadedAt,
+                shootingDateStart = videoEntity.shootingDateStart,
+                shootingDateEnd = videoEntity.shootingDateEnd,
                 visible = videoEntity.visible,
                 crew = listOf(
                     VideoCrew(
@@ -43,7 +44,8 @@ class AddVideoCrewIntegrationTest(
                             nickname = memberEntity.nickname
                         )
                     )
-                )
+                ),
+                labels = listOf()
             )
         }
     }

@@ -25,7 +25,7 @@ class CreateMemberIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 201 and member body`() {
+    internal fun `it should return 201 and member body`() {
         val actual = client.createMember(CREATE_MEMBER)
 
         assertSoftly(actual) {
@@ -46,13 +46,51 @@ class CreateMemberIntegrationTest(
     }
 
     @Test
-    fun `it should return 500 when duplicate urls were specified`() {
+    internal fun `it should return 201 and member body on duplicate names`() {
+        val actual1 = client.createMember(CREATE_MEMBER)
+        val actual2 = client.createMember(CREATE_MEMBER.copy( url = "${CREATE_MEMBER.url}2" ))
+
+        assertSoftly(actual1) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(201)
+            body!! shouldBeEqual Member(
+                id = actual1.body!!.id,
+                url = CREATE_MEMBER.url,
+                name = CREATE_MEMBER.name,
+                nickname = "",
+                description = "",
+                joinedAt = LocalDate.now(),
+                role = "",
+                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                archived = false
+            )
+            headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual1.body!!.id}")
+        }
+
+        assertSoftly(actual2) {
+            statusCode shouldBeEqual HttpStatusCode.valueOf(201)
+            body!! shouldBeEqual Member(
+                id = actual2.body!!.id,
+                url = "${CREATE_MEMBER.url}2",
+                name = CREATE_MEMBER.name,
+                nickname = "",
+                description = "",
+                joinedAt = LocalDate.now(),
+                role = "",
+                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                archived = false
+            )
+            headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual2.body!!.id}")
+        }
+    }
+
+    @Test
+    internal fun `it should return 500 when duplicate urls were specified`() {
         memberRepository.save(DetailedMemberEntity(url = CREATE_MEMBER.url, name = CREATE_MEMBER.name))
 
         shouldThrow<FeignException.InternalServerError> {
             client.createMember(CreateMember(url = CREATE_MEMBER.url, name = CREATE_MEMBER.name))
         } should {
-            it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error","path":"/api/v1/member"}"""
+            it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error""""
         }
     }
 

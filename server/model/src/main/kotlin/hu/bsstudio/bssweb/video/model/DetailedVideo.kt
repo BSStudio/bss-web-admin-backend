@@ -6,10 +6,12 @@ import java.util.UUID
 
 data class DetailedVideo(
     val id: UUID,
-    val url: String,
     val title: String,
+    val urls: List<String>,
     val description: String,
-    val uploadedAt: LocalDate,
+    val shootingDateStart: LocalDate,
+    val shootingDateEnd: LocalDate,
     val visible: Boolean,
+    val labels: List<String>,
     val crew: List<VideoCrew>,
 )

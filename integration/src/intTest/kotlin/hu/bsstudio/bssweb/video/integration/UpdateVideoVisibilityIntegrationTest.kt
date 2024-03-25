@@ -15,11 +15,11 @@ class UpdateVideoVisibilityIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and updated ids`() {
+    internal fun `it should return 200 and updated ids`() {
         val entities = videoRepository.saveAll(
             listOf(
-                DetailedVideoEntity(url = URL_1, title = TITLE_1),
-                DetailedVideoEntity(url = URL_2, title = TITLE_2)
+                DetailedVideoEntity(title = TITLE_1),
+                DetailedVideoEntity(title = TITLE_2)
             )
         )
 
@@ -32,11 +32,11 @@ class UpdateVideoVisibilityIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 and updated ids wheen videos are being hidden`() {
+    internal fun `it should return 200 and updated ids wheen videos are being hidden`() {
         val entities = videoRepository.saveAll(
             listOf(
-                DetailedVideoEntity(url = URL_1, title = TITLE_1, visible = true),
-                DetailedVideoEntity(url = URL_2, title = TITLE_2, visible = true)
+                DetailedVideoEntity(title = TITLE_1, visible = true),
+                DetailedVideoEntity(title = TITLE_2, visible = true)
             )
         )
 
@@ -49,7 +49,7 @@ class UpdateVideoVisibilityIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 and empty list`() {
+    internal fun `it should return 200 and empty list`() {
         val actual = client.changeVideoVisibility(listOf(), true)
 
         assertSoftly(actual) {
@@ -59,9 +59,7 @@ class UpdateVideoVisibilityIntegrationTest(
     }
 
     private companion object {
-        private const val URL_1 = "url1"
         private const val TITLE_1 = "title1"
-        private const val URL_2 = "url2"
         private const val TITLE_2 = "title2"
     }
 }

@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatusCode
 import java.net.URI
 import java.time.LocalDate
 
-class CreateEventIntegrationTest : IntegrationTest() {
+internal class CreateEventIntegrationTest : IntegrationTest() {
 
     @Autowired
     private lateinit var client: EventClient
@@ -26,7 +26,7 @@ class CreateEventIntegrationTest : IntegrationTest() {
     private lateinit var url: String
 
     @Test
-    fun `it should return 201 and event`() {
+    internal fun `it should return 201 and event`() {
         val actual = client.createEvent(CREATE_EVENT)
 
         assertSoftly(actual) {
@@ -36,7 +36,8 @@ class CreateEventIntegrationTest : IntegrationTest() {
                 url = CREATE_EVENT.url,
                 title = CREATE_EVENT.title,
                 description = "",
-                date = LocalDate.now(),
+                dateFrom = LocalDate.now(),
+                dateTo = LocalDate.now(),
                 visible = false
             )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/event/${actual.body!!.id}")
@@ -44,12 +45,12 @@ class CreateEventIntegrationTest : IntegrationTest() {
     }
 
     @Test
-    fun `it should retun 500 when duplicate urls were specified`() {
+    internal fun `it should retun 500 when duplicate urls were specified`() {
         eventRepository.save(DetailedEventEntity(url = CREATE_EVENT.url, title = CREATE_EVENT.title))
 
         shouldThrow<FeignException.InternalServerError> {
             client.createEvent(CREATE_EVENT)
-        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error","path":"/api/v1/event"}""" }
+        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error"""" }
     }
 
     private companion object {

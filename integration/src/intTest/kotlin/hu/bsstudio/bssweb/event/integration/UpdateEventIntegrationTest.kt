@@ -15,32 +15,43 @@ import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 import java.util.UUID
 
-class UpdateEventIntegrationTest(
+internal class UpdateEventIntegrationTest(
     @Autowired private val client: EventClient
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and updated event`() {
+    internal fun `it should return 200 and updated event`() {
         val entity = this.eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
 
         val actual = client.updateEvent(entity.id, UPDATE_EVENT)
 
         assertSoftly(actual) {
             body!! shouldBeEqual DetailedEvent(
-                id = entity.id,
-                url = UPDATE_EVENT.url,
-                title = UPDATE_EVENT.title,
-                description = UPDATE_EVENT.description,
-                date = UPDATE_EVENT.date,
-                visible = UPDATE_EVENT.visible,
-                videos = listOf()
+                    id = entity.id,
+                    url = UPDATE_EVENT.url,
+                    title = UPDATE_EVENT.title,
+                    description = UPDATE_EVENT.description,
+                    dateFrom = UPDATE_EVENT.dateFrom,
+                    dateTo = UPDATE_EVENT.dateTo,
+                    visible = UPDATE_EVENT.visible,
+                    videos = listOf()
             )
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
         }
     }
 
     @Test
-    fun `it should return 404 when event not found`() {
+    internal fun `it should return 500 when dateTo is before dateFrom`() {
+        val entity = this.eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
+
+        val updateEvent = UPDATE_EVENT.copy(dateTo = LocalDate.EPOCH)
+        shouldThrow<FeignException.InternalServerError> {
+            client.updateEvent(entity.id, updateEvent)
+        }
+    }
+
+    @Test
+    internal fun `it should return 404 when event not found`() {
         shouldThrow<FeignException.NotFound> {
             client.updateEvent(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),
@@ -54,7 +65,8 @@ class UpdateEventIntegrationTest(
             url = "updatedUrl",
             title = "updatedTitle",
             description = "updatedDescription",
-            date = LocalDate.of(2023, 1, 1),
+            dateFrom = LocalDate.of(2023, 1, 1),
+            dateTo = LocalDate.of(2023, 1, 1),
             visible = true
         )
     }

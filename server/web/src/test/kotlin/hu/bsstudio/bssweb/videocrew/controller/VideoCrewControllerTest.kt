@@ -114,12 +114,14 @@ internal class VideoCrewControllerTest(
         private val DETAILED_VIDEO =
             DetailedVideo(
                 id = VIDEO_ID,
-                url = "url",
+                urls = listOf("url"),
                 title = "title",
                 description = "description",
-                uploadedAt = LocalDate.now(),
+                shootingDateStart = LocalDate.now(),
+                shootingDateEnd = LocalDate.now(),
                 visible = false,
                 crew = listOf(),
+                labels = listOf(),
             )
     }
 }

@@ -5,8 +5,10 @@ import java.util.UUID
 
 data class Video(
     val id: UUID,
-    val url: String,
     val title: String,
-    val uploadedAt: LocalDate,
+    val urls: List<String>,
+    val description: String,
+    val shootingDateStart: LocalDate,
+    val shootingDateEnd: LocalDate,
     val visible: Boolean,
 )

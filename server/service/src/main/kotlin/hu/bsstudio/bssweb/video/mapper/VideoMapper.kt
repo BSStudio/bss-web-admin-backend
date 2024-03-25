@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.video.mapper
 
+import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
 import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
 import hu.bsstudio.bssweb.video.model.CreateVideo
@@ -12,9 +13,11 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
     fun entityToModel(entity: SimpleVideoEntity): Video {
         return Video(
             id = entity.id,
-            url = entity.url,
             title = entity.title,
-            uploadedAt = entity.uploadedAt,
+            urls = entity.urls,
+            description = entity.description,
+            shootingDateStart = entity.shootingDateStart,
+            shootingDateEnd = entity.shootingDateEnd,
             visible = entity.visible,
         )
     }
@@ -22,28 +25,33 @@ class VideoMapper(private val videoCrewMapper: VideoCrewMapper) {
     fun entityToModel(entity: DetailedVideoEntity): DetailedVideo {
         return DetailedVideo(
             id = entity.id,
-            url = entity.url,
             title = entity.title,
+            urls = entity.urls,
             description = entity.description,
-            uploadedAt = entity.uploadedAt,
+            shootingDateStart = entity.shootingDateStart,
+            shootingDateEnd = entity.shootingDateEnd,
             visible = entity.visible,
+            labels = entity.labels.map { it.name },
             crew = entity.videoCrew.map(videoCrewMapper::entityToModel),
         )
     }
 
     fun modelToEntity(model: CreateVideo): SimpleVideoEntity {
-        return SimpleVideoEntity(url = model.url, title = model.title)
+        return SimpleVideoEntity(title = model.title)
     }
 
     fun updateToEntity(
         videoEntity: DetailedVideoEntity,
         updateVideo: UpdateVideo,
+        labels: List<LabelEntity>,
     ): DetailedVideoEntity {
-        videoEntity.url = updateVideo.url
         videoEntity.title = updateVideo.title
+        videoEntity.urls = updateVideo.urls
         videoEntity.description = updateVideo.description
-        videoEntity.uploadedAt = updateVideo.uploadedAt
+        videoEntity.shootingDateStart = updateVideo.shootingDateStart
+        videoEntity.shootingDateEnd = updateVideo.shootingDateEnd
         videoEntity.visible = updateVideo.visible
+        videoEntity.labels = labels
         return videoEntity
     }
 }

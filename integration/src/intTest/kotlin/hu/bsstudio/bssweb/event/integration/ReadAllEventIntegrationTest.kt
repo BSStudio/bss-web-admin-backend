@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 
-class ReadAllEventIntegrationTest(
+internal class ReadAllEventIntegrationTest(
     @Autowired private val client: EventClient
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and empty list`() {
+    internal fun `it should return 200 and empty list`() {
         val actual = client.findAllEvent()
 
         assertSoftly(actual) {
@@ -28,7 +28,7 @@ class ReadAllEventIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 and list with 1 event`() {
+    internal fun `it should return 200 and list with 1 event`() {
         val entity = eventRepository.save(DetailedEventEntity(url = URL, title = TITLE))
 
         val actual = client.findAllEvent()
@@ -40,7 +40,8 @@ class ReadAllEventIntegrationTest(
                     url = URL,
                     title = TITLE,
                     description = "",
-                    date = LocalDate.now(),
+                    dateFrom = LocalDate.now(),
+                    dateTo = LocalDate.now(),
                     visible = false
                 )
             )

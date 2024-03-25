@@ -14,8 +14,8 @@ class DeleteVideoIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 204 and delete video`() {
-        val entity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+    internal fun `it should return 204 and delete video`() {
+        val entity = videoRepository.save(DetailedVideoEntity(urls = emptyList(), title = "title"))
 
         val actual = client.deleteVideo(entity.id)
 
@@ -23,7 +23,7 @@ class DeleteVideoIntegrationTest(
     }
 
     @Test
-    fun `it should return 204 when video not found`() {
+    internal fun `it should return 204 when video not found`() {
         val actual = client.deleteVideo(UUID.fromString("00000000-0000-0000-0000-000000000000"))
 
         actual.statusCode shouldBeEqual HttpStatusCode.valueOf(204)

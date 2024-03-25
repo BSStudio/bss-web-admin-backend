@@ -20,13 +20,12 @@ class RemoveVideoFromEventIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 204 and remove video from event`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+    internal fun `it should return 204 and remove video from event`() {
+        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
         val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
             .apply {
                 this.videos = listOf(
                     SimpleVideoEntity(
-                        url = videoEntity.url,
                         title = videoEntity.title
                     ).apply { this.id = videoEntity.id }
                 )
@@ -41,7 +40,8 @@ class RemoveVideoFromEventIntegrationTest(
                 url = eventEntity.url,
                 title = eventEntity.title,
                 description = eventEntity.description,
-                date = eventEntity.date,
+                dateFrom = eventEntity.dateFrom,
+                dateTo = eventEntity.dateTo,
                 visible = eventEntity.visible,
                 videos = listOf()
             )
@@ -49,8 +49,8 @@ class RemoveVideoFromEventIntegrationTest(
     }
 
     @Test
-    fun `it should return 404 when event does not exist`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(url = "url", title = "title"))
+    internal fun `it should return 404 when event does not exist`() {
+        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
 
         shouldThrow<FeignException.NotFound> {
             client.removeVideoFromEvent(
@@ -61,7 +61,7 @@ class RemoveVideoFromEventIntegrationTest(
     }
 
     @Test
-    fun `it should return 200 when video does not exist`() {
+    internal fun `it should return 200 when video does not exist`() {
         val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
 
         val actual = client.removeVideoFromEvent(
@@ -75,7 +75,8 @@ class RemoveVideoFromEventIntegrationTest(
             url = eventEntity.url,
             title = eventEntity.title,
             description = eventEntity.description,
-            date = eventEntity.date,
+            dateFrom = eventEntity.dateFrom,
+            dateTo = eventEntity.dateTo,
             visible = eventEntity.visible,
             videos = listOf()
         )

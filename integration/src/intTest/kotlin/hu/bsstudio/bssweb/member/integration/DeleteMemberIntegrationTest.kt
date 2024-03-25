@@ -14,7 +14,7 @@ class DeleteMemberIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 204 and delete member`() {
+    internal fun `it should return 204 and delete member`() {
         val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
 
         val actual = client.removeMember(entity.id)
@@ -23,7 +23,7 @@ class DeleteMemberIntegrationTest(
     }
 
     @Test
-    fun `it should return 204 when member not found`() {
+    internal fun `it should return 204 when member not found`() {
         val actual = client.removeMember(UUID.fromString("00000000-0000-0000-0000-000000000000"))
 
         actual.statusCode shouldBeEqual HttpStatusCode.valueOf(204)

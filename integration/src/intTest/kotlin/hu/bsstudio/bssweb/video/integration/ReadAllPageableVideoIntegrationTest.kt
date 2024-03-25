@@ -19,10 +19,10 @@ class ReadAllPageableVideoIntegrationTest(
 ) : IntegrationTest() {
 
     @Test
-    fun `it should return 200 and paged`() {
+    internal fun `it should return 200 and paged`() {
         val (entity0, entity1, entity2, entity3) = videoRepository.saveAll(
             IntRange(0, 3).map { i ->
-                DetailedVideoEntity(url = "url$i", title = "title$i").apply {
+                DetailedVideoEntity(title = "title$i").apply {
                     id = UUID.fromString("00000000-0000-0000-0000-00000000000$i")
                 }
             }
@@ -36,16 +36,20 @@ class ReadAllPageableVideoIntegrationTest(
             body!!.content.shouldContainExactly(
                 Video(
                     id = entity0.id,
-                    url = "url0",
                     title = "title0",
-                    uploadedAt = LocalDate.now(),
+                    urls = listOf(),
+                    description = "",
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                     visible = false
                 ),
                 Video(
                     id = entity1.id,
-                    url = "url1",
                     title = "title1",
-                    uploadedAt = LocalDate.now(),
+                    urls = listOf(),
+                    description = "",
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                     visible = false
                 )
             )
@@ -55,16 +59,20 @@ class ReadAllPageableVideoIntegrationTest(
             body!!.content.shouldContainExactly(
                 Video(
                     id = entity2.id,
-                    url = "url2",
                     title = "title2",
-                    uploadedAt = LocalDate.now(),
+                    urls = listOf(),
+                    description = "",
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                     visible = false
                 ),
                 Video(
                     id = entity3.id,
-                    url = "url3",
                     title = "title3",
-                    uploadedAt = LocalDate.now(),
+                    urls = listOf(),
+                    description = "",
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
                     visible = false
                 )
             )

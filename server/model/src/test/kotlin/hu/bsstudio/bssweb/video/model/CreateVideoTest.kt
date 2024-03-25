@@ -26,17 +26,14 @@ internal class CreateVideoTest(
     }
 
     private companion object {
-        private const val URL = "video_url"
         private const val TITLE = "video_title"
         private val CREATE_VIDEO =
             CreateVideo(
-                url = URL,
                 title = TITLE,
             )
         private val JSON =
             """
             {
-                "url": "$URL",
                 "title": "$TITLE"
             }
             """.trimIndent()

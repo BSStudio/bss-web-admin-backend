@@ -17,22 +17,9 @@
   ],
   "packageRules": [
     {
-      "description": "Add `javascript` label for npm updates and run `npmDedupe` after run.",
-      "matchManagers": ["npm"],
-      "addLabels": ["javascript"],
-      "postUpdateOptions": ["npmDedupe"]
-    },
-    {
       "description": "Add `docker` label for Dockerfile or docker-compose related updates.",
       "matchManagers": ["docker-compose", "dockerfile"],
       "addLabels": ["docker"]
-    },
-    {
-      "description": "Group all minor and patch updates together for npm.",
-      "matchManagers": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch"
     },
     {
       "description": "Group all minor and patch updates together for gradle.",

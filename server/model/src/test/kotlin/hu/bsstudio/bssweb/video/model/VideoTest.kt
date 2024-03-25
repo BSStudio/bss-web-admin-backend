@@ -29,25 +29,31 @@ internal class VideoTest(
 
     private companion object {
         private val ID = UUID.randomUUID()
-        private const val URL = "video_url"
         private const val TITLE = "video_title"
-        private val UPLOADED_AT = LocalDate.now()
+        private const val DESCRIPTION = "description"
+        private val URLS = listOf("video_url")
+        private val SHOOTING_DATE_START = LocalDate.EPOCH
+        private val SHOOTING_DATE_END = LocalDate.MAX
         private const val VISIBLE = true
         private val VIDEO =
             Video(
                 id = ID,
-                url = URL,
                 title = TITLE,
-                uploadedAt = UPLOADED_AT,
+                urls = URLS,
+                description = DESCRIPTION,
+                shootingDateStart = SHOOTING_DATE_START,
+                shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
             )
         private val JSON =
             """
             {
                 "id": "$ID",
-                "url": "$URL",
                 "title": "$TITLE",
-                "uploadedAt": "$UPLOADED_AT",
+                "description": "$DESCRIPTION",
+                "urls": ["${URLS[0]}"],
+                "shootingDateStart": "$SHOOTING_DATE_START",
+                "shootingDateEnd": "$SHOOTING_DATE_END",
                 "visible": $VISIBLE
             }
             """.trimIndent()

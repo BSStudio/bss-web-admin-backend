@@ -27,27 +27,33 @@ internal class UpdateVideoTest(
     }
 
     private companion object {
-        private const val URL = "video_url"
+        private val URLS = listOf("video_url")
         private const val TITLE = "video_title"
         private const val DESCRIPTION = "video_description"
-        private val UPLOADED_AT = LocalDate.now()
+        private val SHOOTING_DATE_START = LocalDate.EPOCH
+        private val SHOOTING_DATE_END = LocalDate.MAX
         private const val VISIBLE = true
+        private val LABELS = listOf("label")
         private val UPDATE_VIDEO =
             UpdateVideo(
-                url = URL,
+                urls = URLS,
                 title = TITLE,
                 description = DESCRIPTION,
-                uploadedAt = UPLOADED_AT,
+                shootingDateStart = SHOOTING_DATE_START,
+                shootingDateEnd = SHOOTING_DATE_END,
                 visible = VISIBLE,
+                labels = LABELS,
             )
         private val JSON =
             """
             {
-                "url": "$URL",
+                "urls": ["${URLS[0]}"],
                 "title": "$TITLE",
                 "description": "$DESCRIPTION",
-                "uploadedAt": "$UPLOADED_AT",
-                "visible": $VISIBLE
+                "shootingDateStart": "$SHOOTING_DATE_START",
+                "shootingDateEnd": "$SHOOTING_DATE_END",
+                "visible": $VISIBLE,
+                "labels": ["${LABELS[0]}"]
             }
             """.trimIndent()
     }

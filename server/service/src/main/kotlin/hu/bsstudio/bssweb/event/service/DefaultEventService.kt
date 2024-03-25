@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.event.service
 
-import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
 import hu.bsstudio.bssweb.event.mapper.EventMapper
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
@@ -40,7 +39,7 @@ open class DefaultEventService(
                 it
             }
             .map(repository::save)
-            .map(SimpleEventEntity::id)
+            .map { it.id }
     }
 
     override fun findEventById(eventId: UUID): Optional<DetailedEvent> {

@@ -9,6 +9,9 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.Hibernate
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
+import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
@@ -18,12 +21,19 @@ data class DetailedEventEntity(
     override var url: String,
     override var title: String,
     override var description: String = "",
-    override var date: LocalDate = LocalDate.now(),
+    override var dateFrom: LocalDate = LocalDate.now(),
+    override var dateTo: LocalDate = LocalDate.now(),
     override var visible: Boolean = false,
 ) : EventEntity {
     @Id
     @GeneratedValue
     override lateinit var id: UUID
+
+    @CreationTimestamp
+    override lateinit var createdAt: Instant
+
+    @UpdateTimestamp
+    override lateinit var updatedAt: Instant
 
     @OneToMany
     @JoinTable(
@@ -49,7 +59,8 @@ data class DetailedEventEntity(
             "url='$url', " +
             "title='$title', " +
             "description='$description', " +
-            "date=$date, " +
+            "dateFrom=$dateFrom, " +
+            "dateTo=$dateTo, " +
             "visible=$visible, " +
             "id=$id, " +
             "videos=$videos" +

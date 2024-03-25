@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.member.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
-import hu.bsstudio.bssweb.fileserver.model.FileUpdate
+import hu.bsstudio.bssweb.fileserver.model.MemberFileUpdate
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
@@ -15,7 +15,7 @@ class FileUpdatingMemberService(private val server: MemberService, private val f
 
     override fun insertMember(createMember: CreateMember): Member {
         return this.server.insertMember(createMember)
-            .also { fileClient.createMemberFolder(FileUpdate(it.id, it.url)) }
+            .also { fileClient.createMemberFolder(MemberFileUpdate(it.id, it.url)) }
     }
 
     override fun archiveMembers(
@@ -35,7 +35,7 @@ class FileUpdatingMemberService(private val server: MemberService, private val f
     ): Optional<Member> {
         return this.server.updateMember(memberId, updateMember)
             .map {
-                fileClient.updateMemberFolder(FileUpdate(it.id, it.url))
+                fileClient.updateMemberFolder(MemberFileUpdate(it.id, it.url))
                 it
             }
     }
