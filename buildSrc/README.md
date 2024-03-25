@@ -51,6 +51,10 @@ There are a few exceptions to the coverage enforcement.
 The coverage is enforced by the `check` lifecycle.
 There's always coverage reports generated after the tests are run.
 
+## Kotlin testing conventions
+Will set up the testing configuration for Kotlin.
+And set up dependencies for the Kotlin testing libraries.
+
 ## Spring module conventions
 Will set up dependency management and enforce spotless conventions.
 
