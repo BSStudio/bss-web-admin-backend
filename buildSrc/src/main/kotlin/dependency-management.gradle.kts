@@ -1,7 +1,5 @@
 plugins {
-    // should not depend on kotlin-conventions
-    // replace with java-conventions
-    id("kotlin-conventions")
+    id("java-conventions")
     id("io.spring.dependency-management")
 }
 
