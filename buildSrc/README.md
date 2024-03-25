@@ -5,11 +5,10 @@ There are conventions configured for most use cases.
 
 ```mermaid
 classDiagram
-
 direction BT
 
-class java-conventions
 class kotlin-conventions
+class java-conventions
 class dependency-management
 class integration-testing-conventions
 class spotless-conventions
@@ -21,7 +20,7 @@ kotlin-conventions --> java-conventions
 integration-testing-conventions --> testing-conventions
 spring-app-conventions --> spring-module-conventions
 spring-module-conventions --> dependency-management
-dependency-management --> kotlin-conventions
+dependency-management --> java-conventions
 testing-conventions --> dependency-management
 spring-module-conventions --> spotless-conventions
 ```
