@@ -1,6 +1,7 @@
 plugins {
+    id("kotlin-conventions")
     id("spring-module-conventions")
-    id("testing-conventions")
+    id("kotlin-testing-conventions")
 }
 dependencies {
     api(project(":server:common"))
