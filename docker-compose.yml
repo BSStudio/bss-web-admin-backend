@@ -20,6 +20,7 @@ services:
       spring.datasource.username: "username"
       spring.datasource.password: "password"
       spring.flyway.default-schema: "private"
+      spring.flyway.schemas: "private,public"
   postgres:
     # update server/data/src/test/resources/application.yml
     image: "postgres:16.2-alpine3.18"
