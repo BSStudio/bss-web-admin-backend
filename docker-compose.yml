@@ -16,10 +16,10 @@ services:
     environment:
       bss.file-api.url: "http://mock-file-api:8080"
       spring.security.user.password: "password"
-      spring.datasource.url: "jdbc:postgresql://postgres:5432/postgres?currentSchema=bss_web"
-      spring.datasource.username: "postgres"
-      spring.datasource.password: "postgres"
-      spring.flyway.default-schema: "bss_web"
+      spring.datasource.url: "jdbc:postgresql://postgres:5432/bss?currentSchema=private"
+      spring.datasource.username: "username"
+      spring.datasource.password: "password"
+      spring.flyway.default-schema: "private"
   postgres:
     # update server/data/src/test/resources/application.yml
     image: "postgres:16.2-alpine3.18"
