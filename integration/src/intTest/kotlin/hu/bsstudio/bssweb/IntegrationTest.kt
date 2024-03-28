@@ -19,9 +19,9 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
         "bss.client.username=user",
         "bss.client.password=password",
         "spring.flyway.enabled=false",
-        "spring.datasource.url=jdbc:postgresql://localhost:5432/postgres?currentSchema=bss_web",
-        "spring.datasource.username=postgres",
-        "spring.datasource.password=postgres"
+        "spring.datasource.url=jdbc:postgresql://localhost:5432/postgres?currentSchema=private",
+        "spring.datasource.username=username",
+        "spring.datasource.password=password",
     ]
 )
 open class IntegrationTest {
