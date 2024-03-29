@@ -1,7 +1,6 @@
----
 spring:
   datasource:
-    url: "jdbc:tc:postgresql:16.2-alpine3.18:///db?currentSchema=private"
+    url: jdbc:tc:postgresql:16.2-alpine3.18:///db?currentSchema=private
   flyway:
-    default-schema: "private"
+    default-schema: private
     schemas: "private,public"

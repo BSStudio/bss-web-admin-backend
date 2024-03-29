@@ -23,5 +23,7 @@ spotless {
     yaml {
         target("**/*.yml", "**/*.yaml")
         jackson()
+            .yamlFeature("WRITE_DOC_START_MARKER", false)
+            .yamlFeature("MINIMIZE_QUOTES", true)
     }
 }
