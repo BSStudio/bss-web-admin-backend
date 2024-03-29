@@ -1,4 +1,5 @@
 # The integration module
+
 It stores the integration tests for the application.
 
 To run the integration tests, you need to have Docker installed on your machine.
@@ -14,3 +15,4 @@ docker compose up -d
 ./gradlew integrationTest
 docker compose down
 ```
+

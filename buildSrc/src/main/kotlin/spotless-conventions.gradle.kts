@@ -16,4 +16,8 @@ spotless {
     kotlinGradle{
         ktlint()
     }
+    flexmark {
+        target("**/*.md")
+        flexmark()
+    }
 }

@@ -14,6 +14,7 @@ you should create a new migration file in the
 directory.
 
 ### Schemas
+
 The project uses the `private` schema for all the tables.
 The `public` schema is used for rendering views for the [GraphQL backend][graphql-backend].
 
@@ -121,14 +122,11 @@ event_video ||--|{ video: has
 video_label ||--|{ video: has
 video_label ||--|{ label: has
 video_url ||--|{ video: has
-``` 
+```
 
 [flyway]: https://flywaydb.org/
-
 [migrations-folder]: src/main/resources/db/migration
-
 [graphql-backend]: https://github.com/BSStudio/bss-web-graphql-backend
-
 [testcontainers]: https://www.testcontainers.org/quickstart/junit_5/
-
 [test-properties]: src/test/resources/application.yml
+

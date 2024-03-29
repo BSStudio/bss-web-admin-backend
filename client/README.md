@@ -8,5 +8,5 @@ The `BssFeignConfig` class will expose beans for each controller in the backend 
 There are some properties to control authorisation.
 Refer to the [additional-spring-configuration-metadata.json][metadata-json]
 
-
 [metadata-json]: src/main/resources/META-INF/additional-spring-configuration-metadata.json
+
