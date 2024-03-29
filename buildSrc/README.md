@@ -15,14 +15,16 @@ class spotless-conventions
 class spring-app-conventions
 class spring-module-conventions
 class testing-conventions
+class kotlin-testing-conventions
 
-kotlin-conventions --> java-conventions
+kotlin-testing-conventions --> testing-conventions
 integration-testing-conventions --> testing-conventions
 spring-app-conventions --> spring-module-conventions
 spring-module-conventions --> dependency-management
 dependency-management --> java-conventions
 testing-conventions --> dependency-management
-spring-module-conventions --> spotless-conventions
+java-conventions --> spotless-conventions
+kotlin-conventions --> java-conventions
 ```
 
 ## Java conventions

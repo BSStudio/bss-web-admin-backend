@@ -7,6 +7,12 @@ spotless {
         ktlint()
         toggleOffOn()
     }
+    java {
+        importOrder()
+        removeUnusedImports()
+        cleanthat()
+        googleJavaFormat()
+    }
     kotlinGradle{
         ktlint()
     }
