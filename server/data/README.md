@@ -19,7 +19,7 @@ The `public` schema is used for rendering views for the [GraphQL backend][graphq
 
 ## Testing
 
-The tests in this module will set up a postgres database
+The tests in this module will set up a Postgres database
 with the help of [Testcontainers][testcontainers].
 
 This means that you need docker running on your machine when running these tests
