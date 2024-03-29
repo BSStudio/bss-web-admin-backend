@@ -13,4 +13,3 @@ while still allowing the MemberStatus to be used for validation at both layers.
 
 [project structure]: ../../README.md#project-structure
 
- 

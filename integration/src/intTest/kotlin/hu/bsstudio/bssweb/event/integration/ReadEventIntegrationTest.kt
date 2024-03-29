@@ -15,9 +15,8 @@ import java.time.LocalDate
 import java.util.UUID
 
 internal class ReadEventIntegrationTest(
-    @Autowired private val client: EventClient
+    @Autowired private val client: EventClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 404`() {
         assertThrows<FeignException.NotFound> {
@@ -33,16 +32,17 @@ internal class ReadEventIntegrationTest(
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!! shouldBeEqual DetailedEvent(
-                id = entity.id,
-                url = URL,
-                title = TITLE,
-                description = "",
-                dateFrom = LocalDate.now(),
-                dateTo = LocalDate.now(),
-                visible = false,
-                videos = listOf()
-            )
+            body!! shouldBeEqual
+                DetailedEvent(
+                    id = entity.id,
+                    url = URL,
+                    title = TITLE,
+                    description = "",
+                    dateFrom = LocalDate.now(),
+                    dateTo = LocalDate.now(),
+                    visible = false,
+                    videos = listOf(),
+                )
         }
     }
 

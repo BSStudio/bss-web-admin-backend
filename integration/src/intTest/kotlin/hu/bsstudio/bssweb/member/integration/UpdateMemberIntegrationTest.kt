@@ -17,9 +17,8 @@ import java.time.LocalDate
 import java.util.UUID
 
 class UpdateMemberIntegrationTest(
-    @Autowired private val client: MemberClient
+    @Autowired private val client: MemberClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and updated member`() {
         val entity = this.memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
@@ -27,17 +26,18 @@ class UpdateMemberIntegrationTest(
         val actual = client.updateMember(entity.id, UPDATE_MEMBER)
 
         assertSoftly(actual) {
-            body!! shouldBeEqual Member(
-                id = entity.id,
-                url = UPDATE_MEMBER.url,
-                name = UPDATE_MEMBER.name,
-                nickname = UPDATE_MEMBER.nickname,
-                description = UPDATE_MEMBER.description,
-                joinedAt = UPDATE_MEMBER.joinedAt,
-                role = UPDATE_MEMBER.role,
-                status = UPDATE_MEMBER.status,
-                archived = UPDATE_MEMBER.archived
-            )
+            body!! shouldBeEqual
+                Member(
+                    id = entity.id,
+                    url = UPDATE_MEMBER.url,
+                    name = UPDATE_MEMBER.name,
+                    nickname = UPDATE_MEMBER.nickname,
+                    description = UPDATE_MEMBER.description,
+                    joinedAt = UPDATE_MEMBER.joinedAt,
+                    role = UPDATE_MEMBER.role,
+                    status = UPDATE_MEMBER.status,
+                    archived = UPDATE_MEMBER.archived,
+                )
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
         }
     }
@@ -50,15 +50,16 @@ class UpdateMemberIntegrationTest(
     }
 
     private companion object {
-        private val UPDATE_MEMBER = UpdateMember(
-            url = "updatedUrl",
-            name = "updatedName",
-            nickname = "updatedNickname",
-            description = "updatedDescription",
-            joinedAt = LocalDate.of(2023, 1, 1),
-            role = "updatedRole",
-            status = MemberStatus.ALUMNI,
-            archived = true
-        )
+        private val UPDATE_MEMBER =
+            UpdateMember(
+                url = "updatedUrl",
+                name = "updatedName",
+                nickname = "updatedNickname",
+                description = "updatedDescription",
+                joinedAt = LocalDate.of(2023, 1, 1),
+                role = "updatedRole",
+                status = MemberStatus.ALUMNI,
+                archived = true,
+            )
     }
 }

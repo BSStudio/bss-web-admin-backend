@@ -14,9 +14,8 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class ReadMemberIntegrationTest(
-    @Autowired private val client: MemberClient
+    @Autowired private val client: MemberClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and member`() {
         val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
@@ -24,17 +23,18 @@ class ReadMemberIntegrationTest(
         val actual = client.getMemberById(entity.id)
 
         assertSoftly(actual) {
-            body!! shouldBeEqual Member(
-                id = entity.id,
-                url = entity.url,
-                name = entity.name,
-                nickname = entity.nickname,
-                description = entity.description,
-                joinedAt = entity.joinedAt,
-                role = entity.role,
-                status = entity.status,
-                archived = entity.archived
-            )
+            body!! shouldBeEqual
+                Member(
+                    id = entity.id,
+                    url = entity.url,
+                    name = entity.name,
+                    nickname = entity.nickname,
+                    description = entity.description,
+                    joinedAt = entity.joinedAt,
+                    role = entity.role,
+                    status = entity.status,
+                    archived = entity.archived,
+                )
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
         }
     }

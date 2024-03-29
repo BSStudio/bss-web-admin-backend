@@ -10,9 +10,8 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 internal class DeleteEventIntegrationTest(
-    @Autowired private val client: EventClient
+    @Autowired private val client: EventClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 204 and delete event`() {
         val entity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))

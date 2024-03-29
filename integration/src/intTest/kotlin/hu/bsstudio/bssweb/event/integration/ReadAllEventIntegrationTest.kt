@@ -14,9 +14,8 @@ import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 
 internal class ReadAllEventIntegrationTest(
-    @Autowired private val client: EventClient
+    @Autowired private val client: EventClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and empty list`() {
         val actual = client.findAllEvent()
@@ -42,8 +41,8 @@ internal class ReadAllEventIntegrationTest(
                     description = "",
                     dateFrom = LocalDate.now(),
                     dateTo = LocalDate.now(),
-                    visible = false
-                )
+                    visible = false,
+                ),
             )
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
         }

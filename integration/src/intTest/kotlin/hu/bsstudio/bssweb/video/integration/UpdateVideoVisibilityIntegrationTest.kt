@@ -11,17 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 class UpdateVideoVisibilityIntegrationTest(
-    @Autowired private val client: VideoClient
+    @Autowired private val client: VideoClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and updated ids`() {
-        val entities = videoRepository.saveAll(
-            listOf(
-                DetailedVideoEntity(title = TITLE_1),
-                DetailedVideoEntity(title = TITLE_2)
+        val entities =
+            videoRepository.saveAll(
+                listOf(
+                    DetailedVideoEntity(title = TITLE_1),
+                    DetailedVideoEntity(title = TITLE_2),
+                ),
             )
-        )
 
         val actual = client.changeVideoVisibility(entities.map { it.id }, true)
 
@@ -33,12 +33,13 @@ class UpdateVideoVisibilityIntegrationTest(
 
     @Test
     internal fun `it should return 200 and updated ids wheen videos are being hidden`() {
-        val entities = videoRepository.saveAll(
-            listOf(
-                DetailedVideoEntity(title = TITLE_1, visible = true),
-                DetailedVideoEntity(title = TITLE_2, visible = true)
+        val entities =
+            videoRepository.saveAll(
+                listOf(
+                    DetailedVideoEntity(title = TITLE_1, visible = true),
+                    DetailedVideoEntity(title = TITLE_2, visible = true),
+                ),
             )
-        )
 
         val actual = client.changeVideoVisibility(entities.map { it.id }, false)
 

@@ -13,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 class ReadAllMemberIntegrationTest(
-    @Autowired private val client: MemberClient
+    @Autowired private val client: MemberClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and empty list`() {
         val actual = client.getAllMembers()
@@ -43,8 +42,8 @@ class ReadAllMemberIntegrationTest(
                     description = entity.description,
                     role = entity.role,
                     status = entity.status,
-                    archived = entity.archived
-                )
+                    archived = entity.archived,
+                ),
             )
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
         }

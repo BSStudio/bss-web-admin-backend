@@ -17,10 +17,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatusCode
 import java.net.URI
 
-class CreateLabelIntegrationTest: IntegrationTest() {
-
+class CreateLabelIntegrationTest : IntegrationTest() {
     @Autowired
     private lateinit var client: LabelClient
+
     @Value("\${bss.client.url}")
     private lateinit var url: String
 
@@ -30,11 +30,12 @@ class CreateLabelIntegrationTest: IntegrationTest() {
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(201)
-            body!! shouldBeEqual Label(
+            body!! shouldBeEqual
+                Label(
                     id = actual.body!!.id,
                     name = CREATE_LABEL.name,
                     description = CREATE_LABEL.description,
-            )
+                )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/label/${actual.body!!.id}")
         }
     }
@@ -49,9 +50,10 @@ class CreateLabelIntegrationTest: IntegrationTest() {
     }
 
     private companion object {
-        private val CREATE_LABEL = CreateLabel(
-            name = "name",
-            description = "description"
-        )
+        private val CREATE_LABEL =
+            CreateLabel(
+                name = "name",
+                description = "description",
+            )
     }
 }

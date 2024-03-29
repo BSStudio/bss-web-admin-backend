@@ -15,9 +15,8 @@ import java.time.LocalDate
 import java.util.UUID
 
 class ReadVideoIntegrationTest(
-    @Autowired private val client: VideoClient
+    @Autowired private val client: VideoClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 404`() {
         shouldThrow<FeignException.NotFound> {
@@ -33,17 +32,18 @@ class ReadVideoIntegrationTest(
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!! shouldBeEqual DetailedVideo(
-                id = entity.id,
-                urls = emptyList(),
-                title = TITLE,
-                description = "",
-                visible = false,
-                shootingDateStart = LocalDate.now(),
-                shootingDateEnd = LocalDate.now(),
-                crew = listOf(),
-                labels = listOf()
-            )
+            body!! shouldBeEqual
+                DetailedVideo(
+                    id = entity.id,
+                    urls = emptyList(),
+                    title = TITLE,
+                    description = "",
+                    visible = false,
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
+                    crew = listOf(),
+                    labels = listOf(),
+                )
         }
     }
 

@@ -19,9 +19,9 @@ import java.net.URI
 import java.time.LocalDate
 
 internal class CreateEventIntegrationTest : IntegrationTest() {
-
     @Autowired
     private lateinit var client: EventClient
+
     @Value("\${bss.client.url}")
     private lateinit var url: String
 
@@ -31,15 +31,16 @@ internal class CreateEventIntegrationTest : IntegrationTest() {
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(201)
-            body!! shouldBeEqual Event(
-                id = actual.body!!.id,
-                url = CREATE_EVENT.url,
-                title = CREATE_EVENT.title,
-                description = "",
-                dateFrom = LocalDate.now(),
-                dateTo = LocalDate.now(),
-                visible = false
-            )
+            body!! shouldBeEqual
+                Event(
+                    id = actual.body!!.id,
+                    url = CREATE_EVENT.url,
+                    title = CREATE_EVENT.title,
+                    description = "",
+                    dateFrom = LocalDate.now(),
+                    dateTo = LocalDate.now(),
+                    visible = false,
+                )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/event/${actual.body!!.id}")
         }
     }
@@ -54,9 +55,10 @@ internal class CreateEventIntegrationTest : IntegrationTest() {
     }
 
     private companion object {
-        private val CREATE_EVENT = CreateEvent(
-            url = "url",
-            title = "title"
-        )
+        private val CREATE_EVENT =
+            CreateEvent(
+                url = "url",
+                title = "title",
+            )
     }
 }

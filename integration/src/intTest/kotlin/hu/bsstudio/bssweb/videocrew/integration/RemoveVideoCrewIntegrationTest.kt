@@ -14,9 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 class RemoveVideoCrewIntegrationTest(
-    @Autowired private val client: VideoCrewClient
+    @Autowired private val client: VideoCrewClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and delete video crew`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
@@ -27,17 +26,18 @@ class RemoveVideoCrewIntegrationTest(
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!! shouldBeEqual DetailedVideo(
-                id = videoEntity.id,
-                urls = videoEntity.urls,
-                title = videoEntity.title,
-                description = videoEntity.description,
-                shootingDateStart = videoEntity.shootingDateStart,
-                shootingDateEnd = videoEntity.shootingDateEnd,
-                visible = videoEntity.visible,
-                crew = listOf(),
-                labels = listOf()
-            )
+            body!! shouldBeEqual
+                DetailedVideo(
+                    id = videoEntity.id,
+                    urls = videoEntity.urls,
+                    title = videoEntity.title,
+                    description = videoEntity.description,
+                    shootingDateStart = videoEntity.shootingDateStart,
+                    shootingDateEnd = videoEntity.shootingDateEnd,
+                    visible = videoEntity.visible,
+                    crew = listOf(),
+                    labels = listOf(),
+                )
         }
     }
 }
