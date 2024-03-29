@@ -24,7 +24,7 @@ with the help of [Testcontainers][testcontainers].
 
 This means that you need docker running on your machine when running these tests
 
-You can skip these test during your local build using `-x :server:data:test`
+You can skip these tests during your local build using `-x :server:data:test`
 
 ```shell
 # run all tests except :server:data
@@ -35,7 +35,7 @@ Since the project is so well-structured,
 there's no need to apply labels on these tests,
 the module can be excluded from the build process.
 
-You can set the postgres container version in the
+You can set the Postgres container version in the
 [`src/test/resources/application.yml`][test-properties]
 file.
 
