@@ -13,6 +13,10 @@ you should create a new migration file in the
 [`src/main/resources/db/migration`][migrations-folder]
 directory.
 
+### Schemas
+The project uses the `private` schema for all the tables.
+The `public` schema is used for rendering views for the [graphql backend][graphql-backend].
+
 ## Testing
 
 The tests in this module will set up a postgres database
@@ -122,6 +126,8 @@ video_url ||--|{ video: has
 [flyway]: https://flywaydb.org/
 
 [migrations-folder]: src/main/resources/db/migration
+
+[graphql-backend]: https://github.com/BSStudio/bss-web-graphql-backend
 
 [testcontainers]: https://www.testcontainers.org/quickstart/junit_5/
 
