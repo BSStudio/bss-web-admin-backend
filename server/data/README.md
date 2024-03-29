@@ -15,7 +15,7 @@ directory.
 
 ### Schemas
 The project uses the `private` schema for all the tables.
-The `public` schema is used for rendering views for the [graphql backend][graphql-backend].
+The `public` schema is used for rendering views for the [GraphQL backend][graphql-backend].
 
 ## Testing
 
