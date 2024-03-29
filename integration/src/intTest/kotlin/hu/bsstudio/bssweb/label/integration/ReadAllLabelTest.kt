@@ -13,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 internal class ReadAllLabelTest(
-    @Autowired private val client: LabelClient
+    @Autowired private val client: LabelClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and empty list`() {
         val actual = client.getAllLabels()
@@ -37,8 +36,8 @@ internal class ReadAllLabelTest(
                 Label(
                     id = entity.id,
                     name = NAME,
-                    description = DESCRIPTION
-                )
+                    description = DESCRIPTION,
+                ),
             )
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
         }

@@ -14,9 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 class AddVideoCrewIntegrationTest(
-    @Autowired private val client: VideoCrewClient
+    @Autowired private val client: VideoCrewClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should add a member to a video`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
@@ -26,27 +25,30 @@ class AddVideoCrewIntegrationTest(
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!! shouldBeEqual DetailedVideo(
-                id = videoEntity.id,
-                urls = videoEntity.urls,
-                title = videoEntity.title,
-                description = videoEntity.description,
-                shootingDateStart = videoEntity.shootingDateStart,
-                shootingDateEnd = videoEntity.shootingDateEnd,
-                visible = videoEntity.visible,
-                crew = listOf(
-                    VideoCrew(
-                        videoEntity.id,
-                        "position",
-                        member = SimpleMember(
-                            id = memberEntity.id,
-                            name = memberEntity.name,
-                            nickname = memberEntity.nickname
-                        )
-                    )
-                ),
-                labels = listOf()
-            )
+            body!! shouldBeEqual
+                DetailedVideo(
+                    id = videoEntity.id,
+                    urls = videoEntity.urls,
+                    title = videoEntity.title,
+                    description = videoEntity.description,
+                    shootingDateStart = videoEntity.shootingDateStart,
+                    shootingDateEnd = videoEntity.shootingDateEnd,
+                    visible = videoEntity.visible,
+                    crew =
+                        listOf(
+                            VideoCrew(
+                                videoEntity.id,
+                                "position",
+                                member =
+                                    SimpleMember(
+                                        id = memberEntity.id,
+                                        name = memberEntity.name,
+                                        nickname = memberEntity.nickname,
+                                    ),
+                            ),
+                        ),
+                    labels = listOf(),
+                )
         }
     }
 }

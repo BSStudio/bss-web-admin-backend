@@ -15,18 +15,18 @@ import java.time.LocalDate
 import java.util.UUID
 
 class ReadAllPageableVideoIntegrationTest(
-    @Autowired private val client: VideoClient
+    @Autowired private val client: VideoClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and paged`() {
-        val (entity0, entity1, entity2, entity3) = videoRepository.saveAll(
-            IntRange(0, 3).map { i ->
-                DetailedVideoEntity(title = "title$i").apply {
-                    id = UUID.fromString("00000000-0000-0000-0000-00000000000$i")
-                }
-            }
-        )
+        val (entity0, entity1, entity2, entity3) =
+            videoRepository.saveAll(
+                IntRange(0, 3).map { i ->
+                    DetailedVideoEntity(title = "title$i").apply {
+                        id = UUID.fromString("00000000-0000-0000-0000-00000000000$i")
+                    }
+                },
+            )
 
         val actual1 = client.getAllVideos(PageRequest.of(0, 2))
         val actual2 = client.getAllVideos(PageRequest.of(1, 2))
@@ -41,7 +41,7 @@ class ReadAllPageableVideoIntegrationTest(
                     description = "",
                     shootingDateStart = LocalDate.now(),
                     shootingDateEnd = LocalDate.now(),
-                    visible = false
+                    visible = false,
                 ),
                 Video(
                     id = entity1.id,
@@ -50,8 +50,8 @@ class ReadAllPageableVideoIntegrationTest(
                     description = "",
                     shootingDateStart = LocalDate.now(),
                     shootingDateEnd = LocalDate.now(),
-                    visible = false
-                )
+                    visible = false,
+                ),
             )
         }
         assertSoftly(actual2) {
@@ -64,7 +64,7 @@ class ReadAllPageableVideoIntegrationTest(
                     description = "",
                     shootingDateStart = LocalDate.now(),
                     shootingDateEnd = LocalDate.now(),
-                    visible = false
+                    visible = false,
                 ),
                 Video(
                     id = entity3.id,
@@ -73,8 +73,8 @@ class ReadAllPageableVideoIntegrationTest(
                     description = "",
                     shootingDateStart = LocalDate.now(),
                     shootingDateEnd = LocalDate.now(),
-                    visible = false
-                )
+                    visible = false,
+                ),
             )
         }
     }

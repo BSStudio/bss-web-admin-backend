@@ -10,9 +10,8 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class DeleteMemberIntegrationTest(
-    @Autowired private val client: MemberClient
+    @Autowired private val client: MemberClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 204 and delete member`() {
         val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))

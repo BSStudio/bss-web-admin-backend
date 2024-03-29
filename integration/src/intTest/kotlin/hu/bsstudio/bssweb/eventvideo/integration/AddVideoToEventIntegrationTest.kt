@@ -16,9 +16,8 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class AddVideoToEventIntegrationTest(
-    @Autowired private val client: EventVideoClient
+    @Autowired private val client: EventVideoClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and add video to event`() {
         val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
@@ -28,26 +27,28 @@ class AddVideoToEventIntegrationTest(
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!! shouldBeEqual DetailedEvent(
-                id = eventEntity.id,
-                url = eventEntity.url,
-                title = eventEntity.title,
-                description = eventEntity.description,
-                dateFrom = eventEntity.dateFrom,
-                dateTo = eventEntity.dateTo,
-                visible = eventEntity.visible,
-                videos = listOf(
-                    Video(
-                        id = videoEntity.id,
-                        title = videoEntity.title,
-                        urls = videoEntity.urls,
-                        description = videoEntity.description,
-                        shootingDateStart = videoEntity.shootingDateStart,
-                        shootingDateEnd = videoEntity.shootingDateEnd,
-                        visible = videoEntity.visible
-                    )
+            body!! shouldBeEqual
+                DetailedEvent(
+                    id = eventEntity.id,
+                    url = eventEntity.url,
+                    title = eventEntity.title,
+                    description = eventEntity.description,
+                    dateFrom = eventEntity.dateFrom,
+                    dateTo = eventEntity.dateTo,
+                    visible = eventEntity.visible,
+                    videos =
+                        listOf(
+                            Video(
+                                id = videoEntity.id,
+                                title = videoEntity.title,
+                                urls = videoEntity.urls,
+                                description = videoEntity.description,
+                                shootingDateStart = videoEntity.shootingDateStart,
+                                shootingDateEnd = videoEntity.shootingDateEnd,
+                                visible = videoEntity.visible,
+                            ),
+                        ),
                 )
-            )
         }
     }
 
@@ -58,7 +59,7 @@ class AddVideoToEventIntegrationTest(
         shouldThrow<FeignException.InternalServerError> {
             client.addVideoToEvent(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),
-                videoEntity.id
+                videoEntity.id,
             )
         }
     }
@@ -70,7 +71,7 @@ class AddVideoToEventIntegrationTest(
         shouldThrow<FeignException.InternalServerError> {
             client.addVideoToEvent(
                 eventEntity.id,
-                UUID.fromString("00000000-0000-0000-0000-000000000000")
+                UUID.fromString("00000000-0000-0000-0000-000000000000"),
             )
         }
     }

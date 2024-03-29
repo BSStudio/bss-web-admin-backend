@@ -19,10 +19,12 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
         "bss.client.username=user",
         "bss.client.password=password",
         "spring.flyway.enabled=false",
-        "spring.datasource.url=jdbc:postgresql://localhost:5432/postgres?currentSchema=private",
-        "spring.datasource.username=username",
+        "spring.datasource.url=jdbc:postgresql://postgres:5432/bss?currentSchema=private",
+        "spring.datasource.username=user",
         "spring.datasource.password=password",
-    ]
+        "spring.flyway.default-schema=private",
+        "spring.flyway.schemas=private,public",
+    ],
 )
 open class IntegrationTest {
     @Autowired protected lateinit var eventRepository: DetailedEventRepository

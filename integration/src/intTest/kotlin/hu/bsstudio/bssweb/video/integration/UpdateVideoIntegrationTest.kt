@@ -17,9 +17,8 @@ import java.time.LocalDate
 import java.util.UUID
 
 class UpdateVideoIntegrationTest(
-    @Autowired private val client: VideoClient
+    @Autowired private val client: VideoClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and updated video`() {
         this.labelRepository.save(LabelEntity(name = LABEL_NAME, description = "description"))
@@ -29,17 +28,18 @@ class UpdateVideoIntegrationTest(
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!! shouldBeEqual DetailedVideo(
-                id = entity.id,
-                urls = UPDATE_VIDEO.urls,
-                title = UPDATE_VIDEO.title,
-                description = UPDATE_VIDEO.description,
-                visible = UPDATE_VIDEO.visible,
-                shootingDateStart = UPDATE_VIDEO.shootingDateStart,
-                shootingDateEnd = UPDATE_VIDEO.shootingDateEnd,
-                crew = listOf(),
-                labels = UPDATE_VIDEO.labels
-            )
+            body!! shouldBeEqual
+                DetailedVideo(
+                    id = entity.id,
+                    urls = UPDATE_VIDEO.urls,
+                    title = UPDATE_VIDEO.title,
+                    description = UPDATE_VIDEO.description,
+                    visible = UPDATE_VIDEO.visible,
+                    shootingDateStart = UPDATE_VIDEO.shootingDateStart,
+                    shootingDateEnd = UPDATE_VIDEO.shootingDateEnd,
+                    crew = listOf(),
+                    labels = UPDATE_VIDEO.labels,
+                )
         }
     }
 
@@ -58,21 +58,22 @@ class UpdateVideoIntegrationTest(
         shouldThrow<FeignException.NotFound> {
             client.updateVideo(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),
-                UPDATE_VIDEO
+                UPDATE_VIDEO,
             )
         }
     }
 
     private companion object {
         private const val LABEL_NAME = "label"
-        private val UPDATE_VIDEO = UpdateVideo(
-            urls = listOf("updatedUrl0", "updatedUrl1"),
-            title = "updatedTitle",
-            description = "updatedDescription",
-            visible = true,
-            shootingDateStart = LocalDate.of(2023, 1, 1),
-            shootingDateEnd = LocalDate.of(2023, 1, 2),
-            labels = listOf(LABEL_NAME)
-        )
+        private val UPDATE_VIDEO =
+            UpdateVideo(
+                urls = listOf("updatedUrl0", "updatedUrl1"),
+                title = "updatedTitle",
+                description = "updatedDescription",
+                visible = true,
+                shootingDateStart = LocalDate.of(2023, 1, 1),
+                shootingDateEnd = LocalDate.of(2023, 1, 2),
+                labels = listOf(LABEL_NAME),
+            )
     }
 }

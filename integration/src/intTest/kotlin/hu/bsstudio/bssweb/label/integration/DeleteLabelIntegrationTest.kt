@@ -10,9 +10,8 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class DeleteLabelIntegrationTest(
-    @Autowired private val client: LabelClient
-): IntegrationTest() {
-
+    @Autowired private val client: LabelClient,
+) : IntegrationTest() {
     @Test
     internal fun `it should return 204 and delete label`() {
         val entity = labelRepository.save(LabelEntity(name = "url", description = "description"))
