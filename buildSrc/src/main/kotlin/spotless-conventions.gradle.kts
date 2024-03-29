@@ -20,4 +20,8 @@ spotless {
         target("**/*.md")
         flexmark()
     }
+    yaml {
+        target("**/*.yml", "**/*.yaml")
+        jackson()
+    }
 }

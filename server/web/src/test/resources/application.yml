@@ -1,4 +1,5 @@
+---
 spring:
   security:
     user:
-      password: password
+      password: "password"
