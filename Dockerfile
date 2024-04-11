@@ -1,18 +1,20 @@
 FROM bellsoft/liberica-openjdk-alpine-musl:21.0.1-16 AS build
 WORKDIR /usr/src/app
 # cache dependencies
-COPY ./gradlew                         ./
-COPY ./gradle.properties               ./
-COPY ./settings.gradle.kts             ./
-COPY ./gradle                          ./gradle/
-COPY ./buildSrc/src                    ./buildSrc/src/
-COPY ./buildSrc/*.gradle.kts           ./buildSrc/
-COPY ./server/build.gradle.kts         ./server/
-COPY ./server/web/build.gradle.kts     ./server/web/
-COPY ./server/service/build.gradle.kts ./server/service/
-COPY ./server/data/build.gradle.kts    ./server/data/
-COPY ./server/model/build.gradle.kts   ./server/model/
-COPY ./server/common/build.gradle.kts  ./server/common/
+COPY ./gradlew                           ./
+COPY ./gradle.properties                 ./
+COPY ./settings.gradle.kts               ./
+COPY ./gradle                            ./gradle/
+COPY ./buildSrc/src                      ./buildSrc/src/
+COPY ./buildSrc/*.gradle.kts             ./buildSrc/
+COPY ./server/client/build.gradle.kts    ./server/client/
+COPY ./server/common/build.gradle.kts    ./server/common/
+COPY ./server/data/build.gradle.kts      ./server/data/
+COPY ./server/model/build.gradle.kts     ./server/model/
+COPY ./server/operation/build.gradle.kts ./server/operation/
+COPY ./server/service/build.gradle.kts   ./server/service/
+COPY ./server/web/build.gradle.kts       ./server/web/
+COPY ./server/build.gradle.kts           ./server/
 RUN ./gradlew
 # build
 COPY ./buildSrc ./buildSrc
