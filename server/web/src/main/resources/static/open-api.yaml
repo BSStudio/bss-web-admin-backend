@@ -503,12 +503,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/BssMetrics'
 security:
-- basicAuth: []
+- oidc: []
 components:
   securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
+    oidc:
+      type: openIdConnect
+      openIdConnectUrl: "https://authelia.vault.csik.dev/.well-known/openid-configuration"
   parameters:
     memberId:
       name: memberId

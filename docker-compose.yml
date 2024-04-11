@@ -15,7 +15,9 @@ services:
       - postgres
     environment:
       bss.file-api.url: "http://mock-file-api:8080"
-      spring.security.user.password: "password"
+      spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: "http://authelia"
+      spring.security.oauth2.resourceserver.opaquetoken.client-id: "client_id"
+      spring.security.oauth2.resourceserver.opaquetoken.client-secret: "client_secret"
       spring.datasource.url: "jdbc:postgresql://postgres:5432/bss?currentSchema=private"
       spring.datasource.username: "user"
       spring.datasource.password: "password"
@@ -37,7 +39,7 @@ services:
       timeout: 5s
       retries: 3
   mock-file-api:
-    image: "wiremock/wiremock:2.35.0"
+    image: "wiremock/wiremock:2.35.1-1"
     ports:
       - "127.0.0.1:8888:8080"
     healthcheck:

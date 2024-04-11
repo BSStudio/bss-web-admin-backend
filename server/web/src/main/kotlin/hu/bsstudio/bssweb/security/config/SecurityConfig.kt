@@ -14,10 +14,16 @@ class SecurityConfig {
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .authorizeHttpRequests {
-                it.requestMatchers("/api/**").authenticated()
+                it
+                    .requestMatchers("/api/**").authenticated()
                     .anyRequest().permitAll()
             }
-            .httpBasic(Customizer.withDefaults())
+            .oauth2ResourceServer{
+                it.opaqueToken {
+                    // load settings from Spring Boot
+                    // spring.security.oauth2.resourceserver.opaquetoken
+                }
+            }
             .cors { it.disable() }
             .csrf { it.disable() }
             .build()
