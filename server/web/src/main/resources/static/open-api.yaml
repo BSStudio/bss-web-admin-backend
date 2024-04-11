@@ -508,7 +508,7 @@ components:
   securitySchemes:
     oidc:
       type: openIdConnect
-      openIdConnectUrl: "https://authelia.vault.csik.dev/.well-known/openid-configuration"
+      openIdConnectUrl: https://login.bsstudio.hu/.well-known/openid-configuration
   parameters:
     memberId:
       name: memberId

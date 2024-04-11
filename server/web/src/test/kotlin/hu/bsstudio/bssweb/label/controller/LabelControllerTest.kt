@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.opaqueToken
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -31,7 +31,7 @@ internal class LabelControllerTest(
         every { mockService.findAllLabels() } returns LABEL_LIST
 
         mockMvc.get(BASE_URL) {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(LABEL_LIST) }
@@ -45,7 +45,7 @@ internal class LabelControllerTest(
         mockMvc.post(BASE_URL) {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(CREATE_LABEL)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isCreated() }
@@ -59,7 +59,7 @@ internal class LabelControllerTest(
         every { mockService.removeLabel(LABEL_ID) } returns Unit
 
         mockMvc.delete("$BASE_URL/$LABEL_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isNoContent() }
