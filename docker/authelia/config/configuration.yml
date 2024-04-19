@@ -718,14 +718,14 @@ session:
 
   ## Cookies configures the list of allowed cookie domains for sessions to be created on.
   ## Undefined values will default to the values below.
-  # cookies:
-  #   -
+  cookies:
+    -
       ## The name of the session cookie.
       # name: 'authelia_session'
 
       ## The domain to protect.
       ## Note: the Authelia portal must also be in that domain.
-      # domain: 'example.com'
+      domain: 'example.com'
 
       ## Required. The fully qualified URI of the portal to redirect users to on proxies that support redirections.
       ## Rules:
@@ -733,7 +733,7 @@ session:
       ##   - The above 'domain' option MUST either:
       ##      - Match the host portion of this URI.
       ##      - Match the suffix of the host portion when prefixed with '.'.
-      # authelia_url: 'https://auth.example.com'
+      authelia_url: 'https://auth.example.com'
 
       ## Optional. The fully qualified URI used as the redirection location if the portal is accessed directly. Not
       ## configuring this option disables the automatic redirection behaviour.
@@ -896,11 +896,11 @@ session:
 ## Storage Provider Configuration
 ##
 ## The available providers are: `local`, `mysql`, `postgres`. You must use one and only one of these providers.
-# storage:
+storage:
   ## The encryption key that is used to encrypt sensitive information in the database. Must be a string with a minimum
   ## length of 20. Please see the docs if you configure this with an undesirable key and need to change it, you MUST use
   ## the CLI to change this in the database if you want to change it from a previously configured value.
-  # encryption_key: 'you_must_generate_a_random_string_of_more_than_twenty_chars_and_configure_this'
+  encryption_key: 'you_must_generate_a_random_string_of_more_than_twenty_chars_and_configure_this'
 
   ##
   ## Local (Storage Provider)
@@ -910,9 +910,9 @@ session:
   ##
   ## Important: Kubernetes (or HA) users must read https://www.authelia.com/t/statelessness
   ##
-  # local:
+  local:
     ## Path to the SQLite3 Database.
-    # path: '/config/db.sqlite3'
+    path: '/config/db.sqlite3'
 
   ##
   ## MySQL / MariaDB (Storage Provider)
@@ -1051,8 +1051,8 @@ notifier:
   ##
   ## Important: Kubernetes (or HA) users must read https://www.authelia.com/t/statelessness
   ##
-  # filesystem:
-    # filename: '/config/notification.txt'
+  filesystem:
+    filename: '/config/notification.txt'
 
   ##
   ## SMTP (Notification Provider)
