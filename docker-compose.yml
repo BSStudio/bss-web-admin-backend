@@ -15,9 +15,9 @@ services:
       - postgres
     environment:
       bss.file-api.url: "http://mock-file-api:8080"
-      spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: "http://authelia"
-      spring.security.oauth2.resourceserver.opaquetoken.client-id: "client_id"
-      spring.security.oauth2.resourceserver.opaquetoken.client-secret: "client_secret"
+      spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: 	"https://login.bsstudio.hu/application/o/introspect/"
+      spring.security.oauth2.resourceserver.opaquetoken.client-id: "H2w2dOKxioUPmjghbPNbXMcEiGxqT7A82mLO811d"
+      spring.security.oauth2.resourceserver.opaquetoken.client-secret: "TK49q5vFyZ9Xex52N1aC21Ok4wrD3FTJPyalTA4BS3lMJQcIDI3CxjMnsWVMb1plKpRUuKSx2V7SG89OPlQxMcXVyYViDvp4cukbGdcKfh9B2MTyUxHUFhQRpcljIyva"
       spring.datasource.url: "jdbc:postgresql://postgres:5432/bss?currentSchema=private"
       spring.datasource.username: "user"
       spring.datasource.password: "password"
@@ -38,6 +38,10 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+  authelia:
+    image: authelia/authelia:latest
+    volumes:
+      - ./docker/authelia/config:/config
   mock-file-api:
     image: "wiremock/wiremock:2.35.1-1"
     ports:
