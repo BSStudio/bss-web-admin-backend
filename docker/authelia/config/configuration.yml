@@ -506,8 +506,8 @@ authentication_backend:
   ##
   ## Important: Kubernetes (or HA) users must read https://www.authelia.com/t/statelessness
   ##
-  file:
-    path: '/config/users_database.yml'
+  # file:
+    # path: '/config/users_database.yml'
     # watch: false
     # search:
       # email: false
@@ -620,7 +620,7 @@ privacy_policy:
 access_control:
   ## Default policy can either be 'bypass', 'one_factor', 'two_factor' or 'deny'. It is the policy applied to any
   ## resource if there is no policy to be applied to the user.
-  default_policy: 'one_factor'
+  default_policy: 'deny'
 
   # networks:
     # - name: 'internal'
