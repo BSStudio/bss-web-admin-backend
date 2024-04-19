@@ -42,6 +42,8 @@ services:
     image: authelia/authelia:latest
     volumes:
       - ./docker/authelia/config:/config
+    ports:
+      - "127.0.0.1:9091:9091"
   mock-file-api:
     image: "wiremock/wiremock:2.35.1-1"
     ports:
