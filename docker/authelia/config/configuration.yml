@@ -725,7 +725,7 @@ session:
 
       ## The domain to protect.
       ## Note: the Authelia portal must also be in that domain.
-      domain: 'example.com'
+      domain: '127.0.0.1'
 
       ## Required. The fully qualified URI of the portal to redirect users to on proxies that support redirections.
       ## Rules:
@@ -733,7 +733,7 @@ session:
       ##   - The above 'domain' option MUST either:
       ##      - Match the host portion of this URI.
       ##      - Match the suffix of the host portion when prefixed with '.'.
-      authelia_url: 'https://auth.example.com'
+      authelia_url: 'https://127.0.0.1:9091'
 
       ## Optional. The fully qualified URI used as the redirection location if the portal is accessed directly. Not
       ## configuring this option disables the automatic redirection behaviour.
@@ -1138,25 +1138,22 @@ notifier:
 ##
 ## Identity Providers
 ##
-# identity_providers:
+identity_providers:
 
   ##
   ## OpenID Connect (Identity Provider)
   ##
   ## It's recommended you read the documentation before configuration of this section:
   ## https://www.authelia.com/c/oidc
-  # oidc:
+  oidc:
     ## The hmac_secret is used to sign OAuth2 tokens (authorization code, access tokens and refresh tokens).
     ## HMAC Secret can also be set using a secret: https://www.authelia.com/c/secrets
-    # hmac_secret: 'this_is_a_secret_abc123abc123abc'
+    hmac_secret: 'this_is_a_secret_abc123abc123abc'
 
     ## The JWK's issuer option configures multiple JSON Web Keys. It's required that at least one of the JWK's
     ## configured has the RS256 algorithm. For RSA keys (RS or PS) the minimum is a 2048 bit key.
-    # jwks:
-    # -
-      ## Key ID embedded into the JWT header for key matching. Must be an alphanumeric string with 7 or less characters.
-      ## This value is automatically generated if not provided. It's recommended to not configure this.
-      # key_id: 'example'
+    jwks:
+      - key_id: 'example'
 
       ## The key algorithm used with this key.
       # algorithm: 'RS256'
@@ -1165,10 +1162,59 @@ notifier:
       # use: 'sig'
 
       ## Required Private Key in PEM DER form.
-      # key: |
-        # -----BEGIN RSA PRIVATE KEY-----
-        # ...
-        # -----END RSA PRIVATE KEY-----
+        key: |
+          -----BEGIN PRIVATE KEY-----
+          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
+          B0Cp7WIjo23wFYaXdRvXUXXamNWjTFz5SVmNeWwqM06SPv+XWz+V2C+D+uhfaXot
+          8AIlJd5GSHYhAoIBAH4RgRzELF1vlUcC/ErQmROXnqvKHQ3AA9eQawJoK1+Oc/XE
+          iUvx5LUfddse7KWvv4wWlZ4P082P8kWsTllWcvnfU1ZkvHKswgRhkgbuuD+MB0+Z
+          RfVdOS0h1FWgnyRID4JZlDei+INJnfaVHPNM4lDUZ/v0FSJR65/jUtEpcZJt2owi
+          1AjPCIH0p43cMnsWj55+6qVkHXkrv6R8CZt29sGdoq/U9wmitriOqEAB4LAQo2Dz
+          9O5zdxxpSv0gpzbdY+BYmGb4/XV5flpJ3uvGo47qvBDmjyIddYdl2FIbxyW0IuPv
+          L/RGs6PCSJj5DM6rq4HnOzeLbjH1epgjMGY5otECggEAJZg7+i2OamakRiZPeQej
+          qt3Uf7OJIUz0WOkoVWAd/sTkYN6zGCu0l+d9m2opgEdu2HWUNdDb3vv32mscdsR2
+          2hEDNFtJ3Gvffa4DEHxfZGZS/qhNQ5lgZhAbLE9Vw8arDTkBAj6w4yHOKTj7Ubal
+          NASK1fDCEeDzQMppV4DyhURKMGQIxx2kPrNhRKokUMbuzGRByIdgcycHZDGArdLV
+          A3W22tPz7altv1WHG/7z3nAJd2WOvvbpbu1YwyAs8GQ8r1nZGhvNwlgwwjIEzzmV
+          mVW2A11wgNBSRlMuT79ye008jGJYFhm9bcTBTHVAp3uA15lfux0viISf3jjTSqkd
+          4QKCAQAUbbf3ztY67jk8AyRhnEF+Pf3I0+gK8D5FPdBQctxv/2qlBsblxCeJ6GkF
+          g9yfmVVb9jxtt2pyJOlcsYGlWdWvdYdnuU6rvziMsSdxRcr5go708cpMZvizZ2Lb
+          SkFDhpOuNWaH+xc/otUPzPJRV5mzU95opPtswsz4Ji9KFkv+GyaDB4WNKyIr7zrA
+          E9W9HONqcKvHErCqmqv3DcXhyh6uzBUDNOqnxboU+bKdLSyx9QIGNmtRK4kX2FVv
+          oKE0w1W43IX0TL1vHYXt979JSBwWYoITd0U5IbXesQlHLAjONc/YW6ghNbViFDob
+          gq+NRPrr5GHSvVx+jS3ROHmfam5h
+          -----END PRIVATE KEY-----
 
 
       ## Optional matching certificate chain in PEM DER form that matches the key. All certificates within the chain
@@ -1244,18 +1290,18 @@ notifier:
       # allowed_origins_from_client_redirect_uris: false
 
     ## Clients is a list of known clients and their configuration.
-    # clients:
-      # -
+    clients:
+      -
         ## The Client ID is the OAuth 2.0 and OpenID Connect 1.0 Client ID which is used to link an application to a
         ## configuration.
-        # client_id: 'myapp'
+        client_id: 'myapp'
 
         ## The description to show to users when they end up on the consent screen. Defaults to the ID above.
         # client_name: 'My Application'
 
         ## The client secret is a shared secret between Authelia and the consumer of this client.
         # yamllint disable-line rule:line-length
-        # client_secret: '$pbkdf2-sha512$310000$c8p78n7pUMln0jzvd4aK4Q$JNRBzwAo0ek5qKn50cFzzvE9RXV88h1wJn5KGiHrD0YKtZaR/nCb2CJPOsKaPK0hjf.9yHxzQGZziziccp6Yng'  # The digest of 'insecure_secret'.
+        client_secret: '$pbkdf2-sha512$310000$c8p78n7pUMln0jzvd4aK4Q$JNRBzwAo0ek5qKn50cFzzvE9RXV88h1wJn5KGiHrD0YKtZaR/nCb2CJPOsKaPK0hjf.9yHxzQGZziziccp6Yng'  # The digest of 'insecure_secret'.
 
         ## Sector Identifiers are occasionally used to generate pairwise subject identifiers. In most cases this is not
         ## necessary. It is critical to read the documentation for more information.
