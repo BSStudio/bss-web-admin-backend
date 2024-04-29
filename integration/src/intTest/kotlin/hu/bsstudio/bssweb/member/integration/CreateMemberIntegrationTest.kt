@@ -21,26 +21,26 @@ import java.time.LocalDate
 
 class CreateMemberIntegrationTest(
     @Autowired private val client: MemberClient,
-    @Value("\${bss.client.url}") private val url: String
+    @Value("\${bss.client.url}") private val url: String,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 201 and member body`() {
         val actual = client.createMember(CREATE_MEMBER)
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(201)
-            body!! shouldBeEqual Member(
-                id = actual.body!!.id,
-                url = CREATE_MEMBER.url,
-                name = CREATE_MEMBER.name,
-                nickname = "",
-                description = "",
-                joinedAt = LocalDate.now(),
-                role = "",
-                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-                archived = false
-            )
+            body!! shouldBeEqual
+                Member(
+                    id = actual.body!!.id,
+                    url = CREATE_MEMBER.url,
+                    name = CREATE_MEMBER.name,
+                    nickname = "",
+                    description = "",
+                    joinedAt = LocalDate.now(),
+                    role = "",
+                    status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                    archived = false,
+                )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual.body!!.id}")
         }
     }
@@ -48,37 +48,39 @@ class CreateMemberIntegrationTest(
     @Test
     internal fun `it should return 201 and member body on duplicate names`() {
         val actual1 = client.createMember(CREATE_MEMBER)
-        val actual2 = client.createMember(CREATE_MEMBER.copy( url = "${CREATE_MEMBER.url}2" ))
+        val actual2 = client.createMember(CREATE_MEMBER.copy(url = "${CREATE_MEMBER.url}2"))
 
         assertSoftly(actual1) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(201)
-            body!! shouldBeEqual Member(
-                id = actual1.body!!.id,
-                url = CREATE_MEMBER.url,
-                name = CREATE_MEMBER.name,
-                nickname = "",
-                description = "",
-                joinedAt = LocalDate.now(),
-                role = "",
-                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-                archived = false
-            )
+            body!! shouldBeEqual
+                Member(
+                    id = actual1.body!!.id,
+                    url = CREATE_MEMBER.url,
+                    name = CREATE_MEMBER.name,
+                    nickname = "",
+                    description = "",
+                    joinedAt = LocalDate.now(),
+                    role = "",
+                    status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                    archived = false,
+                )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual1.body!!.id}")
         }
 
         assertSoftly(actual2) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(201)
-            body!! shouldBeEqual Member(
-                id = actual2.body!!.id,
-                url = "${CREATE_MEMBER.url}2",
-                name = CREATE_MEMBER.name,
-                nickname = "",
-                description = "",
-                joinedAt = LocalDate.now(),
-                role = "",
-                status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
-                archived = false
-            )
+            body!! shouldBeEqual
+                Member(
+                    id = actual2.body!!.id,
+                    url = "${CREATE_MEMBER.url}2",
+                    name = CREATE_MEMBER.name,
+                    nickname = "",
+                    description = "",
+                    joinedAt = LocalDate.now(),
+                    role = "",
+                    status = MemberStatus.MEMBER_CANDIDATE_CANDIDATE,
+                    archived = false,
+                )
             headers.location!! shouldBeEqual URI.create("$url/api/v1/member/${actual2.body!!.id}")
         }
     }

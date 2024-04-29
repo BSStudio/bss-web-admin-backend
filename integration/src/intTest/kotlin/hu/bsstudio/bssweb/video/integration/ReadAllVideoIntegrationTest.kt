@@ -13,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 
 class ReadAllVideoIntegrationTest(
-    @Autowired private val client: VideoClient
+    @Autowired private val client: VideoClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and empty list`() {
         val actual = client.getAllVideos()
@@ -42,7 +41,7 @@ class ReadAllVideoIntegrationTest(
                     shootingDateStart = LocalDate.now(),
                     shootingDateEnd = LocalDate.now(),
                     visible = false,
-                )
+                ),
             )
             statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(200)
         }

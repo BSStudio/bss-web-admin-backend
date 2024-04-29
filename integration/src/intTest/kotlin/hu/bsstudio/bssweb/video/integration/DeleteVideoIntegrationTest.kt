@@ -10,9 +10,8 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class DeleteVideoIntegrationTest(
-    @Autowired private val client: VideoClient
+    @Autowired private val client: VideoClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 204 and delete video`() {
         val entity = videoRepository.save(DetailedVideoEntity(urls = emptyList(), title = "title"))

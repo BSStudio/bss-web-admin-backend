@@ -1,8 +1,8 @@
 version: 2.1
 orbs:
-  codecov: codecov/codecov@4.0.1
+  codecov: codecov/codecov@4.1.0
   gradle: circleci/gradle@3.0.0
-  docker: circleci/docker@2.5.0
+  docker: circleci/docker@2.6.0
   github-cli: circleci/github-cli@2.3.0
 executors:
   jdk:
@@ -26,6 +26,8 @@ defaults:
     remote-docker-dlc: true
     use-buildkit: true
   tag_only: &tag_only
+    context:
+      - BSS Github deploy
     filters:
       branches:
         ignore: /.*/

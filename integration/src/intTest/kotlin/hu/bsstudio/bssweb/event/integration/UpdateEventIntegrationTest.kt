@@ -16,9 +16,8 @@ import java.time.LocalDate
 import java.util.UUID
 
 internal class UpdateEventIntegrationTest(
-    @Autowired private val client: EventClient
+    @Autowired private val client: EventClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and updated event`() {
         val entity = this.eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
@@ -26,7 +25,8 @@ internal class UpdateEventIntegrationTest(
         val actual = client.updateEvent(entity.id, UPDATE_EVENT)
 
         assertSoftly(actual) {
-            body!! shouldBeEqual DetailedEvent(
+            body!! shouldBeEqual
+                DetailedEvent(
                     id = entity.id,
                     url = UPDATE_EVENT.url,
                     title = UPDATE_EVENT.title,
@@ -34,8 +34,8 @@ internal class UpdateEventIntegrationTest(
                     dateFrom = UPDATE_EVENT.dateFrom,
                     dateTo = UPDATE_EVENT.dateTo,
                     visible = UPDATE_EVENT.visible,
-                    videos = listOf()
-            )
+                    videos = listOf(),
+                )
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
         }
     }
@@ -55,19 +55,20 @@ internal class UpdateEventIntegrationTest(
         shouldThrow<FeignException.NotFound> {
             client.updateEvent(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),
-                UPDATE_EVENT
+                UPDATE_EVENT,
             )
         }
     }
 
     private companion object {
-        private val UPDATE_EVENT = UpdateEvent(
-            url = "updatedUrl",
-            title = "updatedTitle",
-            description = "updatedDescription",
-            dateFrom = LocalDate.of(2023, 1, 1),
-            dateTo = LocalDate.of(2023, 1, 1),
-            visible = true
-        )
+        private val UPDATE_EVENT =
+            UpdateEvent(
+                url = "updatedUrl",
+                title = "updatedTitle",
+                description = "updatedDescription",
+                dateFrom = LocalDate.of(2023, 1, 1),
+                dateTo = LocalDate.of(2023, 1, 1),
+                visible = true,
+            )
     }
 }

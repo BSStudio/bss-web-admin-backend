@@ -16,35 +16,37 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class RemoveVideoFromEventIntegrationTest(
-    @Autowired private val client: EventVideoClient
+    @Autowired private val client: EventVideoClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 204 and remove video from event`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
-        val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
-            .apply {
-                this.videos = listOf(
-                    SimpleVideoEntity(
-                        title = videoEntity.title
-                    ).apply { this.id = videoEntity.id }
-                )
-            }
+        val eventEntity =
+            eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
+                .apply {
+                    this.videos =
+                        listOf(
+                            SimpleVideoEntity(
+                                title = videoEntity.title,
+                            ).apply { this.id = videoEntity.id },
+                        )
+                }
 
         val actual = client.removeVideoFromEvent(eventEntity.id, videoEntity.id)
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!! shouldBeEqual DetailedEvent(
-                id = eventEntity.id,
-                url = eventEntity.url,
-                title = eventEntity.title,
-                description = eventEntity.description,
-                dateFrom = eventEntity.dateFrom,
-                dateTo = eventEntity.dateTo,
-                visible = eventEntity.visible,
-                videos = listOf()
-            )
+            body!! shouldBeEqual
+                DetailedEvent(
+                    id = eventEntity.id,
+                    url = eventEntity.url,
+                    title = eventEntity.title,
+                    description = eventEntity.description,
+                    dateFrom = eventEntity.dateFrom,
+                    dateTo = eventEntity.dateTo,
+                    visible = eventEntity.visible,
+                    videos = listOf(),
+                )
         }
     }
 
@@ -55,7 +57,7 @@ class RemoveVideoFromEventIntegrationTest(
         shouldThrow<FeignException.NotFound> {
             client.removeVideoFromEvent(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),
-                videoEntity.id
+                videoEntity.id,
             )
         }
     }
@@ -64,21 +66,23 @@ class RemoveVideoFromEventIntegrationTest(
     internal fun `it should return 200 when video does not exist`() {
         val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
 
-        val actual = client.removeVideoFromEvent(
-            eventEntity.id,
-            UUID.fromString("00000000-0000-0000-0000-000000000000")
-        )
+        val actual =
+            client.removeVideoFromEvent(
+                eventEntity.id,
+                UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            )
 
         actual.statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-        actual.body!! shouldBeEqual DetailedEvent(
-            id = eventEntity.id,
-            url = eventEntity.url,
-            title = eventEntity.title,
-            description = eventEntity.description,
-            dateFrom = eventEntity.dateFrom,
-            dateTo = eventEntity.dateTo,
-            visible = eventEntity.visible,
-            videos = listOf()
-        )
+        actual.body!! shouldBeEqual
+            DetailedEvent(
+                id = eventEntity.id,
+                url = eventEntity.url,
+                title = eventEntity.title,
+                description = eventEntity.description,
+                dateFrom = eventEntity.dateFrom,
+                dateTo = eventEntity.dateTo,
+                visible = eventEntity.visible,
+                videos = listOf(),
+            )
     }
 }

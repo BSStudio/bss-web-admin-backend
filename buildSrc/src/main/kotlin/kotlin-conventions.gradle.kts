@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
@@ -6,8 +8,8 @@ plugins {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
+    compilerOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "21"
+        jvmTarget.set(JvmTarget.JVM_21)
     }
 }

@@ -6,6 +6,8 @@ plugins {
 }
 
 tasks.jar {
+    // if this convention is used we only expect bootJars to be built
+    // it will disable the default jar task
     enabled = false
 }
 
@@ -18,5 +20,4 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-web")
 }

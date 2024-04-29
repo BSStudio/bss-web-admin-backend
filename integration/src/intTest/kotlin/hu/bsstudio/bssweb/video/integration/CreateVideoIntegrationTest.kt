@@ -18,24 +18,24 @@ import java.time.LocalDate
 
 class CreateVideoIntegrationTest(
     @Autowired private val client: VideoClient,
-    @Value("\${bss.client.url}") private val url: String
+    @Value("\${bss.client.url}") private val url: String,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 201 and video`() {
         val actual = client.createVideo(CREATE_VIDEO)
 
         assertSoftly(actual) {
             statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(201)
-            body!! shouldBeEqual Video(
-                id = actual.body!!.id,
-                title = CREATE_VIDEO.title,
-                urls = emptyList(),
-                description = "",
-                shootingDateStart = LocalDate.now(),
-                shootingDateEnd = LocalDate.now(),
-                visible = false
-            )
+            body!! shouldBeEqual
+                Video(
+                    id = actual.body!!.id,
+                    title = CREATE_VIDEO.title,
+                    urls = emptyList(),
+                    description = "",
+                    shootingDateStart = LocalDate.now(),
+                    shootingDateEnd = LocalDate.now(),
+                    visible = false,
+                )
             headers.location!! shouldBeEqual java.net.URI.create("$url/api/v1/video/${actual.body!!.id}")
         }
     }
@@ -50,8 +50,9 @@ class CreateVideoIntegrationTest(
     }
 
     private companion object {
-        private val CREATE_VIDEO = CreateVideo(
-            title = "title"
-        )
+        private val CREATE_VIDEO =
+            CreateVideo(
+                title = "title",
+            )
     }
 }

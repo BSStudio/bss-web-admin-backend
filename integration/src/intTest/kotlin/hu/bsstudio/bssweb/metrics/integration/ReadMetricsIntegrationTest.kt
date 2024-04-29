@@ -13,9 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 class ReadMetricsIntegrationTest(
-    @Autowired private val client: MetricsClient
+    @Autowired private val client: MetricsClient,
 ) : IntegrationTest() {
-
     @Test
     internal fun `it should return 200 and empty metrics`() {
         val actual = this.client.getMetrics()

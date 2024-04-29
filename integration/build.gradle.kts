@@ -1,4 +1,5 @@
 plugins {
+    id("kotlin-conventions")
     id("integration-testing-conventions")
 }
 
