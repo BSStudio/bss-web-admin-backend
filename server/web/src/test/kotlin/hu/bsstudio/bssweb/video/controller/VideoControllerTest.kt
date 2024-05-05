@@ -16,7 +16,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.opaqueToken
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -39,7 +39,7 @@ internal class VideoControllerTest(
         every { mockService.findAllVideos() } returns listOf(VIDEO)
 
         mockMvc.get("$BASE_URL/all") {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(listOf(VIDEO)) }
@@ -53,7 +53,7 @@ internal class VideoControllerTest(
         mockMvc.get(BASE_URL) {
             param("page", "${PAGEABLE.pageNumber}")
             param("size", "${PAGEABLE.pageSize}")
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(PAGED_VIDEOS) }
@@ -67,7 +67,7 @@ internal class VideoControllerTest(
         mockMvc.post(BASE_URL) {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(CREATE_VIDEO)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isCreated() }
@@ -87,7 +87,7 @@ internal class VideoControllerTest(
             content = objectMapper.writeValueAsString(videoIds)
             param("visible", "$visible")
             param("videoIds", "$VIDEO_ID")
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isOk() }
@@ -100,7 +100,7 @@ internal class VideoControllerTest(
         every { mockService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO)
 
         mockMvc.get("$BASE_URL/$VIDEO_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
@@ -112,7 +112,7 @@ internal class VideoControllerTest(
         every { mockService.findVideoById(VIDEO_ID) } returns Optional.empty()
 
         mockMvc.get("$BASE_URL/$VIDEO_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
         }.andExpectAll {
             status { isNotFound() }
             content { string("") }
@@ -126,7 +126,7 @@ internal class VideoControllerTest(
         mockMvc.put("$BASE_URL/$VIDEO_ID") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(UPDATE_VIDEO)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isOk() }
@@ -141,7 +141,7 @@ internal class VideoControllerTest(
         mockMvc.put("$BASE_URL/$VIDEO_ID") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(UPDATE_VIDEO)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isNotFound() }
@@ -154,7 +154,7 @@ internal class VideoControllerTest(
         every { mockService.deleteVideoById(VIDEO_ID) } returns Unit
 
         mockMvc.delete("$BASE_URL/$VIDEO_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isNoContent() }
@@ -164,8 +164,6 @@ internal class VideoControllerTest(
 
     private companion object {
         private const val BASE_URL = "/api/v1/video"
-        private const val USERNAME = "user"
-        private const val PASSWORD = "password"
         private val PAGEABLE: Pageable = PageRequest.of(0, 20)
         private val VIDEO_ID = UUID.randomUUID()
         private val URLS = listOf("url")

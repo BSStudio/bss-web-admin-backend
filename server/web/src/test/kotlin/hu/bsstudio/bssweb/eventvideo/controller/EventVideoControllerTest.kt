@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.opaqueToken
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.post
@@ -32,7 +32,7 @@ internal class EventVideoControllerTest(
         mockMvc.post(BASE_URL) {
             param("eventId", EVENT_ID.toString())
             param("videoId", VIDEO_ID.toString())
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isOk() }
@@ -47,7 +47,7 @@ internal class EventVideoControllerTest(
         mockMvc.delete(BASE_URL) {
             param("eventId", EVENT_ID.toString())
             param("videoId", VIDEO_ID.toString())
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isOk() }
@@ -57,8 +57,6 @@ internal class EventVideoControllerTest(
 
     private companion object {
         private const val BASE_URL = "/api/v1/eventVideo"
-        private const val USERNAME = "user"
-        private const val PASSWORD = "password"
         private val EVENT_ID = UUID.randomUUID()
         private val VIDEO_ID = UUID.randomUUID()
         private val DETAILED_EVENT =

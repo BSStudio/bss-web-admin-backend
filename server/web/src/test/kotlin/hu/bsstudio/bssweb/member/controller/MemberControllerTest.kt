@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.opaqueToken
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -36,7 +36,7 @@ internal class MemberControllerTest(
         every { mockService.findAllMembers() } returns MEMBER_LIST
 
         mockMvc.get(BASE_URL) {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(MEMBER_LIST) }
@@ -48,7 +48,7 @@ internal class MemberControllerTest(
         every { mockService.findMemberById(MEMBER_ID) } returns Optional.of(MEMBER)
 
         mockMvc.get("$BASE_URL/$MEMBER_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(MEMBER) }
@@ -60,7 +60,7 @@ internal class MemberControllerTest(
         every { mockService.findMemberById(MEMBER_ID) } returns Optional.empty()
 
         mockMvc.get("$BASE_URL/$MEMBER_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
         }.andExpectAll {
             status { isNotFound() }
             content { string("") }
@@ -74,7 +74,7 @@ internal class MemberControllerTest(
         mockMvc.put("$BASE_URL/$MEMBER_ID") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(UPDATE_MEMBER)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isOk() }
@@ -89,7 +89,7 @@ internal class MemberControllerTest(
         mockMvc.post(BASE_URL) {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(CREATE_MEMBER)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isCreated() }
@@ -107,7 +107,7 @@ internal class MemberControllerTest(
         mockMvc.put("$BASE_URL/archive") {
             param("memberIds", MEMBER_ID.toString())
             param("unArchive", "$unArchive")
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isOk() }
@@ -122,7 +122,7 @@ internal class MemberControllerTest(
 
         mockMvc.put("$BASE_URL/archive") {
             param("memberIds", MEMBER_ID.toString())
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isOk() }
@@ -135,7 +135,7 @@ internal class MemberControllerTest(
         every { mockService.removeMember(MEMBER_ID) } returns Unit
 
         mockMvc.delete("$BASE_URL/$MEMBER_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isNoContent() }
@@ -145,8 +145,6 @@ internal class MemberControllerTest(
 
     private companion object {
         private const val BASE_URL = "/api/v1/member"
-        private const val USERNAME = "user"
-        private const val PASSWORD = "password"
         private val MEMBER_ID = UUID.randomUUID()
         private const val URL = "url"
         private const val NAME = "name"

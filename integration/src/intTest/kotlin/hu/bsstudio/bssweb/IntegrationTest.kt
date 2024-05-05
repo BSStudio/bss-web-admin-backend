@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb
 
-import hu.bsstudio.bssweb.config.BssFeignConfig
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
 import hu.bsstudio.bssweb.label.repository.LabelRepository
@@ -12,16 +11,21 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 
-@SpringJUnitConfig(classes = [BssFeignConfig::class, DataConfig::class])
+@SpringJUnitConfig(classes = [DataConfig::class])
 @TestPropertySource(
     properties = [
         "bss.client.url=http://localhost:8080",
-        "bss.client.username=user",
-        "bss.client.password=password",
         "spring.flyway.enabled=false",
         "spring.datasource.url=jdbc:postgresql://localhost:5432/bss?currentSchema=private",
         "spring.datasource.username=user",
         "spring.datasource.password=password",
+        "spring.cloud.openfeign.oauth2.enabled=true",
+        "spring.cloud.openfeign.client.config.event.url=http://localhost:8080",
+        "spring.security.oauth2.client.provider.authelia.issuer-uri=issuer-uri",
+        "spring.security.oauth2.client.registration.bss.provider=authelia",
+        "spring.security.oauth2.client.registration.bss.client-id=client-id",
+        "spring.security.oauth2.client.registration.bss.client-secret=client-secret",
+        "spring.cloud.openfeign.oauth2.clientRegistrationId=bss",
     ],
 )
 open class IntegrationTest {

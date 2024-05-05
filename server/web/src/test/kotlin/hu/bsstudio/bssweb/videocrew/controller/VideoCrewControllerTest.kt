@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.opaqueToken
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
@@ -32,7 +32,7 @@ internal class VideoCrewControllerTest(
         every { mockService.getPositions() } returns listOf(POSITION)
 
         mockMvc.get("$BASE_URL/position") {
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
         }.andExpectAll {
             status { isOk() }
             content { objectMapper.writeValueAsString(listOf(POSITION)) }
@@ -47,7 +47,7 @@ internal class VideoCrewControllerTest(
             param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
             param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
             param("position", VIDEO_CREW_REQUEST.position)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isOk() }
@@ -63,7 +63,7 @@ internal class VideoCrewControllerTest(
             param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
             param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
             param("position", VIDEO_CREW_REQUEST.position)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isNotFound() }
@@ -79,7 +79,7 @@ internal class VideoCrewControllerTest(
             param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
             param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
             param("position", VIDEO_CREW_REQUEST.position)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isOk() }
@@ -95,7 +95,7 @@ internal class VideoCrewControllerTest(
             param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
             param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
             param("position", VIDEO_CREW_REQUEST.position)
-            with(httpBasic(USERNAME, PASSWORD))
+            with(opaqueToken())
             with(csrf())
         }.andExpectAll {
             status { isNotFound() }
@@ -105,8 +105,6 @@ internal class VideoCrewControllerTest(
 
     private companion object {
         private const val BASE_URL = "/api/v1/videoCrew"
-        private const val USERNAME = "user"
-        private const val PASSWORD = "password"
         private val VIDEO_ID = UUID.randomUUID()
         private const val POSITION = "position"
         private val MEMBER_ID = UUID.randomUUID()
