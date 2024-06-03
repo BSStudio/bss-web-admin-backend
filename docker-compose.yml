@@ -23,7 +23,7 @@ services:
       spring.flyway.schemas: "private,public"
   postgres:
     # update server/data/src/test/resources/application.yml
-    image: "postgres:16.2-alpine3.18"
+    image: "postgres:16.3-alpine3.18"
     environment:
       POSTGRES_DB: "bss"
       POSTGRES_USER: "user"
