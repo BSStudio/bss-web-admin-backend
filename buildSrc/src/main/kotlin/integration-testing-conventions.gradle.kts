@@ -21,7 +21,7 @@ dependencies {
         exclude(module = "hamcrest") // require developers to use KoTest
         exclude(module = "org.assertj") // require developers to use KoTest
     }
-    intTestImplementation("io.kotest:kotest-runner-junit5:5.9.0")
+    intTestImplementation("io.kotest:kotest-runner-junit5:5.9.1")
 }
 
 val integrationTest = task<Test>("integrationTest") {
