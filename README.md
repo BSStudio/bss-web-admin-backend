@@ -122,6 +122,24 @@ Docker compose:
 docker compose up
 ```
 
+This will start the app, database, and 3rd party mocks.
+
+If you want to look at metrics
+
+````shell
+# Set your git not to commit changes to the default Grafana config
+git update-index --skip-worktree docker/grafana/grafana.db
+docker compose -profile metrics up
+
+# If you want to commit changes to the default Grafana config
+git update-index --no-skip-worktree docker/grafana/grafana.db
+git add docker/grafana/grafana.db
+git commit -m "Update Grafana config"
+# Ignore logs again
+git update-index --skip-worktree docker/grafana/grafana.db
+````
+
+
 Gradle:
 
 ```shell
