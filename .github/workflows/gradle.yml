@@ -27,7 +27,7 @@ jobs:
           java-version: '21'
           distribution: 'liberica'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Build with Gradle Wrapper
         run: ./gradlew build -x integrationTest
 
@@ -43,7 +43,7 @@ jobs:
           java-version: '21'
           distribution: 'liberica'
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Setup Docker
         uses: docker/setup-buildx-action@v3
       - name: Start Docker compose
