@@ -7,11 +7,11 @@ There are conventions configured for most use cases.
 classDiagram
 direction BT
 
+class spotless-conventions
 class kotlin-conventions
 class java-conventions
 class dependency-management
 class integration-testing-conventions
-class spotless-conventions
 class spring-app-conventions
 class spring-module-conventions
 class testing-conventions
