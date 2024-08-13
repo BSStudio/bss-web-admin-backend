@@ -1,4 +1,5 @@
 plugins {
+    id("spotless-conventions")
     id("kotlin-conventions")
     id("integration-testing-conventions")
 }

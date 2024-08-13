@@ -23,7 +23,6 @@ spring-app-conventions --> spring-module-conventions
 spring-module-conventions --> dependency-management
 dependency-management --> java-conventions
 testing-conventions --> dependency-management
-java-conventions --> spotless-conventions
 kotlin-conventions --> java-conventions
 ```
 
