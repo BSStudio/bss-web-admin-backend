@@ -35,6 +35,7 @@
 .idea/artifacts
 .idea/compiler.xml
 .idea/jarRepositories.xml
+.idea/misc.xml
 .idea/modules.xml
 .idea/*.iml
 .idea/modules

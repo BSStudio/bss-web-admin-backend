@@ -1,7 +1,7 @@
 plugins {
-    id("spotless-conventions")
-    id("kotlin-conventions")
-    id("spring-app-conventions")
+    id("hu.bsstudio.spotless-conventions")
+    id("hu.bsstudio.kotlin-conventions")
+    id("hu.bsstudio.spring-app-conventions")
 }
 
 dependencies {

@@ -1,8 +1,8 @@
 plugins {
-    id("spotless-conventions")
-    id("kotlin-conventions")
-    id("spring-module-conventions")
-    id("kotlin-testing-conventions")
+    id("hu.bsstudio.spotless-conventions")
+    id("hu.bsstudio.kotlin-conventions")
+    id("hu.bsstudio.spring-module-conventions")
+    id("hu.bsstudio.kotlin-testing-conventions")
 }
 dependencies {
     api(project(":server:common"))
