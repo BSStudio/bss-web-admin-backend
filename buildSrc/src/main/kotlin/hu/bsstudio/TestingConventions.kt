@@ -34,7 +34,7 @@ class TestingConventions : Plugin<Project> {
             )
 
         val jacocoTestReport =
-            project.tasks.withType(JacocoReport::class) {
+            project.tasks.withType<JacocoReport> {
                 // require xml report
                 reports {
                     xml.required.set(true)
@@ -52,7 +52,7 @@ class TestingConventions : Plugin<Project> {
             }
 
         val jacocoTestCoverageVerification =
-            project.tasks.withType(JacocoCoverageVerification::class) {
+            project.tasks.withType<JacocoCoverageVerification> {
                 // set required coverage to 100%
                 violationRules {
                     rule {
@@ -79,7 +79,7 @@ class TestingConventions : Plugin<Project> {
         }
 
         val test =
-            project.tasks.withType(Test::class) {
+            project.tasks.withType<Test> {
                 useJUnitPlatform()
                 // generate report after tests run
                 finalizedBy(jacocoTestReport)

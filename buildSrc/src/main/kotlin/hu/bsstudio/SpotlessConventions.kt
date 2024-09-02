@@ -11,7 +11,7 @@ class SpotlessConventions : Plugin<Project> {
     override fun apply(project: Project) {
         project.pluginManager.apply(SpotlessPlugin::class)
 
-        project.extensions.configure(SpotlessExtension::class) {
+        project.extensions.configure<SpotlessExtension>() {
             kotlin {
                 ktlint()
                 toggleOffOn()
