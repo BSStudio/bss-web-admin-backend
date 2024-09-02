@@ -3,7 +3,7 @@ package hu.bsstudio
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-class IntegrationTestingConventions: Plugin<Project> {
+class IntegrationTestingConventions : Plugin<Project> {
     override fun apply(project: Project) {
 //        project.pluginManager.apply(TestingConventions::class)
 //

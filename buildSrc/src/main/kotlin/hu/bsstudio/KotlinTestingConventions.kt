@@ -4,7 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 
-class KotlinTestingConventions: Plugin<Project> {
+class KotlinTestingConventions : Plugin<Project> {
     override fun apply(project: Project) {
         project.pluginManager.apply(TestingConventions::class)
         project.dependencies.apply {
@@ -14,4 +14,3 @@ class KotlinTestingConventions: Plugin<Project> {
         }
     }
 }
-

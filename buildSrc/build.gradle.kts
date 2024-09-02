@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+    alias(libs.plugins.spotless)
 }
 
 repositories {
@@ -15,6 +16,12 @@ dependencies {
     implementation(kotlin("reflect", "2.0.10"))
     implementation(kotlin("stdlib-jdk8", "2.0.10"))
     implementation(kotlin("noarg", "2.0.10"))
+}
+
+spotless {
+    kotlin {
+        ktlint()
+    }
 }
 
 gradlePlugin {

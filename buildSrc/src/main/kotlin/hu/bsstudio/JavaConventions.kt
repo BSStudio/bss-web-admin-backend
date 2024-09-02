@@ -8,7 +8,7 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 
-class JavaConventions: Plugin<Project> {
+class JavaConventions : Plugin<Project> {
     override fun apply(project: Project) {
         project.pluginManager.apply(JavaLibraryPlugin::class)
 

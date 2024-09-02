@@ -7,9 +7,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 
-
-class SpotlessConventions: Plugin<Project> {
-
+class SpotlessConventions : Plugin<Project> {
     override fun apply(project: Project) {
         project.pluginManager.apply(SpotlessPlugin::class)
 
@@ -24,7 +22,7 @@ class SpotlessConventions: Plugin<Project> {
                 cleanthat()
                 googleJavaFormat()
             }
-            kotlinGradle{
+            kotlinGradle {
                 ktlint()
             }
             flexmark {
