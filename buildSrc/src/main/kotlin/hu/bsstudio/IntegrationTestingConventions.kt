@@ -43,7 +43,7 @@ class IntegrationTestingConventions : Plugin<Project> {
             add("intTestImplementation", "io.kotest:kotest-runner-junit5:5.9.1")
         }
 
-        val integrationTest = project.tasks.registering(Test::class) {
+        val integrationTest = project.tasks.register("integrationTest", Test::class) {
             description = "Runs integration tests."
             group = "verification"
 

@@ -33,7 +33,7 @@ class SpringAppConventions : Plugin<Project> {
         }
 
         project.dependencies {
-            // add("annotationProcessor", "org.springframework.boot:spring-boot-configuration-processor")
+            add("annotationProcessor", "org.springframework.boot:spring-boot-configuration-processor")
             add("developmentOnly", "org.springframework.boot:spring-boot-devtools")
             add("implementation", "org.springframework.boot:spring-boot-starter")
         }
