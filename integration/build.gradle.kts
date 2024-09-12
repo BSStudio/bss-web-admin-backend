@@ -1,7 +1,7 @@
 plugins {
-    id("spotless-conventions")
-    id("kotlin-conventions")
-    id("integration-testing-conventions")
+    id("hu.bsstudio.spotless-conventions")
+    id("hu.bsstudio.kotlin-conventions")
+    id("hu.bsstudio.integration-testing-conventions")
 }
 
 dependencies {
