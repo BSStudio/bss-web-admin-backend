@@ -7,6 +7,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.get
 
 class JavaConventions : Plugin<Project> {
     override fun apply(project: Project) {
@@ -18,10 +19,6 @@ class JavaConventions : Plugin<Project> {
             }
         }
 
-        project.configurations.apply {
-            getByName("compileOnly") {
-                extendsFrom(getByName("annotationProcessor"))
-            }
-        }
+        project.configurations["compileOnly"].extendsFrom(project.configurations["annotationProcessor"])
     }
 }
