@@ -20,7 +20,7 @@ class DependencyManagement : Plugin<Project> {
             add("api", enforcedPlatform("org.springframework.boot:spring-boot-dependencies:3.3.3"))
             add("api", enforcedPlatform("org.springframework.shell:spring-shell-dependencies:3.3.2"))
             add("api", enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:2023.0.3"))
-            add("api", platform("io.kotest:kotest-bom:5.3.0"))
+            add("testApi", platform("io.kotest:kotest-bom:5.3.0"))
         }
     }
 }

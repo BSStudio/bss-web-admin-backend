@@ -25,7 +25,6 @@ class SpringAppConventions : Plugin<Project> {
         }
 
         project.tasks.withType<BootJar> {
-            enabled = true
             archiveClassifier.value("boot")
         }
 
