@@ -3,12 +3,17 @@ package hu.bsstudio
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.TestReportAggregationPlugin
+import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.tasks.Jar
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoReportAggregationPlugin
+import org.springframework.boot.gradle.dsl.SpringBootExtension
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 class SpringAppConventions : Plugin<Project> {
     override fun apply(project: Project) {
@@ -19,13 +24,12 @@ class SpringAppConventions : Plugin<Project> {
             apply(TestReportAggregationPlugin::class)
         }
 
-        project.tasks.withType<Jar> {
-            // if this convention is used we only expect bootJars to be built
-            // it will disable the default jar task
-            enabled = false
+        project.tasks.withType<BootJar> {
+            enabled = true
+            archiveClassifier.value("boot")
         }
 
-        project.tasks.named("test") {
+        project.tasks.named<Test>("test") {
             finalizedBy(
                 project.tasks.named("testAggregateTestReport"),
                 project.tasks.named("testCodeCoverageReport"),

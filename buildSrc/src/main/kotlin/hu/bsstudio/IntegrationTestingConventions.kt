@@ -41,6 +41,7 @@ class IntegrationTestingConventions : Plugin<Project> {
                 exclude(module = "org.assertj") // require developers to use KoTest
             }
             add("intTestImplementation", "io.kotest:kotest-runner-junit5:5.9.1")
+            add("intTestImplementation", "io.kotest:kotest-assertions-core-jvm:5.9.1")
         }
 
         val integrationTest = project.tasks.register("integrationTest", Test::class) {
@@ -54,10 +55,6 @@ class IntegrationTestingConventions : Plugin<Project> {
             shouldRunAfter("test")
 
             useJUnitPlatform()
-
-            testLogging {
-                showStandardStreams = true
-            }
         }
 
         project.tasks.named("check") { dependsOn(integrationTest) }
