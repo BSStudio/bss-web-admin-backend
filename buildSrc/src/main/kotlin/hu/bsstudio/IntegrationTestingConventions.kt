@@ -30,11 +30,9 @@ class IntegrationTestingConventions : Plugin<Project> {
             }
         }
 
-        project.configurations.getByName("intTestImplementation")
-            .extendsFrom(project.configurations.getByName("implementation"))
+        project.configurations["intTestImplementation"].extendsFrom(project.configurations["implementation"])
 
-        project.configurations.getByName("intTestRuntimeOnly")
-            .extendsFrom(project.configurations.getByName("runtimeOnly"))
+        project.configurations["intTestRuntimeOnly"].extendsFrom(project.configurations["runtimeOnly"])
 
 
         project.dependencies {
