@@ -11,11 +11,13 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.exclude
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.getting
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.registering
+import org.gradle.kotlin.dsl.the
 
 class IntegrationTestingConventions : Plugin<Project> {
     override fun apply(project: Project) {
@@ -48,8 +50,7 @@ class IntegrationTestingConventions : Plugin<Project> {
             description = "Runs integration tests."
             group = "verification"
 
-            val sourceSet = project.extensions.getByType<SourceSetContainer>()
-            val intTest = sourceSet.getByName("intTest")
+            val intTest = project.the<SourceSetContainer>()["intTest"]
             testClassesDirs = intTest.output.classesDirs
             classpath = intTest.runtimeClasspath
             shouldRunAfter("test")
