@@ -1,6 +1,6 @@
 [versions]
 springdoc = "2.6.0"
-springBoot = "3.3.3"
+springBoot = "3.3.4"
 springDependencyManagementPlugin = "1.1.6"
 kotest = "5.9.1"
 spotless = "6.25.0"
