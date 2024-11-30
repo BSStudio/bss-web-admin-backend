@@ -3,7 +3,7 @@ orbs:
   codecov: codecov/codecov@5.0.0
   gradle: circleci/gradle@3.0.0
   docker: circleci/docker@2.7.1
-  github-cli: circleci/github-cli@2.5.0
+  github-cli: circleci/github-cli@2.6.0
 executors:
   jdk:
     docker:
