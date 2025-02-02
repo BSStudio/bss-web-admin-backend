@@ -10,6 +10,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 
 class ReadAllVideoIntegrationTest(
@@ -21,7 +22,7 @@ class ReadAllVideoIntegrationTest(
 
         assertSoftly(actual) {
             body.shouldBeEmpty()
-            statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(200)
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
         }
     }
 
@@ -43,7 +44,7 @@ class ReadAllVideoIntegrationTest(
                     visible = false,
                 ),
             )
-            statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(200)
+            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
         }
     }
 

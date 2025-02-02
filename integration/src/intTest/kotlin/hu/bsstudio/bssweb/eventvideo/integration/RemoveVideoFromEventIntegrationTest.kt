@@ -22,7 +22,8 @@ class RemoveVideoFromEventIntegrationTest(
     internal fun `it should return 204 and remove video from event`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
         val eventEntity =
-            eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
+            eventRepository
+                .save(DetailedEventEntity(url = "url", title = "title"))
                 .apply {
                     this.videos =
                         listOf(
