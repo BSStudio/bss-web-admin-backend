@@ -20,10 +20,11 @@ spotless {
         target("**/*.md")
         flexmark()
     }
-    yaml {
-        target("**/*.yml", "**/*.yaml")
-        jackson()
-            .yamlFeature("WRITE_DOC_START_MARKER", false)
-            .yamlFeature("MINIMIZE_QUOTES", true)
-    }
+    // TODO fix yaml with spotless update
+    // yaml {
+    //     target("**/*.yml", "**/*.yaml")
+    //     jackson()
+    //        .yamlFeature("WRITE_DOC_START_MARKER", false)
+    //         .yamlFeature("MINIMIZE_QUOTES", true)
+    // }
 }

@@ -14,6 +14,7 @@ import io.kotest.matchers.string.shouldContain
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 
 class CreateVideoIntegrationTest(
@@ -25,7 +26,7 @@ class CreateVideoIntegrationTest(
         val actual = client.createVideo(CREATE_VIDEO)
 
         assertSoftly(actual) {
-            statusCode shouldBeEqual org.springframework.http.HttpStatusCode.valueOf(201)
+            statusCode shouldBeEqual HttpStatusCode.valueOf(201)
             body!! shouldBeEqual
                 Video(
                     id = actual.body!!.id,
