@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-openjdk-alpine-musl:21.0.4 AS build
+FROM bellsoft/liberica-openjdk-alpine-musl:21.0.6 AS build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                         ./
@@ -20,7 +20,7 @@ COPY ./server   ./server
 ARG BUILD_ARG="bootJar --parallel"
 RUN ./gradlew ${BUILD_ARG}
 
-FROM bellsoft/liberica-openjre-alpine-musl:21.0.4 AS app
+FROM bellsoft/liberica-openjre-alpine-musl:21.0.6 AS app
 # use non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
