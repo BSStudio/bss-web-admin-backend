@@ -37,7 +37,7 @@ services:
       timeout: 5s
       retries: 3
   mock-file-api:
-    image: "wiremock/wiremock:2.35.0"
+    image: "wiremock/wiremock:3.12.1"
     ports:
       - "127.0.0.1:8888:8080"
     healthcheck:
