@@ -15,9 +15,8 @@ class EventServiceConfig(
     private val videoMapper: VideoMapper,
 ) {
     @Bean
-    fun defaultEventService(eventMapper: EventMapper): DefaultEventService {
-        return DefaultEventService(repository, detailedRepository, eventMapper)
-    }
+    fun defaultEventService(eventMapper: EventMapper): DefaultEventService =
+        DefaultEventService(repository, detailedRepository, eventMapper)
 
     @Bean
     fun eventMapper() = EventMapper(videoMapper)

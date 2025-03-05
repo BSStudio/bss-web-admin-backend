@@ -38,42 +38,45 @@ internal class VideoControllerTest(
     internal fun getAllVideos() {
         every { mockService.findAllVideos() } returns listOf(VIDEO)
 
-        mockMvc.get("$BASE_URL/all") {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(listOf(VIDEO)) }
-        }
+        mockMvc
+            .get("$BASE_URL/all") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(listOf(VIDEO)) }
+            }
     }
 
     @Test
     internal fun getAllVideosPaged() {
         every { mockService.findAllVideos(PAGEABLE) } returns PAGED_VIDEOS
 
-        mockMvc.get(BASE_URL) {
-            param("page", "${PAGEABLE.pageNumber}")
-            param("size", "${PAGEABLE.pageSize}")
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(PAGED_VIDEOS) }
-        }
+        mockMvc
+            .get(BASE_URL) {
+                param("page", "${PAGEABLE.pageNumber}")
+                param("size", "${PAGEABLE.pageSize}")
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(PAGED_VIDEOS) }
+            }
     }
 
     @Test
     internal fun createVideo() {
         every { mockService.insertVideo(CREATE_VIDEO) } returns VIDEO
 
-        mockMvc.post(BASE_URL) {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(CREATE_VIDEO)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isCreated() }
-            content { objectMapper.writeValueAsString(VIDEO) }
-            header { string("Location", "http://localhost$BASE_URL/$VIDEO_ID") }
-        }
+        mockMvc
+            .post(BASE_URL) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(CREATE_VIDEO)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isCreated() }
+                content { objectMapper.writeValueAsString(VIDEO) }
+                header { string("Location", "http://localhost$BASE_URL/$VIDEO_ID") }
+            }
     }
 
     @Test
@@ -82,84 +85,90 @@ internal class VideoControllerTest(
         val visible = false
         every { mockService.changeVideoVisibility(videoIds, visible) } returns videoIds
 
-        mockMvc.put("$BASE_URL/visible") {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(videoIds)
-            param("visible", "$visible")
-            param("videoIds", "$VIDEO_ID")
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(videoIds) }
-        }
+        mockMvc
+            .put("$BASE_URL/visible") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(videoIds)
+                param("visible", "$visible")
+                param("videoIds", "$VIDEO_ID")
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(videoIds) }
+            }
     }
 
     @Test
     internal fun getVideo1() {
         every { mockService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO)
 
-        mockMvc.get("$BASE_URL/$VIDEO_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
-        }
+        mockMvc
+            .get("$BASE_URL/$VIDEO_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
+            }
     }
 
     @Test
     internal fun getVideo2() {
         every { mockService.findVideoById(VIDEO_ID) } returns Optional.empty()
 
-        mockMvc.get("$BASE_URL/$VIDEO_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isNotFound() }
-            content { string("") }
-        }
+        mockMvc
+            .get("$BASE_URL/$VIDEO_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isNotFound() }
+                content { string("") }
+            }
     }
 
     @Test
     internal fun updateVideo1() {
         every { mockService.updateVideo(VIDEO_ID, UPDATE_VIDEO) } returns Optional.of(DETAILED_VIDEO)
 
-        mockMvc.put("$BASE_URL/$VIDEO_ID") {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(UPDATE_VIDEO)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
-        }
+        mockMvc
+            .put("$BASE_URL/$VIDEO_ID") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(UPDATE_VIDEO)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
+            }
     }
 
     @Test
     internal fun updateVideo2() {
         every { mockService.updateVideo(VIDEO_ID, UPDATE_VIDEO) } returns Optional.empty()
 
-        mockMvc.put("$BASE_URL/$VIDEO_ID") {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(UPDATE_VIDEO)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isNotFound() }
-            content { string("") }
-        }
+        mockMvc
+            .put("$BASE_URL/$VIDEO_ID") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(UPDATE_VIDEO)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isNotFound() }
+                content { string("") }
+            }
     }
 
     @Test
     internal fun deleteVideo() {
         every { mockService.deleteVideoById(VIDEO_ID) } returns Unit
 
-        mockMvc.delete("$BASE_URL/$VIDEO_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isNoContent() }
-            content { string("") }
-        }
+        mockMvc
+            .delete("$BASE_URL/$VIDEO_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isNoContent() }
+                content { string("") }
+            }
     }
 
     private companion object {

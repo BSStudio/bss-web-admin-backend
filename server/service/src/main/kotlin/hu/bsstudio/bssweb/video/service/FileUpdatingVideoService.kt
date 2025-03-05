@@ -11,43 +11,36 @@ import org.springframework.data.domain.Pageable
 import java.util.Optional
 import java.util.UUID
 
-class FileUpdatingVideoService(private val service: VideoService, private val fileClient: FileApiClient) : VideoService {
-    override fun findAllVideos(): List<Video> {
-        return this.service.findAllVideos()
-    }
+class FileUpdatingVideoService(
+    private val service: VideoService,
+    private val fileClient: FileApiClient,
+) : VideoService {
+    override fun findAllVideos(): List<Video> = this.service.findAllVideos()
 
-    override fun findAllVideos(pageable: Pageable): Page<Video> {
-        return this.service.findAllVideos(pageable)
-    }
+    override fun findAllVideos(pageable: Pageable): Page<Video> = this.service.findAllVideos(pageable)
 
-    override fun insertVideo(createVideo: CreateVideo): Video {
-        return this.service.insertVideo(createVideo)
+    override fun insertVideo(createVideo: CreateVideo): Video =
+        this.service
+            .insertVideo(createVideo)
             .also { this.fileClient.createVideoFolder(VideoFileUpdate(it.id, it.urls)) }
-    }
 
     override fun changeVideoVisibility(
         videoIds: List<UUID>,
         visible: Boolean,
-    ): List<UUID> {
-        return this.service.changeVideoVisibility(videoIds, visible)
-    }
+    ): List<UUID> = this.service.changeVideoVisibility(videoIds, visible)
 
-    override fun findVideoById(videoId: UUID): Optional<DetailedVideo> {
-        return this.service.findVideoById(videoId)
-    }
+    override fun findVideoById(videoId: UUID): Optional<DetailedVideo> = this.service.findVideoById(videoId)
 
     override fun updateVideo(
         videoId: UUID,
         updateVideo: UpdateVideo,
-    ): Optional<DetailedVideo> {
-        return this.service.updateVideo(videoId, updateVideo)
+    ): Optional<DetailedVideo> =
+        this.service
+            .updateVideo(videoId, updateVideo)
             .map {
                 this.fileClient.updateVideoFolder(VideoFileUpdate(it.id, it.urls))
                 it
             }
-    }
 
-    override fun deleteVideoById(videoId: UUID) {
-        return this.service.deleteVideoById(videoId)
-    }
+    override fun deleteVideoById(videoId: UUID) = this.service.deleteVideoById(videoId)
 }

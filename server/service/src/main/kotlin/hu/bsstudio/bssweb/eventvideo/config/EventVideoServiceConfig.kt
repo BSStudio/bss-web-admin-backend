@@ -13,7 +13,5 @@ class EventVideoServiceConfig(
     private val eventService: EventService,
 ) {
     @Bean
-    fun eventVideoService(): EventVideoService {
-        return DefaultEventVideoService(repository, eventService)
-    }
+    fun eventVideoService(): EventVideoService = DefaultEventVideoService(repository, eventService)
 }

@@ -10,16 +10,18 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
 
 @RestController
-class LabelController(val service: LabelService) : LabelOperation {
-    override fun getAllLabels(): ResponseEntity<List<Label>> {
-        return this.service.findAllLabels()
+class LabelController(
+    val service: LabelService,
+) : LabelOperation {
+    override fun getAllLabels(): ResponseEntity<List<Label>> =
+        this.service
+            .findAllLabels()
             .let { ResponseEntity.ok(it) }
-    }
 
-    override fun createLabel(label: CreateLabel): ResponseEntity<Label> {
-        return this.service.insertLabel(label)
+    override fun createLabel(label: CreateLabel): ResponseEntity<Label> =
+        this.service
+            .insertLabel(label)
             .let { ResponseEntity.created(locationUri(it.id)).body(it) }
-    }
 
     override fun removeLabel(labelId: UUID): ResponseEntity<Void> {
         this.service.removeLabel(labelId)
@@ -27,7 +29,8 @@ class LabelController(val service: LabelService) : LabelOperation {
     }
 
     private fun locationUri(id: UUID) =
-        ServletUriComponentsBuilder.fromCurrentRequest()
+        ServletUriComponentsBuilder
+            .fromCurrentRequest()
             .path("/{id}")
             .buildAndExpand(id)
             .toUri()

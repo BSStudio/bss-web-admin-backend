@@ -12,45 +12,43 @@ class DefaultMemberService(
     private val repository: MemberRepository,
     private val mapper: MemberMapper,
 ) : MemberService {
-    override fun findAllMembers(): List<Member> {
-        return repository.findAll()
+    override fun findAllMembers(): List<Member> =
+        repository
+            .findAll()
             .map(mapper::entityToModel)
-    }
 
-    override fun insertMember(createMember: CreateMember): Member {
-        return createMember
+    override fun insertMember(createMember: CreateMember): Member =
+        createMember
             .let(mapper::modelToEntity)
             .let(repository::save)
             .let(mapper::entityToModel)
-    }
 
     override fun archiveMembers(
         memberIds: List<UUID>,
         archive: Boolean,
-    ): List<UUID> {
-        return repository.findAllById(memberIds)
+    ): List<UUID> =
+        repository
+            .findAllById(memberIds)
             .map {
                 it.archived = archive
                 it
-            }
-            .map(repository::save)
+            }.map(repository::save)
             .map { it.id }
-    }
 
     override fun updateMember(
         memberId: UUID,
         updateMember: UpdateMember,
-    ): Optional<Member> {
-        return repository.findById(memberId)
+    ): Optional<Member> =
+        repository
+            .findById(memberId)
             .map { mapper.updateToEntity(it, updateMember) }
             .map(repository::save)
             .map(mapper::entityToModel)
-    }
 
-    override fun findMemberById(memberIds: UUID): Optional<Member> {
-        return repository.findById(memberIds)
+    override fun findMemberById(memberIds: UUID): Optional<Member> =
+        repository
+            .findById(memberIds)
             .map(mapper::entityToModel)
-    }
 
     override fun removeMember(memberId: UUID) = repository.deleteById(memberId)
 }

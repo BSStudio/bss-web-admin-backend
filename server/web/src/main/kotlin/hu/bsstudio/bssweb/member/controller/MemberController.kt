@@ -11,37 +11,39 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
 
 @RestController
-class MemberController(val service: MemberService) : MemberOperation {
-    override fun getAllMembers(): ResponseEntity<List<Member>> {
-        return service.findAllMembers()
+class MemberController(
+    val service: MemberService,
+) : MemberOperation {
+    override fun getAllMembers(): ResponseEntity<List<Member>> =
+        service
+            .findAllMembers()
             .let { ResponseEntity.ok(it) }
-    }
 
-    override fun createMember(member: CreateMember): ResponseEntity<Member> {
-        return service.insertMember(member)
+    override fun createMember(member: CreateMember): ResponseEntity<Member> =
+        service
+            .insertMember(member)
             .let { ResponseEntity.created(locationUri(it.id)).body(it) }
-    }
 
     override fun updateMember(
         memberId: UUID,
         updateMember: UpdateMember,
-    ): ResponseEntity<Member> {
-        return service.updateMember(memberId, updateMember)
+    ): ResponseEntity<Member> =
+        service
+            .updateMember(memberId, updateMember)
             .let { ResponseEntity.of(it) }
-    }
 
     override fun archiveMembers(
         memberIds: List<UUID>,
         archive: Boolean,
-    ): ResponseEntity<List<UUID>> {
-        return service.archiveMembers(memberIds, archive)
+    ): ResponseEntity<List<UUID>> =
+        service
+            .archiveMembers(memberIds, archive)
             .let { ResponseEntity.ok(it) }
-    }
 
-    override fun getMemberById(memberId: UUID): ResponseEntity<Member> {
-        return service.findMemberById(memberId)
+    override fun getMemberById(memberId: UUID): ResponseEntity<Member> =
+        service
+            .findMemberById(memberId)
             .let { ResponseEntity.of(it) }
-    }
 
     override fun removeMember(memberId: UUID): ResponseEntity<Void> {
         service.removeMember(memberId)
@@ -49,7 +51,8 @@ class MemberController(val service: MemberService) : MemberOperation {
     }
 
     private fun locationUri(id: UUID) =
-        ServletUriComponentsBuilder.fromCurrentRequest()
+        ServletUriComponentsBuilder
+            .fromCurrentRequest()
             .path("/{id}")
             .buildAndExpand(id)
             .toUri()

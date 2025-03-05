@@ -24,12 +24,8 @@ data class DetailedVideoCrewEntity(
         return this.id == other.id
     }
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    override fun hashCode(): Int = id.hashCode()
 
     @Override
-    override fun toString(): String {
-        return this::class.simpleName + "(id = $id)"
-    }
+    override fun toString(): String = this::class.simpleName + "(id = $id)"
 }

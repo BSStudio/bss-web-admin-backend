@@ -11,15 +11,16 @@ import org.springframework.security.web.SecurityFilterChain
 @EnableWebSecurity
 class SecurityConfig {
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        return http
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
+        http
             .authorizeHttpRequests {
-                it.requestMatchers("/api/**").authenticated()
-                    .anyRequest().permitAll()
-            }
-            .httpBasic(Customizer.withDefaults())
+                it
+                    .requestMatchers("/api/**")
+                    .authenticated()
+                    .anyRequest()
+                    .permitAll()
+            }.httpBasic(Customizer.withDefaults())
             .cors { it.disable() }
             .csrf { it.disable() }
             .build()
-    }
 }

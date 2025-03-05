@@ -17,14 +17,10 @@ class MemberServiceConfig(
 ) {
     @Bean
     @Primary
-    fun memberService(defaultMemberService: MemberService): MemberService {
-        return FileUpdatingMemberService(defaultMemberService, fileClient)
-    }
+    fun memberService(defaultMemberService: MemberService): MemberService = FileUpdatingMemberService(defaultMemberService, fileClient)
 
     @Bean
-    fun defaultMemberService(memberMapper: MemberMapper): MemberService {
-        return DefaultMemberService(repository, memberMapper)
-    }
+    fun defaultMemberService(memberMapper: MemberMapper): MemberService = DefaultMemberService(repository, memberMapper)
 
     @Bean
     fun memberMapper() = MemberMapper()

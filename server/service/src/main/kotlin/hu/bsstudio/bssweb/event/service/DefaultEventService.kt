@@ -17,45 +17,43 @@ open class DefaultEventService(
     private val detailedRepository: DetailedEventRepository,
     private val mapper: EventMapper,
 ) : EventService {
-    override fun findAllEvent(): List<Event> {
-        return repository.findAll()
+    override fun findAllEvent(): List<Event> =
+        repository
+            .findAll()
             .map(mapper::entityToModel)
-    }
 
-    override fun insertEvent(createEvent: CreateEvent): Event {
-        return createEvent
+    override fun insertEvent(createEvent: CreateEvent): Event =
+        createEvent
             .let(mapper::modelToEntity)
             .let(repository::save)
             .let(mapper::entityToModel)
-    }
 
     override fun changeVisibility(
         eventIds: List<UUID>,
         visible: Boolean,
-    ): List<UUID> {
-        return repository.findAllById(eventIds)
+    ): List<UUID> =
+        repository
+            .findAllById(eventIds)
             .map {
                 it.visible = visible
                 it
-            }
-            .map(repository::save)
+            }.map(repository::save)
             .map { it.id }
-    }
 
-    override fun findEventById(eventId: UUID): Optional<DetailedEvent> {
-        return detailedRepository.findById(eventId)
+    override fun findEventById(eventId: UUID): Optional<DetailedEvent> =
+        detailedRepository
+            .findById(eventId)
             .map(mapper::entityToModel)
-    }
 
     override fun updateEvent(
         eventId: UUID,
         updateEvent: UpdateEvent,
-    ): Optional<DetailedEvent> {
-        return detailedRepository.findById(eventId)
+    ): Optional<DetailedEvent> =
+        detailedRepository
+            .findById(eventId)
             .map { mapper.updateToEntity(it, updateEvent) }
             .map(detailedRepository::save)
             .map(mapper::entityToModel)
-    }
 
     override fun removeEvent(eventId: UUID) = repository.deleteById(eventId)
 }

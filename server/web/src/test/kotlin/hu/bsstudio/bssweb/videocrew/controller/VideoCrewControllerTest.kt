@@ -31,76 +31,81 @@ internal class VideoCrewControllerTest(
     internal fun getPositions() {
         every { mockService.getPositions() } returns listOf(POSITION)
 
-        mockMvc.get("$BASE_URL/position") {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(listOf(POSITION)) }
-        }
+        mockMvc
+            .get("$BASE_URL/position") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(listOf(POSITION)) }
+            }
     }
 
     @Test
     internal fun addPosition() {
         every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
-        mockMvc.put(BASE_URL) {
-            param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
-            param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
-            param("position", VIDEO_CREW_REQUEST.position)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
-        }
+        mockMvc
+            .put(BASE_URL) {
+                param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
+                param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
+                param("position", VIDEO_CREW_REQUEST.position)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
+            }
     }
 
     @Test
     internal fun addPositionEmpty() {
         every { mockService.addPosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
-        mockMvc.put(BASE_URL) {
-            param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
-            param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
-            param("position", VIDEO_CREW_REQUEST.position)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isNotFound() }
-            content { string("") }
-        }
+        mockMvc
+            .put(BASE_URL) {
+                param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
+                param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
+                param("position", VIDEO_CREW_REQUEST.position)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isNotFound() }
+                content { string("") }
+            }
     }
 
     @Test
     internal fun removePosition() {
         every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.of(DETAILED_VIDEO)
 
-        mockMvc.delete(BASE_URL) {
-            param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
-            param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
-            param("position", VIDEO_CREW_REQUEST.position)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
-        }
+        mockMvc
+            .delete(BASE_URL) {
+                param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
+                param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
+                param("position", VIDEO_CREW_REQUEST.position)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(DETAILED_VIDEO) }
+            }
     }
 
     @Test
     internal fun removePositionEmpty() {
         every { mockService.removePosition(VIDEO_CREW_REQUEST) } returns Optional.empty()
 
-        mockMvc.delete(BASE_URL) {
-            param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
-            param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
-            param("position", VIDEO_CREW_REQUEST.position)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isNotFound() }
-            content { string("") }
-        }
+        mockMvc
+            .delete(BASE_URL) {
+                param("videoId", "${VIDEO_CREW_REQUEST.videoId}")
+                param("memberId", "${VIDEO_CREW_REQUEST.memberId}")
+                param("position", VIDEO_CREW_REQUEST.position)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isNotFound() }
+                content { string("") }
+            }
     }
 
     private companion object {

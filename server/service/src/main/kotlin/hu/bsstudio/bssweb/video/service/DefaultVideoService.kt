@@ -21,47 +21,46 @@ open class DefaultVideoService(
     private val mapper: VideoMapper,
     private val labelRepository: LabelRepository,
 ) : VideoService {
-    override fun findAllVideos(): List<Video> {
-        return repository.findAll()
+    override fun findAllVideos(): List<Video> =
+        repository
+            .findAll()
             .map(mapper::entityToModel)
-    }
 
-    override fun findAllVideos(pageable: Pageable): Page<Video> {
-        return repository.findAll(pageable)
+    override fun findAllVideos(pageable: Pageable): Page<Video> =
+        repository
+            .findAll(pageable)
             .map(mapper::entityToModel)
-    }
 
-    override fun insertVideo(createVideo: CreateVideo): Video {
-        return createVideo
+    override fun insertVideo(createVideo: CreateVideo): Video =
+        createVideo
             .let(mapper::modelToEntity)
             .let(repository::save)
             .let(mapper::entityToModel)
-    }
 
     override fun changeVideoVisibility(
         videoIds: List<UUID>,
         visible: Boolean,
-    ): List<UUID> {
-        return repository.findAllById(videoIds)
+    ): List<UUID> =
+        repository
+            .findAllById(videoIds)
             .map {
                 it.visible = visible
                 it
-            }
-            .map(repository::save)
+            }.map(repository::save)
             .map { it.id }
-    }
 
-    override fun findVideoById(videoId: UUID): Optional<DetailedVideo> {
-        return detailedRepository.findById(videoId)
+    override fun findVideoById(videoId: UUID): Optional<DetailedVideo> =
+        detailedRepository
+            .findById(videoId)
             .map(mapper::entityToModel)
-    }
 
     override fun updateVideo(
         videoId: UUID,
         updateVideo: UpdateVideo,
     ): Optional<DetailedVideo> {
         val labels = labelRepository.findAllByNameIn(updateVideo.labels)
-        return detailedRepository.findById(videoId)
+        return detailedRepository
+            .findById(videoId)
             .map { mapper.updateToEntity(it, updateVideo, labels) }
             .map(detailedRepository::save)
             .map(mapper::entityToModel)

@@ -14,17 +14,15 @@ class DefaultVideoCrewService(
 ) : VideoCrewService {
     override fun getPositions() = repository.getPositions().sorted()
 
-    override fun addPosition(videoCrew: VideoCrewRequest): Optional<DetailedVideo> {
-        return videoCrew
+    override fun addPosition(videoCrew: VideoCrewRequest): Optional<DetailedVideo> =
+        videoCrew
             .let(mapper::modelToEntity)
             .let(repository::save)
             .run { videoService.findVideoById(videoCrew.videoId) }
-    }
 
-    override fun removePosition(videoCrew: VideoCrewRequest): Optional<DetailedVideo> {
-        return videoCrew
+    override fun removePosition(videoCrew: VideoCrewRequest): Optional<DetailedVideo> =
+        videoCrew
             .let(mapper::modelToId)
             .let(repository::deleteById)
             .run { videoService.findVideoById(videoCrew.videoId) }
-    }
 }

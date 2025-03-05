@@ -15,7 +15,5 @@ class VideoCrewServiceConfig(
     private val videoCrewMapper: VideoCrewMapper,
 ) {
     @Bean
-    fun defaultVideoCrewService(): VideoCrewService {
-        return DefaultVideoCrewService(repository, videoService, videoCrewMapper)
-    }
+    fun defaultVideoCrewService(): VideoCrewService = DefaultVideoCrewService(repository, videoService, videoCrewMapper)
 }

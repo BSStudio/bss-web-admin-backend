@@ -12,29 +12,31 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 import java.util.UUID
 
 @RestController
-class EventController(private val service: EventService) : EventOperation {
-    override fun findAllEvent(): ResponseEntity<List<Event>> {
-        return service.findAllEvent()
+class EventController(
+    private val service: EventService,
+) : EventOperation {
+    override fun findAllEvent(): ResponseEntity<List<Event>> =
+        service
+            .findAllEvent()
             .let { ResponseEntity.ok(it) }
-    }
 
-    override fun createEvent(createEvent: CreateEvent): ResponseEntity<Event> {
-        return service.insertEvent(createEvent)
+    override fun createEvent(createEvent: CreateEvent): ResponseEntity<Event> =
+        service
+            .insertEvent(createEvent)
             .let { ResponseEntity.created(locationUri(it.id)).body(it) }
-    }
 
-    override fun findEventById(eventId: UUID): ResponseEntity<DetailedEvent> {
-        return service.findEventById(eventId)
+    override fun findEventById(eventId: UUID): ResponseEntity<DetailedEvent> =
+        service
+            .findEventById(eventId)
             .let { ResponseEntity.of(it) }
-    }
 
     override fun updateEvent(
         eventId: UUID,
         updateEvent: UpdateEvent,
-    ): ResponseEntity<DetailedEvent> {
-        return service.updateEvent(eventId, updateEvent)
+    ): ResponseEntity<DetailedEvent> =
+        service
+            .updateEvent(eventId, updateEvent)
             .let { ResponseEntity.of(it) }
-    }
 
     override fun deleteEvent(eventId: UUID): ResponseEntity<Void> {
         service.removeEvent(eventId)
@@ -42,7 +44,8 @@ class EventController(private val service: EventService) : EventOperation {
     }
 
     private fun locationUri(id: UUID) =
-        ServletUriComponentsBuilder.fromCurrentRequest()
+        ServletUriComponentsBuilder
+            .fromCurrentRequest()
             .path("/{id}")
             .buildAndExpand(id)
             .toUri()
