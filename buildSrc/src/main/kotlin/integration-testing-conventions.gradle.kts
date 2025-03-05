@@ -24,7 +24,7 @@ dependencies {
     intTestImplementation("io.kotest:kotest-runner-junit5:5.9.1")
 }
 
-val integrationTest = task<Test>("integrationTest") {
+val integrationTest by tasks.registering(Test::class) {
     description = "Runs integration tests."
     group = "verification"
 
@@ -38,5 +38,3 @@ val integrationTest = task<Test>("integrationTest") {
         showStandardStreams = true
     }
 }
-
-tasks.check { dependsOn(integrationTest) }
