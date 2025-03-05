@@ -36,95 +36,102 @@ internal class EventControllerTest(
     internal fun findAllEvent() {
         every { mockService.findAllEvent() } returns EVENT_LIST
 
-        mockMvc.get(BASE_URL) {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpect {
-            status { isOk() }
-            content { json(objectMapper.writeValueAsString(EVENT_LIST)) }
-        }
+        mockMvc
+            .get(BASE_URL) {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpect {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(EVENT_LIST)) }
+            }
     }
 
     @Test
     internal fun createEvent() {
         every { mockService.insertEvent(CREATE_EVENT) } returns EVENT
 
-        mockMvc.post(BASE_URL) {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(CREATE_EVENT)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpect {
-            status { isCreated() }
-            content { json(objectMapper.writeValueAsString(EVENT)) }
-            header { string("Location", "http://localhost$BASE_URL/$EVENT_ID") }
-        }
+        mockMvc
+            .post(BASE_URL) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(CREATE_EVENT)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpect {
+                status { isCreated() }
+                content { json(objectMapper.writeValueAsString(EVENT)) }
+                header { string("Location", "http://localhost$BASE_URL/$EVENT_ID") }
+            }
     }
 
     @Test
     internal fun findEventById1() {
         every { mockService.findEventById(EVENT_ID) } returns Optional.of(DETAILED_EVENT)
 
-        mockMvc.get("$BASE_URL/$EVENT_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpect {
-            status { isOk() }
-            content { json(objectMapper.writeValueAsString(DETAILED_EVENT)) }
-        }
+        mockMvc
+            .get("$BASE_URL/$EVENT_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpect {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(DETAILED_EVENT)) }
+            }
     }
 
     @Test
     internal fun findEventById2() {
         every { mockService.findEventById(EVENT_ID) } returns Optional.empty()
 
-        mockMvc.get("$BASE_URL/$EVENT_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpect {
-            status { isNotFound() }
-            content { string("") }
-        }
+        mockMvc
+            .get("$BASE_URL/$EVENT_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpect {
+                status { isNotFound() }
+                content { string("") }
+            }
     }
 
     @Test
     internal fun updateEvent1() {
         every { mockService.updateEvent(EVENT_ID, UPDATE_EVENT) } returns Optional.of(DETAILED_EVENT)
 
-        mockMvc.put("$BASE_URL/$EVENT_ID") {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(UPDATE_EVENT)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpect {
-            status { isOk() }
-            content { json(objectMapper.writeValueAsString(DETAILED_EVENT)) }
-        }
+        mockMvc
+            .put("$BASE_URL/$EVENT_ID") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(UPDATE_EVENT)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpect {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(DETAILED_EVENT)) }
+            }
     }
 
     @Test
     internal fun updateEvent2() {
         every { mockService.updateEvent(EVENT_ID, UPDATE_EVENT) } returns Optional.empty()
 
-        mockMvc.put("$BASE_URL/$EVENT_ID") {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(UPDATE_EVENT)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpect {
-            status { isNotFound() }
-            content { string("") }
-        }
+        mockMvc
+            .put("$BASE_URL/$EVENT_ID") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(UPDATE_EVENT)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpect {
+                status { isNotFound() }
+                content { string("") }
+            }
     }
 
     @Test
     internal fun deleteEvent() {
         every { mockService.removeEvent(EVENT_ID) } returns Unit
 
-        mockMvc.delete("$BASE_URL/$EVENT_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpect {
-            status { isNoContent() }
-            content { string("") }
-        }
+        mockMvc
+            .delete("$BASE_URL/$EVENT_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpect {
+                status { isNoContent() }
+                content { string("") }
+            }
     }
 
     private companion object {

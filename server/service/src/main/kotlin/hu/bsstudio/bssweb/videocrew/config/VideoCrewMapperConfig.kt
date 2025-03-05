@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class VideoCrewMapperConfig(private val memberMapper: MemberMapper) {
+class VideoCrewMapperConfig(
+    private val memberMapper: MemberMapper,
+) {
     @Bean
     fun videoCrewMapper() = VideoCrewMapper(memberMapper)
 }

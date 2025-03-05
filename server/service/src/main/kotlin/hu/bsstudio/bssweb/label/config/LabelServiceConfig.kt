@@ -12,9 +12,7 @@ class LabelServiceConfig(
     private val labelRepository: LabelRepository,
 ) {
     @Bean
-    fun labelService(labelMapper: LabelMapper): LabelService {
-        return DefaultLabelService(labelRepository, labelMapper)
-    }
+    fun labelService(labelMapper: LabelMapper): LabelService = DefaultLabelService(labelRepository, labelMapper)
 
     @Bean
     fun labelMapper() = LabelMapper()

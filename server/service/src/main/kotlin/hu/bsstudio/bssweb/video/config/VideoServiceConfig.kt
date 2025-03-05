@@ -22,17 +22,13 @@ class VideoServiceConfig(
 ) {
     @Bean
     @Primary
-    fun videoService(defaultVideoService: VideoService): VideoService {
-        return FileUpdatingVideoService(defaultVideoService, fileClient)
-    }
+    fun videoService(defaultVideoService: VideoService): VideoService = FileUpdatingVideoService(defaultVideoService, fileClient)
 
     @Bean
     fun defaultVideoService(
         videoMapper: VideoMapper,
         labelRepository: LabelRepository,
-    ): VideoService {
-        return DefaultVideoService(videoRepository, detailedRepository, videoMapper, labelRepository)
-    }
+    ): VideoService = DefaultVideoService(videoRepository, detailedRepository, videoMapper, labelRepository)
 
     @Bean
     fun videoMapper() = VideoMapper(videoCrewMapper)

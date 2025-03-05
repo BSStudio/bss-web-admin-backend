@@ -35,67 +35,72 @@ internal class MemberControllerTest(
     internal fun `should retrieve all members`() {
         every { mockService.findAllMembers() } returns MEMBER_LIST
 
-        mockMvc.get(BASE_URL) {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(MEMBER_LIST) }
-        }
+        mockMvc
+            .get(BASE_URL) {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(MEMBER_LIST) }
+            }
     }
 
     @Test
     internal fun `should retrieve a single member`() {
         every { mockService.findMemberById(MEMBER_ID) } returns Optional.of(MEMBER)
 
-        mockMvc.get("$BASE_URL/$MEMBER_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(MEMBER) }
-        }
+        mockMvc
+            .get("$BASE_URL/$MEMBER_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(MEMBER) }
+            }
     }
 
     @Test
     internal fun `should retrieve a not found if member was not found`() {
         every { mockService.findMemberById(MEMBER_ID) } returns Optional.empty()
 
-        mockMvc.get("$BASE_URL/$MEMBER_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isNotFound() }
-            content { string("") }
-        }
+        mockMvc
+            .get("$BASE_URL/$MEMBER_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isNotFound() }
+                content { string("") }
+            }
     }
 
     @Test
     internal fun `should return ok on update`() {
         every { mockService.updateMember(MEMBER_ID, UPDATE_MEMBER) } returns Optional.of(MEMBER)
 
-        mockMvc.put("$BASE_URL/$MEMBER_ID") {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(UPDATE_MEMBER)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(MEMBER) }
-        }
+        mockMvc
+            .put("$BASE_URL/$MEMBER_ID") {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(UPDATE_MEMBER)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(MEMBER) }
+            }
     }
 
     @Test
     internal fun `should return created on create`() {
         every { mockService.insertMember(CREATE_MEMBER) } returns MEMBER
 
-        mockMvc.post(BASE_URL) {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(CREATE_MEMBER)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isCreated() }
-            content { objectMapper.writeValueAsString(MEMBER) }
-            header { string("Location", "http://localhost$BASE_URL/$MEMBER_ID") }
-        }
+        mockMvc
+            .post(BASE_URL) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(CREATE_MEMBER)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isCreated() }
+                content { objectMapper.writeValueAsString(MEMBER) }
+                header { string("Location", "http://localhost$BASE_URL/$MEMBER_ID") }
+            }
     }
 
     @Test
@@ -104,15 +109,16 @@ internal class MemberControllerTest(
         val unArchive = true
         every { mockService.archiveMembers(memberIds, unArchive) } returns memberIds
 
-        mockMvc.put("$BASE_URL/archive") {
-            param("memberIds", MEMBER_ID.toString())
-            param("unArchive", "$unArchive")
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(memberIds) }
-        }
+        mockMvc
+            .put("$BASE_URL/archive") {
+                param("memberIds", MEMBER_ID.toString())
+                param("unArchive", "$unArchive")
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(memberIds) }
+            }
     }
 
     @Test
@@ -120,27 +126,29 @@ internal class MemberControllerTest(
         val memberIds = listOf(MEMBER_ID)
         every { mockService.archiveMembers(memberIds, true) } returns memberIds
 
-        mockMvc.put("$BASE_URL/archive") {
-            param("memberIds", MEMBER_ID.toString())
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(memberIds) }
-        }
+        mockMvc
+            .put("$BASE_URL/archive") {
+                param("memberIds", MEMBER_ID.toString())
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(memberIds) }
+            }
     }
 
     @Test
     internal fun `should return ok after member was removed`() {
         every { mockService.removeMember(MEMBER_ID) } returns Unit
 
-        mockMvc.delete("$BASE_URL/$MEMBER_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isNoContent() }
-            content { string("") }
-        }
+        mockMvc
+            .delete("$BASE_URL/$MEMBER_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isNoContent() }
+                content { string("") }
+            }
     }
 
     private companion object {

@@ -14,19 +14,17 @@ class DefaultEventVideoService(
     override fun addVideoToEvent(
         eventId: UUID,
         videoId: UUID,
-    ): Optional<DetailedEvent> {
-        return EventVideoEntity(eventId = eventId, videoId = videoId)
+    ): Optional<DetailedEvent> =
+        EventVideoEntity(eventId = eventId, videoId = videoId)
             .let(repository::save)
             .let(EventVideoEntity::eventId)
             .let(eventService::findEventById)
-    }
 
     override fun removeVideoFromEvent(
         eventId: UUID,
         videoId: UUID,
-    ): Optional<DetailedEvent> {
-        return EventVideoEntity(eventId = eventId, videoId = videoId)
+    ): Optional<DetailedEvent> =
+        EventVideoEntity(eventId = eventId, videoId = videoId)
             .let(repository::deleteById)
             .run { eventService.findEventById(eventId) }
-    }
 }

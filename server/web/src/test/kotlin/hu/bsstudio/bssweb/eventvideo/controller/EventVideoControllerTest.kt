@@ -29,30 +29,32 @@ internal class EventVideoControllerTest(
     fun addVideoToEvent() {
         every { mockService.addVideoToEvent(EVENT_ID, VIDEO_ID) } returns Optional.of(DETAILED_EVENT)
 
-        mockMvc.post(BASE_URL) {
-            param("eventId", EVENT_ID.toString())
-            param("videoId", VIDEO_ID.toString())
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(DETAILED_EVENT) }
-        }
+        mockMvc
+            .post(BASE_URL) {
+                param("eventId", EVENT_ID.toString())
+                param("videoId", VIDEO_ID.toString())
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(DETAILED_EVENT) }
+            }
     }
 
     @Test
     fun removeVideoFromEvent() {
         every { mockService.removeVideoFromEvent(EVENT_ID, VIDEO_ID) } returns Optional.of(DETAILED_EVENT)
 
-        mockMvc.delete(BASE_URL) {
-            param("eventId", EVENT_ID.toString())
-            param("videoId", VIDEO_ID.toString())
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(DETAILED_EVENT) }
-        }
+        mockMvc
+            .delete(BASE_URL) {
+                param("eventId", EVENT_ID.toString())
+                param("videoId", VIDEO_ID.toString())
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(DETAILED_EVENT) }
+            }
     }
 
     private companion object {

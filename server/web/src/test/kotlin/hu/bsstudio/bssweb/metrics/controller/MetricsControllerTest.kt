@@ -24,12 +24,13 @@ internal class MetricsControllerTest(
     internal fun `should return ok and metrics`() {
         every { service.getMetrics() } returns METRICS
 
-        mockMvc.get(BASE_URL) {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(METRICS) }
-        }
+        mockMvc
+            .get(BASE_URL) {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(METRICS) }
+            }
     }
 
     private companion object {

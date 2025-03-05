@@ -30,41 +30,44 @@ internal class LabelControllerTest(
     internal fun `should retrieve all labels`() {
         every { mockService.findAllLabels() } returns LABEL_LIST
 
-        mockMvc.get(BASE_URL) {
-            with(httpBasic(USERNAME, PASSWORD))
-        }.andExpectAll {
-            status { isOk() }
-            content { objectMapper.writeValueAsString(LABEL_LIST) }
-        }
+        mockMvc
+            .get(BASE_URL) {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { objectMapper.writeValueAsString(LABEL_LIST) }
+            }
     }
 
     @Test
     internal fun `should return created on create`() {
         every { mockService.insertLabel(CREATE_LABEL) } returns LABEL
 
-        mockMvc.post(BASE_URL) {
-            contentType = MediaType.APPLICATION_JSON
-            content = objectMapper.writeValueAsString(CREATE_LABEL)
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isCreated() }
-            content { objectMapper.writeValueAsString(LABEL) }
-            header { string("Location", "http://localhost$BASE_URL/$LABEL_ID") }
-        }
+        mockMvc
+            .post(BASE_URL) {
+                contentType = MediaType.APPLICATION_JSON
+                content = objectMapper.writeValueAsString(CREATE_LABEL)
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isCreated() }
+                content { objectMapper.writeValueAsString(LABEL) }
+                header { string("Location", "http://localhost$BASE_URL/$LABEL_ID") }
+            }
     }
 
     @Test
     internal fun `should return ok after label was removed`() {
         every { mockService.removeLabel(LABEL_ID) } returns Unit
 
-        mockMvc.delete("$BASE_URL/$LABEL_ID") {
-            with(httpBasic(USERNAME, PASSWORD))
-            with(csrf())
-        }.andExpectAll {
-            status { isNoContent() }
-            content { string("") }
-        }
+        mockMvc
+            .delete("$BASE_URL/$LABEL_ID") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isNoContent() }
+                content { string("") }
+            }
     }
 
     private companion object {

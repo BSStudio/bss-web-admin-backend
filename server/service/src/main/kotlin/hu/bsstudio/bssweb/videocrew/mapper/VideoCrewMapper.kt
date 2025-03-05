@@ -7,24 +7,22 @@ import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 
-class VideoCrewMapper(private val memberMapper: MemberMapper) {
-    fun modelToId(model: VideoCrewRequest): VideoCrewEntityId {
-        return VideoCrewEntityId(
+class VideoCrewMapper(
+    private val memberMapper: MemberMapper,
+) {
+    fun modelToId(model: VideoCrewRequest): VideoCrewEntityId =
+        VideoCrewEntityId(
             videoId = model.videoId,
             position = model.position,
             memberId = model.memberId,
         )
-    }
 
-    fun modelToEntity(model: VideoCrewRequest): VideoCrewEntity {
-        return VideoCrewEntity(id = this.modelToId(model))
-    }
+    fun modelToEntity(model: VideoCrewRequest): VideoCrewEntity = VideoCrewEntity(id = this.modelToId(model))
 
-    fun entityToModel(entity: DetailedVideoCrewEntity): VideoCrew {
-        return VideoCrew(
+    fun entityToModel(entity: DetailedVideoCrewEntity): VideoCrew =
+        VideoCrew(
             videoId = entity.id.videoId,
             position = entity.id.position,
             member = memberMapper.entityToModel(entity.member),
         )
-    }
 }
