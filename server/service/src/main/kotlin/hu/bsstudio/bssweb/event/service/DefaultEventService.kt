@@ -28,18 +28,6 @@ open class DefaultEventService(
             .let(repository::save)
             .let(mapper::entityToModel)
 
-    override fun changeVisibility(
-        eventIds: List<UUID>,
-        visible: Boolean,
-    ): List<UUID> =
-        repository
-            .findAllById(eventIds)
-            .map {
-                it.visible = visible
-                it
-            }.map(repository::save)
-            .map { it.id }
-
     override fun findEventById(eventId: UUID): Optional<DetailedEvent> =
         detailedRepository
             .findById(eventId)
