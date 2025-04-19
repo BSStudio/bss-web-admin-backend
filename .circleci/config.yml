@@ -57,7 +57,7 @@ jobs:
     executor: jdk-machine
     steps:
       - checkout
-      - run: docker compose up -d --build
+      - run: docker compose up --wait
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           cache_key: v2
