@@ -54,32 +54,6 @@ internal class DefaultEventServiceTest(
     }
 
     @Test
-    internal fun `should archive event`() {
-        val eventIds = listOf(EVENT_ID)
-        every { mockRepository.findAllById(eventIds) } returns listOf(EVENT_ENTITY)
-        every { EVENT_ENTITY.visible = false } returns Unit
-        every { mockRepository.save(EVENT_ENTITY) } returns EVENT_ENTITY
-        every { mockMapper.entityToModel(EVENT_ENTITY) } returns EVENT
-
-        val actual = underTest.changeVisibility(eventIds)
-
-        actual.shouldContainExactly(EVENT_ID)
-    }
-
-    @Test
-    internal fun `should archive event with implicit archive flag`() {
-        val eventIds = listOf(EVENT_ID)
-        every { mockRepository.findAllById(eventIds) } returns listOf(EVENT_ENTITY)
-        every { EVENT_ENTITY.visible = true } returns Unit
-        every { mockRepository.save(EVENT_ENTITY) } returns EVENT_ENTITY
-        every { EVENT_ENTITY.id } returns EVENT_ID
-
-        val actual = underTest.changeVisibility(eventIds, true)
-
-        actual.shouldContainExactly(EVENT_ID)
-    }
-
-    @Test
     internal fun `should find event by id`() {
         every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_ENTITY)
         every { mockMapper.entityToModel(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT

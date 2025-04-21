@@ -12,11 +12,6 @@ interface EventService {
 
     fun insertEvent(createEvent: CreateEvent): Event
 
-    fun changeVisibility(
-        eventIds: List<UUID>,
-        visible: Boolean = true,
-    ): List<UUID>
-
     fun findEventById(eventId: UUID): Optional<DetailedEvent>
 
     fun updateEvent(
