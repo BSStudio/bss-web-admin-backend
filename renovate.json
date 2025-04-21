@@ -1,6 +1,5 @@
 {
   "extends": [
-    ":autodetectPinVersions",
     ":automergeDisabled",
     ":dependencyDashboard",
     ":disableRateLimiting",
@@ -18,25 +17,44 @@
   "packageRules": [
     {
       "description": "Add `docker` label for Dockerfile or docker-compose related updates.",
-      "matchManagers": ["docker-compose", "dockerfile"],
-      "addLabels": ["docker"]
+      "matchManagers": [
+        "docker-compose",
+        "dockerfile"
+      ],
+      "addLabels": [
+        "docker"
+      ]
     },
     {
       "description": "Group all minor and patch updates together for gradle.",
-      "matchManagers": ["gradle"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": [
+        "gradle"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch"
     },
     {
       "description": "Group all minor and patch updates together for docker.",
-      "matchManagers": ["docker-compose", "dockerfile"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": [
+        "docker-compose",
+        "dockerfile"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch"
     },
     {
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     }
