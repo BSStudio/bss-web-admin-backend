@@ -27,15 +27,16 @@ internal class LabelEntityRepositoryTest(
     @Test
     internal fun `it should be able to find all labels by name`() {
         underTest.count() shouldBeExactly 0
-        val savedLabels = underTest.saveAll(listOf(LABEL_0, LABEL_1))
+        val savedLabels = underTest.saveAll(listOf(LABEL_1, LABEL_2))
         entityManager.flush()
         underTest.count() shouldBeExactly 2
-        val actual = underTest.findAllByNameIn(listOf(LABEL_0.name, LABEL_1.name, "Nonexistent label"))
+        val actual = underTest.findAllByNameIn(listOf(LABEL_1.name, LABEL_2.name, "Nonexistent label"))
         actual shouldBe savedLabels
     }
 
     private companion object {
         private val LABEL_0 = LabelEntity(name = "Test label 0", description = "Test label description 0")
         private val LABEL_1 = LabelEntity(name = "Test label 1", description = "Test label description 1")
+        private val LABEL_2 = LabelEntity(name = "Test label 2", description = "Test label description 2")
     }
 }
