@@ -14,13 +14,16 @@ services:
       - postgres
     environment:
       bss.file-api.url: "http://mock-file-api:8080"
-      spring.security.user.password: "password"
+      spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: http://mock-oidc/dex/token/introspect
+      spring.security.oauth2.resourceserver.opaquetoken.client-id: example-app
+      spring.security.oauth2.resourceserver.opaquetoken.client-secret: ZXhhbXBsZS1hcHAtc2VjcmV0
       spring.datasource.url: "jdbc:postgresql://postgres:5432/bss?currentSchema=private"
       spring.datasource.username: "user"
       spring.datasource.password: "password"
       spring.flyway.default-schema: "private"
       spring.flyway.schemas: "private,public"
       management.endpoints.web.exposure.include: "prometheus,health"
+
   postgres:
     # update server/data/src/test/resources/application.yml
     image: "postgres:16.3-alpine3.18"
@@ -48,6 +51,12 @@ services:
       retries: 3
     volumes:
       - "./stubs:/home/wiremock/mappings"
+  mock-oidc:
+    image: "dexidp/dex:v2.43.1-distroless"
+    ports:
+      - "127.0.0.1:5556:5556"
+    volumes:
+      - ./config.yaml:/etc/dex/config.yaml
   prometheus:
     image: "prom/prometheus:v3.3.0"
     ports:
