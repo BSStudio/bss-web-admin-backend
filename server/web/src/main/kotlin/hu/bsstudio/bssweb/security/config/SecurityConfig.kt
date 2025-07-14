@@ -17,11 +17,7 @@ class SecurityConfig {
             authorizeHttpRequests {
                 authorize(anyRequest, authenticated)
             }
-            oauth2ResourceServer {
-                opaqueToken { }
-            }
-            cors { disable() }
-            csrf { disable() }
+            oauth2ResourceServer { opaqueToken { } }
         }
 
         return http.build()

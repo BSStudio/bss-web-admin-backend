@@ -52,11 +52,19 @@ services:
     volumes:
       - "./stubs:/home/wiremock/mappings"
   mock-oidc:
-    image: "dexidp/dex:v2.43.1-distroless"
+    image: "dexidp/dex:v2.43.1-alpine"
     ports:
       - "127.0.0.1:5556:5556"
     volumes:
-      - ./config.yaml:/etc/dex/config.yaml
+      - ./docker/dex/config.yml:/etc/dex/config.yml
+    command: ["dex", "serve", "/etc/dex/config.yml"]
+    healthcheck:
+      test: "wget --tries=1 --no-verbose -qO- http://0.0.0.0:5556/dex/.well-known/openid-configuration"
+      start_period: 2s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
   prometheus:
     image: "prom/prometheus:v3.3.0"
     ports:

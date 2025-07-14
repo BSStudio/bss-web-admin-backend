@@ -4,23 +4,21 @@ issuer: http://127.0.0.1:5556/dex
 storage:
   type: sqlite3
   config:
-    file: var/sqlite/dex.db
+    file: /var/dex/dex.db
 
 web:
-  http: 127.0.0.1:5556
-
-telemetry:
-  http: 127.0.0.1:5558
-
-grpc:
-  addr: 127.0.0.1:5557
+  http: 0.0.0.0:5556
 
 staticClients:
-  - id: example-app
+  - name: 'Example App'
+    id: 'example-app'
+    public: true
+    # example-app-secret Base 64 encoded
+    secret: 'ZXhhbXBsZS1hcHAtc2VjcmV0'
     redirectURIs:
       - 'http://127.0.0.1:8080/callback'
-    name: 'Example App'
-    secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+      - 'http://localhost:8080/callback'
+      - 'https://oauth.pstmn.io/v1/callback'
 
 connectors:
   - type: mockCallback
@@ -31,6 +29,7 @@ enablePasswordDB: true
 
 staticPasswords:
   - email: "admin@example.com"
+    # bcrypt hash of the string "password": $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)
     hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
     username: "admin"
     userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
