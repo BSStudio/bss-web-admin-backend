@@ -1,5 +1,8 @@
 package hu.bsstudio.bssweb.security.config
 
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
+import org.springframework.boot.actuate.health.HealthEndpoint
+import org.springframework.boot.actuate.info.InfoEndpoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -15,6 +18,7 @@ class SecurityConfig {
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             authorizeHttpRequests {
+                authorize(EndpointRequest.to(HealthEndpoint::class.java, InfoEndpoint::class.java), permitAll)
                 authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer { opaqueToken { } }

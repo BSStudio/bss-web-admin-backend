@@ -8,3 +8,5 @@ springdoc:
     url: /open-api.yaml
     display-request-duration: true
     use-root-path: true
+  enable-spring-security: false
+  show-actuator: true
