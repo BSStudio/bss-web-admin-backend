@@ -21,7 +21,9 @@ interface VideoOperation {
     fun getAllVideos(): ResponseEntity<List<Video>>
 
     @GetMapping("/api/v1/video")
-    fun getAllVideos(pageable: Pageable): ResponseEntity<Page<Video>>
+    fun getAllVideos(
+        @RequestParam pageable: Pageable,
+    ): ResponseEntity<Page<Video>>
 
     @PostMapping("/api/v1/video")
     fun createVideo(
