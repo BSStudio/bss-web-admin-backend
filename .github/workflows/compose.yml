@@ -23,10 +23,41 @@ jobs:
             *.cache-to=type=gha,mode=max
             *.cache-from=type=gha
 
+      - name: Restore Docker image cache
+        id: image-cache-restore
+        uses: actions/cache@v4
+        with:
+          path: docker-images-cache/
+          key: docker-images-cache-${{ github.sha }}
+          restore-keys: |
+            docker-images-cache-
+
+      - name: Load Docker images from cache
+        if: steps.image-cache-restore.outputs.cache-hit == 'true'
+        run: |
+          for tar in docker-images-cache/*.tar; do
+            [ -f "$tar" ] && docker load -i "$tar"
+          done
+
       - name: Start Docker compose
         run: docker compose up --build --wait
         env:
           COMPOSE_BAKE: true
+
+      - name: Save Docker images to tar
+        run: |
+          mkdir -p docker-images-cache
+          images=$(docker compose config | docker-compose config --services | xargs -n1 docker compose images --format '{{.Image}}' | sort | uniq)
+          for img in $images; do
+            safe_img=$(echo $img | tr '/:' '_')
+            docker save "$img" -o docker-images-cache/${safe_img}.tar || true
+          done
+
+      - name: Cache Docker images
+        uses: actions/cache@v4
+        with:
+          path: docker-images-cache/
+          key: docker-images-cache-${{ github.sha }}
 
       - name: Stop Docker compose
         run: docker compose down
