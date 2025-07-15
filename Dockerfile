@@ -3,6 +3,8 @@ WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                         ./
 COPY ./gradle.properties               ./
+COPY ./gradle/wrapper                  ./gradle/wrapper/
+RUN ./gradlew
 COPY ./settings.gradle.kts             ./
 COPY ./gradle                          ./gradle/
 COPY ./buildSrc/src                    ./buildSrc/src/
@@ -13,11 +15,10 @@ COPY ./server/service/build.gradle.kts ./server/service/
 COPY ./server/data/build.gradle.kts    ./server/data/
 COPY ./server/model/build.gradle.kts   ./server/model/
 COPY ./server/common/build.gradle.kts  ./server/common/
-RUN ./gradlew
 # build
 COPY ./buildSrc ./buildSrc
 COPY ./server   ./server
-ARG BUILD_ARG="bootJar --parallel"
+ARG BUILD_ARG="bootJar"
 RUN ./gradlew ${BUILD_ARG}
 
 FROM eclipse-temurin:21.0.7_6-jre-alpine AS app

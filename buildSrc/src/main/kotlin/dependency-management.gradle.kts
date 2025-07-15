@@ -9,5 +9,5 @@ repositories {
 
 dependencies {
     api(enforcedPlatform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
-    api(enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:2023.0.6"))
+    api(enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:2025.0.0"))
 }
