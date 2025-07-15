@@ -17,8 +17,9 @@ internal class LabelEntityRepositoryTest(
 ) {
     @Test
     internal fun `it should be able to add and remove label`() {
+        val label = LabelEntity(name = "Test label 0", description = "Test label description 0")
         underTest.count() shouldBeExactly 0
-        val saved = underTest.save(LABEL_0)
+        val saved = underTest.save(label)
         underTest.count() shouldBeExactly 1
         underTest.deleteById(saved.id)
         underTest.count() shouldBeExactly 0
@@ -26,16 +27,13 @@ internal class LabelEntityRepositoryTest(
 
     @Test
     internal fun `it should be able to find all labels by name`() {
+        val label0 = LabelEntity(name = "Test label 0", description = "Test label description 0")
+        val label1 = LabelEntity(name = "Test label 1", description = "Test label description 1")
         underTest.count() shouldBeExactly 0
-        val savedLabels = underTest.saveAll(listOf(LABEL_0, LABEL_1))
+        val savedLabels = underTest.saveAll(listOf(label0, label1))
         entityManager.flush()
         underTest.count() shouldBeExactly 2
-        val actual = underTest.findAllByNameIn(listOf(LABEL_0.name, LABEL_1.name, "Nonexistent label"))
+        val actual = underTest.findAllByNameIn(listOf(label0.name, label1.name, "Nonexistent label"))
         actual shouldBe savedLabels
-    }
-
-    private companion object {
-        private val LABEL_0 = LabelEntity(name = "Test label 0", description = "Test label description 0")
-        private val LABEL_1 = LabelEntity(name = "Test label 1", description = "Test label description 1")
     }
 }
