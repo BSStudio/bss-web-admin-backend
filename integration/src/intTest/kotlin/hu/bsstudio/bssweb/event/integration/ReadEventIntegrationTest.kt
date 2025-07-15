@@ -3,10 +3,11 @@ package hu.bsstudio.bssweb.event.integration
 import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
+import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,23 +21,25 @@ internal class ReadEventIntegrationTest(
     @Test
     internal fun `it should return 404`() {
         assertThrows<FeignException.NotFound> {
-            client.findEventById(ID)
+            client.findEventById(UUID.randomUUID())
         }
     }
 
     @Test
     internal fun `it should return 200 and event`() {
-        val entity = eventRepository.save(DetailedEventEntity(url = URL, title = TITLE).apply { id = ID })
+        val url = "url"
+        val title = "title"
+        val created = client.createEvent(CreateEvent(url = url, title = title)).body.shouldNotBeNull()
 
-        val actual = client.findEventById(entity.id)
+        val actual = client.findEventById(created.id)
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
             body!! shouldBeEqual
                 DetailedEvent(
-                    id = entity.id,
-                    url = URL,
-                    title = TITLE,
+                    id = created.id,
+                    url = url,
+                    title = title,
                     description = "",
                     dateFrom = LocalDate.now(),
                     dateTo = LocalDate.now(),
@@ -44,11 +47,7 @@ internal class ReadEventIntegrationTest(
                     videos = listOf(),
                 )
         }
-    }
 
-    private companion object {
-        private val ID = UUID.randomUUID()
-        private const val URL = "url"
-        private const val TITLE = "title"
+        client.deleteEvent(created.id)
     }
 }

@@ -1,9 +1,9 @@
 [versions]
-springdoc = "2.6.0"
-springBoot = "3.3.10"
+springdoc = "2.8.9"
+springBoot = "3.5.3"
 springDependencyManagementPlugin = "1.1.7"
 kotest = "5.9.1"
-spotless = "7.0.3"
+spotless = "7.1.0"
 
 [libraries]
 springdocOpenapiStarterWebmvcUi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }

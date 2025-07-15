@@ -3,11 +3,12 @@ package hu.bsstudio.bssweb.video.integration
 import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.video.client.VideoClient
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
@@ -20,23 +21,24 @@ class ReadVideoIntegrationTest(
     @Test
     internal fun `it should return 404`() {
         shouldThrow<FeignException.NotFound> {
-            client.getVideo(ID)
+            client.getVideo(UUID.randomUUID())
         }
     }
 
     @Test
     internal fun `it should return 200 with video`() {
-        val entity = videoRepository.save(DetailedVideoEntity(title = TITLE).apply { id = ID })
+        val title = "title"
+        val created = client.createVideo(CreateVideo(title)).body.shouldNotBeNull()
 
-        val actual = client.getVideo(entity.id)
+        val actual = client.getVideo(created.id)
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
             body!! shouldBeEqual
                 DetailedVideo(
-                    id = entity.id,
+                    id = created.id,
                     urls = emptyList(),
-                    title = TITLE,
+                    title = title,
                     description = "",
                     visible = false,
                     shootingDateStart = LocalDate.now(),
@@ -45,10 +47,7 @@ class ReadVideoIntegrationTest(
                     labels = listOf(),
                 )
         }
-    }
 
-    private companion object {
-        private val ID = UUID.randomUUID()
-        private const val TITLE = "title"
+        client.deleteVideo(created.id)
     }
 }
