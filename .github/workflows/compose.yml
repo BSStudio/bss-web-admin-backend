@@ -41,8 +41,8 @@ jobs:
 
       - name: Start Docker compose
         run: docker compose up --build --wait
-        env:
-          COMPOSE_BAKE: true
+#        env:
+#          COMPOSE_BAKE: true
 
       - name: Save Docker images to tar
         run: |
