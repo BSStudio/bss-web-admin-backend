@@ -1,5 +1,5 @@
 plugins {
-    id("testing-conventions")
+    id("dependency-management")
 }
 
 sourceSets {
@@ -20,8 +20,11 @@ dependencies {
     intTestImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "hamcrest") // require developers to use KoTest
         exclude(module = "org.assertj") // require developers to use KoTest
+        exclude(module = "org.mockito") // require developers to use KoTest
     }
+    intTestRuntimeOnly("org.junit.platform:junit-platform-launcher")
     intTestImplementation("io.kotest:kotest-runner-junit5:5.9.1")
+    intTestImplementation("io.kotest:kotest-assertions-core-jvm:5.9.1")
 }
 
 val integrationTest by tasks.registering(Test::class) {
