@@ -1,11 +1,14 @@
 services:
   app:
-    ports:
+    ports: !override
       - "8080"
   postgres:
-    ports:
+    ports: !override
       - "5432"
   mock-file-api:
-    ports:
+    ports: !override
       - "8080"
     volumes: []
+  mock-oidc:
+    ports: !override
+      - "5556"
