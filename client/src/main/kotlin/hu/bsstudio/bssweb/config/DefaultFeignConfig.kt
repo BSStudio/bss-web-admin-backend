@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.config
 
-import feign.auth.BasicAuthRequestInterceptor
+import feign.RequestInterceptor
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,5 +11,8 @@ class DefaultFeignConfig(
     @Value("\${bss.client.password}") val password: String,
 ) {
     @Bean
-    fun interceptor() = BasicAuthRequestInterceptor(this.username, this.password)
+    fun interceptor() =
+        RequestInterceptor { template ->
+            template.header("Authorization", "Bearer token")
+        }
 }

@@ -92,6 +92,35 @@
           "url": "url"
         }
       }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/o/introspect",
+        "basicAuthCredentials": {
+          "username": "client-id",
+          "password": "client-secret"
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "active": true,
+          "client_id": "example-app",
+          "sub": "Cg0wLTM4NS0yODA4OS0wEgRtb2Nr",
+          "exp": 1753126717,
+          "iat": 1753040317,
+          "nbf": 1753040317,
+          "aud": "example-app",
+          "iss": "http://127.0.0.1:5556/dex",
+          "token_type": "Bearer",
+          "token_use": "access_token",
+          "ext": {}
+        }
+      }
     }
   ]
 }

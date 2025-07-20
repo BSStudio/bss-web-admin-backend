@@ -13,14 +13,17 @@ services:
     depends_on:
       - postgres
     environment:
-      bss.file-api.url: "http://mock-file-api:8080"
-      spring.security.user.password: "password"
+      bss.file-api.url: "http://mock-api:8080"
+      spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: "http://mock-api:8080/o/introspect"
+      spring.security.oauth2.resourceserver.opaquetoken.client-id: client-id
+      spring.security.oauth2.resourceserver.opaquetoken.client-secret: client-secret
       spring.datasource.url: "jdbc:postgresql://postgres:5432/bss?currentSchema=private"
       spring.datasource.username: "user"
       spring.datasource.password: "password"
       spring.flyway.default-schema: "private"
       spring.flyway.schemas: "private,public"
       management.endpoints.web.exposure.include: "prometheus,health"
+
   postgres:
     # update server/data/src/test/resources/application.yml
     image: "postgres:16.3-alpine3.18"
@@ -36,7 +39,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-  mock-file-api:
+  mock-api:
     image: "wiremock/wiremock:3.13.1"
     ports:
       - "127.0.0.1:8888:8080"
@@ -47,7 +50,8 @@ services:
       timeout: 5s
       retries: 3
     volumes:
-      - "./stubs:/home/wiremock/mappings"
+      - "./docker/wiremock/stubs:/home/wiremock/mappings"
+
   prometheus:
     image: "prom/prometheus:v3.5.0"
     ports:
