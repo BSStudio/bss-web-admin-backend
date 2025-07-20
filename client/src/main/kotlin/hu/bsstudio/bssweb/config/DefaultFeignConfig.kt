@@ -11,7 +11,8 @@ class DefaultFeignConfig(
     @Value("\${bss.client.password}") val password: String,
 ) {
     @Bean
-    fun interceptor() = RequestInterceptor { template ->
-        template.header("Authorization", "Bearer token")
-    }
+    fun interceptor() =
+        RequestInterceptor { template ->
+            template.header("Authorization", "Bearer token")
+        }
 }
