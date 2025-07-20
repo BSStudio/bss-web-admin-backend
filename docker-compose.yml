@@ -13,10 +13,10 @@ services:
     depends_on:
       - postgres
     environment:
-      bss.file-api.url: "http://mock-file-api:8080"
-      spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: http://mock-oidc/dex/token/introspect
-      spring.security.oauth2.resourceserver.opaquetoken.client-id: example-app
-      spring.security.oauth2.resourceserver.opaquetoken.client-secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+      bss.file-api.url: "http://mock-api:8080"
+      spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: "http://mock-api:8080/o/introspect"
+      spring.security.oauth2.resourceserver.opaquetoken.client-id: client-id
+      spring.security.oauth2.resourceserver.opaquetoken.client-secret: client-secret
       spring.datasource.url: "jdbc:postgresql://postgres:5432/bss?currentSchema=private"
       spring.datasource.username: "user"
       spring.datasource.password: "password"
@@ -39,7 +39,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-  mock-file-api:
+  mock-api:
     image: "wiremock/wiremock:3.13.1"
     ports:
       - "127.0.0.1:8888:8080"
@@ -50,20 +50,7 @@ services:
       timeout: 5s
       retries: 3
     volumes:
-      - "./stubs:/home/wiremock/mappings"
-  mock-oidc:
-    image: "dexidp/dex:v2.43.1-alpine"
-    ports:
-      - "127.0.0.1:5556:5556"
-    volumes:
-      - ./docker/dex/config.yml:/etc/dex/config.yml
-    command: ["dex", "serve", "/etc/dex/config.yml"]
-    healthcheck:
-      test: "wget --tries=1 --no-verbose -qO- http://0.0.0.0:5556/dex/.well-known/openid-configuration"
-      start_period: 2s
-      interval: 30s
-      timeout: 5s
-      retries: 3
+      - "./docker/wiremock/stubs:/home/wiremock/mappings"
 
   prometheus:
     image: "prom/prometheus:v3.5.0"
