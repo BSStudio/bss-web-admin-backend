@@ -1,0 +1,53 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "POST",
+        "url": "/o/introspect",
+        "basicAuthCredentials": {
+          "username": "client-id",
+          "password": "client-secret"
+        },
+        "formParameters": {
+          "token": {
+            "equalTo": "token"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "iss": "https://login.bsstudio.hu/application/o/website-test/",
+          "sub": "0000000000000000000000000000000000000000000000000000000000000000",
+          "aud": "client-id",
+          "exp": 2147483647,
+          "iat": 1,
+          "auth_time": 1,
+          "acr": "goauthentik.io/providers/oauth2/default",
+          "amr": [
+            "pwd",
+            "mfa"
+          ],
+          "sid": "0000000000000000000000000000000000000000000000000000000000000000",
+          "email": "jdoe@example.com",
+          "email_verified": true,
+          "name": "John Doe",
+          "given_name": "John",
+          "family_name": "Doe",
+          "preferred_username": "jdoe",
+          "nickname": "jdoe",
+          "groups": [
+            "Öregtag",
+            "Developer"
+          ],
+          "active": true,
+          "scope": "email profile openid offline_access",
+          "client_id": "client-id"
+        }
+      }
+    }
+  ]
+}

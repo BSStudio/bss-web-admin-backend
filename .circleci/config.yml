@@ -57,7 +57,7 @@ jobs:
     executor: jdk-machine
     steps:
       - checkout
-      - run: docker compose up --wait --build
+      - run: docker compose --profile app up --wait --build
       - gradle/with_cache:
           deps_checksum_file: build.gradle.kts
           cache_key: v2
@@ -73,9 +73,9 @@ jobs:
     steps:
       - checkout
       - github-cli/install:
-          version: 2.43.1
+          version: 2.76.0
       - github-cli/setup:
-          version: 2.43.1
+          version: 2.76.0
       - run: gh release create << pipeline.git.tag >> -t << pipeline.git.tag >> --generate-notes
 workflows:
   Build app:
