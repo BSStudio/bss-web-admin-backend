@@ -10,11 +10,13 @@ services:
       timeout: 5s
       retries: 5
       start_period: 20s
+    profiles:
+      - app
     depends_on:
       - postgres
     environment:
-      bss.file-api.url: "http://mock-api:8080"
-      spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: "http://mock-api:8080/o/introspect"
+      bss.file-api.url: "http://mock-file-api:8080"
+      spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: "http://mock-oidc:8080/o/introspect"
       spring.security.oauth2.resourceserver.opaquetoken.client-id: client-id
       spring.security.oauth2.resourceserver.opaquetoken.client-secret: client-secret
       spring.datasource.url: "jdbc:postgresql://postgres:5432/bss?currentSchema=private"
@@ -39,7 +41,7 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-  mock-api:
+  mock-file-api:
     image: "wiremock/wiremock:3.13.1"
     ports:
       - "127.0.0.1:8888:8080"
@@ -50,7 +52,19 @@ services:
       timeout: 5s
       retries: 3
     volumes:
-      - "./docker/wiremock/stubs:/home/wiremock/mappings"
+      - "./docker/wiremock/stubs/file-api:/home/wiremock/mappings/file-api"
+  mock-oidc:
+    image: "wiremock/wiremock:3.13.1"
+    ports:
+      - "127.0.0.1:8998:8080"
+    healthcheck:
+      test: "curl -fs http://localhost:8080/__admin/docs > /dev/null || exit 1"
+      start_period: 5s
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - "./docker/wiremock/stubs/oidc:/home/wiremock/mappings/oidc"
 
   prometheus:
     image: "prom/prometheus:v3.5.0"
