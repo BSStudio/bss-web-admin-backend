@@ -37,12 +37,14 @@ jobs:
           # on.push:tag: latest (auto), v1.2.3, v.1,2, v.1
           # on.push.branch: branchName
           # on.workflow_dispatch: branchName
+          # on.pull_request: branchName (won't be pushed)
           tags: |
             type=schedule
             type=semver,pattern={{raw}}
             type=semver,pattern=v{{major}}.{{minor}}
             type=semver,pattern=v{{major}}
             type=ref,event=branch
+            type=ref,event=pr
 
       - uses: docker/bake-action@v6.8.0
         with:
