@@ -47,10 +47,12 @@ jobs:
           # on.workflow_dispatch: branchName
           # on.pull_request: branchName (won't be pushed)
 
-      - uses: docker/bake-action@v6.8.0
+      - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
         with:
           push: ${{ github.event_name != 'pull_request' }}
           files: |
             ./docker-bake.hcl
             cwd://${{ steps.meta.outputs.bake-file }}
-          targets: build
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max
