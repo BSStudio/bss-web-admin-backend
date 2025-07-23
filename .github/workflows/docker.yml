@@ -10,12 +10,6 @@ on:
     branches: [ "main" ]
     tags: [ "v*" ]
 
-permissions:
-  contents: read
-  packages: write
-  attestations: write
-  id-token: write
-
 jobs:
   lint:
     name: Lint Dockerfile
@@ -26,6 +20,11 @@ jobs:
   build:
     name: Docker build and publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
@@ -55,11 +54,11 @@ jobs:
       - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
         with:
           push: true
-          sbom: true
-          provenance: true
           files: |
             ./docker-bake.hcl
             cwd://${{ steps.meta.outputs.bake-file }}
+          sbom: true
+          provenance: true
           set: |
             *.cache-from=type=gha
             *.cache-to=type=gha,mode=max
