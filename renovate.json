@@ -12,7 +12,9 @@
     ":separateMajorReleases",
     ":timezone(Europe/Dublin)",
     "schedule:weekends",
-    "workarounds:all"
+    "workarounds:all",
+    "helpers:pinGitHubActionDigests",
+    ":semanticCommits"
   ],
   "packageRules": [
     {
