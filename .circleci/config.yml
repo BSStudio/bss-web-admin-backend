@@ -1,9 +1,8 @@
+# $schema: https://www.schemastore.org/circleciconfig.json
 version: 2.1
 orbs:
   codecov: codecov/codecov@5.4.3
   gradle: circleci/gradle@3.0.0
-  docker: circleci/docker@2.8.2
-  github-cli: circleci/github-cli@2.7.0
 executors:
   jdk:
     docker:
@@ -17,22 +16,6 @@ defaults:
     deps_checksum_file: build.gradle.kts
     cache_key: v2
     executor: jdk
-  docker_publish: &docker_publish
-    image: bsstudio/bss-web-admin-backend
-    registry: ghcr.io
-    executor: docker/docker
-    remote-docker-version: default
-    use-remote-docker: true
-    remote-docker-dlc: true
-    use-buildkit: true
-  tag_only: &tag_only
-    context:
-      - BSS Github deploy
-    filters:
-      branches:
-        ignore: /.*/
-      tags:
-        only: /.*/
 jobs:
   gradle_docker:
     parameters:
@@ -108,18 +91,3 @@ workflows:
             - gradle/collect_test_results:
                 reports_path: server/build/reports
                 test_results_path: test-results
-      - docker/hadolint:
-          name: Lint Dockerfile
-      - docker/publish:
-          name: Build docker image
-          <<: *docker_publish
-          deploy: false
-  Release:
-    jobs:
-      - docker/publish:
-          name: Publish image
-          <<: [*docker_publish, *tag_only]
-          tag: latest,<< pipeline.git.tag >>
-      - github_release:
-          name: Create release
-          <<: *tag_only

@@ -33,6 +33,3 @@ COPY --from=build $BOOT_JAR ./app.jar
 ENTRYPOINT ["java","-jar","./app.jar"]
 
 EXPOSE 8080
-LABEL org.opencontainers.image.source="https://github.com/BSStudio/bss-web-admin-backend"
-LABEL org.opencontainers.image.description="BSS Web admin backend"
-LABEL org.opencontainers.image.licenses="GPL-3.0"
