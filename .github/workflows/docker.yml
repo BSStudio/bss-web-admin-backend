@@ -3,6 +3,7 @@ name: Docker
 on:
   pull_request:
   workflow_dispatch:
+  merge_group:
   schedule:
     - cron: "0 0 * * *"
   push:
@@ -49,7 +50,7 @@ jobs:
 
       - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
         with:
-          push: ${{ github.event_name != 'pull_request' }}
+          push: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
           files: |
             ./docker-bake.hcl
             cwd://${{ steps.meta.outputs.bake-file }}
