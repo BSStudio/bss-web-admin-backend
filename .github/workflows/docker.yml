@@ -19,7 +19,10 @@ jobs:
       - uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
   build:
     permissions:
+      contents: read
       packages: write
+      attestations: write
+      id-token: write
     name: Docker build and publish
     runs-on: ubuntu-latest
     steps:
