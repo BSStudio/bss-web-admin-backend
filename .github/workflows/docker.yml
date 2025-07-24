@@ -80,3 +80,5 @@ jobs:
           image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           artifact-name: sbom-${{ matrix.name }}.spdx.json
           dependency-snapshot: true
+          registry-username: ${{ github.actor }}
+          registry-password: ${{ github.token }}
