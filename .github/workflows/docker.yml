@@ -22,7 +22,7 @@ jobs:
       - uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
 
   build:
-    name: Docker build and publish
+    name: Docker build and publish ${{ matrix.name }}
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
@@ -75,8 +75,8 @@ jobs:
             *.cache-from=type=gha,scope=${{ matrix.platform }}
             *.cache-to=type=gha,scope=${{ matrix.platform }},mode=max
 
-      - uses: anchore/sbom-action@b7b36ad622f042cab6f59a75c2ac24ccb256e9b45 # v0.20.4
+      - uses: anchore/sbom-action@7b36ad622f042cab6f59a75c2ac24ccb256e9b45 # v0.20.4
         with:
           image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
-          artifact-name: image-${{ matrix.name }}.spdx.json
+          artifact-name: sbom-${{ matrix.name }}.spdx.json
           dependency-snapshot: true
