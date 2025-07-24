@@ -30,8 +30,10 @@ jobs:
         include:
           - platform: linux/amd64
             runner: ubuntu-latest
+            name: amd64
           - platform: linux/arm64/v8
             runner: ubuntu-24.04-arm
+            name: arm64
     permissions:
       contents: read
       packages: write
@@ -72,3 +74,9 @@ jobs:
             *.platform=${{ matrix.platform }}
             *.cache-from=type=gha,scope=${{ matrix.platform }}
             *.cache-to=type=gha,scope=${{ matrix.platform }},mode=max
+
+      - uses: anchore/sbom-action@b7b36ad622f042cab6f59a75c2ac24ccb256e9b45 # v0.20.4
+        with:
+          image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+          artifact-name: image-${{ matrix.name }}.spdx.json
+          dependency-snapshot: true
