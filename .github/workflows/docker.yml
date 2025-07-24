@@ -64,8 +64,6 @@ jobs:
           # on.workflow_dispatch: branchName
           # on.pull_request: branchName (won't be pushed)
 
-      - run: docker images
-
       - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
         with:
           push: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
@@ -76,6 +74,8 @@ jobs:
             *.platform=${{ matrix.platform }}
             *.cache-from=type=gha,scope=${{ matrix.platform }}
             *.cache-to=type=gha,scope=${{ matrix.platform }},mode=max
+
+      - run: docker images
 
       - uses: anchore/sbom-action@7b36ad622f042cab6f59a75c2ac24ccb256e9b45 # v0.20.4
         with:
