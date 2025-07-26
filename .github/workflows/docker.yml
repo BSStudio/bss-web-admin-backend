@@ -59,7 +59,7 @@ jobs:
 
       - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
         with:
-          push: ${{ github.event_name != 'merge_group' }}
+          push:  ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
           files: |
             cwd://${{ steps.meta.outputs.bake-file }}
             cwd://${{ steps.meta.outputs.bake-file-annotations }}
