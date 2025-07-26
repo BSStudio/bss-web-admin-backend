@@ -12,6 +12,7 @@ on:
   schedule:
     - cron: '41 19 * * 0'
   pull_request:
+  merge_group:
   push:
     branches: [ "main" ]
 
