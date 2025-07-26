@@ -46,8 +46,6 @@ jobs:
       - uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
       - uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5.7.0
         id: meta
-        env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
@@ -61,14 +59,12 @@ jobs:
           # on.push:tag: latest (auto), v1.2.3, v.1,2, v.1
           # on.push.branch: branchName
           # on.workflow_dispatch: branchName
-          # on.pull_request: prNumber (won't be pushed)
+          # on.pull_request: branchName (won't be pushed)
 
       - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
         with:
-          push: ${{ github.event_name != 'merge_group' }}
-          files: |
-            cwd://${{ steps.meta.outputs.bake-file }}
-            cwd://${{ steps.meta.outputs.bake-file-annotations }}
+          push: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+          files: cwd://${{ steps.meta.outputs.bake-file }}
           sbom: true
           provenance: true
           set: |
