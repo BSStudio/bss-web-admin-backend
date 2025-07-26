@@ -1,5 +1,4 @@
 plugins {
-    id("java-conventions")
     id("io.spring.dependency-management")
 }
 
@@ -8,6 +7,6 @@ repositories {
 }
 
 dependencies {
-    api(enforcedPlatform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
-    api(enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:2025.0.0"))
+    add("implementation", enforcedPlatform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
+    add("implementation", enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:2025.0.0"))
 }
