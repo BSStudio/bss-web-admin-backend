@@ -58,8 +58,8 @@ jobs:
         with:
           push: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
           files: |
-            ./docker-bake.hcl
             cwd://${{ steps.meta.outputs.bake-file }}
+            ./docker-bake.hcl
           sbom: true
           provenance: true
           set: |
