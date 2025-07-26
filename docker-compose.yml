@@ -1,7 +1,6 @@
 services:
   app:
-    build:
-      context: "./"
+    image: "ghcr.io/bsstudio/bss-web-admin-backend:latest"
     ports:
       - "127.0.0.1:8080:8080"
     healthcheck:

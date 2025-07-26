@@ -1,26 +1,24 @@
 plugins {
-    id("dependency-management")
     jacoco
 }
 
 dependencies {
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    // kotlin related dependencies should move to kotlin-testing-conventions
-    testImplementation("io.mockk:mockk-jvm:1.14.4")
-    testImplementation("com.ninja-squad:springmockk:4.0.2")
-    testImplementation("io.kotest:kotest-assertions-core-jvm:5.9.1")
+    add("testImplementation", "org.springframework.boot:spring-boot-starter-test")
+    add("testRuntimeOnly", "org.junit.platform:junit-platform-launcher")
+    add("testImplementation", "io.mockk:mockk-jvm:1.14.4")
+    add("testImplementation", "com.ninja-squad:springmockk:4.0.2")
+    add("testImplementation", "io.kotest:kotest-assertions-core-jvm:5.9.1")
 }
 
-tasks.test {
+tasks.named<Test>("test") {
     useJUnitPlatform()
     // generate report after tests run
-    finalizedBy(tasks.jacocoTestReport)
+    finalizedBy(tasks.named<JacocoReport>("jacocoTestReport"))
 }
 
-tasks.check {
+tasks.named("check") {
     // coverage is part of check
-    finalizedBy(tasks.jacocoTestCoverageVerification)
+    finalizedBy(tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification"))
 }
 
 val excluded = setOf(
@@ -29,9 +27,9 @@ val excluded = setOf(
     "**/**Config**",
 )
 
-tasks.jacocoTestReport {
+tasks.named<JacocoReport>("jacocoTestReport") {
     // tests are required to run before generating the report
-    dependsOn(tasks.test)
+    dependsOn(tasks.named<Test>("test"))
     // require xml report
     reports {
         xml.required.set(true)
@@ -48,9 +46,9 @@ tasks.jacocoTestReport {
     )
 }
 
-tasks.jacocoTestCoverageVerification {
+tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
     // tests are required to run before generating the coverage verification
-    dependsOn(tasks.test)
+    dependsOn(tasks.named<Test>("test"))
     // set required coverage to 100%
     violationRules {
         rule {

@@ -1,43 +1,23 @@
 plugins {
-    id("dependency-management")
+    `jvm-test-suite`
 }
 
-sourceSets {
-    create("intTest") {
-        compileClasspath += sourceSets.main.get().output
-        runtimeClasspath += sourceSets.main.get().output
-    }
-}
-
-val intTestImplementation by configurations.getting {
-    extendsFrom(configurations.implementation.get())
-}
-val intTestRuntimeOnly by configurations.getting
-
-configurations["intTestRuntimeOnly"].extendsFrom(configurations.runtimeOnly.get())
-
-dependencies {
-    intTestImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(module = "hamcrest") // require developers to use KoTest
-        exclude(module = "org.assertj") // require developers to use KoTest
-        exclude(module = "org.mockito") // require developers to use KoTest
-    }
-    intTestRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    intTestImplementation("io.kotest:kotest-runner-junit5:5.9.1")
-    intTestImplementation("io.kotest:kotest-assertions-core-jvm:5.9.1")
-}
-
-val integrationTest by tasks.registering(Test::class) {
-    description = "Runs integration tests."
-    group = "verification"
-
-    testClassesDirs = sourceSets["intTest"].output.classesDirs
-    classpath = sourceSets["intTest"].runtimeClasspath
-    shouldRunAfter("test")
-
-    useJUnitPlatform()
-
-    testLogging {
-        showStandardStreams = true
+testing {
+    suites {
+        val integrationTest by registering(JvmTestSuite::class) {
+            useJUnitJupiter()
+            dependencies {
+                implementation(enforcedPlatform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
+                implementation(enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:2025.0.0"))
+                implementation("org.springframework.boot:spring-boot-starter-test") {
+                    exclude(module = "hamcrest") // require developers to use KoTest
+                    exclude(module = "org.assertj") // require developers to use KoTest
+                    exclude(module = "org.mockito") // require developers to use KoTest
+                }
+                runtimeOnly("org.junit.platform:junit-platform-launcher")
+                implementation("io.kotest:kotest-runner-junit5:5.9.1")
+                implementation("io.kotest:kotest-assertions-core-jvm:5.9.1")
+            }
+        }
     }
 }
