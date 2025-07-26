@@ -54,7 +54,7 @@ jobs:
           # on.schedule: nightly
           # on.push:tag: latest (auto), v1.2.3, v.1,2, v.1
           # on.push.branch: branchName
-          # on.workflow_dispatch: branchName
+          # on.pull_request: pr-number (won't be pushed)
           # on.pull_request: prNumber (won't be pushed)
 
       - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
