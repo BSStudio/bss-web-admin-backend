@@ -8,6 +8,4 @@ include(
     "server:data",
     "server:common",
     "server:client",
-    "client",
-    "integration"
 )

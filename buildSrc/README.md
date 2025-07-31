@@ -11,14 +11,12 @@ class spotless-conventions
 class kotlin-conventions
 class java-conventions
 class dependency-management
-class integration-testing-conventions
 class spring-app-conventions
 class spring-module-conventions
 class testing-conventions
 class kotlin-testing-conventions
 
 kotlin-testing-conventions --> testing-conventions
-integration-testing-conventions --> testing-conventions
 spring-app-conventions --> spring-module-conventions
 spring-module-conventions --> dependency-management
 dependency-management --> java-conventions
@@ -35,11 +33,6 @@ It's based on [Spring Initializr][spring-initializr].
 
 ## Dependency management
 Will set up the BOM and the repositories for the project.
-
-## Integration testing conventions
-Will set up the integration testing configuration.
-It will create a new scope: `integrationTest`.
-It's based on [Gradle's documentation to set up integration tests][gradle-integration].
 
 ## Spotless conventions
 Will set up the code formatter.
@@ -68,4 +61,3 @@ The latter is only enabled in the developmentOnly scope.
 It will also use the `spring-boot-starter` dependency to autowire the dependencies.
 
 [spring-initializr]: https://start.spring.io/
-[gradle-integration]: https://docs.gradle.org/current/userguide/java_testing.html#sec:configuring_java_integration_tests

@@ -9,7 +9,7 @@ info:
 servers:
 - description: Local
   url: /
-- description: Integration
+- description: Development
   url: https://dev-admin.bsstudio.hu
 - description: Production
   url: https://admin.bsstudio.hu
