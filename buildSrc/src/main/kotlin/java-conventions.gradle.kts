@@ -12,3 +12,7 @@ configurations {
         extendsFrom(configurations.annotationProcessor.get())
     }
 }
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:all")
+}
