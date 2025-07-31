@@ -38,9 +38,6 @@ classDiagram
          class common
      }
 
-    integration ..> client
-    client ..> operation
-    integration ..> data
     web ..> operation
     web ..> service
     service ..> data
@@ -51,10 +48,6 @@ classDiagram
     src ..> web
 ```
 
-> Note: client can only access operation, model, common. No business code
-
-> Note: integration can only access client (with everything mentioned above) and data. No business
-> code
 
 ## Development
 
@@ -86,13 +79,6 @@ sdk env install
 ./gradlew test
 ```
 
-### Integration test
-
-```shell
-docker compose up -d
-./gradlew integrationTest
-docker compose down
-```
 
 ### Build
 
@@ -151,8 +137,6 @@ Gradle:
 Please read the documentation for each module to understand the codebase.
 
 - [buildSrc](buildSrc/README.md)
-- [client](client/README.md)
-- [integration](integration/README.md)
 - [server](server/README.md)
     - [client](server/client/README.md)
     - [common](server/common/README.md)
