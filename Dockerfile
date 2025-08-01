@@ -15,6 +15,8 @@ COPY ./server/service/build.gradle.kts ./server/service/
 COPY ./server/data/build.gradle.kts    ./server/data/
 COPY ./server/model/build.gradle.kts   ./server/model/
 COPY ./server/common/build.gradle.kts  ./server/common/
+COPY ./integration/build.gradle.kts    ./integration/
+COPY ./client/build.gradle.kts         ./client/
 # build
 COPY ./buildSrc ./buildSrc
 COPY ./server   ./server
