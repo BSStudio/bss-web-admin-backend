@@ -88,6 +88,10 @@ describe('Member API Integration Tests', () => {
       // First archive
       await apiClient.members.archiveMembers([createdMember.id], true);
       
+      // Verify it's archived
+      const archivedMember = await apiClient.members.getMemberById(createdMember.id);
+      expect(archivedMember.archived).toBe(true);
+      
       // Then unarchive
       const unarchivedIds = await apiClient.members.archiveMembers([createdMember.id], false);
       
