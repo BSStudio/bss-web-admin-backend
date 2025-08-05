@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.7_6-jdk-alpine AS build
+FROM eclipse-temurin:21.0.8_9-jdk-alpine AS build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                         ./
@@ -23,7 +23,7 @@ COPY ./server   ./server
 ARG BUILD_ARG="bootJar"
 RUN ./gradlew ${BUILD_ARG}
 
-FROM eclipse-temurin:21.0.7_6-jre-alpine AS app
+FROM eclipse-temurin:21.0.8_9-jre-alpine AS app
 # use non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
