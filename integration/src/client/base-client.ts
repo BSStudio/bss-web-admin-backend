@@ -16,15 +16,23 @@ export class ApiClientError extends Error {
 export interface ApiClientConfig {
   baseURL: string;
   timeout?: number;
+  authToken?: string;
 }
 
-export function createApiClient({ baseURL, timeout = 10000 }: ApiClientConfig): AxiosInstance {
+export function createApiClient({ baseURL, timeout = 10000, authToken }: ApiClientConfig): AxiosInstance {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  // Add Authorization header if token is provided
+  if (authToken) {
+    headers.Authorization = authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`;
+  }
+
   const client = axios.create({
     baseURL,
     timeout,
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
   });
 
   // Request interceptor for logging

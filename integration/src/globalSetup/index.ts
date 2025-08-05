@@ -36,6 +36,7 @@ export async function setup(project: TestProject) {
     const apiClient = createBssApiClient({
       baseURL,
       timeout: 15000,
+      authToken: 'token', // Mock OIDC token for integration tests
     });
     const cleanupSummary = await cleanupTestData(apiClient);
     if (cleanupSummary.events + cleanupSummary.videos + cleanupSummary.members + cleanupSummary.labels > 0) {
@@ -55,6 +56,7 @@ export async function teardown() {
       const apiClient = createBssApiClient({
         baseURL,
         timeout: 15000,
+        authToken: 'token', // Mock OIDC token for integration tests
       });
       const cleanupSummary = await cleanupTestData(apiClient);
       console.log('✅ Test data cleanup completed');

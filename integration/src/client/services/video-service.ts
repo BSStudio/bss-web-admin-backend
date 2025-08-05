@@ -34,9 +34,12 @@ export function createVideoService(client: AxiosInstance) {
     },
 
     async changeVideoVisibility(videoIds: UUID[], visible: boolean): Promise<UUID[]> {
-      const response = await client.put<UUID[]>(`${basePath}/visible`, null, {
-        params: { videoIds, visible }
-      });
+      // Create URLSearchParams for proper array handling
+      const params = new URLSearchParams();
+      videoIds.forEach(id => params.append('videoIds', id));
+      params.append('visible', visible.toString());
+      
+      const response = await client.put<UUID[]>(`${basePath}/visible?${params.toString()}`);
       return response.data;
     },
 

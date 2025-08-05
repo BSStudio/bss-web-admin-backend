@@ -21,9 +21,12 @@ export function createMemberService(client: AxiosInstance) {
     },
 
     async archiveMembers(memberIds: UUID[], archive = true): Promise<UUID[]> {
-      const response = await client.put<UUID[]>(`${basePath}/archive`, null, {
-        params: { memberIds, archive }
-      });
+      // Create URLSearchParams for proper array handling
+      const params = new URLSearchParams();
+      memberIds.forEach(id => params.append('memberIds', id));
+      params.append('archive', archive.toString());
+      
+      const response = await client.put<UUID[]>(`${basePath}/archive?${params.toString()}`);
       return response.data;
     },
 
