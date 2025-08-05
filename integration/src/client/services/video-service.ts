@@ -1,11 +1,11 @@
 import type { AxiosInstance } from 'axios';
-import type { 
-  Video, 
-  DetailedVideo, 
-  CreateVideo, 
-  UpdateVideo, 
-  UUID, 
-  PaginatedResponse 
+import type {
+  CreateVideo,
+  DetailedVideo,
+  PaginatedResponse,
+  UpdateVideo,
+  UUID,
+  Video,
 } from '../../types/index.js';
 
 export interface VideoQueryParams {
@@ -23,8 +23,12 @@ export function createVideoService(client: AxiosInstance) {
       return response.data;
     },
 
-    async getVideosPaginated(params?: VideoQueryParams): Promise<PaginatedResponse<Video>> {
-      const response = await client.get<PaginatedResponse<Video>>(basePath, { params });
+    async getVideosPaginated(
+      params?: VideoQueryParams,
+    ): Promise<PaginatedResponse<Video>> {
+      const response = await client.get<PaginatedResponse<Video>>(basePath, {
+        params,
+      });
       return response.data;
     },
 
@@ -33,23 +37,36 @@ export function createVideoService(client: AxiosInstance) {
       return response.data;
     },
 
-    async changeVideoVisibility(videoIds: UUID[], visible: boolean): Promise<UUID[]> {
+    async changeVideoVisibility(
+      videoIds: UUID[],
+      visible: boolean,
+    ): Promise<UUID[]> {
       // Create URLSearchParams for proper array handling
       const params = new URLSearchParams();
-      videoIds.forEach(id => params.append('videoIds', id));
+      videoIds.forEach((id) => params.append('videoIds', id));
       params.append('visible', visible.toString());
-      
-      const response = await client.put<UUID[]>(`${basePath}/visible?${params.toString()}`);
+
+      const response = await client.put<UUID[]>(
+        `${basePath}/visible?${params.toString()}`,
+      );
       return response.data;
     },
 
     async getVideoById(videoId: UUID): Promise<DetailedVideo> {
-      const response = await client.get<DetailedVideo>(`${basePath}/${videoId}`);
+      const response = await client.get<DetailedVideo>(
+        `${basePath}/${videoId}`,
+      );
       return response.data;
     },
 
-    async updateVideo(videoId: UUID, updateVideo: UpdateVideo): Promise<DetailedVideo> {
-      const response = await client.put<DetailedVideo>(`${basePath}/${videoId}`, updateVideo);
+    async updateVideo(
+      videoId: UUID,
+      updateVideo: UpdateVideo,
+    ): Promise<DetailedVideo> {
+      const response = await client.put<DetailedVideo>(
+        `${basePath}/${videoId}`,
+        updateVideo,
+      );
       return response.data;
     },
 

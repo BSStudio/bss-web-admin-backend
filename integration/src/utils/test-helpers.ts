@@ -17,7 +17,9 @@ export interface CleanupSummary {
  * Cleans up all test data created during integration tests
  * This function identifies test entities by the TEST_PREFIX in their names/titles
  */
-export async function cleanupTestData(client: BssApiClient): Promise<CleanupSummary> {
+export async function cleanupTestData(
+  client: BssApiClient,
+): Promise<CleanupSummary> {
   const summary: CleanupSummary = {
     events: 0,
     videos: 0,
@@ -26,13 +28,15 @@ export async function cleanupTestData(client: BssApiClient): Promise<CleanupSumm
     errors: [],
   };
 
-  console.log(`🧹 Starting cleanup of test data with prefix: ${getTestPrefix()}`);
+  console.log(
+    `🧹 Starting cleanup of test data with prefix: ${getTestPrefix()}`,
+  );
 
   // Cleanup Events
   try {
     const events = await client.events.getAllEvents();
-    const testEvents = events.filter(event => isTestEntity(event.title));
-    
+    const testEvents = events.filter((event) => isTestEntity(event.title));
+
     for (const event of testEvents) {
       try {
         await client.events.deleteEvent(event.id);
@@ -53,8 +57,8 @@ export async function cleanupTestData(client: BssApiClient): Promise<CleanupSumm
   // Cleanup Videos
   try {
     const videos = await client.videos.getAllVideos();
-    const testVideos = videos.filter(video => isTestEntity(video.title));
-    
+    const testVideos = videos.filter((video) => isTestEntity(video.title));
+
     for (const video of testVideos) {
       try {
         await client.videos.deleteVideo(video.id);
@@ -75,8 +79,8 @@ export async function cleanupTestData(client: BssApiClient): Promise<CleanupSumm
   // Cleanup Members
   try {
     const members = await client.members.getAllMembers();
-    const testMembers = members.filter(member => isTestEntity(member.name));
-    
+    const testMembers = members.filter((member) => isTestEntity(member.name));
+
     for (const member of testMembers) {
       try {
         await client.members.deleteMember(member.id);
@@ -97,8 +101,8 @@ export async function cleanupTestData(client: BssApiClient): Promise<CleanupSumm
   // Cleanup Labels
   try {
     const labels = await client.labels.getAllLabels();
-    const testLabels = labels.filter(label => isTestEntity(label.name));
-    
+    const testLabels = labels.filter((label) => isTestEntity(label.name));
+
     for (const label of testLabels) {
       try {
         await client.labels.deleteLabel(label.id);
@@ -116,8 +120,11 @@ export async function cleanupTestData(client: BssApiClient): Promise<CleanupSumm
     console.error('❌ Failed to cleanup labels:', error);
   }
 
-  const totalCleaned = summary.events + summary.videos + summary.members + summary.labels;
-  console.log(`✅ Cleanup completed: ${totalCleaned} entities removed, ${summary.errors.length} errors`);
+  const totalCleaned =
+    summary.events + summary.videos + summary.members + summary.labels;
+  console.log(
+    `✅ Cleanup completed: ${totalCleaned} entities removed, ${summary.errors.length} errors`,
+  );
 
   return summary;
 }
@@ -128,10 +135,10 @@ export async function cleanupTestData(client: BssApiClient): Promise<CleanupSumm
 export async function waitFor<T>(
   condition: () => Promise<T>,
   timeout = 10000,
-  interval = 100
+  interval = 100,
 ): Promise<T> {
   const start = Date.now();
-  
+
   while (Date.now() - start < timeout) {
     try {
       const result = await condition();
@@ -141,10 +148,10 @@ export async function waitFor<T>(
     } catch (error) {
       // Continue waiting
     }
-    
-    await new Promise(resolve => setTimeout(resolve, interval));
+
+    await new Promise((resolve) => setTimeout(resolve, interval));
   }
-  
+
   throw new Error(`Condition not met within ${timeout}ms`);
 }
 
@@ -154,7 +161,7 @@ export async function waitFor<T>(
 export async function retry<T>(
   operation: () => Promise<T>,
   maxAttempts = 3,
-  baseDelay = 1000
+  baseDelay = 1000,
 ): Promise<T> {
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
@@ -163,12 +170,12 @@ export async function retry<T>(
       if (attempt === maxAttempts) {
         throw error;
       }
-      
-      const delay = baseDelay * Math.pow(2, attempt - 1);
+
+      const delay = baseDelay * 2 ** (attempt - 1);
       console.log(`Attempt ${attempt} failed, retrying in ${delay}ms...`);
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
-  
+
   throw new Error('This should never be reached');
 }

@@ -1,4 +1,8 @@
-import axios, { type AxiosInstance, type AxiosResponse, type AxiosError } from 'axios';
+import axios, {
+  type AxiosError,
+  type AxiosInstance,
+  type AxiosResponse,
+} from 'axios';
 import type { ApiError } from '../types/index.js';
 
 export class ApiClientError extends Error {
@@ -19,14 +23,20 @@ export interface ApiClientConfig {
   authToken?: string;
 }
 
-export function createApiClient({ baseURL, timeout = 10000, authToken }: ApiClientConfig): AxiosInstance {
+export function createApiClient({
+  baseURL,
+  timeout = 10000,
+  authToken,
+}: ApiClientConfig): AxiosInstance {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
   };
 
   // Add Authorization header if token is provided
   if (authToken) {
-    headers.Authorization = authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`;
+    headers.Authorization = authToken.startsWith('Bearer ')
+      ? authToken
+      : `Bearer ${authToken}`;
   }
 
   const client = axios.create({
@@ -44,7 +54,7 @@ export function createApiClient({ baseURL, timeout = 10000, authToken }: ApiClie
     (error: any) => {
       console.error('❌ Request error:', error);
       return Promise.reject(error);
-    }
+    },
   );
 
   // Response interceptor for error handling
@@ -56,11 +66,11 @@ export function createApiClient({ baseURL, timeout = 10000, authToken }: ApiClie
     (error: AxiosError<ApiError>) => {
       const message = error.response?.data?.message || error.message;
       const status = error.response?.status || 500;
-      
+
       console.error(`❌ ${status} ${error.config?.url}: ${message}`);
-      
+
       throw new ApiClientError(message, status, error.response);
-    }
+    },
   );
 
   return client;

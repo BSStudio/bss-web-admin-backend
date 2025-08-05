@@ -1,5 +1,5 @@
 import type { AxiosInstance } from 'axios';
-import type { Label, CreateLabel, UUID } from '../../types/index.js';
+import type { CreateLabel, Label, UUID } from '../../types/index.js';
 
 export function createLabelService(client: AxiosInstance) {
   const basePath = '/api/v1/label';

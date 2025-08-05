@@ -1,9 +1,9 @@
 import type { AxiosInstance } from 'axios';
-import { createApiClient, type ApiClientConfig } from './base-client.js';
+import { type ApiClientConfig, createApiClient } from './base-client.js';
 import { createEventService } from './services/event-service.js';
-import { createVideoService } from './services/video-service.js';
-import { createMemberService } from './services/member-service.js';
 import { createLabelService } from './services/label-service.js';
+import { createMemberService } from './services/member-service.js';
+import { createVideoService } from './services/video-service.js';
 
 export interface BssApiClient {
   client: AxiosInstance;

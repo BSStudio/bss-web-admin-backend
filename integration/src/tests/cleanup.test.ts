@@ -1,13 +1,13 @@
-import { describe, expect, it, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import type { BssApiClient } from '../client/index.js';
-import { 
-  createTestEvent, 
-  createTestVideo, 
-  createTestMember, 
-  createTestLabel,
+import {
   cleanupTestData,
+  createTestApiClient,
+  createTestEvent,
+  createTestLabel,
+  createTestMember,
+  createTestVideo,
   getTestPrefix,
-  createTestApiClient
 } from '../utils/index.js';
 
 describe('Test Data Cleanup Integration', () => {
@@ -43,24 +43,29 @@ describe('Test Data Cleanup Integration', () => {
     await expect(apiClient.events.getEventById(event.id)).rejects.toThrow();
     await expect(apiClient.videos.getVideoById(video.id)).rejects.toThrow();
     await expect(apiClient.members.getMemberById(member.id)).rejects.toThrow();
-    
+
     // Labels can only be verified by checking they're not in the list
     const remainingLabels = await apiClient.labels.getAllLabels();
-    const foundLabel = remainingLabels.find(l => l.id === label.id);
+    const foundLabel = remainingLabels.find((l) => l.id === label.id);
     expect(foundLabel).toBeUndefined();
   });
 
   it('should handle empty cleanup gracefully', async () => {
     // First ensure we have a clean state by running cleanup
     await cleanupTestData(apiClient);
-    
+
     // Small delay to ensure all cleanup operations are complete
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
     // Run cleanup again - should find nothing or very little
     const secondCleanup = await cleanupTestData(apiClient);
 
     // Check that cleanup found minimal entities (allowing for race conditions)
-    expect(secondCleanup.events + secondCleanup.videos + secondCleanup.members + secondCleanup.labels).toBeLessThanOrEqual(2);
+    expect(
+      secondCleanup.events +
+        secondCleanup.videos +
+        secondCleanup.members +
+        secondCleanup.labels,
+    ).toBeLessThanOrEqual(2);
   });
 });

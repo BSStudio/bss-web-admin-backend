@@ -1,5 +1,11 @@
 import type { AxiosInstance } from 'axios';
-import type { Event, DetailedEvent, CreateEvent, UpdateEvent, UUID } from '../../types/index.js';
+import type {
+  CreateEvent,
+  DetailedEvent,
+  Event,
+  UpdateEvent,
+  UUID,
+} from '../../types/index.js';
 
 export function createEventService(client: AxiosInstance) {
   const basePath = '/api/v1/event';
@@ -16,12 +22,20 @@ export function createEventService(client: AxiosInstance) {
     },
 
     async getEventById(eventId: UUID): Promise<DetailedEvent> {
-      const response = await client.get<DetailedEvent>(`${basePath}/${eventId}`);
+      const response = await client.get<DetailedEvent>(
+        `${basePath}/${eventId}`,
+      );
       return response.data;
     },
 
-    async updateEvent(eventId: UUID, updateEvent: UpdateEvent): Promise<DetailedEvent> {
-      const response = await client.put<DetailedEvent>(`${basePath}/${eventId}`, updateEvent);
+    async updateEvent(
+      eventId: UUID,
+      updateEvent: UpdateEvent,
+    ): Promise<DetailedEvent> {
+      const response = await client.put<DetailedEvent>(
+        `${basePath}/${eventId}`,
+        updateEvent,
+      );
       return response.data;
     },
 
