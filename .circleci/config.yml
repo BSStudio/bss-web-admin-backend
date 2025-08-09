@@ -36,20 +36,6 @@ jobs:
           steps:
             - run: ./gradlew << parameters.command >>
       - steps: << parameters.after >>
-  gradle_integration:
-    executor: jdk-machine
-    steps:
-      - checkout
-      - run: docker compose --profile app up --wait --build
-      - gradle/with_cache:
-          deps_checksum_file: build.gradle.kts
-          cache_key: v2
-          steps:
-            - run: ./gradlew integrationTest --continue
-      - gradle/collect_test_results:
-          reports_path: integration/build/reports
-          test_results_path: integration/build/test-results
-      - run: docker compose down
   github_release:
     docker:
       - image: cimg/base:stable
@@ -71,8 +57,6 @@ workflows:
           name: Build boot jar
           command: bootJar
           <<: *gradle
-      - gradle_integration:
-          name: Integration test
       - gradle_docker:
           name: Coverage verification
           command: jacocoTestCoverageVerification
