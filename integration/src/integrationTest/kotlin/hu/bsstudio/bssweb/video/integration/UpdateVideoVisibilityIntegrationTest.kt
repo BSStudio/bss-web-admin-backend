@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 class UpdateVideoVisibilityIntegrationTest(
-    @Autowired private val client: VideoClient,
+    @param:Autowired private val client: VideoClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and updated ids`() {

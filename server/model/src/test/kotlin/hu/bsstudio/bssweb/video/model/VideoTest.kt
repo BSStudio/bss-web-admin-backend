@@ -11,7 +11,7 @@ import java.util.UUID
 
 @JsonTest
 internal class VideoTest(
-    @Autowired private val underTest: JacksonTester<Video>,
+    @param:Autowired private val underTest: JacksonTester<Video>,
 ) {
     @Test
     internal fun `test serialisation`() {

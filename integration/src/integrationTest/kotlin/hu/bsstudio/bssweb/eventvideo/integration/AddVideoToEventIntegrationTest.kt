@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class AddVideoToEventIntegrationTest(
-    @Autowired private val client: EventVideoClient,
+    @param:Autowired private val client: EventVideoClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and add video to event`() {

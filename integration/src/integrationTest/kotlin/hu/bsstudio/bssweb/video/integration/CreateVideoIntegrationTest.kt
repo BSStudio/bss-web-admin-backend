@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 
 class CreateVideoIntegrationTest(
-    @Autowired private val client: VideoClient,
+    @param:Autowired private val client: VideoClient,
     @Value("\${bss.client.url}") private val url: String,
 ) : IntegrationTest() {
     @Test

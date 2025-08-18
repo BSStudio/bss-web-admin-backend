@@ -20,8 +20,8 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class FileUpdatingMemberServiceTest(
-    @MockK private val mockService: MemberService,
-    @MockK private val mockClient: FileApiClient,
+    @param:MockK private val mockService: MemberService,
+    @param:MockK private val mockClient: FileApiClient,
 ) {
     @InjectMockKs
     private lateinit var underTest: FileUpdatingMemberService

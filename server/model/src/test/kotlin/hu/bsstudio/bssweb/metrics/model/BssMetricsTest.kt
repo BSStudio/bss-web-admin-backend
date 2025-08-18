@@ -9,7 +9,7 @@ import org.springframework.boot.test.json.JacksonTester
 
 @JsonTest
 internal class BssMetricsTest(
-    @Autowired private val underTest: JacksonTester<BssMetrics>,
+    @param:Autowired private val underTest: JacksonTester<BssMetrics>,
 ) {
     @Test
     internal fun `test serialisation`() {

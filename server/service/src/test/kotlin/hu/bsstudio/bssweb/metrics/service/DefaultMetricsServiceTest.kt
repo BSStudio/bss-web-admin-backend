@@ -14,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultMetricsServiceTest(
-    @MockK private val videoRepository: SimpleVideoRepository,
-    @MockK private val eventRepository: SimpleEventRepository,
-    @MockK private val memberRepository: MemberRepository,
+    @param:MockK private val videoRepository: SimpleVideoRepository,
+    @param:MockK private val eventRepository: SimpleEventRepository,
+    @param:MockK private val memberRepository: MemberRepository,
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultMetricsService

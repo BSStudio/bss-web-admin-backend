@@ -10,7 +10,7 @@ import java.time.LocalDate
 
 @JsonTest
 internal class UpdateEventTest(
-    @Autowired private val underTest: JacksonTester<UpdateEvent>,
+    @param:Autowired private val underTest: JacksonTester<UpdateEvent>,
 ) {
     @Test
     internal fun `test serialisation`() {

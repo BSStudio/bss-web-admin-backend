@@ -16,7 +16,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 internal class UpdateEventIntegrationTest(
-    @Autowired private val client: EventClient,
+    @param:Autowired private val client: EventClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and updated event`() {

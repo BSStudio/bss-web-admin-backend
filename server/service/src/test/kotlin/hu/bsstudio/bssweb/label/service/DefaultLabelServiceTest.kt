@@ -19,8 +19,8 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultLabelServiceTest(
-    @MockK private val mockRepository: LabelRepository,
-    @MockK private val mockMapper: LabelMapper,
+    @param:MockK private val mockRepository: LabelRepository,
+    @param:MockK private val mockMapper: LabelMapper,
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultLabelService

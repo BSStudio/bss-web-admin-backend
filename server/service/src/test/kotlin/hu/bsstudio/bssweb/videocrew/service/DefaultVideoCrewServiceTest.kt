@@ -22,9 +22,9 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultVideoCrewServiceTest(
-    @MockK private val mockRepository: VideoCrewRepository,
-    @MockK private val mockMapper: VideoCrewMapper,
-    @MockK private val mockVideoService: VideoService,
+    @param:MockK private val mockRepository: VideoCrewRepository,
+    @param:MockK private val mockMapper: VideoCrewMapper,
+    @param:MockK private val mockVideoService: VideoService,
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultVideoCrewService

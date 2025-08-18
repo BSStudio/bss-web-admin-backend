@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 class AddVideoCrewIntegrationTest(
-    @Autowired private val client: VideoCrewClient,
+    @param:Autowired private val client: VideoCrewClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should add a member to a video`() {

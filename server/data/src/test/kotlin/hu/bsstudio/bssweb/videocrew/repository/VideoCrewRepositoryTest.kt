@@ -18,9 +18,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class VideoCrewRepositoryTest(
-    @Autowired private val underTest: VideoCrewRepository,
-    @Autowired private val memberRepository: MemberRepository,
-    @Autowired private val videoRepository: SimpleVideoRepository,
+    @param:Autowired private val underTest: VideoCrewRepository,
+    @param:Autowired private val memberRepository: MemberRepository,
+    @param:Autowired private val videoRepository: SimpleVideoRepository,
 ) {
     @Test
     internal fun `create read delete`() {

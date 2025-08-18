@@ -13,18 +13,17 @@ spotless {
         cleanthat()
         googleJavaFormat()
     }
-    kotlinGradle{
+    kotlinGradle {
         ktlint()
     }
     flexmark {
         target("**/*.md")
         flexmark()
     }
-    // TODO spotless introduced a bug with 7.0.2
-    // yaml {
-    //     target("**/*.yml", "**/*.yaml")
-    //     jackson()
-    //         .yamlFeature("WRITE_DOC_START_MARKER", false)
-    //         .yamlFeature("MINIMIZE_QUOTES", true)
-    // }
+    yaml {
+        target("**/*.yml", "**/*.yaml")
+        jackson()
+            .yamlFeature("WRITE_DOC_START_MARKER", false)
+            .yamlFeature("MINIMIZE_QUOTES", true)
+    }
 }

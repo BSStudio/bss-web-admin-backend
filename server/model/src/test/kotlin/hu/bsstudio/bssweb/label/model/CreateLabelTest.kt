@@ -9,7 +9,7 @@ import org.springframework.boot.test.json.JacksonTester
 
 @JsonTest
 internal class CreateLabelTest(
-    @Autowired private val underTest: JacksonTester<CreateLabel>,
+    @param:Autowired private val underTest: JacksonTester<CreateLabel>,
 ) {
     @Test
     internal fun `test serialisation`() {

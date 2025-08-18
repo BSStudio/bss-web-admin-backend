@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class ReadMemberIntegrationTest(
-    @Autowired private val client: MemberClient,
+    @param:Autowired private val client: MemberClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and member`() {

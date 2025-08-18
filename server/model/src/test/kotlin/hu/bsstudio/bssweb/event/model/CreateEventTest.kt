@@ -9,7 +9,7 @@ import org.springframework.boot.test.json.JacksonTester
 
 @JsonTest
 internal class CreateEventTest(
-    @Autowired private val underTest: JacksonTester<CreateEvent>,
+    @param:Autowired private val underTest: JacksonTester<CreateEvent>,
 ) {
     @Test
     internal fun `test serialisation`() {

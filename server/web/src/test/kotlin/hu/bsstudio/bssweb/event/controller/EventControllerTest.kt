@@ -26,8 +26,8 @@ import java.util.UUID
 
 @WebMvcTest(EventController::class)
 internal class EventControllerTest(
-    @Autowired private val mockMvc: MockMvc,
-    @Autowired private val objectMapper: ObjectMapper,
+    @param:Autowired private val mockMvc: MockMvc,
+    @param:Autowired private val objectMapper: ObjectMapper,
 ) {
     @MockkBean
     private lateinit var mockService: EventService

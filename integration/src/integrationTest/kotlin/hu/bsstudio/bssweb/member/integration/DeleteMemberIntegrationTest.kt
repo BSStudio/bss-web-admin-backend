@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class DeleteMemberIntegrationTest(
-    @Autowired private val client: MemberClient,
+    @param:Autowired private val client: MemberClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 204 and delete member`() {

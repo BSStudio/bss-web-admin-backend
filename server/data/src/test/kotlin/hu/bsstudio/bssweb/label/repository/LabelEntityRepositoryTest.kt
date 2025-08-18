@@ -12,8 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class LabelEntityRepositoryTest(
-    @Autowired private val underTest: LabelRepository,
-    @Autowired private val entityManager: TestEntityManager,
+    @param:Autowired private val underTest: LabelRepository,
+    @param:Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
     internal fun `it should be able to add and remove label`() {

@@ -9,7 +9,7 @@ import org.springframework.boot.test.json.JacksonTester
 
 @JsonTest
 internal class CreateVideoTest(
-    @Autowired private val underTest: JacksonTester<CreateVideo>,
+    @param:Autowired private val underTest: JacksonTester<CreateVideo>,
 ) {
     @Test
     internal fun `test serialisation`() {

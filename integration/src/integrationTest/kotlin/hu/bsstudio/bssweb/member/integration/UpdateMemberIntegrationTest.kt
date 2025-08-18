@@ -17,7 +17,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 class UpdateMemberIntegrationTest(
-    @Autowired private val client: MemberClient,
+    @param:Autowired private val client: MemberClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and updated member`() {

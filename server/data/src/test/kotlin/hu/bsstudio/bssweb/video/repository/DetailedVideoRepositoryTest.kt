@@ -29,11 +29,11 @@ import kotlin.time.Duration.Companion.minutes
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class DetailedVideoRepositoryTest(
-    @Autowired private val underTest: DetailedVideoRepository,
-    @Autowired private val memberRepository: MemberRepository,
-    @Autowired private val videoCrewRepository: VideoCrewRepository,
-    @Autowired private val labelRepository: LabelRepository,
-    @Autowired private val entityManager: TestEntityManager,
+    @param:Autowired private val underTest: DetailedVideoRepository,
+    @param:Autowired private val memberRepository: MemberRepository,
+    @param:Autowired private val videoCrewRepository: VideoCrewRepository,
+    @param:Autowired private val labelRepository: LabelRepository,
+    @param:Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
     internal fun `create read delete`() {

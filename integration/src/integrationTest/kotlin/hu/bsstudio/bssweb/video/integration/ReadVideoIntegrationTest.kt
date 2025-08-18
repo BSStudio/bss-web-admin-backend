@@ -16,7 +16,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 class ReadVideoIntegrationTest(
-    @Autowired private val client: VideoClient,
+    @param:Autowired private val client: VideoClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 404`() {
