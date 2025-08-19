@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 
 class ReadAllPageableVideoIntegrationTest(
-    @Autowired private val client: VideoClient,
+    @param:Autowired private val client: VideoClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and paged`() {

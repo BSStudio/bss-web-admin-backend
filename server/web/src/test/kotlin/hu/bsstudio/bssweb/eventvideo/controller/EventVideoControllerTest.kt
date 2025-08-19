@@ -19,8 +19,8 @@ import java.util.UUID
 
 @WebMvcTest(EventVideoController::class)
 internal class EventVideoControllerTest(
-    @Autowired private val mockMvc: MockMvc,
-    @Autowired private val objectMapper: ObjectMapper,
+    @param:Autowired private val mockMvc: MockMvc,
+    @param:Autowired private val objectMapper: ObjectMapper,
 ) {
     @MockkBean
     private lateinit var mockService: EventVideoService

@@ -16,7 +16,7 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class RemoveVideoFromEventIntegrationTest(
-    @Autowired private val client: EventVideoClient,
+    @param:Autowired private val client: EventVideoClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 204 and remove video from event`() {

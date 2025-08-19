@@ -11,7 +11,7 @@ import java.util.UUID
 
 @JsonTest
 internal class EventTest(
-    @Autowired private val underTest: JacksonTester<Event>,
+    @param:Autowired private val underTest: JacksonTester<Event>,
 ) {
     @Test
     internal fun `test serialisation`() {

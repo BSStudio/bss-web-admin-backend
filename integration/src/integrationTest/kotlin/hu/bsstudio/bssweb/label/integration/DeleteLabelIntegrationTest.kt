@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class DeleteLabelIntegrationTest(
-    @Autowired private val client: LabelClient,
+    @param:Autowired private val client: LabelClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 204 and delete label`() {

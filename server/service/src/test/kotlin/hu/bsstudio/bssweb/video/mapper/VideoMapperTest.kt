@@ -23,7 +23,7 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class VideoMapperTest(
-    @MockK private val mockVideoCrewMapper: VideoCrewMapper,
+    @param:MockK private val mockVideoCrewMapper: VideoCrewMapper,
 ) {
     @InjectMockKs
     private lateinit var underTest: VideoMapper

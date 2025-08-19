@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatusCode
 import java.util.UUID
 
 class DeleteVideoIntegrationTest(
-    @Autowired private val client: VideoClient,
+    @param:Autowired private val client: VideoClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 204 and delete video`() {

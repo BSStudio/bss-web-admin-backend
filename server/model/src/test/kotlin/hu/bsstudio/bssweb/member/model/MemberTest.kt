@@ -12,7 +12,7 @@ import java.util.UUID
 
 @JsonTest
 internal class MemberTest(
-    @Autowired private val underTest: JacksonTester<Member>,
+    @param:Autowired private val underTest: JacksonTester<Member>,
 ) {
     @Test
     internal fun `test serialisation`() {

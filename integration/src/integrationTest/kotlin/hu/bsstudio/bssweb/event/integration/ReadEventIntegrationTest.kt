@@ -16,7 +16,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 internal class ReadEventIntegrationTest(
-    @Autowired private val client: EventClient,
+    @param:Autowired private val client: EventClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 404`() {

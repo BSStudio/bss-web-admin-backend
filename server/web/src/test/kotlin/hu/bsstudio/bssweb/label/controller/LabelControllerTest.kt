@@ -20,8 +20,8 @@ import java.util.UUID
 
 @WebMvcTest(LabelController::class)
 internal class LabelControllerTest(
-    @Autowired private val mockMvc: MockMvc,
-    @Autowired private val objectMapper: ObjectMapper,
+    @param:Autowired private val mockMvc: MockMvc,
+    @param:Autowired private val objectMapper: ObjectMapper,
 ) {
     @MockkBean
     private lateinit var mockService: LabelService

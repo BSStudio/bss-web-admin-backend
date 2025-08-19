@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 
 internal class ReadAllEventIntegrationTest(
-    @Autowired private val client: EventClient,
+    @param:Autowired private val client: EventClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and empty list`() {

@@ -17,7 +17,7 @@ import java.time.LocalDate
 import java.util.UUID
 
 class UpdateVideoIntegrationTest(
-    @Autowired private val client: VideoClient,
+    @param:Autowired private val client: VideoClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and updated video`() {

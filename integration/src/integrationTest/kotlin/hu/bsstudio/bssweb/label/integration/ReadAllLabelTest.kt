@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 internal class ReadAllLabelTest(
-    @Autowired private val client: LabelClient,
+    @param:Autowired private val client: LabelClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and empty list`() {

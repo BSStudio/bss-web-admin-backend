@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class DefaultFeignConfig(
-    @Value("\${bss.client.username}") val username: String,
-    @Value("\${bss.client.password}") val password: String,
+    @param:Value("\${bss.client.username}") val username: String,
+    @param:Value("\${bss.client.password}") val password: String,
 ) {
     @Bean
     fun interceptor() =

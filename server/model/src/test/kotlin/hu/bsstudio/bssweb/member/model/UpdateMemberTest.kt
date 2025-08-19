@@ -11,7 +11,7 @@ import java.time.LocalDate
 
 @JsonTest
 internal class UpdateMemberTest(
-    @Autowired private val underTest: JacksonTester<UpdateMember>,
+    @param:Autowired private val underTest: JacksonTester<UpdateMember>,
 ) {
     @Test
     internal fun `test serialisation`() {

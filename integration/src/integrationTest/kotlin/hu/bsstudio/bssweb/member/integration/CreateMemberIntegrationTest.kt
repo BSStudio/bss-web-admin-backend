@@ -20,7 +20,7 @@ import java.net.URI
 import java.time.LocalDate
 
 class CreateMemberIntegrationTest(
-    @Autowired private val client: MemberClient,
+    @param:Autowired private val client: MemberClient,
     @Value("\${bss.client.url}") private val url: String,
 ) : IntegrationTest() {
     @Test

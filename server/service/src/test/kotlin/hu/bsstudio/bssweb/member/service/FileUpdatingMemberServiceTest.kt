@@ -20,8 +20,8 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class FileUpdatingMemberServiceTest(
-    @MockK private val mockService: MemberService,
-    @MockK private val mockClient: FileApiClient,
+    @param:MockK private val mockService: MemberService,
+    @param:MockK private val mockClient: FileApiClient,
 ) {
     @InjectMockKs
     private lateinit var underTest: FileUpdatingMemberService
@@ -50,9 +50,9 @@ internal class FileUpdatingMemberServiceTest(
     @Test
     internal fun `should archive member`() {
         val memberIds = listOf(MEMBER_ID)
-        every { mockService.archiveMembers(memberIds) } returns memberIds
+        every { mockService.archiveMembers(memberIds, true) } returns memberIds
 
-        val actual = underTest.archiveMembers(memberIds)
+        val actual = underTest.archiveMembers(memberIds, true)
 
         actual shouldBeEqual memberIds
     }

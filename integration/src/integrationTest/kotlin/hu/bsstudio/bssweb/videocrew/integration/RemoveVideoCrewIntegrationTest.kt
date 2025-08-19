@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 class RemoveVideoCrewIntegrationTest(
-    @Autowired private val client: VideoCrewClient,
+    @param:Autowired private val client: VideoCrewClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and delete video crew`() {

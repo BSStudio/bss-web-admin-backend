@@ -10,7 +10,7 @@ import java.util.UUID
 
 @JsonTest
 class MemberFileUpdateTest(
-    @Autowired private val underTest: JacksonTester<MemberFileUpdate>,
+    @param:Autowired private val underTest: JacksonTester<MemberFileUpdate>,
 ) {
     @Test
     internal fun `test serialization`() {

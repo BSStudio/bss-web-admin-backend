@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
 
 class ReadAllMemberIntegrationTest(
-    @Autowired private val client: MemberClient,
+    @param:Autowired private val client: MemberClient,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and empty list`() {

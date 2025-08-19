@@ -22,8 +22,8 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultMemberServiceTest(
-    @MockK private val mockRepository: MemberRepository,
-    @MockK private val mockMapper: MemberMapper,
+    @param:MockK private val mockRepository: MemberRepository,
+    @param:MockK private val mockMapper: MemberMapper,
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultMemberService
@@ -57,7 +57,7 @@ internal class DefaultMemberServiceTest(
         every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
         every { MEMBER_ENTITY.id } returns MEMBER_ID
 
-        val actual = underTest.archiveMembers(memberIds)
+        val actual = underTest.archiveMembers(memberIds, true)
 
         actual.shouldContainExactly(MEMBER_ID)
     }
