@@ -4,7 +4,6 @@ springBoot = "3.5.4"
 springDependencyManagementPlugin = "1.1.7"
 kotest = "5.9.1"
 spotless = "7.2.1"
-kover = "0.9.1"
 
 [libraries]
 springdocOpenapiStarterWebmvcUi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
@@ -13,4 +12,3 @@ kotestAssertionsJson = { module = "io.kotest:kotest-assertions-json", version.re
 plugin-springBoot = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
 plugin-springDependencyManagement = { module = "io.spring.gradle:dependency-management-plugin", version.ref = "springDependencyManagementPlugin" }
 plugin-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
-plugin-kover = { module = "org.jetbrains.kotlinx.kover:org.jetbrains.kotlinx.kover.gradle.plugin", version.ref = "kover" }

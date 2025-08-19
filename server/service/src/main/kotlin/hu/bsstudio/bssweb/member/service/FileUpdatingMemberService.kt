@@ -22,7 +22,7 @@ class FileUpdatingMemberService(
     override fun archiveMembers(
         memberIds: List<UUID>,
         archive: Boolean,
-    ): List<UUID> = this.server.archiveMembers(memberIds)
+    ): List<UUID> = this.server.archiveMembers(memberIds, true)
 
     override fun findMemberById(memberIds: UUID): Optional<Member> = this.server.findMemberById(memberIds)
 

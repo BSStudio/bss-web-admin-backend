@@ -50,9 +50,9 @@ internal class FileUpdatingMemberServiceTest(
     @Test
     internal fun `should archive member`() {
         val memberIds = listOf(MEMBER_ID)
-        every { mockService.archiveMembers(memberIds) } returns memberIds
+        every { mockService.archiveMembers(memberIds, true) } returns memberIds
 
-        val actual = underTest.archiveMembers(memberIds)
+        val actual = underTest.archiveMembers(memberIds, true)
 
         actual shouldBeEqual memberIds
     }

@@ -13,7 +13,7 @@ interface MemberService {
 
     fun archiveMembers(
         memberIds: List<UUID>,
-        archive: Boolean = true,
+        archive: Boolean,
     ): List<UUID>
 
     fun findMemberById(memberIds: UUID): Optional<Member>

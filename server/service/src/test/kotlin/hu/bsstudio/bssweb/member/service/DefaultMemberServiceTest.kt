@@ -57,7 +57,7 @@ internal class DefaultMemberServiceTest(
         every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
         every { MEMBER_ENTITY.id } returns MEMBER_ID
 
-        val actual = underTest.archiveMembers(memberIds)
+        val actual = underTest.archiveMembers(memberIds, true)
 
         actual.shouldContainExactly(MEMBER_ID)
     }
