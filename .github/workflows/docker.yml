@@ -74,7 +74,10 @@ jobs:
         id: scan
         with:
           image: "ghcr.io/bsstudio/bss-web-admin-backend:pr-415"
-          # fail-build: true
+          cache-db: true
+          fail-build: false
+
+      - run: 'echo "Image digest: ${{ steps.scan.outputs.json }}"'
 
       - uses: github/codeql-action/upload-sarif@96f518a34f7a870018057716cc4d7a5c014bd61c # v3.29.10
         with:
