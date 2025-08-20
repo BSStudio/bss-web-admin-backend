@@ -55,9 +55,9 @@ jobs:
           # on.push:tag: latest (auto), v1.2.3, v.1,2, v.1
           # on.push.branch: branchName
           # on.pull_request: pr-number (won't be pushed)
-          # on.pull_request: prNumber (won't be pushed)
 
       - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
+        id: bake
         with:
           push:  ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
           files: |
@@ -66,6 +66,17 @@ jobs:
             ./docker-bake.hcl
           sbom: true
           provenance: true
+          load: true
           set: |
             *.cache-from=type=gha
             *.cache-to=type=gha,mode=max
+
+      - uses: anchore/scan-action@d5aa5b6cb9414b0c7771438046ff5bcfa2854ed7
+        id: scan
+        with:
+          image: "ghcr.io/${{ github.repository }}"
+          fail-build: true
+
+      - uses: github/codeql-action/upload-sarif@96f518a34f7a870018057716cc4d7a5c014bd61c # v3.29.10
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
