@@ -59,7 +59,7 @@ jobs:
 
       - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
         with:
-          push:  ${{ github.event_name != 'pull_request' || github.event_name != 'merge_group' }}
+          push:  ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
           files: |
             cwd://${{ steps.meta.outputs.bake-file }}
             cwd://${{ steps.meta.outputs.bake-file-annotations }}
@@ -72,13 +72,13 @@ jobs:
 
       - uses: anchore/scan-action@1638637db639e0ade3258b51db49a9a137574c3e # v6.5.1
         id: scan
-        if: ${{ github.event_name != 'pull_request' || github.event_name != 'merge_group' }}
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
         with:
           image: "ghcr.io/bsstudio/bss-web-admin-backend:${{ env.DOCKER_METADATA_OUTPUT_VERSION }}"
           cache-db: true
           fail-build: false
 
       - uses: github/codeql-action/upload-sarif@96f518a34f7a870018057716cc4d7a5c014bd61c # v3.29.10
-        if: ${{ github.event_name != 'pull_request' || github.event_name != 'merge_group' }}
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
