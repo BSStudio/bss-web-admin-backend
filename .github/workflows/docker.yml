@@ -76,6 +76,7 @@ jobs:
         with:
           image: "ghcr.io/bsstudio/bss-web-admin-backend:${{ env.DOCKER_METADATA_OUTPUT_VERSION }}"
           cache-db: true
+          severity-cutoff: 'high'
           fail-build: false
 
       - uses: github/codeql-action/upload-sarif@96f518a34f7a870018057716cc4d7a5c014bd61c # v3.29.10
