@@ -2,7 +2,7 @@
 springdoc = "2.8.9"
 springBoot = "3.5.4"
 springDependencyManagementPlugin = "1.1.7"
-kotest = "5.9.1"
+kotest = "6.0.0"
 spotless = "7.2.1"
 
 [libraries]
