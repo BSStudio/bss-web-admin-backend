@@ -1,5 +1,5 @@
 [versions]
-springdoc = "2.8.10"
+springdoc = "2.8.11"
 springBoot = "3.5.5"
 springDependencyManagementPlugin = "1.1.7"
 kotest = "5.9.1"
