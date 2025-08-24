@@ -60,7 +60,7 @@ jobs:
           # on.push.branch: branchName
           # on.pull_request: pr-number (won't be pushed)
 
-      - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
+      - uses: docker/bake-action@3acf805d94d93a86cce4ca44798a76464a75b88c # v6.9.0
         with:
           push: ${{ env.PUSH_AND_SCAN }}
           files: |
@@ -82,7 +82,7 @@ jobs:
           severity-cutoff: 'high'
           fail-build: false
 
-      - uses: github/codeql-action/upload-sarif@96f518a34f7a870018057716cc4d7a5c014bd61c # v3.29.10
+      - uses: github/codeql-action/upload-sarif@3c3833e0f8c1c83d449a7478aa59c036a9165498 # v3.29.11
         if: ${{ env.PUSH_AND_SCAN }}
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
