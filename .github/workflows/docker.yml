@@ -14,8 +14,7 @@ on:
 permissions: read-all
 
 env:
-  # PUSH_AND_SCAN: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
-  PUSH_AND_SCAN: ${{ github.event_name != 'merge_group' }}
+  PUSH_AND_SCAN: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
 
 jobs:
   lint:
