@@ -18,7 +18,7 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
 
     constraints {
-        add("implementation", "com.nimbusds:nimbus-jose-jwt") {
+        implementation( "com.nimbusds:nimbus-jose-jwt") {
             version {
                 require("[9.37.4,)")
             }
