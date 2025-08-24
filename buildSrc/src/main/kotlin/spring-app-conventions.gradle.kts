@@ -12,6 +12,6 @@ tasks.named<Test>("test") {
 
 dependencies {
     add("annotationProcessor", "org.springframework.boot:spring-boot-configuration-processor")
-    add("developmentOnly", "org.springframework.boot:spring-boot-devtools")
+    // add("developmentOnly", "org.springframework.boot:spring-boot-devtools")
     add("implementation", "org.springframework.boot:spring-boot-starter")
 }

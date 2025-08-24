@@ -7,8 +7,8 @@ testing {
         val integrationTest by registering(JvmTestSuite::class) {
             useJUnitJupiter()
             dependencies {
-                implementation(enforcedPlatform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
-                implementation(enforcedPlatform("org.springframework.cloud:spring-cloud-dependencies:2025.0.0"))
+                implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
+                implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2025.0.0"))
                 implementation("org.springframework.boot:spring-boot-starter-test") {
                     exclude(module = "hamcrest") // require developers to use KoTest
                     exclude(module = "org.assertj") // require developers to use KoTest
