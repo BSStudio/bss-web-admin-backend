@@ -13,9 +13,6 @@ on:
 
 permissions: read-all
 
-env:
-  PUSH_AND_SCAN: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
-
 jobs:
   lint:
     name: Lint Dockerfile
@@ -62,7 +59,7 @@ jobs:
 
       - uses: docker/bake-action@3acf805d94d93a86cce4ca44798a76464a75b88c # v6.9.0
         with:
-          push: ${{ env.PUSH_AND_SCAN }}
+          push: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
           files: |
             cwd://${{ steps.meta.outputs.bake-file }}
             cwd://${{ steps.meta.outputs.bake-file-annotations }}
@@ -75,7 +72,7 @@ jobs:
 
       - uses: anchore/scan-action@1638637db639e0ade3258b51db49a9a137574c3e # v6.5.1
         id: scan
-        if: ${{ env.PUSH_AND_SCAN }}
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
         with:
           image: "ghcr.io/bsstudio/bss-web-admin-backend:${{ env.DOCKER_METADATA_OUTPUT_VERSION }}"
           cache-db: true
@@ -83,6 +80,6 @@ jobs:
           fail-build: false
 
       - uses: github/codeql-action/upload-sarif@3c3833e0f8c1c83d449a7478aa59c036a9165498 # v3.29.11
-        if: ${{ env.PUSH_AND_SCAN }}
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
         with:
           sarif_file: ${{ steps.scan.outputs.sarif }}
