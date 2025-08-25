@@ -15,7 +15,7 @@ testing {
                     exclude(module = "org.mockito") // require developers to use KoTest
                 }
                 runtimeOnly("org.junit.platform:junit-platform-launcher")
-                implementation("io.kotest:kotest-runner-junit5:5.9.1")
+                implementation("io.kotest:kotest-runner-junit5:6.0.1")
                 implementation("io.kotest:kotest-assertions-core-jvm:5.9.1")
             }
         }
