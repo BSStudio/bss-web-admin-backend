@@ -29,6 +29,7 @@ jobs:
       packages: write
       attestations: write
       id-token: write
+      security-events: write
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
@@ -55,11 +56,10 @@ jobs:
           # on.push:tag: latest (auto), v1.2.3, v.1,2, v.1
           # on.push.branch: branchName
           # on.pull_request: pr-number (won't be pushed)
-          # on.pull_request: prNumber (won't be pushed)
 
-      - uses: docker/bake-action@37816e747588cb137173af99ab33873600c46ea8 # v6.8.0
+      - uses: docker/bake-action@3acf805d94d93a86cce4ca44798a76464a75b88c # v6.9.0
         with:
-          push:  ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+          push: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
           files: |
             cwd://${{ steps.meta.outputs.bake-file }}
             cwd://${{ steps.meta.outputs.bake-file-annotations }}
@@ -69,3 +69,17 @@ jobs:
           set: |
             *.cache-from=type=gha
             *.cache-to=type=gha,mode=max
+
+      - uses: anchore/scan-action@1638637db639e0ade3258b51db49a9a137574c3e # v6.5.1
+        id: scan
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+        with:
+          image: "ghcr.io/bsstudio/bss-web-admin-backend:${{ env.DOCKER_METADATA_OUTPUT_VERSION }}"
+          cache-db: true
+          severity-cutoff: 'high'
+          fail-build: false
+
+      - uses: github/codeql-action/upload-sarif@3c3833e0f8c1c83d449a7478aa59c036a9165498 # v3.29.11
+        if: ${{ github.event_name != 'pull_request' && github.event_name != 'merge_group' }}
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}

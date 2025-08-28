@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.8_9-jdk-alpine AS build
+FROM bellsoft/liberica-runtime-container:jdk-21.0.8_13-crac-cds-musl@sha256:c119acf8778cca58288f94eca2b1ce94ec6e448cd6ac2262bb1955a7b9699978 AS build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                         ./
@@ -23,7 +23,7 @@ COPY ./server   ./server
 ARG BUILD_ARG="bootJar"
 RUN ./gradlew ${BUILD_ARG}
 
-FROM eclipse-temurin:21.0.8_9-jre-alpine AS app
+FROM bellsoft/liberica-runtime-container:jre-21.0.8_12-cds-musl@sha256:fae2ddccc51a7f386f66689fc2fc4dabbb5d8e8cae2f64d027cdf212ff4790c0 AS app
 # use non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring

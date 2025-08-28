@@ -8,7 +8,6 @@ repositories {
 
 dependencies {
     implementation(libs.plugin.springBoot)
-    implementation(libs.plugin.springDependencyManagement)
     implementation(libs.plugin.spotless)
     implementation(kotlin("allopen", "2.2.10"))
     implementation(kotlin("gradle-plugin", "2.2.10"))
