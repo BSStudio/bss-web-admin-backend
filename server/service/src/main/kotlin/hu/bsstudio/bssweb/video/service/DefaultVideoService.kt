@@ -15,7 +15,7 @@ import java.util.Optional
 import java.util.UUID
 
 @Transactional
-open class DefaultVideoService(
+class DefaultVideoService(
     private val repository: SimpleVideoRepository,
     private val detailedRepository: DetailedVideoRepository,
     private val mapper: VideoMapper,

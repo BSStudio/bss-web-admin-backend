@@ -117,7 +117,7 @@ internal class FileUpdatingMemberServiceTest(
         private val MEMBER_ID = mockk<UUID>()
         private const val URL = "url"
         private val MEMBER = mockk<Member>()
-        private val MEMBER_LIST = mockk<List<Member>>()
+        private val MEMBER_LIST = listOf<Member>()
         private val CREATE_MEMBER = mockk<CreateMember>()
         private val UPDATE_MEMBER = mockk<UpdateMember>()
         private val FILE_UPDATE = MemberFileUpdate(MEMBER_ID, URL)
