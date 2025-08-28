@@ -1,8 +1,8 @@
 plugins {
-    id("java-conventions")
-    id("dependency-management")
-    id("spotless-conventions")
-    id("kotlin-conventions")
+    id("hu.bsstudio.gradle.java-conventions")
+    id("hu.bsstudio.gradle.dependency-management")
+    id("hu.bsstudio.gradle.spotless-conventions")
+    id("hu.bsstudio.gradle.kotlin-conventions")
     id("integration-testing-conventions")
 }
 
