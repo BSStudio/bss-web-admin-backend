@@ -29,7 +29,6 @@ class IntegrationTestConventionPlugin : Plugin<Project> {
                     }
                 }
             }
-
         }
     }
 }

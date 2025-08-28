@@ -23,11 +23,12 @@ class JacocoConventionPlugin : Plugin<Project> {
             finalizedBy(project.tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification"))
         }
 
-        val excluded = setOf(
-            "**/entity/**",
-            "**/exception/**",
-            "**/**Config**",
-        )
+        val excluded =
+            setOf(
+                "**/entity/**",
+                "**/exception/**",
+                "**/**Config**",
+            )
 
         project.tasks.named<JacocoReport>("jacocoTestReport") {
             // tests are required to run before generating the report
@@ -43,8 +44,8 @@ class JacocoConventionPlugin : Plugin<Project> {
                         project.fileTree(it) {
                             exclude(excluded)
                         }
-                    }
-                )
+                    },
+                ),
             )
         }
 
@@ -66,10 +67,9 @@ class JacocoConventionPlugin : Plugin<Project> {
                         project.fileTree(it) {
                             exclude(excluded)
                         }
-                    }
-                )
+                    },
+                ),
             )
         }
-
     }
 }

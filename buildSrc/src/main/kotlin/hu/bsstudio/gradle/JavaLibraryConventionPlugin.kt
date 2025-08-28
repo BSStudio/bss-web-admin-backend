@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 
-class JavaLibraryConventionPlugin: Plugin<Project> {
+class JavaLibraryConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.pluginManager.apply(JavaLibraryPlugin::class)
 

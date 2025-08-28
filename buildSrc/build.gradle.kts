@@ -1,5 +1,6 @@
 plugins {
     `kotlin-dsl`
+    alias(libs.plugins.spotless)
 }
 
 repositories {
@@ -53,5 +54,16 @@ gradlePlugin {
     plugins.create("testing-convention") {
         id = "hu.bsstudio.gradle.test-convention"
         implementationClass = "hu.bsstudio.gradle.TestConventionPlugin"
+    }
+}
+
+spotless {
+    kotlin {
+        ktlint()
+        toggleOffOn()
+    }
+    kotlinGradle {
+        ktlint()
+        toggleOffOn()
     }
 }

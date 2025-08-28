@@ -1,4 +1,4 @@
-package hu.bsstudio.gradle;
+package hu.bsstudio.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
