@@ -45,7 +45,7 @@ gradlePlugin {
     }
     plugins.create("spotless-convention") {
         id = "hu.bsstudio.gradle.spotless-convention"
-        implementationClass = "hu.bsstudio.gradle.DependencyManagementPlugin"
+        implementationClass = "hu.bsstudio.gradle.SpotlessConventionPlugin"
     }
     plugins.create("spring-app-convention") {
         id = "hu.bsstudio.gradle.spring-app-convention"
