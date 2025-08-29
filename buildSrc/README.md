@@ -8,8 +8,7 @@ There are conventions configured for most use cases.
 The Java conventions will set the language level and set up the annotation processor.
 
 ## Java Library conventions
-The Java conventions will set the language level and set up the annotation processor.
-
+Enables the Gradle `java-library` plugin, sets the language level, configures the annotation processor, and enforces API/implementation separation for published libraries.
 ## Kotlin conventions
 The Kotlin conventions will set up the Kotlin compiler to be compatible with Spring.
 It's based on [Spring Initializr][spring-initializr].
