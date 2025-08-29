@@ -14,13 +14,16 @@ class JacocoConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.pluginManager.apply(JacocoPlugin::class)
 
-        project.tasks.named<Test>("test") {
-            finalizedBy(project.tasks.named<JacocoReport>("jacocoTestReport"))
+        project.tasks.named<JacocoReport>("jacocoTestReport") {
+            dependsOn(project.tasks.named<Test>("test"))
+        }
+
+        project.tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
+            dependsOn(project.tasks.named<JacocoReport>("jacocoTestReport"))
         }
 
         project.tasks.named("check") {
-            // coverage is part of check
-            finalizedBy(project.tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification"))
+            dependsOn(project.tasks.named<JacocoCoverageVerification>("jacocoTestCoverageVerification"))
         }
 
         val excluded =
