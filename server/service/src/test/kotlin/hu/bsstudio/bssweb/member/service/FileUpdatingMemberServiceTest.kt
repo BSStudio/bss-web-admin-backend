@@ -58,16 +58,6 @@ internal class FileUpdatingMemberServiceTest(
     }
 
     @Test
-    internal fun `should archive member with implicit archive flag`() {
-        val memberIds = listOf(MEMBER_ID)
-        every { mockService.archiveMembers(memberIds, true) } returns memberIds
-
-        val actual = underTest.archiveMembers(memberIds, true)
-
-        actual shouldBeEqual memberIds
-    }
-
-    @Test
     internal fun `should find member by id`() {
         every { mockService.findMemberById(MEMBER_ID) } returns Optional.of(MEMBER)
 
