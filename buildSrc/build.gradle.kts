@@ -10,6 +10,7 @@ repositories {
 dependencies {
     implementation(libs.plugin.springBoot)
     implementation(libs.plugin.spotless)
+    implementation(libs.plugin.sonar)
     implementation(kotlin("allopen", "2.2.10"))
     implementation(kotlin("gradle-plugin", "2.2.10"))
     // required for kotlin plugin jpa
@@ -42,6 +43,10 @@ gradlePlugin {
     plugins.create("kotlin-convention") {
         id = "hu.bsstudio.gradle.kotlin-convention"
         implementationClass = "hu.bsstudio.gradle.KotlinConventionPlugin"
+    }
+    plugins.create("sonar-convention") {
+        id = "hu.bsstudio.gradle.sonar-convention"
+        implementationClass = "hu.bsstudio.gradle.SonarConventionPlugin"
     }
     plugins.create("spotless-convention") {
         id = "hu.bsstudio.gradle.spotless-convention"

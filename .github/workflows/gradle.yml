@@ -26,7 +26,9 @@ jobs:
       - uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-      - run: "./gradlew build --continue"
+      - run: "./gradlew build sonar --continue"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - uses: codecov/codecov-action@fdcc8476540edceab3de004e990f80d881c6cc00 # v5.5.0
         with:
           use_oidc: 'true'
