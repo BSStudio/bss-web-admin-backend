@@ -3,32 +3,12 @@ This module stores the build configuration for the application.
 
 There are conventions configured for most use cases.
 
-```mermaid
-classDiagram
-direction BT
-
-class spotless-conventions
-class kotlin-conventions
-class java-conventions
-class dependency-management
-class integration-testing-conventions
-class spring-app-conventions
-class spring-module-conventions
-class testing-conventions
-class kotlin-testing-conventions
-
-kotlin-testing-conventions --> testing-conventions
-integration-testing-conventions --> testing-conventions
-spring-app-conventions --> spring-module-conventions
-spring-module-conventions --> dependency-management
-dependency-management --> java-conventions
-testing-conventions --> dependency-management
-kotlin-conventions --> java-conventions
-```
 
 ## Java conventions
 The Java conventions will set the language level and set up the annotation processor.
 
+## Java Library conventions
+Enables the Gradle `java-library` plugin, sets the language level, configures the annotation processor, and enforces API/implementation separation for published libraries.
 ## Kotlin conventions
 The Kotlin conventions will set up the Kotlin compiler to be compatible with Spring.
 It's based on [Spring Initializr][spring-initializr].
@@ -45,27 +25,24 @@ It's based on [Gradle's documentation to set up integration tests][gradle-integr
 Will set up the code formatter.
 
 ## Testing conventions
-Will set up the testing configuration.
-It will configure JUnit and Jacoco.
-Set coverage to 100% and enforce the coverage.
+Will set up the testing configuration using Gradle's **TestingExtension** for modern test suite management.
+It will configure JUnit Jupiter and set up test dependencies including:
+- Spring Boot Starter Test
+- MockK for Kotlin mocking
+- SpringMockK for Spring integration testing
+- Kotest assertions
+
+The testing configuration now leverages Gradle's built-in test suite capabilities for better organization and dependency management.
+
+## Spring app conventions
+Will set up the Spring Boot plugin and basic Spring Boot starter dependency.
+This convention has been simplified and no longer includes aggregated reports (these are now configured directly in the main `server/build.gradle.kts`).
+
+## Jacoco conventions
+Provides Jacoco test coverage configuration. Set coverage to 100% and enforce the coverage.
 There are a few exceptions to the coverage enforcement.
 The coverage is enforced by the `check` lifecycle.
 There's always coverage reports generated after the tests are run.
-
-## Kotlin testing conventions
-Will set up the testing configuration for Kotlin.
-And set up dependencies for the Kotlin testing libraries.
-
-## Spring module conventions
-Will set up dependency management and enforce spotless conventions.
-
-## Spring app conventions
-Will set up aggregated jacoco and test reports.
-It also enforces the [`module-conventions`](#spring-module-conventions).
-It will pull in the `org.springframework.boot` plugin to enable the `bootJar` task.
-It will enable the configuration processor and the devtools dependency.
-The latter is only enabled in the developmentOnly scope.
-It will also use the `spring-boot-starter` dependency to autowire the dependencies.
 
 [spring-initializr]: https://start.spring.io/
 [gradle-integration]: https://docs.gradle.org/current/userguide/java_testing.html#sec:configuring_java_integration_tests

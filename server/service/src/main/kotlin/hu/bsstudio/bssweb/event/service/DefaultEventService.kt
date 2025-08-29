@@ -12,7 +12,7 @@ import java.util.Optional
 import java.util.UUID
 
 @Transactional
-open class DefaultEventService(
+class DefaultEventService(
     private val repository: SimpleEventRepository,
     private val detailedRepository: DetailedEventRepository,
     private val mapper: EventMapper,
