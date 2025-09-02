@@ -1,5 +1,5 @@
 [versions]
-springdoc = "2.8.11"
+springdoc = "2.8.12"
 springBoot = "3.5.5"
 kotest = "6.0.1"
 spotless = "7.2.1"
