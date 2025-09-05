@@ -13,7 +13,6 @@ data class VideoCrewEntityId(
     @Column(name = "member_id")
     var memberId: UUID,
 ) : Serializable {
-
     companion object {
         private const val serialVersionUID = 1L
     }
