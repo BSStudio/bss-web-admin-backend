@@ -18,6 +18,7 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=BSStudio_bss-web-admin-backend&metric=security_rating)](https://sonarcloud.io/dashboard?id=BSStudio_bss-web-admin-backend)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=BSStudio_bss-web-admin-backend&metric=sqale_index)](https://sonarcloud.io/dashboard?id=BSStudio_bss-web-admin-backend)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=BSStudio_bss-web-admin-backend&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=BSStudio_bss-web-admin-backend)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/10965/badge)](https://www.bestpractices.dev/projects/10965)
 
 ## Project structure
 
