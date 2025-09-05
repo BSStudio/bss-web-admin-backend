@@ -48,5 +48,5 @@ interface VideoOperation {
     @DeleteMapping("/api/v1/video/{videoId}")
     fun deleteVideo(
         @PathVariable videoId: UUID,
-    ): ResponseEntity<Void>
+    ): ResponseEntity<Unit>
 }

@@ -42,5 +42,5 @@ interface MemberOperation {
     @DeleteMapping("/api/v1/member/{memberId}")
     fun removeMember(
         @PathVariable memberId: UUID,
-    ): ResponseEntity<Void>
+    ): ResponseEntity<Unit>
 }

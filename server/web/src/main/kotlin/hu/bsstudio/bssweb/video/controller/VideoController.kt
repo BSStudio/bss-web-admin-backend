@@ -53,7 +53,7 @@ class VideoController(
             .updateVideo(videoId, updateVideo)
             .let { ResponseEntity.of(it) }
 
-    override fun deleteVideo(videoId: UUID): ResponseEntity<Void> {
+    override fun deleteVideo(videoId: UUID): ResponseEntity<Unit> {
         service.deleteVideoById(videoId)
         return ResponseEntity.noContent().build()
     }

@@ -22,5 +22,5 @@ interface LabelOperation {
     @DeleteMapping("/api/v1/label/{labelId}")
     fun removeLabel(
         @PathVariable labelId: UUID,
-    ): ResponseEntity<Void>
+    ): ResponseEntity<Unit>
 }
