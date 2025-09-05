@@ -23,7 +23,7 @@ class LabelController(
             .insertLabel(label)
             .let { ResponseEntity.created(locationUri(it.id)).body(it) }
 
-    override fun removeLabel(labelId: UUID): ResponseEntity<Void> {
+    override fun removeLabel(labelId: UUID): ResponseEntity<Unit> {
         this.service.removeLabel(labelId)
         return ResponseEntity.noContent().build()
     }

@@ -38,7 +38,7 @@ class EventController(
             .updateEvent(eventId, updateEvent)
             .let { ResponseEntity.of(it) }
 
-    override fun deleteEvent(eventId: UUID): ResponseEntity<Void> {
+    override fun deleteEvent(eventId: UUID): ResponseEntity<Unit> {
         service.removeEvent(eventId)
         return ResponseEntity.noContent().build()
     }
