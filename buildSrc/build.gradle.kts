@@ -23,6 +23,10 @@ gradlePlugin {
         id = "hu.bsstudio.gradle.dependency-management"
         implementationClass = "hu.bsstudio.gradle.DependencyManagementPlugin"
     }
+    plugins.create("detekt-convention") {
+        id = "hu.bsstudio.gradle.detekt-convention"
+        implementationClass = "hu.bsstudio.gradle.DetektConventionPlugin"
+    }
     plugins.create("integration-test-convention") {
         id = "hu.bsstudio.gradle.integration-test-convention"
         implementationClass = "hu.bsstudio.gradle.IntegrationTestConventionPlugin"
