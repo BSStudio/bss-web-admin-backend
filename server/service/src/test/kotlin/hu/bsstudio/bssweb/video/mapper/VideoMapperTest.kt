@@ -67,7 +67,7 @@ internal class VideoMapperTest(
         private val SHOOTING_DATE_START = mockk<LocalDate>()
         private val SHOOTING_DATE_END = mockk<LocalDate>()
         private const val VISIBLE = true
-        private val LABEL_NAME = "label"
+        private const val LABEL_NAME = "label"
         private val LABELS = listOf(LABEL_NAME)
         private val CREW_ENTITY = mockk<DetailedVideoCrewEntity>()
         private val VIDEO_CREW = listOf(CREW_ENTITY)

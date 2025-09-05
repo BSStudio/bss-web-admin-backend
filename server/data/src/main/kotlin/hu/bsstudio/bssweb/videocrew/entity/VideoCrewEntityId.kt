@@ -12,4 +12,9 @@ data class VideoCrewEntityId(
     var position: String,
     @Column(name = "member_id")
     var memberId: UUID,
-) : Serializable
+) : Serializable {
+
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
