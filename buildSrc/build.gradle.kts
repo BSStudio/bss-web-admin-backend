@@ -10,6 +10,7 @@ repositories {
 dependencies {
     implementation(libs.plugin.springBoot)
     implementation(libs.plugin.spotless)
+    implementation(libs.plugin.detekt)
     implementation(kotlin("allopen", "2.2.10"))
     implementation(kotlin("gradle-plugin", "2.2.10"))
     // required for kotlin plugin jpa
@@ -22,6 +23,10 @@ gradlePlugin {
     plugins.create("dependency-management") {
         id = "hu.bsstudio.gradle.dependency-management"
         implementationClass = "hu.bsstudio.gradle.DependencyManagementPlugin"
+    }
+    plugins.create("detekt-convention") {
+        id = "hu.bsstudio.gradle.detekt-convention"
+        implementationClass = "hu.bsstudio.gradle.DetektConventionPlugin"
     }
     plugins.create("integration-test-convention") {
         id = "hu.bsstudio.gradle.integration-test-convention"

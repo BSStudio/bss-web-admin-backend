@@ -1,0 +1,5 @@
+# $schema: https://www.schemastore.org/detekt-1.22.0.json
+style:
+  MaxLineLength:
+    # it's controlled by checkstyle/ktlint
+    active: false

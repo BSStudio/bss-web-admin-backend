@@ -18,4 +18,8 @@ data class EventVideoEntity(
     @Id
     @Column(name = "video_id")
     var videoId: UUID,
-) : Serializable
+) : Serializable {
+    companion object {
+        private const val serialVersionUID = 1L
+    }
+}
