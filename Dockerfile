@@ -23,7 +23,7 @@ COPY ./server   ./server
 ARG BUILD_ARG="bootJar"
 RUN ./gradlew ${BUILD_ARG}
 
-FROM bellsoft/liberica-runtime-container:jre-21.0.8_12-cds-musl@sha256:ee85e9895326fe22bad8a47c6d59db732ce30d844056ee8b0e1f4790ef0cf7bf AS app
+FROM bellsoft/liberica-runtime-container:jre-21.0.8_12-cds-musl@sha256:8e63ca393ad6f5e39734c742cc5632bff702450e632684880232ce3057ed1831 AS app
 # use non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
