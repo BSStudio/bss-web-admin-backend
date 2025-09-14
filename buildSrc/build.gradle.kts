@@ -11,12 +11,12 @@ dependencies {
     implementation(libs.plugin.springBoot)
     implementation(libs.plugin.spotless)
     implementation(libs.plugin.detekt)
-    implementation(kotlin("allopen", "2.2.10"))
-    implementation(kotlin("gradle-plugin", "2.2.10"))
+    implementation(kotlin("allopen", "2.2.20"))
+    implementation(kotlin("gradle-plugin", "2.2.20"))
     // required for kotlin plugin jpa
-    implementation(kotlin("reflect", "2.2.10"))
-    implementation(kotlin("stdlib-jdk8", "2.2.10"))
-    implementation(kotlin("noarg", "2.2.10"))
+    implementation(kotlin("reflect", "2.2.20"))
+    implementation(kotlin("stdlib-jdk8", "2.2.20"))
+    implementation(kotlin("noarg", "2.2.20"))
 }
 
 gradlePlugin {
