@@ -3,6 +3,7 @@ plugins {
     id("hu.bsstudio.gradle.dependency-management")
     id("hu.bsstudio.gradle.kotlin-convention")
     id("hu.bsstudio.gradle.spotless-convention")
+    id("hu.bsstudio.gradle.detekt-convention")
 }
 
 dependencies {

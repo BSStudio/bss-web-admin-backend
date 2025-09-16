@@ -36,5 +36,5 @@ interface EventOperation {
     @DeleteMapping("/api/v1/event/{eventId}")
     fun deleteEvent(
         @PathVariable eventId: UUID,
-    ): ResponseEntity<Void>
+    ): ResponseEntity<Unit>
 }

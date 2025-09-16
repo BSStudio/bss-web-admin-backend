@@ -1,9 +1,9 @@
 [versions]
-springdoc = "2.8.11"
+springdoc = "2.8.13"
 springBoot = "3.5.5"
-kotest = "6.0.1"
+kotest = "6.0.3"
 spotless = "7.2.1"
-sonar = "6.3.1.5724"
+detekt = "1.23.8"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
@@ -14,4 +14,4 @@ kotestAssertionsJson = { module = "io.kotest:kotest-assertions-json", version.re
 
 plugin-springBoot = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
 plugin-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
-plugin-sonar = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version.ref = "sonar" }
+plugin-detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }

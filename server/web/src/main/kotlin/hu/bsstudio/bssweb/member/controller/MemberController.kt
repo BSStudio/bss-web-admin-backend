@@ -45,7 +45,7 @@ class MemberController(
             .findMemberById(memberId)
             .let { ResponseEntity.of(it) }
 
-    override fun removeMember(memberId: UUID): ResponseEntity<Void> {
+    override fun removeMember(memberId: UUID): ResponseEntity<Unit> {
         service.removeMember(memberId)
         return ResponseEntity.noContent().build()
     }

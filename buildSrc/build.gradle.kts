@@ -10,19 +10,23 @@ repositories {
 dependencies {
     implementation(libs.plugin.springBoot)
     implementation(libs.plugin.spotless)
-    implementation(libs.plugin.sonar)
-    implementation(kotlin("allopen", "2.2.10"))
-    implementation(kotlin("gradle-plugin", "2.2.10"))
+    implementation(libs.plugin.detekt)
+    implementation(kotlin("allopen", "2.2.20"))
+    implementation(kotlin("gradle-plugin", "2.2.20"))
     // required for kotlin plugin jpa
-    implementation(kotlin("reflect", "2.2.10"))
-    implementation(kotlin("stdlib-jdk8", "2.2.10"))
-    implementation(kotlin("noarg", "2.2.10"))
+    implementation(kotlin("reflect", "2.2.20"))
+    implementation(kotlin("stdlib-jdk8", "2.2.20"))
+    implementation(kotlin("noarg", "2.2.20"))
 }
 
 gradlePlugin {
     plugins.create("dependency-management") {
         id = "hu.bsstudio.gradle.dependency-management"
         implementationClass = "hu.bsstudio.gradle.DependencyManagementPlugin"
+    }
+    plugins.create("detekt-convention") {
+        id = "hu.bsstudio.gradle.detekt-convention"
+        implementationClass = "hu.bsstudio.gradle.DetektConventionPlugin"
     }
     plugins.create("integration-test-convention") {
         id = "hu.bsstudio.gradle.integration-test-convention"
@@ -43,10 +47,6 @@ gradlePlugin {
     plugins.create("kotlin-convention") {
         id = "hu.bsstudio.gradle.kotlin-convention"
         implementationClass = "hu.bsstudio.gradle.KotlinConventionPlugin"
-    }
-    plugins.create("sonar-convention") {
-        id = "hu.bsstudio.gradle.sonar-convention"
-        implementationClass = "hu.bsstudio.gradle.SonarConventionPlugin"
     }
     plugins.create("spotless-convention") {
         id = "hu.bsstudio.gradle.spotless-convention"

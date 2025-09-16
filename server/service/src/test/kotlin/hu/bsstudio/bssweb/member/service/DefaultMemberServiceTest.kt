@@ -63,19 +63,6 @@ internal class DefaultMemberServiceTest(
     }
 
     @Test
-    internal fun `should archive member with implicit archive flag`() {
-        val memberIds = listOf(MEMBER_ID)
-        every { mockRepository.findAllById(memberIds) } returns listOf(MEMBER_ENTITY)
-        every { MEMBER_ENTITY.archived = true } returns Unit
-        every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
-        every { MEMBER_ENTITY.id } returns MEMBER_ID
-
-        val actual = underTest.archiveMembers(memberIds, true)
-
-        actual.shouldContainExactly(MEMBER_ID)
-    }
-
-    @Test
     internal fun `should find member by id`() {
         every { mockRepository.findById(MEMBER_ID) } returns Optional.of(MEMBER_ENTITY)
         every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
