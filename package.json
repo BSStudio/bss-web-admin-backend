@@ -7,7 +7,7 @@
     "release": "semantic-release"
   },
   "devDependencies": {
-    "semantic-release": "24.2.8"
+    "semantic-release": "24.2.9"
   },
   "author": "csikb",
   "license": "LGPL-3.0-only",
