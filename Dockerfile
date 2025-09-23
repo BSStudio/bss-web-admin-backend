@@ -7,12 +7,6 @@ COPY ./gradle                          ./gradle/
 COPY ./settings.gradle.kts             ./
 COPY ./buildSrc/src                    ./buildSrc/src/
 COPY ./buildSrc/*.gradle.kts           ./buildSrc/
-COPY ./server/build.gradle.kts         ./server/
-COPY ./server/web/build.gradle.kts     ./server/web/
-COPY ./server/service/build.gradle.kts ./server/service/
-COPY ./server/data/build.gradle.kts    ./server/data/
-COPY ./server/model/build.gradle.kts   ./server/model/
-COPY ./server/common/build.gradle.kts  ./server/common/
 COPY ./integration/build.gradle.kts    ./integration/
 COPY ./client/build.gradle.kts         ./client/
 COPY ./server   ./server
