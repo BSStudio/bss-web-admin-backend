@@ -3,10 +3,8 @@ WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                         ./
 COPY ./gradle.properties               ./
-COPY ./gradle/wrapper                  ./gradle/wrapper/
-RUN ./gradlew
-COPY ./settings.gradle.kts             ./
 COPY ./gradle                          ./gradle/
+COPY ./settings.gradle.kts             ./
 COPY ./buildSrc/src                    ./buildSrc/src/
 COPY ./buildSrc/*.gradle.kts           ./buildSrc/
 COPY ./server/build.gradle.kts         ./server/
@@ -17,8 +15,6 @@ COPY ./server/model/build.gradle.kts   ./server/model/
 COPY ./server/common/build.gradle.kts  ./server/common/
 COPY ./integration/build.gradle.kts    ./integration/
 COPY ./client/build.gradle.kts         ./client/
-# build
-COPY ./buildSrc ./buildSrc
 COPY ./server   ./server
 ARG BUILD_ARG="bootJar"
 RUN ./gradlew ${BUILD_ARG}
