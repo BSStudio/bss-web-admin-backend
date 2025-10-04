@@ -1,14 +1,14 @@
 rootProject.name = "bss-web-admin-backend"
 
 include(
+    "client",
+    "integration",
     "server",
-    "server:web",
+    "server:client",
+    "server:common",
+    "server:data",
+    "server:model",
     "server:operation",
     "server:service",
-    "server:model",
-    "server:data",
-    "server:common",
-    "server:client",
-    "client",
-    "integration"
+    "server:web",
 )
