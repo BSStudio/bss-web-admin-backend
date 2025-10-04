@@ -67,6 +67,7 @@ jobs:
           sbom: true
           provenance: true
           set: |
+            ${{ github.event_name == 'pull_request' || '--set="*.platform=linux/arm64/v8"' }}
             *.cache-from=type=gha
             *.cache-to=type=gha,mode=max
 
