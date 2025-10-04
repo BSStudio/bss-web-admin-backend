@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-runtime-container:jdk-21.0.8_12-cds-musl@sha256:8b8bb6e5b0ace15ab3e037446eb79151f744461a106656a23f1986e3bf5f8496 AS build
+FROM bellsoft/liberica-runtime-container:jdk-21.0.8_12-cds-musl@sha256:c44155a68eac01e2f69381ef52cc4960e8fe14dbeda24774f50b417a345ad454 AS build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./gradlew                         ./
