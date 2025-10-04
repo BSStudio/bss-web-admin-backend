@@ -17,12 +17,14 @@ COPY ./server/web/build.gradle.kts       ./server/web/
 COPY ./gradlew                           ./
 COPY ./gradle.properties                 ./
 COPY ./settings.gradle.kts               ./
-RUN ./gradlew
+RUN --mount=type=cache,target=/root/.gradle \
+    ./gradlew
 # build
 COPY ./buildSrc ./buildSrc
 COPY ./server   ./server
 ARG BUILD_ARG="bootJar"
-RUN ./gradlew ${BUILD_ARG}
+RUN --mount=type=cache,target=/root/.gradle \
+    ./gradlew ${BUILD_ARG}
 
 FROM bellsoft/liberica-runtime-container:jre-25-cds-musl@sha256:dfba02c9de055cd89f1c3e860425bef21cd88129a49a874e6024b953d9060d05 AS app
 # use non-root user
