@@ -1,7 +1,7 @@
 {
   "name": "bss-web-admin-backend",
   "engines": {
-    "node": "22.19.0"
+    "node": "22.20.0"
   },
   "scripts": {
     "release": "semantic-release"
@@ -11,5 +11,5 @@
   },
   "author": "csikb",
   "license": "LGPL-3.0-only",
-  "packageManager": "pnpm@10.17.0"
+  "packageManager": "pnpm@10.18.0"
 }
