@@ -2,12 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:best-practices",
+    "group:allDigest",
     "security:openssf-scorecard",
     "schedule:automergeWeekends",
     "schedule:monthly",
     "preview:dockerCompose",
     "preview:dockerVersions",
-    "helpers:disableTypesNodeMajor",
     "mergeConfidence:all-badges",
     ":timezone(Europe/Dublin)",
     ":automergeDigest",
