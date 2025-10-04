@@ -28,7 +28,7 @@ services:
 
   postgres:
     # update server/data/src/test/resources/application.yml
-    image: "postgres:16.3-alpine3.18"
+    image: "postgres:16.3-alpine3.18@sha256:64e18e8fb3e9c9aac89ac590c5dd8306b862478404f76cd9b5f7720d012b4c47"
     environment:
       POSTGRES_DB: "bss"
       POSTGRES_USER: "user"
@@ -42,7 +42,7 @@ services:
       timeout: 5s
       retries: 3
   mock-file-api:
-    image: "wiremock/wiremock:3.13.1"
+    image: "wiremock/wiremock:3.13.1@sha256:d61e7720f89483fdef5366843b58d1dfd06bcce5828179c9f2f54de5c28354b0"
     ports:
       - "127.0.0.1:8888:8080"
     healthcheck:
@@ -54,7 +54,7 @@ services:
     volumes:
       - "./docker/wiremock/stubs/file-api:/home/wiremock/mappings/file-api"
   mock-oidc:
-    image: "wiremock/wiremock:3.13.1"
+    image: "wiremock/wiremock:3.13.1@sha256:d61e7720f89483fdef5366843b58d1dfd06bcce5828179c9f2f54de5c28354b0"
     ports:
       - "127.0.0.1:8998:8080"
     healthcheck:
@@ -67,7 +67,7 @@ services:
       - "./docker/wiremock/stubs/oidc:/home/wiremock/mappings/oidc"
 
   prometheus:
-    image: "prom/prometheus:v3.6.0"
+    image: "prom/prometheus:v3.6.0@sha256:76947e7ef22f8a698fc638f706685909be425dbe09bd7a2cd7aca849f79b5f64"
     ports:
       - "127.0.0.1:9090:9090"
     volumes:
@@ -81,7 +81,7 @@ services:
       timeout: 5s
       retries: 3
   grafana:
-    image: "grafana/grafana:12.2.0-ubuntu"
+    image: "grafana/grafana:12.2.0-ubuntu@sha256:b20a76f929a2b0fade8f6546f688aabea09a77a536c69d4e8425a42ddc5e5b41"
     ports:
       - "127.0.0.1:3000:3000"
     volumes:

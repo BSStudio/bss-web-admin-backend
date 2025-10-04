@@ -6,7 +6,7 @@ orbs:
 executors:
   jdk:
     docker:
-      - image: cimg/openjdk:21.0.8
+      - image: cimg/openjdk:21.0.8@sha256:4a801120973f503e4e2c2c83b8ee25f1fec7935c1fa3c455fb61f5773b5af7ae
   jdk-machine:
     machine:
       image: ubuntu-2204:current
@@ -52,7 +52,7 @@ jobs:
       - run: docker compose down
   github_release:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:stable@sha256:35e5e29930ab565475a4f2aa9b4124998ed67dbc7b0e2dd5f420a4189d08d0d2
     steps:
       - checkout
       - github-cli/install:
