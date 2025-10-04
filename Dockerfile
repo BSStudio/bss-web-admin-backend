@@ -1,27 +1,30 @@
 FROM bellsoft/liberica-runtime-container:jdk-21.0.8_12-cds-musl@sha256:c44155a68eac01e2f69381ef52cc4960e8fe14dbeda24774f50b417a345ad454 AS build
 WORKDIR /usr/src/app
 # cache dependencies
-COPY ./gradlew                         ./
-COPY ./gradle.properties               ./
-COPY ./gradle/wrapper                  ./gradle/wrapper/
-RUN ./gradlew
-COPY ./settings.gradle.kts             ./
-COPY ./gradle                          ./gradle/
-COPY ./buildSrc/src                    ./buildSrc/src/
-COPY ./buildSrc/*.gradle.kts           ./buildSrc/
-COPY ./server/build.gradle.kts         ./server/
-COPY ./server/web/build.gradle.kts     ./server/web/
-COPY ./server/service/build.gradle.kts ./server/service/
-COPY ./server/data/build.gradle.kts    ./server/data/
-COPY ./server/model/build.gradle.kts   ./server/model/
-COPY ./server/common/build.gradle.kts  ./server/common/
-COPY ./integration/build.gradle.kts    ./integration/
-COPY ./client/build.gradle.kts         ./client/
+COPY ./buildSrc/*.gradle.kts             ./buildSrc/
+COPY ./buildSrc/src                      ./buildSrc/src/
+COPY ./client/build.gradle.kts           ./client/
+COPY ./gradle                            ./gradle/
+COPY ./integration/build.gradle.kts      ./integration/
+COPY ./server/build.gradle.kts           ./server/
+COPY ./server/client/build.gradle.kts    ./server/client/
+COPY ./server/common/build.gradle.kts    ./server/common/
+COPY ./server/data/build.gradle.kts      ./server/data/
+COPY ./server/model/build.gradle.kts     ./server/model/
+COPY ./server/operation/build.gradle.kts ./server/operation/
+COPY ./server/service/build.gradle.kts   ./server/service/
+COPY ./server/web/build.gradle.kts       ./server/web/
+COPY ./gradlew                           ./
+COPY ./gradle.properties                 ./
+COPY ./settings.gradle.kts               ./
+RUN --mount=type=cache,target=/root/.gradle \
+    ./gradlew
 # build
 COPY ./buildSrc ./buildSrc
 COPY ./server   ./server
 ARG BUILD_ARG="bootJar"
-RUN ./gradlew ${BUILD_ARG}
+RUN --mount=type=cache,target=/root/.gradle \
+    ./gradlew ${BUILD_ARG}
 
 FROM bellsoft/liberica-runtime-container:jre-25-cds-musl@sha256:aef61525d19248dc0a31954d3b901255d17be784f46617c32eb90468623bd927 AS app
 # use non-root user
