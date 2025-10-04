@@ -14,5 +14,16 @@
     ":automergeMinor",
     ":semanticCommits",
     ":pathSemanticCommitType(Dockerfile, perf)"
+  ],
+  "packageRules": [
+    {
+      "groupName": "All GitHub Actions",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": [
+        "digest",
+        "patch",
+        "minor"
+      ]
+    }
   ]
 }
