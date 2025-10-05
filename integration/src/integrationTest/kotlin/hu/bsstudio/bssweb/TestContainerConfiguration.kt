@@ -7,17 +7,9 @@ import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.DockerComposeContainer
 import java.io.File
 
-/**
- * Spring Test Configuration for managing Docker Compose containers in integration tests.
- * This ensures a single Docker Compose instance is shared across all test classes using Spring's singleton scope.
- */
 @TestConfiguration
 class TestContainerConfiguration {
 
-    /**
-     * Creates a singleton Docker Compose container managed by Spring.
-     * The container is started when the bean is created and automatically cleaned up by Spring.
-     */
     @Bean
     fun dockerComposeContainer(): DockerComposeContainer<*> {
         return DockerComposeContainer(File("../docker-compose.yml"), File("../docker-compose.ci.yml"))
@@ -26,11 +18,6 @@ class TestContainerConfiguration {
             .withOptions("--profile app")
             .withBuild(true)
     }
-
-    /**
-     * Bean for configuring dynamic properties based on the Docker Compose container.
-     * This bean depends on the dockerComposeContainer and will be created after it.
-     */
 
     @DynamicPropertySource
     fun containerPropertyConfigurer(registry: DynamicPropertyRegistry, dockerComposeContainer: DockerComposeContainer<*>) {
