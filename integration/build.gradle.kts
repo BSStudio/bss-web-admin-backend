@@ -13,4 +13,7 @@ dependencies {
     integrationTestImplementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     integrationTestImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
     integrationTestImplementation("org.springframework.boot:spring-boot-starter-json")
+    integrationTestImplementation("org.springframework.boot:spring-boot-testcontainers")
+    integrationTestImplementation("org.testcontainers:testcontainers")
+    integrationTestImplementation("org.testcontainers:junit-jupiter")
 }
