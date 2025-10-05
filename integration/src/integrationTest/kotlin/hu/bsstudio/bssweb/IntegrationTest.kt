@@ -20,15 +20,15 @@ import java.io.File
 @Testcontainers
 @SpringJUnitConfig(classes = [BssFeignConfig::class, DataConfig::class])
 open class IntegrationTest {
-
     companion object {
         @Container
         @JvmStatic
-        val compose: DockerComposeContainer<*> = DockerComposeContainer(File("../docker-compose.yml"), File("../docker-compose.ci.yml"))
-            .withExposedService("postgres", 5432)
-            .withExposedService("app", 8080)
-            .withOptions("--profile app")
-            .withBuild(true)
+        val compose: DockerComposeContainer<*> =
+            DockerComposeContainer(File("../docker-compose.yml"), File("../docker-compose.ci.yml"))
+                .withExposedService("postgres", 5432)
+                .withExposedService("app", 8080)
+                .withOptions("--profile app")
+                .withBuild(true)
 
         @DynamicPropertySource
         @JvmStatic
@@ -38,12 +38,12 @@ open class IntegrationTest {
             val appHost = compose.getServiceHost("app", 8080)
             val appPort = compose.getServicePort("app", 8080)
 
-            registry.add("spring.datasource.url") { 
-                "jdbc:postgresql://$postgresHost:$postgresPort/bss?currentSchema=private" 
+            registry.add("spring.datasource.url") {
+                "jdbc:postgresql://$postgresHost:$postgresPort/bss?currentSchema=private"
             }
-            registry.add("spring.datasource.username") {"user" }
-            registry.add("spring.datasource.password") {"password" }
-            registry.add("spring.flyway.enabled") {"false" }
+            registry.add("spring.datasource.username") { "user" }
+            registry.add("spring.datasource.password") { "password" }
+            registry.add("spring.flyway.enabled") { "false" }
             registry.add("bss.client.url") { "http://$appHost:$appPort" }
         }
     }

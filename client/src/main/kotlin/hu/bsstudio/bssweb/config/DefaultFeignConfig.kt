@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class DefaultFeignConfig() {
+class DefaultFeignConfig {
     @Bean
     fun interceptor() =
         RequestInterceptor { template ->
