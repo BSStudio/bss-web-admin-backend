@@ -5,7 +5,6 @@
     "group:allDigest",
     "security:openssf-scorecard",
     "schedule:automergeWeekends",
-    "schedule:monthly",
     "preview:dockerCompose",
     "preview:dockerVersions",
     "mergeConfidence:all-badges",
