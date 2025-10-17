@@ -34,6 +34,7 @@ jobs:
         with:
           node-version-file: package.json
           cache: 'pnpm'
+          cache-dependency-path: ''
 
       - run: pnpm install
 
