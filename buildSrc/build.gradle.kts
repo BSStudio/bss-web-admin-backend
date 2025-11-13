@@ -5,18 +5,26 @@ plugins {
 
 repositories {
     gradlePluginPortal()
+    // TODO: remove when detekt stable is in gradle plugin portal
+    maven {
+        // https://central.sonatype.org/publish/publish-portal-snapshots/#consuming-via-gradle
+        url = uri("https://central.sonatype.com/repository/maven-snapshots/")
+        content {
+            includeModule("io.gitlab.arturbosch.detekt", "detekt-gradle-plugin")
+        }
+    }
 }
 
 dependencies {
     implementation(libs.plugin.springBoot)
     implementation(libs.plugin.spotless)
     implementation(libs.plugin.detekt)
-    implementation(kotlin("allopen", "2.2.21"))
-    implementation(kotlin("gradle-plugin", "2.2.21"))
+    implementation(libs.kotlin.allopen)
+    implementation(libs.kotlin.gradle.plugin)
     // required for kotlin plugin jpa
-    implementation(kotlin("reflect", "2.2.21"))
-    implementation(kotlin("stdlib-jdk8", "2.2.21"))
-    implementation(kotlin("noarg", "2.2.21"))
+    implementation(libs.kotlin.reflect)
+    implementation(libs.kotlin.stdlib.jdk8)
+    implementation(libs.kotlin.noarg)
 }
 
 gradlePlugin {
