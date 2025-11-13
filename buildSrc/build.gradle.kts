@@ -8,7 +8,7 @@ repositories {
     // TODO: remove when detekt stable is in gradle plugin portal
     maven {
         // https://central.sonatype.org/publish/publish-portal-snapshots/#consuming-via-gradle
-        url = 'https://central.sonatype.com/repository/maven-snapshots/'
+        url = "https://central.sonatype.com/repository/maven-snapshots/"
         content {
             includeModule("io.gitlab.arturbosch.detekt", "detekt-gradle-plugin")
         }
