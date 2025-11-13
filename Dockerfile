@@ -26,7 +26,7 @@ ARG BUILD_ARG="bootJar"
 RUN --mount=type=cache,target=/root/.gradle \
     ./gradlew ${BUILD_ARG}
 
-FROM bellsoft/liberica-runtime-container:jre-25-cds-musl@sha256:aef61525d19248dc0a31954d3b901255d17be784f46617c32eb90468623bd927 AS app
+FROM bellsoft/liberica-runtime-container:jre-25-cds-musl@sha256:445d46f3828e4e8683b2a19b59e4546a612d10f9ba6abbec2a01fd0ca0a2cc58 AS app
 # use non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring

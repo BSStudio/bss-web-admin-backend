@@ -67,7 +67,7 @@ services:
       - "./docker/wiremock/stubs/oidc:/home/wiremock/mappings/oidc"
 
   prometheus:
-    image: "prom/prometheus:v3.6.0@sha256:76947e7ef22f8a698fc638f706685909be425dbe09bd7a2cd7aca849f79b5f64"
+    image: "prom/prometheus:v3.7.3@sha256:49214755b6153f90a597adcbff0252cc61069f8ab69ce8411285cd4a560e8038"
     ports:
       - "127.0.0.1:9090:9090"
     volumes:
@@ -81,7 +81,7 @@ services:
       timeout: 5s
       retries: 3
   grafana:
-    image: "grafana/grafana:12.2.0-ubuntu@sha256:b20a76f929a2b0fade8f6546f688aabea09a77a536c69d4e8425a42ddc5e5b41"
+    image: "grafana/grafana:12.2.1-ubuntu@sha256:797530c642f7b41ba7848c44cfda5e361ef1f3391a98bed1e5d448c472b6826a"
     ports:
       - "127.0.0.1:3000:3000"
     volumes:
