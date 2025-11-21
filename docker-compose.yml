@@ -42,7 +42,7 @@ services:
       timeout: 5s
       retries: 3
   mock-file-api:
-    image: "wiremock/wiremock:3.13.1@sha256:d61e7720f89483fdef5366843b58d1dfd06bcce5828179c9f2f54de5c28354b0"
+    image: "wiremock/wiremock:3.13.2@sha256:8bdd64a25db911ba521a38aebf1590d96767c2d29f3e941e2f496a760bbdf47d"
     ports:
       - "127.0.0.1:8888:8080"
     healthcheck:
@@ -54,7 +54,7 @@ services:
     volumes:
       - "./docker/wiremock/stubs/file-api:/home/wiremock/mappings/file-api"
   mock-oidc:
-    image: "wiremock/wiremock:3.13.1@sha256:d61e7720f89483fdef5366843b58d1dfd06bcce5828179c9f2f54de5c28354b0"
+    image: "wiremock/wiremock:3.13.2@sha256:8bdd64a25db911ba521a38aebf1590d96767c2d29f3e941e2f496a760bbdf47d"
     ports:
       - "127.0.0.1:8998:8080"
     healthcheck:
@@ -81,7 +81,7 @@ services:
       timeout: 5s
       retries: 3
   grafana:
-    image: "grafana/grafana:12.2.1-ubuntu@sha256:797530c642f7b41ba7848c44cfda5e361ef1f3391a98bed1e5d448c472b6826a"
+    image: "grafana/grafana:12.3.0-ubuntu@sha256:cee936306135e1925ab21dffa16f8a411535d16ab086bef2309339a8e74d62df"
     ports:
       - "127.0.0.1:3000:3000"
     volumes:
