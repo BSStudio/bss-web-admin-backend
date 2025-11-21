@@ -10,7 +10,7 @@ repositories {
         // https://central.sonatype.org/publish/publish-portal-snapshots/#consuming-via-gradle
         url = uri("https://central.sonatype.com/repository/maven-snapshots/")
         content {
-            includeModule("io.gitlab.arturbosch.detekt", "detekt-gradle-plugin")
+            includeModule("dev.detekt", "detekt-gradle-plugin")
         }
     }
 }
