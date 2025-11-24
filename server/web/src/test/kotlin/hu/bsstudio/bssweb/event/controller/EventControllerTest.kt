@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.event.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent

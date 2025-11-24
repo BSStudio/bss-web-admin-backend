@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.eventvideo.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.eventvideo.service.EventVideoService

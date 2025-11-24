@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.metrics.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.metrics.model.BssMetrics
 import hu.bsstudio.bssweb.metrics.service.MetricsService

@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.member.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
