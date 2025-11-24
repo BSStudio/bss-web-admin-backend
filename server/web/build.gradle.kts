@@ -18,13 +18,5 @@ dependencies {
     implementation(libs.springdocOpenapiStarterWebmvcUi)
     implementation("org.springframework.data:spring-data-commons")
     testImplementation("org.springframework.security:spring-security-test")
-
-    constraints {
-        implementation("com.nimbusds:nimbus-jose-jwt") {
-            version {
-                require("[9.37.4,)")
-            }
-            because("CVE-2025-53864")
-        }
-    }
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 }
