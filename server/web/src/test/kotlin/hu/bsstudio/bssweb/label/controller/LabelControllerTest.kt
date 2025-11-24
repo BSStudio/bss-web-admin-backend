@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.label.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import tools.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.label.model.CreateLabel
 import hu.bsstudio.bssweb.label.model.Label
