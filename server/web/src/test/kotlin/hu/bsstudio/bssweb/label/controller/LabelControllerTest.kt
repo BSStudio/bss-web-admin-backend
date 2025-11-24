@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.label.controller
 
-import tools.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.label.model.CreateLabel
 import hu.bsstudio.bssweb.label.model.Label
@@ -16,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import tools.jackson.databind.ObjectMapper
 import java.util.UUID
 
 @WebMvcTest(LabelController::class)

@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.member.controller
 
-import tools.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
@@ -19,6 +18,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
+import tools.jackson.databind.ObjectMapper
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID

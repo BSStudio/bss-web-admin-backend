@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.video.controller
 
-import tools.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -22,6 +21,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
+import tools.jackson.databind.ObjectMapper
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
