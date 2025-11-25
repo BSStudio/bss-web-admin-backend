@@ -117,4 +117,5 @@ renovate.json
 
 ### User template
 db/
+release/
 README.md
