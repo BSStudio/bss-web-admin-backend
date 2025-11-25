@@ -16,8 +16,6 @@ class IntegrationTestConventionPlugin : Plugin<Project> {
                 register<JvmTestSuite>("integrationTest") {
                     useJUnitJupiter()
                     dependencies {
-                        implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
-                        implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2025.0.0"))
                         implementation("org.springframework.boot:spring-boot-starter-test") {
                             exclude(group = "org.hamcrest")
                             exclude(group = "org.assertj")
@@ -29,6 +27,10 @@ class IntegrationTestConventionPlugin : Plugin<Project> {
                     }
                 }
             }
+        }
+        project.configurations.named("integrationTestImplementation") {
+            extendsFrom(project.configurations.getByName("implementation"))
+            extendsFrom(project.configurations.getByName("runtimeOnly"))
         }
     }
 }
