@@ -48,6 +48,10 @@ gradlePlugin {
         id = "hu.bsstudio.gradle.kotlin-convention"
         implementationClass = "hu.bsstudio.gradle.KotlinConventionPlugin"
     }
+    plugins.create("publishing-convention") {
+        id = "hu.bsstudio.gradle.publishing-convention"
+        implementationClass = "hu.bsstudio.gradle.PublishingConventionPlugin"
+    }
     plugins.create("spotless-convention") {
         id = "hu.bsstudio.gradle.spotless-convention"
         implementationClass = "hu.bsstudio.gradle.SpotlessConventionPlugin"

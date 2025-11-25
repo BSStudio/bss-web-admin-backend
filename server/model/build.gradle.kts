@@ -6,6 +6,7 @@ plugins {
     id("hu.bsstudio.gradle.test-convention")
     id("hu.bsstudio.gradle.jacoco-convention")
     id("hu.bsstudio.gradle.detekt-convention")
+    id("hu.bsstudio.gradle.publishing-convention")
 }
 dependencies {
     api(project(":server:common"))
