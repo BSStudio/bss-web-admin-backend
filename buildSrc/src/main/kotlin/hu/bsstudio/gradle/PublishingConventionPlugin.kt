@@ -1,6 +1,5 @@
 package hu.bsstudio.gradle
 
-import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension
@@ -15,15 +14,11 @@ class PublishingConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.pluginManager.apply(MavenPublishPlugin::class)
 
-        val groupId = project.rootProject.group.toString()
-        if (groupId.isBlank()) {
-            throw GradleException("Must apply a non-blank group to the root project")
-        }
 
         project.extensions.configure(PublishingExtension::class) {
             repositories {
                 maven {
-                    name = "GitHubPackages"
+                    name = "GitHubPackageRegistry"
                     url = project.uri("https://maven.pkg.github.com/BSStudio/bss-web-admin-backend")
                     credentials {
                         username = project.providers.environmentVariable("GPR_USERNAME").orNull
@@ -34,9 +29,14 @@ class PublishingConventionPlugin : Plugin<Project> {
             publications {
                 register<MavenPublication>(project.name) {
                     from(project.components.getByName("java"))
-                    this.groupId = groupId
+                    this.groupId = project.rootProject.group.toString()
+                    this.artifactId = "${project.rootProject.name}-${project.name}"
                 }
             }
+        }
+
+        if (project.rootProject.group.toString().isBlank()) {
+            project.logger.warn("WARNING: The root project group is not set. Please set it to ensure proper publishing configuration.")
         }
     }
 }
