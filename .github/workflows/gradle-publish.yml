@@ -42,3 +42,6 @@ jobs:
           args: >
             --failOnCVSS 7
             --enableRetired
+        env:
+          # See: https://github.com/dependency-check/Dependency-Check_Action?tab=readme-ov-file#error-java_home-is-not-defined-correctly
+          JAVA_HOME: /opt/jdk
