@@ -8,6 +8,7 @@ plugins {
     id("hu.bsstudio.gradle.detekt-convention")
     id("hu.bsstudio.gradle.publishing-convention")
 }
+
 dependencies {
     api(project(":server:common"))
     implementation("org.springframework.boot:spring-boot-starter-json")
