@@ -1,3 +1,5 @@
+version = "1.0.0"
+
 plugins {
     `kotlin-dsl`
     alias(libs.plugins.spotless)
@@ -8,9 +10,10 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.plugin.springBoot)
-    implementation(libs.plugin.spotless)
+    implementation(libs.plugin.cyclonedx)
     implementation(libs.plugin.detekt)
+    implementation(libs.plugin.spotless)
+    implementation(libs.plugin.springBoot)
     implementation(kotlin("allopen", "2.2.21"))
     implementation(kotlin("gradle-plugin", "2.2.21"))
     // required for kotlin plugin jpa
@@ -47,6 +50,14 @@ gradlePlugin {
     plugins.create("kotlin-convention") {
         id = "hu.bsstudio.gradle.kotlin-convention"
         implementationClass = "hu.bsstudio.gradle.KotlinConventionPlugin"
+    }
+    plugins.create("publishing-convention") {
+        id = "hu.bsstudio.gradle.publishing-convention"
+        implementationClass = "hu.bsstudio.gradle.PublishingConventionPlugin"
+    }
+    plugins.create("sbom-convention") {
+        id = "hu.bsstudio.gradle.sbom-convention"
+        implementationClass = "hu.bsstudio.gradle.SbomConventionPlugin"
     }
     plugins.create("spotless-convention") {
         id = "hu.bsstudio.gradle.spotless-convention"

@@ -11,7 +11,7 @@ plugins {
 dependencies {
     api(project(":server:data"))
     api(project(":server:model"))
-    api(project(":server:client"))
+    api(project(":server:file-api"))
     implementation("org.springframework:spring-context")
     implementation("org.springframework.data:spring-data-jpa")
 }

@@ -58,4 +58,6 @@ jobs:
           name: "gradle-integration-artifacts"
           path: |
             **/build/**
-            !buildSrc/build/**
+            !**/build/libs/**
+            !**/build/classes/**
+            !**/build/tmp/**
