@@ -31,10 +31,27 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - run: "./gradlew publishToMavenLocal -Pversion=${{ github.event.release.tag_name || github.ref || 'SNAPSHOT' }}"
+      - id: version
+        run: |
+          # If Pull request: pr-{id}
+          # If Release: {tag_name}
+          # If Push to main: {ref}-SNAPSHOT
+          # If schedule: nightly-SNAPSHOT
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+              echo "version=pr-${{ github.event.pull_request.id }}" >> $GITHUB_ENV
+          elif [ "${{ github.event_name }}" = "release" ]; then
+              echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+          elif [ "${{ github.event_name }}" = "push" ]; then
+              echo "version=${{ github.ref }}-SNAPSHOT" >> $GITHUB_ENV
+          else
+              echo "version=nightly-SNAPSHOT" >> $GITHUB_ENV
+          fi
+          
 
-      - if: github.event_name == 'push' || github.event_name == 'release'
-        run: "./gradlew publish -Pversion=${{ github.ref || 'SNAPSHOT' }}"
+      - run: "./gradlew publishToMavenLocal -Pversion=${{ steps.version.outputs.version }}"
+
+      - if: github.event_name != 'pull_request' || github.event_name != 'merge_group'
+        run: "./gradlew publish -Pversion=${{ steps.version.outputs.version }}"
         env:
           GPR_USERNAME: ${{ github.actor }}
           GPR_PASSWORD: ${{ github.token }}

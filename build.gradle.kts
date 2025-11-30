@@ -3,6 +3,7 @@ group = "hu.bsstudio.web"
 plugins {
     `java-platform`
     `maven-publish`
+    id("hu.bsstudio.gradle.sbom-convention")
 }
 
 dependencies {

@@ -7,6 +7,7 @@ plugins {
     id("hu.bsstudio.gradle.jacoco-convention")
     id("hu.bsstudio.gradle.detekt-convention")
     id("hu.bsstudio.gradle.publishing-convention")
+    id("hu.bsstudio.gradle.sbom-convention")
 }
 
 dependencies {
