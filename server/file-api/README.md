@@ -1,4 +1,4 @@
-# The server client module
+# The file-api module
 
 This module holds external client code for the server.
 
