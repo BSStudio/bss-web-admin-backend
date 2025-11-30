@@ -33,16 +33,20 @@ jobs:
 
       - id: version
         run: |
+          # Determine version based on event type
+          # Pull Request: pr-<PR_NUMBER>
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "version=pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          # Release: <TAG_NAME>
           elif [ "${{ github.event_name }}" = "release" ]; then
             echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
-          elif [ "${{ github.event_name }}" = "push" ]; then
-            echo "version=${{ github.ref_name }}-SNAPSHOT" >> $GITHUB_OUTPUT
-          else
+          # Schedule: nightly-SNAPSHOT
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
             echo "version=nightly-SNAPSHOT" >> $GITHUB_OUTPUT
+          # Push & other: <BRANCH_NAME>-SNAPSHOT
+          else
+            echo "version=${{ github.ref_name }}-SNAPSHOT" >> $GITHUB_OUTPUT
           fi
-          
 
       - run: "./gradlew publishToMavenLocal -Pversion=${{ steps.version.outputs.version }}"
 
