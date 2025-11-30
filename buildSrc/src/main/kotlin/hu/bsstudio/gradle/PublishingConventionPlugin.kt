@@ -9,11 +9,9 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.register
 
-
 class PublishingConventionPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.pluginManager.apply(MavenPublishPlugin::class)
-
 
         project.extensions.configure(PublishingExtension::class) {
             repositories {
@@ -35,7 +33,10 @@ class PublishingConventionPlugin : Plugin<Project> {
             }
         }
 
-        if (project.rootProject.group.toString().isBlank()) {
+        if (project.rootProject.group
+                .toString()
+                .isBlank()
+        ) {
             project.logger.warn("WARNING: The root project group is not set. Please set it to ensure proper publishing configuration.")
         }
     }
