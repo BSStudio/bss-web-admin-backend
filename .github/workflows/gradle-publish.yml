@@ -38,13 +38,13 @@ jobs:
           # If Push to main: {ref}-SNAPSHOT
           # If schedule: nightly-SNAPSHOT
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-              echo "version=pr-${{ github.event.pull_request.id }}" >> $GITHUB_ENV
+              echo "version=pr-${{ github.event.pull_request.id }}" >> GITHUB_OUTPUT
           elif [ "${{ github.event_name }}" = "release" ]; then
-              echo "version=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+              echo "version=${{ github.event.release.tag_name }}" >> GITHUB_OUTPUT
           elif [ "${{ github.event_name }}" = "push" ]; then
-              echo "version=${{ github.ref }}-SNAPSHOT" >> $GITHUB_ENV
+              echo "version=${{ github.ref }}-SNAPSHOT" >> GITHUB_OUTPUT
           else
-              echo "version=nightly-SNAPSHOT" >> $GITHUB_ENV
+              echo "version=nightly-SNAPSHOT" >> GITHUB_OUTPUT
           fi
           
 
