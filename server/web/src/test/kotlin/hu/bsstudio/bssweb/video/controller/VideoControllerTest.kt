@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.video.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -10,7 +9,7 @@ import hu.bsstudio.bssweb.video.service.VideoService
 import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -22,6 +21,7 @@ import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
+import tools.jackson.databind.ObjectMapper
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID

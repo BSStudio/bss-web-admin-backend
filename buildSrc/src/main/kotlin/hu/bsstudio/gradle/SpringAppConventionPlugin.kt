@@ -12,5 +12,13 @@ class SpringAppConventionPlugin : Plugin<Project> {
         project.dependencies {
             add("implementation", "org.springframework.boot:spring-boot-starter")
         }
+        project.configurations.named("developmentOnly") {
+            extendsFrom(project.configurations.getByName("runtimeOnly"))
+            extendsFrom(project.configurations.getByName("implementation"))
+        }
+        project.configurations.named("annotationProcessor") {
+            extendsFrom(project.configurations.getByName("runtimeOnly"))
+            extendsFrom(project.configurations.getByName("implementation"))
+        }
     }
 }

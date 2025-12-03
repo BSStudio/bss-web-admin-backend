@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.label.controller
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.label.model.CreateLabel
 import hu.bsstudio.bssweb.label.model.Label
@@ -8,7 +7,7 @@ import hu.bsstudio.bssweb.label.service.LabelService
 import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
@@ -16,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
+import tools.jackson.databind.ObjectMapper
 import java.util.UUID
 
 @WebMvcTest(LabelController::class)

@@ -10,6 +10,7 @@ plugins {
 dependencies {
     api(project(":server:common"))
     implementation("org.springframework.boot:spring-boot-starter-json")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("tools.jackson.module:jackson-module-kotlin")
     testImplementation(libs.kotestAssertionsJson)
+    testImplementation("org.springframework.boot:spring-boot-starter-jackson-test")
 }
