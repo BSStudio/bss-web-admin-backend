@@ -14,8 +14,8 @@ dependencies {
     implementation(kotlin("allopen", "2.2.21"))
     implementation(kotlin("gradle-plugin", "2.2.21"))
     // required for kotlin plugin jpa
-    implementation(kotlin("reflect", "2.2.21"))
-    implementation(kotlin("stdlib-jdk8", "2.2.21"))
+    implementation(kotlin("reflect", "2.3.0"))
+    implementation(kotlin("stdlib-jdk8", "2.3.0"))
     implementation(kotlin("noarg", "2.2.21"))
 }
 
