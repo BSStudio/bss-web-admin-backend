@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.event.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpServerErrorException
 import java.net.URI
 import java.time.LocalDate
 
@@ -22,7 +22,7 @@ internal class CreateEventIntegrationTest : IntegrationTest() {
     @Autowired
     private lateinit var client: EventClient
 
-    @Value("\${bss.client.url}")
+    @Value($$"${bss.client.url}")
     private lateinit var url: String
 
     @Test
@@ -49,9 +49,9 @@ internal class CreateEventIntegrationTest : IntegrationTest() {
     internal fun `it should retun 500 when duplicate urls were specified`() {
         eventRepository.save(DetailedEventEntity(url = CREATE_EVENT.url, title = CREATE_EVENT.title))
 
-        shouldThrow<FeignException.InternalServerError> {
+        shouldThrow<HttpServerErrorException.InternalServerError> {
             client.createEvent(CREATE_EVENT)
-        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error"""" }
+        } should { it.responseBodyAsString shouldContain ""","status":500,"error":"Internal Server Error"""" }
     }
 
     private companion object {

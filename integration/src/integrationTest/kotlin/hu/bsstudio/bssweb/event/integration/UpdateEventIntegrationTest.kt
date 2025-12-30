@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.event.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
@@ -12,6 +11,8 @@ import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.HttpServerErrorException
 import java.time.LocalDate
 import java.util.UUID
 
@@ -45,14 +46,14 @@ internal class UpdateEventIntegrationTest(
         val entity = this.eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
 
         val updateEvent = UPDATE_EVENT.copy(dateTo = LocalDate.EPOCH)
-        shouldThrow<FeignException.InternalServerError> {
+        shouldThrow<HttpServerErrorException.InternalServerError> {
             client.updateEvent(entity.id, updateEvent)
         }
     }
 
     @Test
     internal fun `it should return 404 when event not found`() {
-        shouldThrow<FeignException.NotFound> {
+        shouldThrow<HttpClientErrorException.NotFound> {
             client.updateEvent(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),
                 UPDATE_EVENT,
