@@ -41,7 +41,7 @@ class CreateLabelIntegrationTest : IntegrationTest() {
     }
 
     @Test
-    internal fun `it should retun 500 when duplicate urls were specified`() {
+    internal fun `it should return 500 when duplicate urls were specified`() {
         labelRepository.save(LabelEntity(name = CREATE_LABEL.name, description = CREATE_LABEL.description))
 
         shouldThrow<HttpServerErrorException.InternalServerError> {
