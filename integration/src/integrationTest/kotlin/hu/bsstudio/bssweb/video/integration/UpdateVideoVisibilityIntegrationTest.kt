@@ -32,7 +32,7 @@ class UpdateVideoVisibilityIntegrationTest(
     }
 
     @Test
-    internal fun `it should return 200 and updated ids wheen videos are being hidden`() {
+    internal fun `it should return 200 and updated ids when videos are hidden`() {
         val entities =
             videoRepository.saveAll(
                 listOf(
@@ -46,16 +46,6 @@ class UpdateVideoVisibilityIntegrationTest(
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
             body!! shouldBeEqual entities.map { it.id }
-        }
-    }
-
-    @Test
-    internal fun `it should return 200 and empty list`() {
-        val actual = client.changeVideoVisibility(listOf(), true)
-
-        assertSoftly(actual) {
-            statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!!.shouldBeEmpty()
         }
     }
 

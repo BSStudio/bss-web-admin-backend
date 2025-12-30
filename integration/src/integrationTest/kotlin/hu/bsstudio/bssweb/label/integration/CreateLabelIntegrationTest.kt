@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.label.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.label.client.LabelClient
 import hu.bsstudio.bssweb.label.entity.LabelEntity
@@ -15,13 +14,14 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpServerErrorException
 import java.net.URI
 
 class CreateLabelIntegrationTest : IntegrationTest() {
     @Autowired
     private lateinit var client: LabelClient
 
-    @Value("\${bss.client.url}")
+    @Value($$"${bss.client.url}")
     private lateinit var url: String
 
     @Test
@@ -41,12 +41,12 @@ class CreateLabelIntegrationTest : IntegrationTest() {
     }
 
     @Test
-    internal fun `it should retun 500 when duplicate urls were specified`() {
+    internal fun `it should return 500 when duplicate urls were specified`() {
         labelRepository.save(LabelEntity(name = CREATE_LABEL.name, description = CREATE_LABEL.description))
 
-        shouldThrow<FeignException.InternalServerError> {
+        shouldThrow<HttpServerErrorException.InternalServerError> {
             client.createLabel(CREATE_LABEL)
-        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error"""" }
+        } should { it.responseBodyAsString shouldContain ""","status":500,"error":"Internal Server Error"""" }
     }
 
     private companion object {

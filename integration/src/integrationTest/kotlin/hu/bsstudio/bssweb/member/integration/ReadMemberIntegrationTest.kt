@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.member.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
@@ -11,6 +10,7 @@ import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpClientErrorException
 import java.util.UUID
 
 class ReadMemberIntegrationTest(
@@ -41,7 +41,7 @@ class ReadMemberIntegrationTest(
 
     @Test
     internal fun `it should return 404 when member not found`() {
-        shouldThrow<FeignException.NotFound> {
+        shouldThrow<HttpClientErrorException.NotFound> {
             client.getMemberById(UUID.fromString("00000000-0000-0000-0000-000000000000"))
         }
     }
