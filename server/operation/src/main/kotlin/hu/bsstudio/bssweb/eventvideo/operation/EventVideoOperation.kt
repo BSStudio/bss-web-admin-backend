@@ -2,19 +2,21 @@ package hu.bsstudio.bssweb.eventvideo.operation
 
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
-import java.util.UUID
+import org.springframework.web.service.annotation.DeleteExchange
+import org.springframework.web.service.annotation.HttpExchange
+import org.springframework.web.service.annotation.PostExchange
+import java.util.*
 
+@HttpExchange("/api/v1/eventVideo")
 interface EventVideoOperation {
-    @PostMapping("/api/v1/eventVideo")
+    @PostExchange
     fun addVideoToEvent(
         @RequestParam eventId: UUID,
         @RequestParam videoId: UUID,
     ): ResponseEntity<DetailedEvent>
 
-    @DeleteMapping("/api/v1/eventVideo")
+    @DeleteExchange
     fun removeVideoFromEvent(
         @RequestParam eventId: UUID,
         @RequestParam videoId: UUID,
