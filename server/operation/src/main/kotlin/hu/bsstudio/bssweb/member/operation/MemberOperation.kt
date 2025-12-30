@@ -12,7 +12,7 @@ import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 import org.springframework.web.service.annotation.PostExchange
 import org.springframework.web.service.annotation.PutExchange
-import java.util.*
+import java.util.UUID
 
 @HttpExchange("/api/v1/member")
 interface MemberOperation {

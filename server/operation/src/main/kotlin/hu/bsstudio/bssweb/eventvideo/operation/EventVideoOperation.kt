@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.service.annotation.DeleteExchange
 import org.springframework.web.service.annotation.HttpExchange
 import org.springframework.web.service.annotation.PostExchange
-import java.util.*
+import java.util.UUID
 
 @HttpExchange("/api/v1/eventVideo")
 interface EventVideoOperation {

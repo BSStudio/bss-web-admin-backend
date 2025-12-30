@@ -17,13 +17,16 @@ import org.springframework.web.service.invoker.createClient
 
 @Configuration
 class BssWebAdminBackendClientConfig {
-
     @Bean
-    protected fun factory(@Value("\${bss.client.url}") baseUrl: String): HttpServiceProxyFactory {
-        val restClient = RestClient.builder()
-            .baseUrl(baseUrl)
-            .defaultHeader("Authorization", "Bearer token")
-            .build()
+    protected fun factory(
+        @Value("\${bss.client.url}") baseUrl: String,
+    ): HttpServiceProxyFactory {
+        val restClient =
+            RestClient
+                .builder()
+                .baseUrl(baseUrl)
+                .defaultHeader("Authorization", "Bearer token")
+                .build()
         val adapter = RestClientAdapter.create(restClient)
         return HttpServiceProxyFactory.builderFor(adapter).build()
     }
