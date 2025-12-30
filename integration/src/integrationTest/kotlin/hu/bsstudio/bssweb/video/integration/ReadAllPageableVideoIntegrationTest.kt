@@ -11,7 +11,8 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatusCode
 import java.time.LocalDate
 
@@ -19,7 +20,7 @@ class ReadAllPageableVideoIntegrationTest(
     @param:Autowired private val client: VideoClient,
 ) : IntegrationTest() {
     @Test
-    @Disabled("Not implemented yet")
+    @Disabled("Should fix test after Spring 4.0")
     internal fun `it should return 200 and paged`() {
         val (created0, created1, created2, created3) =
             IntRange(0, 3)
@@ -27,8 +28,8 @@ class ReadAllPageableVideoIntegrationTest(
                     client.createVideo(CreateVideo(title = "title$i")).body.shouldNotBeNull()
                 }.toList()
 
-        val actual1 = client.getAllVideos(Pageable.ofSize(2).withPage(0))
-        val actual2 = client.getAllVideos(Pageable.ofSize(2).withPage(1))
+        val actual1 = client.getAllVideos(PageRequest.of(0, 2, Sort.by("title")))
+        val actual2 = client.getAllVideos(PageRequest.of(1, 2, Sort.by("title")))
 
         assertSoftly(actual1) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
