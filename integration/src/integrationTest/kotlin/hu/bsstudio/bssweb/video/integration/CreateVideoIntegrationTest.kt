@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.video.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.video.client.VideoClient
 import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpServerErrorException
 import java.time.LocalDate
 
 class CreateVideoIntegrationTest(
@@ -45,9 +45,9 @@ class CreateVideoIntegrationTest(
     internal fun `it should retun 500 when duplicate urls were specified`() {
         videoRepository.save(DetailedVideoEntity(title = CREATE_VIDEO.title))
 
-        shouldThrow<FeignException.InternalServerError> {
+        shouldThrow<HttpServerErrorException.InternalServerError> {
             client.createVideo(CREATE_VIDEO)
-        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error"""" }
+        } should { it.responseBodyAsString shouldContain ""","status":500,"error":"Internal Server Error"""" }
     }
 
     private companion object {

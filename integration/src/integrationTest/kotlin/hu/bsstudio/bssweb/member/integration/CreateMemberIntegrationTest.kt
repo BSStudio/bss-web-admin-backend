@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.member.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.common.MemberStatus
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpServerErrorException
 import java.net.URI
 import java.time.LocalDate
 
@@ -89,10 +89,10 @@ class CreateMemberIntegrationTest(
     internal fun `it should return 500 when duplicate urls were specified`() {
         memberRepository.save(DetailedMemberEntity(url = CREATE_MEMBER.url, name = CREATE_MEMBER.name))
 
-        shouldThrow<FeignException.InternalServerError> {
+        shouldThrow<HttpServerErrorException.InternalServerError> {
             client.createMember(CreateMember(url = CREATE_MEMBER.url, name = CREATE_MEMBER.name))
         } should {
-            it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error""""
+            it.responseBodyAsString shouldContain ""","status":500,"error":"Internal Server Error""""
         }
     }
 

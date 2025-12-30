@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpServerErrorException
 import java.net.URI
 import java.time.LocalDate
 
@@ -49,9 +50,9 @@ internal class CreateEventIntegrationTest : IntegrationTest() {
     internal fun `it should retun 500 when duplicate urls were specified`() {
         eventRepository.save(DetailedEventEntity(url = CREATE_EVENT.url, title = CREATE_EVENT.title))
 
-        shouldThrow<FeignException.InternalServerError> {
+        shouldThrow<HttpServerErrorException.InternalServerError> {
             client.createEvent(CREATE_EVENT)
-        } should { it.contentUTF8() shouldContain ""","status":500,"error":"Internal Server Error"""" }
+        } should { it.responseBodyAsString shouldContain ""","status":500,"error":"Internal Server Error"""" }
     }
 
     private companion object {
