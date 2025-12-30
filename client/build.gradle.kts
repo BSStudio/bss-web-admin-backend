@@ -8,7 +8,6 @@ plugins {
 
 dependencies {
     api(project(":server:operation"))
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
     implementation("org.springframework:spring-context")
     implementation("org.springframework:spring-web")
 }
