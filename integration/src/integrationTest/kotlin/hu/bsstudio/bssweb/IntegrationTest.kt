@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 @TestPropertySource(
     properties = [
         "bss.client.url=http://localhost:8080",
+        "bss.client.token=token",
         "spring.flyway.enabled=false",
         "spring.datasource.url=jdbc:postgresql://localhost:5432/bss?currentSchema=private",
         "spring.datasource.username=user",

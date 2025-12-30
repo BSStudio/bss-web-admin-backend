@@ -20,12 +20,13 @@ class BssWebAdminBackendClientConfig {
     @Bean
     protected fun factory(
         @Value($$"${bss.client.url}") baseUrl: String,
+        @Value($$"${bss.client.token}") token: String,
     ): HttpServiceProxyFactory {
         val restClient =
             RestClient
                 .builder()
                 .baseUrl(baseUrl)
-                .defaultHeader("Authorization", "Bearer token")
+                .defaultHeader("Authorization", "Bearer $token")
                 .build()
         val adapter = RestClientAdapter.create(restClient)
         return HttpServiceProxyFactory.builderFor(adapter).build()
