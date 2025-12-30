@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.video.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.video.client.VideoClient
 import hu.bsstudio.bssweb.video.model.CreateVideo
