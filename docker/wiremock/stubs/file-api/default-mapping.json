@@ -4,6 +4,10 @@
       "request": {
         "method": "POST",
         "url": "/api/v1/video",
+        "basicAuthCredentials": {
+          "username": "username",
+          "password": "password"
+        },
         "bodyPatterns": [
           {
             "matchesJsonPath": "$.id"
@@ -25,6 +29,10 @@
       "request": {
         "method": "POST",
         "url": "/api/v1/member",
+        "basicAuthCredentials": {
+          "username": "username",
+          "password": "password"
+        },
         "bodyPatterns": [
           {
             "matchesJsonPath": "$.id"
@@ -49,6 +57,10 @@
       "request": {
         "method": "PUT",
         "url": "/api/v1/video",
+        "basicAuthCredentials": {
+          "username": "username",
+          "password": "password"
+        },
         "bodyPatterns": [
           {
             "matchesJsonPath": "$.id"
@@ -73,6 +85,10 @@
       "request": {
         "method": "PUT",
         "url": "/api/v1/member",
+        "basicAuthCredentials": {
+          "username": "username",
+          "password": "password"
+        },
         "bodyPatterns": [
           {
             "matchesJsonPath": "$.id"
