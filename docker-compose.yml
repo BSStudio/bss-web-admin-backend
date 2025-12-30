@@ -28,7 +28,7 @@ services:
 
   postgres:
     # update server/data/src/test/resources/application.yml
-    image: "postgres:18-alpine@sha256:2c692d47ba7074205129f25e663ee5840816bc24e9af878995ad33336d83332a"
+    image: "postgres:18-alpine@sha256:b40d931bd0e7ce6eecc59a5a6ac3b3c04a01e559750e73e7086b6dbd7f8bf545"
     environment:
       POSTGRES_DB: "bss"
       POSTGRES_USER: "user"
