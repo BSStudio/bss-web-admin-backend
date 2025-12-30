@@ -21,7 +21,7 @@ import java.time.LocalDate
 
 class CreateMemberIntegrationTest(
     @param:Autowired private val client: MemberClient,
-    @param:Value("\${bss.client.url}") private val url: String,
+    @param:Value($$"${bss.client.url}") private val url: String,
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 201 and member body`() {

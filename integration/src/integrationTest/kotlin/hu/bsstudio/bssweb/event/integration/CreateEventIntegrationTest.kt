@@ -23,7 +23,7 @@ internal class CreateEventIntegrationTest : IntegrationTest() {
     @Autowired
     private lateinit var client: EventClient
 
-    @Value("\${bss.client.url}")
+    @Value($$"${bss.client.url}")
     private lateinit var url: String
 
     @Test

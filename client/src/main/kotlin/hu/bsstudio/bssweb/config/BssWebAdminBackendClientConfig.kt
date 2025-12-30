@@ -19,7 +19,7 @@ import org.springframework.web.service.invoker.createClient
 class BssWebAdminBackendClientConfig {
     @Bean
     protected fun factory(
-        @Value("\${bss.client.url}") baseUrl: String,
+        @Value($$"${bss.client.url}") baseUrl: String,
     ): HttpServiceProxyFactory {
         val restClient =
             RestClient
