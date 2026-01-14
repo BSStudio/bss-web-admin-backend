@@ -42,7 +42,7 @@ services:
       timeout: 5s
       retries: 3
   mock-file-api:
-    image: "wiremock/wiremock:3.13.2@sha256:8bdd64a25db911ba521a38aebf1590d96767c2d29f3e941e2f496a760bbdf47d"
+    image: "wiremock/wiremock:3.13.2@sha256:27c4b74404f58ceedc6899f73abdfe228d8f80d5efa4d8bd42d6c155558b677c"
     ports:
       - "127.0.0.1:8888:8080"
     healthcheck:
@@ -54,7 +54,7 @@ services:
     volumes:
       - "./docker/wiremock/stubs/file-api:/home/wiremock/mappings/file-api"
   mock-oidc:
-    image: "wiremock/wiremock:3.13.2@sha256:8bdd64a25db911ba521a38aebf1590d96767c2d29f3e941e2f496a760bbdf47d"
+    image: "wiremock/wiremock:3.13.2@sha256:27c4b74404f58ceedc6899f73abdfe228d8f80d5efa4d8bd42d6c155558b677c"
     ports:
       - "127.0.0.1:8998:8080"
     healthcheck:
