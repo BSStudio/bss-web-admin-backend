@@ -15,7 +15,7 @@ class JavaConventionPlugin : Plugin<Project> {
 
         project.extensions.configure(JavaPluginExtension::class) {
             toolchain {
-                languageVersion.set(JavaLanguageVersion.of(21))
+                languageVersion.set(JavaLanguageVersion.of(25))
             }
         }
 
