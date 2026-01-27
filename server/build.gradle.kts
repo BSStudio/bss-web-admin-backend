@@ -4,7 +4,7 @@ plugins {
     id("hu.bsstudio.gradle.spotless-convention")
     id("hu.bsstudio.gradle.kotlin-convention")
     id("hu.bsstudio.gradle.spring-app-convention")
-    id("hu.bsstudio.gradle.test-convention")
+    id("hu.bsstudio.gradle.testing-convention")
     `jacoco-report-aggregation`
     `test-report-aggregation`
 }
