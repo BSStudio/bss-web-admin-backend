@@ -9,9 +9,6 @@ class DependencyManagementPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.repositories {
             mavenCentral()
-            maven {
-                url = project.uri("https://redirector.kotlinlang.org/maven/bootstrap")
-            }
         }
 
         project.dependencies {
