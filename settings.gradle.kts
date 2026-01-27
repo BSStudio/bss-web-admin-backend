@@ -1,4 +1,5 @@
 rootProject.name = "bss-web-admin-backend"
+
 include(
     "client",
     "integration",

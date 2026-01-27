@@ -1,7 +1,7 @@
 package hu.bsstudio.gradle
 
-import io.gitlab.arturbosch.detekt.DetektPlugin
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import dev.detekt.gradle.extensions.DetektExtension
+import dev.detekt.gradle.plugin.DetektPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -12,7 +12,6 @@ class DetektConventionPlugin : Plugin<Project> {
         project.pluginManager.apply(DetektPlugin::class)
 
         project.extensions.configure<DetektExtension> {
-            buildUponDefaultConfig = true
             config.setFrom(project.layout.settingsDirectory.file("detekt.yml"))
         }
     }
