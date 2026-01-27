@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.video.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.video.client.VideoClient
 import hu.bsstudio.bssweb.video.model.CreateVideo
@@ -12,6 +11,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpClientErrorException
 import java.time.LocalDate
 import java.util.UUID
 
@@ -20,7 +20,7 @@ class ReadVideoIntegrationTest(
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 404`() {
-        shouldThrow<FeignException.NotFound> {
+        shouldThrow<HttpClientErrorException.NotFound> {
             client.getVideo(UUID.randomUUID())
         }
     }

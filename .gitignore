@@ -102,9 +102,6 @@ gradle-app.setting
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
-### Node template
-node_modules
-
 ### User template
 
 # Ignore local application profiles

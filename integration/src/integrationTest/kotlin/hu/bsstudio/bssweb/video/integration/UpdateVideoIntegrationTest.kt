@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.video.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.video.client.VideoClient
@@ -13,6 +12,8 @@ import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.HttpServerErrorException
 import java.time.LocalDate
 import java.util.UUID
 
@@ -48,14 +49,14 @@ class UpdateVideoIntegrationTest(
         val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
 
         val updateVideo = UPDATE_VIDEO.copy(shootingDateEnd = LocalDate.EPOCH)
-        shouldThrow<FeignException.InternalServerError> {
+        shouldThrow<HttpServerErrorException.InternalServerError> {
             client.updateVideo(entity.id, updateVideo)
         }
     }
 
     @Test
     internal fun `it should return 404 when video not found`() {
-        shouldThrow<FeignException.NotFound> {
+        shouldThrow<HttpClientErrorException.NotFound> {
             client.updateVideo(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),
                 UPDATE_VIDEO,

@@ -12,9 +12,8 @@ plugins {
 dependencies {
     implementation(project(":server:web"))
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
-    // todo these scopes were only supported by the spring gradle dependency management plugin
-    // annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    // developmentOnly("org.springframework.boot:spring-boot-devtools")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("org.testcontainers:testcontainers")
     testImplementation("org.testcontainers:postgresql")

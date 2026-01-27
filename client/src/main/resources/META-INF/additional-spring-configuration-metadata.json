@@ -6,14 +6,9 @@
       "description": "The URL of the BSS backend server."
     },
     {
-      "name": "bss.client.username",
+      "name": "bss.client.token",
       "type": "java.lang.String",
-      "description": "The username to use for authentication."
-    },
-    {
-      "name": "bss.client.password",
-      "type": "java.lang.String",
-      "description": "The password to use for authentication."
+      "description": "The Bearer token to use for authentication."
     }
   ]
 }

@@ -2,24 +2,26 @@ package hu.bsstudio.bssweb.videocrew.operation
 
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.service.annotation.DeleteExchange
+import org.springframework.web.service.annotation.GetExchange
+import org.springframework.web.service.annotation.HttpExchange
+import org.springframework.web.service.annotation.PutExchange
 import java.util.UUID
 
+@HttpExchange("/api/v1/videoCrew")
 interface VideoCrewOperation {
-    @GetMapping("/api/v1/videoCrew/position")
+    @GetExchange("/position")
     fun getPositions(): ResponseEntity<List<String>>
 
-    @PutMapping("/api/v1/videoCrew")
+    @PutExchange
     fun addPosition(
         @RequestParam videoId: UUID,
         @RequestParam position: String,
         @RequestParam memberId: UUID,
     ): ResponseEntity<DetailedVideo>
 
-    @DeleteMapping("/api/v1/videoCrew")
+    @DeleteExchange
     fun removePosition(
         @RequestParam videoId: UUID,
         @RequestParam position: String,

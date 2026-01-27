@@ -1,8 +1,8 @@
 [versions]
-springdoc = "2.8.14"
-springBoot = "3.5.8"
-kotest = "6.0.5"
-spotless = "8.1.0"
+springdoc = "3.0.1"
+springBoot = "4.0.2"
+kotest = "6.1.1"
+spotless = "8.2.0"
 detekt = "2.0.0-alpha.2"
 kotlin = "2.3.0"
 

@@ -1,6 +1,5 @@
 package hu.bsstudio.bssweb.eventvideo.integration
 
-import feign.FeignException
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
 import hu.bsstudio.bssweb.event.model.DetailedEvent
@@ -13,6 +12,7 @@ import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatusCode
+import org.springframework.web.client.HttpClientErrorException
 import java.util.UUID
 
 class RemoveVideoFromEventIntegrationTest(
@@ -55,7 +55,7 @@ class RemoveVideoFromEventIntegrationTest(
     internal fun `it should return 404 when event does not exist`() {
         val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
 
-        shouldThrow<FeignException.NotFound> {
+        shouldThrow<HttpClientErrorException.NotFound> {
             client.removeVideoFromEvent(
                 UUID.fromString("00000000-0000-0000-0000-000000000000"),
                 videoEntity.id,
