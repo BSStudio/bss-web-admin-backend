@@ -1,9 +1,8 @@
 # The client module
 
-This module stores exposes some interfaces to easily interact with the backend services.
-It uses Spring Cloud OpenFeign to make the requests.
+This module stores exposes some interfaces to easily interact with the backend service.
 
-The `BssFeignConfig` class will expose beans for each controller in the backend services.
+The `BssWebAdminBackendClientConfig` class will expose beans for each controller in the backend service.
 
 There are some properties to control authorisation.
 Refer to the [additional-spring-configuration-metadata.json][metadata-json]
