@@ -11,8 +11,7 @@
     ":timezone(Europe/Dublin)",
     ":automergeDigest",
     ":automergeMinor",
-    ":semanticCommits",
-    ":pathSemanticCommitType(Dockerfile, perf)"
+    ":semanticCommits"
   ],
   "packageRules": [
     {
@@ -22,7 +21,8 @@
         "digest",
         "patch",
         "minor"
-      ]
+      ],
+      "schedule": ["on friday"]
     }
   ]
 }
