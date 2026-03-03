@@ -2,7 +2,7 @@
 springdoc = "3.0.2"
 springBoot = "4.0.3"
 kotest = "6.1.4"
-spotless = "8.2.1"
+spotless = "8.3.0"
 detekt = "2.0.0-alpha.2"
 kotlin = "2.3.10"
 
