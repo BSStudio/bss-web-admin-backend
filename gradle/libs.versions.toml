@@ -4,7 +4,7 @@ springBoot = "4.0.3"
 kotest = "6.1.7"
 spotless = "8.3.0"
 detekt = "2.0.0-alpha.2"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
