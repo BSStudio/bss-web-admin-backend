@@ -616,8 +616,8 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
-  lru-cache@11.2.6:
-    resolution: {integrity: sha512-ESL2CrkS/2wTPfuend7Zhkzo2u0daGJ/A2VucJOgQ/C48S/zB8MMeMHSGKYpXhIjbPxfuezITkaBH1wqv00DDQ==}
+  lru-cache@11.2.7:
+    resolution: {integrity: sha512-aY/R+aEsRelme17KGQa/1ZSIpLpNYYrhcrepKTZgE+W3WM16YMCaPwOHLHsmopZHELU0Ojin1lPVxKR0MihncA==}
     engines: {node: 20 || >=22}
 
   make-asynchronous@1.1.0:
@@ -694,8 +694,8 @@ packages:
     resolution: {integrity: sha512-9qny7Z9DsQU8Ou39ERsPU4OZQlSTP47ShQzuKZ6PRXpYLtIFgl/DEBYEXKlvcEa+9tHVcK8CF81Y2V72qaZhWA==}
     engines: {node: '>=18'}
 
-  npm@11.11.0:
-    resolution: {integrity: sha512-82gRxKrh/eY5UnNorkTFcdBQAGpgjWehkfGVqAGlJjejEtJZGGJUqjo3mbBTNbc5BTnPKGVtGPBZGhElujX5cw==}
+  npm@11.11.1:
+    resolution: {integrity: sha512-asazCodkFdz1ReQzukyzS/DD77uGCIqUFeRG3gtaT8b9UR0ne1m9QOBuMgT72ij1rt7TRrOox4A1WzntMWIuEg==}
     engines: {node: ^20.17.0 || >=22.9.0}
     hasBin: true
     bundledDependencies:
@@ -1102,12 +1102,12 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  undici@6.23.0:
-    resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
+  undici@6.24.1:
+    resolution: {integrity: sha512-sC+b0tB1whOCzbtlx20fx3WgCXwkW627p4EA9uM+/tNNPkSS+eSEld6pAs9nDv7WbY1UUljBMYPtu9BCOrCWKA==}
     engines: {node: '>=18.17'}
 
-  undici@7.22.0:
-    resolution: {integrity: sha512-RqslV2Us5BrllB+JeiZnK4peryVTndy9Dnqq62S3yYRRTj0tFQCwEniUy2167skdGOy3vqRzEvl1Dm4sV2ReDg==}
+  undici@7.24.3:
+    resolution: {integrity: sha512-eJdUmK/Wrx2d+mnWWmwwLRyA7OQCkLap60sk3dOK4ViZR7DKwwptwuIvFBg2HaiP9ESaEdhtpSymQPvytpmkCA==}
     engines: {node: '>=20.18.1'}
 
   unicode-emoji-modifier-base@1.0.0:
@@ -1208,7 +1208,7 @@ snapshots:
   '@actions/http-client@4.0.0':
     dependencies:
       tunnel: 0.0.6
-      undici: 6.23.0
+      undici: 6.24.1
 
   '@actions/io@3.0.2': {}
 
@@ -1331,7 +1331,7 @@ snapshots:
       p-filter: 4.1.0
       semantic-release: 25.0.3
       tinyglobby: 0.2.15
-      undici: 7.22.0
+      undici: 7.24.3
       url-join: 5.0.0
     transitivePeerDependencies:
       - supports-color
@@ -1347,7 +1347,7 @@ snapshots:
       lodash-es: 4.17.23
       nerf-dart: 1.0.0
       normalize-url: 9.0.0
-      npm: 11.11.0
+      npm: 11.11.1
       rc: 1.2.8
       read-pkg: 10.1.0
       registry-auth-token: 5.1.1
@@ -1693,7 +1693,7 @@ snapshots:
 
   hosted-git-info@9.0.2:
     dependencies:
-      lru-cache: 11.2.6
+      lru-cache: 11.2.7
 
   http-proxy-agent@7.0.2:
     dependencies:
@@ -1816,7 +1816,7 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  lru-cache@11.2.6: {}
+  lru-cache@11.2.7: {}
 
   make-asynchronous@1.1.0:
     dependencies:
@@ -1894,7 +1894,7 @@ snapshots:
       path-key: 4.0.0
       unicorn-magic: 0.3.0
 
-  npm@11.11.0: {}
+  npm@11.11.1: {}
 
   object-assign@4.1.1: {}
 
@@ -2236,9 +2236,9 @@ snapshots:
   uglify-js@3.19.3:
     optional: true
 
-  undici@6.23.0: {}
+  undici@6.24.1: {}
 
-  undici@7.22.0: {}
+  undici@7.24.3: {}
 
   unicode-emoji-modifier-base@1.0.0: {}
 
