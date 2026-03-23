@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-runtime-container:jdk-25.0.2_12-cds-musl@sha256:e19e91a598e2b25d98cccc0bd4c1545ff585e710bf6e7bf9ef1a6646eb9bf187 AS build
+FROM bellsoft/liberica-runtime-container:jdk-25.0.2_12-cds-musl@sha256:7340903bcf4d592eada815db4ecfda2cf98e15cefe2a966be454bba72255ee67 AS build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./buildSrc/*.gradle.kts             ./buildSrc/
@@ -26,7 +26,7 @@ ARG BUILD_ARG="bootJar"
 RUN --mount=type=cache,target=/root/.gradle \
     ./gradlew ${BUILD_ARG}
 
-FROM bellsoft/liberica-runtime-container:jre-25.0.2_12-cds-musl@sha256:865aa2506c1831d6dbb899e5a61f3da02866ea0847b043c61bbd38b56e28bbb0 AS app
+FROM bellsoft/liberica-runtime-container:jre-25.0.2_12-cds-musl@sha256:ace5fae0159b48bee04a418d8dd3ffdcb3157eec95237e97c7d8118121c9425d AS app
 # use non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
