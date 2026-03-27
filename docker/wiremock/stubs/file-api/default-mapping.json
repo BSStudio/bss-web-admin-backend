@@ -4,6 +4,11 @@
       "request": {
         "method": "POST",
         "url": "/api/v1/video",
+        "headers": {
+          "Authorization": {
+            "matches": "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
+          }
+        },
         "bodyPatterns": [
           {
             "matchesJsonPath": "$.id"
@@ -25,6 +30,11 @@
       "request": {
         "method": "POST",
         "url": "/api/v1/member",
+        "headers": {
+          "Authorization": {
+            "matches": "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
+          }
+        },
         "bodyPatterns": [
           {
             "matchesJsonPath": "$.id"
@@ -49,6 +59,11 @@
       "request": {
         "method": "PUT",
         "url": "/api/v1/video",
+        "headers": {
+          "Authorization": {
+            "matches": "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
+          }
+        },
         "bodyPatterns": [
           {
             "matchesJsonPath": "$.id"
@@ -73,6 +88,11 @@
       "request": {
         "method": "PUT",
         "url": "/api/v1/member",
+        "headers": {
+          "Authorization": {
+            "matches": "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
+          }
+        },
         "bodyPatterns": [
           {
             "matchesJsonPath": "$.id"

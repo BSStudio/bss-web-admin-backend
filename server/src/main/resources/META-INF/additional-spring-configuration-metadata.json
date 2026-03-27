@@ -4,6 +4,16 @@
       "name": "bss.file-api.url",
       "type": "java.lang.String",
       "description": "BSS file API base URL."
+    },
+    {
+      "name": "bss.file-api.username",
+      "type": "java.lang.String",
+      "description": "BSS file API basic auth username."
+    },
+    {
+      "name": "bss.file-api.password",
+      "type": "java.lang.String",
+      "description": "BSS file API basic auth password."
     }
   ]
 }
