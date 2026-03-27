@@ -1,6 +1,6 @@
 [versions]
 springdoc = "3.0.2"
-springBoot = "4.0.4"
+springBoot = "4.0.5"
 kotest = "6.1.9"
 spotless = "8.4.0"
 detekt = "2.0.0-alpha.2"
