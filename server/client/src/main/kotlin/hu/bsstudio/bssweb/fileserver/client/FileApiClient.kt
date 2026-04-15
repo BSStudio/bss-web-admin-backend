@@ -2,21 +2,21 @@ package hu.bsstudio.bssweb.fileserver.client
 
 import hu.bsstudio.bssweb.fileserver.model.MemberFileUpdate
 import hu.bsstudio.bssweb.fileserver.model.VideoFileUpdate
-import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.service.annotation.HttpExchange
+import org.springframework.web.service.annotation.PostExchange
+import org.springframework.web.service.annotation.PutExchange
 
-@FeignClient(name = "member", url = "\${bss.file-api.url}")
+@HttpExchange("/api/v1")
 interface FileApiClient {
-    @PostMapping("/api/v1/member")
+    @PostExchange("/member")
     fun createMemberFolder(fileUpdate: MemberFileUpdate): MemberFileUpdate
 
-    @PutMapping("/api/v1/member")
+    @PutExchange("/member")
     fun updateMemberFolder(fileUpdate: MemberFileUpdate): MemberFileUpdate
 
-    @PostMapping("/api/v1/video")
+    @PostExchange("/video")
     fun createVideoFolder(videoFileUpdate: VideoFileUpdate): VideoFileUpdate
 
-    @PutMapping("/api/v1/video")
+    @PutExchange("/video")
     fun updateVideoFolder(videoFileUpdate: VideoFileUpdate): VideoFileUpdate
 }
