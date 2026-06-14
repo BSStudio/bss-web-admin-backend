@@ -8,7 +8,7 @@
   "devDependencies": {
     "semantic-release": "25.0.5"
   },
-  "packageManager": "pnpm@10.34.2",
+  "packageManager": "pnpm@10.34.3",
   "release": {
     "plugins": [
       "@semantic-release/commit-analyzer",
