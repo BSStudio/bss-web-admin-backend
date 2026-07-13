@@ -6,7 +6,7 @@
     "release": "semantic-release"
   },
   "devDependencies": {
-    "semantic-release": "25.0.5"
+    "semantic-release": "25.0.6"
   },
   "packageManager": "pnpm@10.34.5",
   "release": {
