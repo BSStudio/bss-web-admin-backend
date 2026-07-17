@@ -10,14 +10,22 @@ import org.springframework.web.service.annotation.PutExchange
 @HttpExchange("/api/v1")
 interface FileApiClient {
     @PostExchange("/member")
-    fun createMemberFolder(@RequestBody fileUpdate: MemberFileUpdate): MemberFileUpdate
+    fun createMemberFolder(
+        @RequestBody fileUpdate: MemberFileUpdate,
+    ): MemberFileUpdate
 
     @PutExchange("/member")
-    fun updateMemberFolder(@RequestBody fileUpdate: MemberFileUpdate): MemberFileUpdate
+    fun updateMemberFolder(
+        @RequestBody fileUpdate: MemberFileUpdate,
+    ): MemberFileUpdate
 
     @PostExchange("/video")
-    fun createVideoFolder(@RequestBody videoFileUpdate: VideoFileUpdate): VideoFileUpdate
+    fun createVideoFolder(
+        @RequestBody videoFileUpdate: VideoFileUpdate,
+    ): VideoFileUpdate
 
     @PutExchange("/video")
-    fun updateVideoFolder(@RequestBody videoFileUpdate: VideoFileUpdate): VideoFileUpdate
+    fun updateVideoFolder(
+        @RequestBody videoFileUpdate: VideoFileUpdate,
+    ): VideoFileUpdate
 }
