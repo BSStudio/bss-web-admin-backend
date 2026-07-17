@@ -13,7 +13,7 @@ permissions: read-all
 
 jobs:
   build:
-    runs-on: ubuntu-22.04-arm
+    runs-on: ubuntu-24.04-arm
     name: "Build"
     permissions:
       id-token: write # for codecov
@@ -40,7 +40,7 @@ jobs:
             !buildSrc/build/**
 
   integration:
-    runs-on: ubuntu-22.04-arm
+    runs-on: ubuntu-24.04-arm
     name: "Integration test"
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
