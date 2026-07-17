@@ -52,7 +52,13 @@ internal class EventMapperTest(
 
     @Test
     internal fun `should map update to entity`() {
-        val actual = underTest.updateToEntity(DETAILED_ENTITY, UPDATE_EVENT)
+        val entity =
+            DetailedEventEntity(URL, TITLE, DESCRIPTION, DATE_FROM, DATE_TO, VISIBLE).apply {
+                id = ID
+                videos = listOf(VIDEO_ENTITY)
+            }
+
+        val actual = underTest.updateToEntity(entity, UPDATE_EVENT)
 
         actual shouldBeEqual UPDATED_ENTITY
     }
