@@ -12,6 +12,7 @@ dependencies {
         exclude("org.springframework.boot", "spring-boot-starter-flyway")
     }
     integrationTestImplementation(project(":client"))
+    integrationTestImplementation("org.springframework:spring-web")
     integrationTestImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
     integrationTestImplementation("org.springframework.boot:spring-boot-starter-json")
     integrationTestImplementation("org.springframework.boot:spring-boot-data-jpa-test")
