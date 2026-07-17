@@ -16,6 +16,8 @@ services:
       - postgres
     environment:
       bss.file-api.url: "http://mock-file-api:8080"
+      bss.file-api.username: "username"
+      bss.file-api.password: "password"
       spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: "http://mock-oidc:8080/o/introspect"
       spring.security.oauth2.resourceserver.opaquetoken.client-id: client-id
       spring.security.oauth2.resourceserver.opaquetoken.client-secret: client-secret
