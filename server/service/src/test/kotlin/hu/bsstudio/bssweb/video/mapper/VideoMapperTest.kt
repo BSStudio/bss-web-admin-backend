@@ -54,7 +54,14 @@ internal class VideoMapperTest(
 
     @Test
     internal fun `should map update model to entity`() {
-        val actual = underTest.updateToEntity(DETAILED_VIDEO_ENTITY, UPDATE_VIDEO, LABEL_ENTITIES)
+        val entity =
+            DetailedVideoEntity(TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE).apply {
+                id = VIDEO_ID
+                labels = LABEL_ENTITIES
+                videoCrew = VIDEO_CREW
+            }
+
+        val actual = underTest.updateToEntity(entity, UPDATE_VIDEO, LABEL_ENTITIES)
 
         actual shouldBeEqual UPDATED_VIDEO_ENTITY
     }
