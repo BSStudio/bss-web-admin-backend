@@ -83,7 +83,7 @@ services:
       timeout: 5s
       retries: 3
   grafana:
-    image: "grafana/grafana:13.1.0-ubuntu@sha256:41b0dc13bb4f6a63ae2facb6112bfa40db59c797e0b70f9d6795d838de04537b"
+    image: "grafana/grafana:13.1.1-ubuntu@sha256:89dbb8eaa80b6330c0e2345ddc75ae5cbe0792a4fefd3c10e53878762048d36f"
     ports:
       - "127.0.0.1:3000:3000"
     volumes:
