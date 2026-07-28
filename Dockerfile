@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-runtime-container:jdk-25.0.3_11-cds-musl@sha256:4c471d659d21611017a1dd9da531d53aa4e2bb2c7db66066cd76aeab715da9d5 AS build
+FROM bellsoft/liberica-runtime-container:jdk-25.0.3_11-cds-musl@sha256:b20aacceaa47db5db90af6c3348a32b5c2f9231c18d59ca445a711bb014de867 AS build
 WORKDIR /usr/src/app
 # cache dependencies
 COPY ./buildSrc/*.gradle.kts             ./buildSrc/
