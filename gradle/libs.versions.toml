@@ -3,7 +3,7 @@ springdoc = "3.1.0"
 springBoot = "4.1.0"
 kotest = "6.2.3"
 spotless = "8.9.0"
-detekt = "2.0.0-alpha.5"
+detekt = "2.0.0-alpha.6"
 kotlin = "2.4.10"
 
 [plugins]
