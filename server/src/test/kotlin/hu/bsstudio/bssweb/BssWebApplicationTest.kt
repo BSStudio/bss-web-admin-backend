@@ -7,5 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest
 class BssWebApplicationTest {
     @Test
     fun contextLoads() {
+        // verifies that the Spring application context starts successfully
     }
 }

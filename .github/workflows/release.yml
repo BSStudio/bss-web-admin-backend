@@ -38,7 +38,7 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: 'release/pnpm-lock.yaml'
 
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile --ignore-scripts
         working-directory: release
 
       - run: pnpm run release
