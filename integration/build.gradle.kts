@@ -17,4 +17,6 @@ dependencies {
     integrationTestImplementation("org.springframework.boot:spring-boot-starter-json")
     integrationTestImplementation("org.springframework.boot:spring-boot-data-jpa-test")
     integrationTestImplementation("org.springframework.boot:spring-boot-starter-validation-test")
+    integrationTestImplementation("org.springframework.boot:spring-boot-testcontainers")
+    integrationTestImplementation("org.testcontainers:testcontainers")
 }
