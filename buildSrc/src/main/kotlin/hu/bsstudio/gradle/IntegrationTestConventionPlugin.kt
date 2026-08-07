@@ -3,10 +3,12 @@ package hu.bsstudio.gradle
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.jvm.JvmTestSuite
+import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.exclude
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.register
+import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.base.TestingExtension
 
 class IntegrationTestConventionPlugin : Plugin<Project> {
@@ -31,6 +33,28 @@ class IntegrationTestConventionPlugin : Plugin<Project> {
         project.configurations.named("integrationTestImplementation") {
             extendsFrom(project.configurations.getByName("implementation"))
             extendsFrom(project.configurations.getByName("runtimeOnly"))
+        }
+        project.afterEvaluate {
+            project.tasks.withType<Test>().matching { it.name == "integrationTest" }.configureEach {
+                if (System.getenv("CI") != null) {
+                    systemProperty("spring.profiles.active", "ci")
+                }
+                val root = project.rootProject
+                inputs
+                    .files(
+                        root.file("docker-compose.yml"),
+                        root.file("docker-compose.ci.yml"),
+                        root.file("Dockerfile"),
+                        root.fileTree("docker/wiremock"),
+                    ).withPropertyName("infrastructure")
+                root.tasks.findByPath(":server:bootJar")?.let { bootJar ->
+                    inputs.files(bootJar.outputs.files).withPropertyName("appArtifact")
+                }
+                inputs
+                    .property("integrationProfile") {
+                        if (System.getenv("CI") != null) "ci" else "default"
+                    }
+            }
         }
     }
 }
