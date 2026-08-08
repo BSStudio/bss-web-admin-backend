@@ -9,21 +9,13 @@ import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.test.context.TestPropertySource
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
+import org.springframework.boot.test.context.SpringBootTest
 
-@SpringJUnitConfig(classes = [BssWebAdminBackendClientConfig::class, DataConfig::class])
-@TestPropertySource(
-    properties = [
-        "bss.client.url=http://localhost:8080",
-        "bss.client.token=token",
-        "spring.flyway.enabled=false",
-        "spring.datasource.url=jdbc:postgresql://localhost:5432/bss?currentSchema=private",
-        "spring.datasource.username=user",
-        "spring.datasource.password=password",
-    ],
+@SpringBootTest(
+    classes = [CiTestContainerConfiguration::class, BssWebAdminBackendClientConfig::class, DataConfig::class],
+    webEnvironment = SpringBootTest.WebEnvironment.NONE,
 )
-open class IntegrationTest {
+class IntegrationTest {
     @Autowired protected lateinit var eventRepository: DetailedEventRepository
 
     @Autowired protected lateinit var videoRepository: DetailedVideoRepository
