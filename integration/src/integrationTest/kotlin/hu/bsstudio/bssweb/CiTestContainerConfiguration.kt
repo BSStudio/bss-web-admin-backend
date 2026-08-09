@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
@@ -9,7 +10,9 @@ import java.io.File
 
 @Profile("ci")
 @TestConfiguration(proxyBeanMethods = false)
-class CiTestContainerConfiguration {
+class CiTestContainerConfiguration(
+    @Value("\${integration.testcontainers.rebuild-images:false}") private val rebuildImages: Boolean,
+) {
     @Bean
     fun dockerComposeContainer(): ComposeContainer =
         ComposeContainer(
@@ -18,7 +21,7 @@ class CiTestContainerConfiguration {
         ).withExposedService("postgres", 5432)
             .withExposedService("app", 8080)
             .withEnv("COMPOSE_PROFILES", "app")
-            .withBuild(System.getenv("REBUILD_IMAGES")?.toBoolean() ?: false)
+            .withBuild(rebuildImages)
 
     @Bean
     fun ciIntegrationProperties(compose: ComposeContainer): DynamicPropertyRegistrar =
