@@ -47,7 +47,19 @@ class IntegrationTestConventionPlugin : Plugin<Project> {
                         root.file("Dockerfile"),
                         root.fileTree("docker/wiremock"),
                     ).withPropertyName("infrastructure")
+                inputs
+                    .files(
+                        root.file("gradlew"),
+                        root.file("gradle.properties"),
+                        root.file("settings.gradle.kts"),
+                        root.file("client/build.gradle.kts"),
+                        root.file("integration/build.gradle.kts"),
+                        root.fileTree("gradle"),
+                        root.fileTree("buildSrc") { exclude("**/build/**") },
+                        root.fileTree("server") { exclude("**/build/**") },
+                    ).withPropertyName("dockerBuildContext")
                 root.tasks.findByPath(":server:bootJar")?.let { bootJar ->
+                    dependsOn(bootJar)
                     inputs.files(bootJar.outputs.files).withPropertyName("appArtifact")
                 }
                 inputs
