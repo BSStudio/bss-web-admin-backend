@@ -27,7 +27,13 @@ GitHub Actions runs a self-contained integration test: Testcontainers starts the
 runs tests, and tears it down. To reproduce locally:
 
 ```shell
-CI=true REBUILD_IMAGES=true ./gradlew integrationTest
+CI=true ./gradlew integrationTest
+```
+
+To skip Docker image rebuilds (faster when images are already present locally):
+
+```shell
+CI=true ./gradlew integrationTest -Dintegration.testcontainers.rebuild-images=false
 ```
 
 ## Requirements
