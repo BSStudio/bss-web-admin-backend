@@ -111,3 +111,4 @@ gradle-app.setting
 **/application-*.yml
 **/application-*.yaml
 **/application-*.properties
+!integration/src/integrationTest/resources/application-ci.yml
