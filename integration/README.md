@@ -14,12 +14,8 @@ docker compose --profile app up -d
 ./gradlew integrationTest
 ```
 
-Optionally start the app via Spring Boot (requires `spring-boot-docker-compose` on the server module):
-
-```shell
-./gradlew :server:bootRun
-./gradlew integrationTest
-```
+Local runs are never cached or considered up to date, because Gradle cannot see the externally
+started stack.
 
 ## CI (`ci` profile)
 
@@ -33,7 +29,7 @@ CI=true ./gradlew integrationTest
 To skip Docker image rebuilds (faster when images are already present locally):
 
 ```shell
-CI=true ./gradlew integrationTest -Dintegration.testcontainers.rebuild-images=false
+CI=true ./gradlew integrationTest -Pintegration.rebuildImages=false
 ```
 
 ## Requirements

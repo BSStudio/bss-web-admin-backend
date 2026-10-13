@@ -1,10 +1,6 @@
 spring:
   application:
     name: BSS Web admin API
-  docker:
-    compose:
-      profiles:
-        active: app
   jpa:
     open-in-view: false
 springdoc:
