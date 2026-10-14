@@ -1,5 +1,8 @@
-FROM bellsoft/liberica-runtime-container:jdk-25.0.4_9-cds-musl@sha256:077aac55092eb81070b8c1c2eb86b8612cac561ef4e37d749f506ac4bbbc6e2a AS build
+FROM bellsoft/hardened-liberica-runtime-container:jdk-25-cds-musl@sha256:1d5baee7a254cd348fd4fa7872cd888a98512cf14d1a61aa4273a02d21d8bb55 AS build
 WORKDIR /usr/src/app
+# health probe for the runtime image, which has no shell, curl or wget
+COPY ./docker/healthcheck/HealthCheck.java ./healthcheck/
+RUN javac --release 25 -d ./healthcheck ./healthcheck/HealthCheck.java
 # cache dependencies
 COPY ./buildSrc/*.gradle.kts             ./buildSrc/
 COPY ./buildSrc/src                      ./buildSrc/src/
@@ -26,15 +29,17 @@ ARG BUILD_ARG="bootJar"
 RUN --mount=type=cache,target=/root/.gradle \
     ./gradlew ${BUILD_ARG}
 
-FROM bellsoft/liberica-runtime-container:jre-25.0.4_9-cds-musl@sha256:acecc60d28ab480372af7148d292d22c6d304a03f7a87ec0171d3f2a120c4bbf AS app
-# use non-root user
-RUN addgroup -g 1001 -S spring && adduser -u 1001 -S spring -G spring
-USER 1001:1001
-WORKDIR /home/spring
-# copy jar and run it
+FROM bellsoft/hardened-liberica-runtime-container:jre-25-cds-distroless-musl@sha256:ab1739a724cbbb4800a2f17b8a00d334956cc9d9e5b7e99534e5d8707d157e9a AS app
+# distroless: no shell or package manager; run as the image's non-root appuser
+USER 10001:10001
+WORKDIR /home/appuser
+# copy jar and run it; files stay root-owned, so the app cannot modify them
 ARG BUILD_ROOT=/usr/src/app
 ARG BOOT_JAR=$BUILD_ROOT/server/build/libs/*.jar
 COPY --from=build $BOOT_JAR ./app.jar
-ENTRYPOINT ["java","-jar","./app.jar"]
+COPY --from=build $BUILD_ROOT/healthcheck/HealthCheck.class /opt/healthcheck/
+HEALTHCHECK --interval=10s --timeout=5s --start-period=20s --retries=5 \
+    CMD ["java", "-XX:+UseSerialGC", "-XX:TieredStopAtLevel=1", "-cp", "/opt/healthcheck", "HealthCheck", "http://localhost:8080/actuator/health"]
+ENTRYPOINT ["java", "-jar", "./app.jar"]
 
 EXPOSE 8080

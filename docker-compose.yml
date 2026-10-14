@@ -4,12 +4,7 @@ services:
       context: "./"
     ports:
       - "127.0.0.1:8080:8080"
-    healthcheck:
-      test: "wget --tries=1 --no-verbose -qO- http://localhost:8080/actuator/health | grep -q UP"
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
+    # healthcheck: defined by the image's HEALTHCHECK (the distroless image has no wget)
     profiles:
       - app
     depends_on:
