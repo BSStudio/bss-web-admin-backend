@@ -1,0 +1,5 @@
+name: "CodeQL config"
+
+queries:
+  # superset of the default suite: adds lower precision security queries and code quality queries
+  - uses: security-and-quality
