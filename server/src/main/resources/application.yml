@@ -3,6 +3,8 @@ spring:
     name: BSS Web admin API
   jpa:
     open-in-view: false
+  messages:
+    fallback-to-system-locale: false
 springdoc:
   swagger-ui:
     url: /open-api.yaml

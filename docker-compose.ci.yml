@@ -12,3 +12,6 @@ services:
   mock-oidc:
     ports: !override
       - "5556"
+  mock-login:
+    ports: !override
+      - "8080"

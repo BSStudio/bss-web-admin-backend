@@ -1,0 +1,73 @@
+/*
+ * BSS colours on top of Pico: blue links, orange primary buttons, navy top bar.
+ * The selectors mirror Pico's theme selectors so these variables win in light and dark mode.
+ */
+:root:not([data-theme="dark"]),
+[data-theme="dark"] {
+    --pico-primary-background: #f8b046;
+    --pico-primary-border: #f8b046;
+    --pico-primary-hover-background: #fdd657;
+    --pico-primary-hover-border: #fdd657;
+    --pico-primary-inverse: #153470;
+}
+
+:root:not([data-theme="dark"]),
+[data-theme="light"] {
+    --pico-primary: #204085;
+    --pico-primary-hover: #153470;
+    --pico-primary-focus: rgba(32, 64, 133, 0.25);
+    --pico-primary-underline: rgba(32, 64, 133, 0.5);
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+    :root:not([data-theme]) {
+        --pico-primary: #94b8ff;
+        --pico-primary-hover: #b8d0ff;
+        --pico-primary-focus: rgba(148, 184, 255, 0.25);
+        --pico-primary-underline: rgba(148, 184, 255, 0.5);
+    }
+}
+
+[data-theme="dark"] {
+    --pico-primary: #94b8ff;
+    --pico-primary-hover: #b8d0ff;
+    --pico-primary-focus: rgba(148, 184, 255, 0.25);
+    --pico-primary-underline: rgba(148, 184, 255, 0.5);
+}
+
+.admin-bar {
+    background: #153470;
+    color: #e9efff;
+    --pico-color: #e9efff;
+    --pico-primary: #ffe088;
+    --pico-primary-hover: #fdd657;
+    --pico-secondary: #b8c8ee;
+    --pico-secondary-border: #b8c8ee;
+    --pico-secondary-hover: #ffffff;
+    --pico-secondary-hover-border: #ffffff;
+}
+
+.admin-bar .brand {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.admin-bar .brand strong {
+    color: #fdd657;
+}
+
+.admin-bar form,
+.admin-bar button {
+    margin: 0;
+}
+
+.admin-bar button {
+    padding: 0.25rem 0.75rem;
+}
+
+.metric {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}

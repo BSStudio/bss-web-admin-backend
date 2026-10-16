@@ -9,6 +9,7 @@ services:
       - app
     depends_on:
       - postgres
+      - mock-login
     environment:
       bss.file-api.url: "http://mock-file-api:8080"
       bss.file-api.username: "username"
@@ -22,6 +23,17 @@ services:
       spring.flyway.default-schema: "private"
       spring.flyway.schemas: "private,public"
       management.endpoints.web.exposure.include: "prometheus,health"
+      # admin UI login: the browser talks to localhost, the app talks to the container
+      spring.security.oauth2.client.registration.authentik.client-id: "admin-ui"
+      spring.security.oauth2.client.registration.authentik.client-secret: "secret"
+      spring.security.oauth2.client.registration.authentik.authorization-grant-type: "authorization_code"
+      spring.security.oauth2.client.registration.authentik.redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+      spring.security.oauth2.client.registration.authentik.scope: "openid,profile,email"
+      spring.security.oauth2.client.provider.authentik.authorization-uri: "http://localhost:8999/default/authorize"
+      spring.security.oauth2.client.provider.authentik.token-uri: "http://mock-login:8080/default/token"
+      spring.security.oauth2.client.provider.authentik.jwk-set-uri: "http://mock-login:8080/default/jwks"
+      spring.security.oauth2.client.provider.authentik.user-info-uri: "http://mock-login:8080/default/userinfo"
+      spring.security.oauth2.client.provider.authentik.user-name-attribute: "sub"
 
   postgres:
     # update server/data/src/test/resources/application.yml
@@ -62,6 +74,14 @@ services:
       retries: 3
     volumes:
       - "./docker/wiremock/stubs/oidc:/home/wiremock/mappings/oidc"
+
+  mock-login:
+    # OIDC provider with a login form for the admin UI; type any username to log in
+    image: "ghcr.io/navikt/mock-oauth2-server:6.0.4@sha256:47374fe063995d9b6d39ebb6ea21eb5f765025bf0aa08b61b08b439eb91adaf0"
+    ports:
+      - "127.0.0.1:8999:8080"
+    environment:
+      JSON_CONFIG: '{"interactiveLogin": true}'
 
   prometheus:
     image: "prom/prometheus:v3.15.0@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e"

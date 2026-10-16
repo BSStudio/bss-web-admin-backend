@@ -13,3 +13,18 @@ spring:
           introspection-uri: http://localhost:8888
           client-id: client-id
           client-secret: client-secret
+      client:
+        registration:
+          authentik:
+            client-id: client-id
+            client-secret: client-secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: "openid,profile,email"
+        provider:
+          authentik:
+            authorization-uri: http://localhost:8999/default/authorize
+            token-uri: http://localhost:8999/default/token
+            jwk-set-uri: http://localhost:8999/default/jwks
+            user-info-uri: http://localhost:8999/default/userinfo
+            user-name-attribute: sub

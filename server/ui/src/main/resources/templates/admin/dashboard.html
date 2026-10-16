@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main})}">
+<head>
+    <title th:text="|#{dashboard.title} · #{app.title}|">Dashboard · BSS admin</title>
+</head>
+<body>
+<main class="container">
+    <h1 th:text="#{dashboard.title}">Dashboard</h1>
+    <section class="grid">
+        <article>
+            <header th:text="#{dashboard.videos}">Videos</header>
+            <p class="metric" th:text="${metrics.videoCount}">0</p>
+        </article>
+        <article>
+            <header th:text="#{dashboard.events}">Events</header>
+            <p class="metric" th:text="${metrics.eventCount}">0</p>
+        </article>
+        <article>
+            <header th:text="#{dashboard.members}">Members</header>
+            <p class="metric" th:text="${metrics.memberCount}">0</p>
+        </article>
+    </section>
+</main>
+</body>
+</html>

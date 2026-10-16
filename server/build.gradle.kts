@@ -11,6 +11,7 @@ plugins {
 
 dependencies {
     implementation(project(":server:web"))
+    implementation(project(":server:ui"))
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
