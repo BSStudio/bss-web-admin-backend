@@ -76,6 +76,8 @@ jobs:
         with:
           image: "ghcr.io/bsstudio/bss-web-admin-backend:${{ env.DOCKER_METADATA_OUTPUT_VERSION }}"
           cache-db: true
+          # only report vulnerabilities that have a fix, so every alert is actionable
+          only-fixed: true
           severity-cutoff: 'high'
           fail-build: false
 
