@@ -5,6 +5,11 @@ kotest = "6.2.6"
 spotless = "8.10.4"
 detekt = "2.0.0-alpha.6"
 kotlin = "2.4.21"
+# Security overrides: raise versions Spring Boot 4.1.1 still manages at vulnerable releases.
+# Drop each one once springBoot manages an equal or newer version.
+jackson = "3.1.7"
+jackson2 = "2.22.3"
+tomcat = "11.0.27"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
@@ -12,6 +17,12 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 [libraries]
 springdocOpenapiStarterWebmvcUi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 kotestAssertionsJson = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
+
+jackson-bom = { module = "tools.jackson:jackson-bom", version.ref = "jackson" }
+jackson2-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson2" }
+tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcat" }
+tomcat-embed-el = { module = "org.apache.tomcat.embed:tomcat-embed-el", version.ref = "tomcat" }
+tomcat-embed-websocket = { module = "org.apache.tomcat.embed:tomcat-embed-websocket", version.ref = "tomcat" }
 
 plugin-springBoot = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "springBoot" }
 plugin-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
