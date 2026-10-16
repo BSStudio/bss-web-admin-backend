@@ -7,7 +7,7 @@ detekt = "2.0.0-alpha.6"
 kotlin = "2.4.21"
 # Security overrides: raise versions Spring Boot 4.1.1 still manages at vulnerable releases.
 # Drop each one once springBoot manages an equal or newer version.
-jackson = "3.1.7"
+jackson = "3.2.3"
 jackson2 = "2.22.3"
 tomcat = "11.0.27"
 
