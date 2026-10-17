@@ -22,6 +22,12 @@
         event.target.removeAttribute("data-dirty");
     });
 
+    // Forms with data-confirm ask before they submit, e.g. delete buttons in table rows.
+    document.addEventListener("submit", (event) => {
+        const question = event.target.dataset.confirm;
+        if (question && !window.confirm(question)) event.preventDefault();
+    });
+
     window.addEventListener("beforeunload", (event) => {
         if (document.querySelector("form[data-dirty]")) event.preventDefault();
     });

@@ -23,6 +23,9 @@
             <li><a th:href="@{/admin}" class="brand"><strong>BSS</strong><span th:text="#{app.name}">admin</span></a></li>
             <li><a th:href="@{/admin}" th:aria-current="${layoutSection == 'dashboard'} ? 'page'" th:text="#{nav.dashboard}">Dashboard</a></li>
             <li><a th:href="@{/admin/videos}" th:aria-current="${layoutSection == 'videos'} ? 'page'" th:text="#{nav.videos}">Videos</a></li>
+            <li><a th:href="@{/admin/events}" th:aria-current="${layoutSection == 'events'} ? 'page'" th:text="#{nav.events}">Events</a></li>
+            <li><a th:href="@{/admin/members}" th:aria-current="${layoutSection == 'members'} ? 'page'" th:text="#{nav.members}">Members</a></li>
+            <li><a th:href="@{/admin/labels}" th:aria-current="${layoutSection == 'labels'} ? 'page'" th:text="#{nav.labels}">Labels</a></li>
         </ul>
         <ul>
             <li>

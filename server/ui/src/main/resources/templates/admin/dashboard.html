@@ -14,14 +14,14 @@
             <span class="label" th:text="#{dashboard.videos}">Videos</span>
             <span class="metric" th:text="${metrics.videoCount}">0</span>
         </a>
-        <div class="tile">
+        <a class="tile" th:href="@{/admin/events}">
             <span class="label" th:text="#{dashboard.events}">Events</span>
             <span class="metric" th:text="${metrics.eventCount}">0</span>
-        </div>
-        <div class="tile">
+        </a>
+        <a class="tile" th:href="@{/admin/members}">
             <span class="label" th:text="#{dashboard.members}">Members</span>
             <span class="metric" th:text="${metrics.memberCount}">0</span>
-        </div>
+        </a>
     </section>
 </main>
 </body>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'labels')}">
+<head>
+    <title th:text="|#{label.list.title} · #{app.title}|">Labels · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container">
+    <div class="page-header">
+        <h1 th:text="#{label.list.title}">Labels</h1>
+    </div>
+    <p th:replace="~{admin/fragments :: error(${error})}"></p>
+
+    <div class="columns">
+        <div class="data-table">
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col" th:text="#{label.field.name}">Name</th>
+                    <th scope="col" th:text="#{label.field.description}">Description</th>
+                    <th scope="col"><span class="sr-only" th:text="#{label.list.actions}">Actions</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${labels.isEmpty()}">
+                    <td colspan="3" class="muted" th:text="#{label.list.empty}">No labels yet.</td>
+                </tr>
+                <tr th:each="label : ${labels}">
+                    <td th:text="${label.name}">Egyetemi élet</td>
+                    <td class="muted" th:text="${label.description}">University life</td>
+                    <td class="row-action">
+                        <form method="post" th:action="@{/admin/labels/{id}/delete(id=${label.id})}"
+                              th:data-confirm="#{label.delete.question(${label.name})}">
+                            <button type="submit" class="danger ghost"
+                                    th:aria-label="#{label.delete.label(${label.name})}"
+                                    th:text="#{action.delete}">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <section class="panel">
+            <h2 th:text="#{label.new.title}">New label</h2>
+            <form method="post" th:action="@{/admin/labels}" class="stack"
+                  th:data-unsaved="${error} ? 'pending' : 'track'">
+                <label>
+                    <span th:text="#{label.field.name}">Name</span>
+                    <input type="text" name="name" th:value="${name}" required maxlength="64"
+                           aria-describedby="form-error" th:aria-invalid="${error} ? 'true'">
+                </label>
+                <label>
+                    <span th:text="#{label.field.description}">Description</span>
+                    <input type="text" name="description" th:value="${description}" required maxlength="256"
+                           aria-describedby="description-help">
+                    <small id="description-help" th:text="#{label.field.description.help}">What the label is for.</small>
+                </label>
+                <div class="actions">
+                    <button type="submit" th:text="#{label.new.submit}">Add label</button>
+                    <span class="unsaved" role="status" th:text="#{form.unsaved}">Unsaved changes</span>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+</body>
+</html>

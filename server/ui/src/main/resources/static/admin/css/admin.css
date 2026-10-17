@@ -525,10 +525,19 @@ label.inline {
 }
 
 .inline-form {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     margin: 0.75rem 0 0;
+}
+
+.inline-form > :is(input, select) {
+    flex: 1 1 10rem;
+    width: auto;
+}
+
+td.row-action form {
+    margin: 0;
 }
 
 /* ---------- Data tables ---------- */
@@ -821,10 +830,6 @@ dialog > article > footer form {
 @media (max-width: 40rem) {
     .container {
         padding-inline: 1rem;
-    }
-
-    .inline-form {
-        grid-template-columns: 1fr;
     }
 
     .hide-small {
