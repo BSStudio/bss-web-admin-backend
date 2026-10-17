@@ -84,7 +84,8 @@ internal class AdminErrorAttributesTest {
         attributes["trace"] shouldBe null
     }
 
-    private fun attributesFor(request: ServletWebRequest) = underTest.getErrorAttributes(request, ErrorAttributeOptions.defaults())
+    private fun attributesFor(request: ServletWebRequest): Map<String, Any?> =
+        underTest.getErrorAttributes(request, ErrorAttributeOptions.defaults())
 
     private fun request(
         path: String? = "/admin/videos",

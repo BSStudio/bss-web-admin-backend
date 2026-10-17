@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}">
 <head>
     <title th:text="|#{video.list.title} · #{app.title}|">Videos · BSS admin</title>
@@ -19,7 +19,7 @@
             <button type="reset" th:text="#{action.cancel}">Cancel</button>
         </form>
         <div class="toolbar-actions">
-            <a role="button" th:href="@{/admin/videos/new}" th:text="#{video.list.new}">New video</a>
+            <a class="button" th:href="@{/admin/videos/new}" th:text="#{video.list.new}">New video</a>
         </div>
     </div>
 
@@ -40,8 +40,10 @@
             </tr>
             <tr th:each="v : ${page.content}">
                 <td class="select">
-                    <input type="checkbox" name="videoIds" form="bulk" th:value="${v.id}"
-                           th:aria-label="#{video.list.select(${v.title})}">
+                    <label>
+                        <span class="sr-only" th:text="#{video.list.select(${v.title})}">Select</span>
+                        <input type="checkbox" name="videoIds" form="bulk" th:value="${v.id}">
+                    </label>
                 </td>
                 <td><a th:href="@{/admin/videos/{id}(id=${v.id})}" th:text="${v.title}">Gólyatábor 2026 - Vám</a></td>
                 <td class="muted hide-small" th:text="${v.urls.isEmpty()} ? '' : ${v.urls[0]}">golyatabor-2026-vam</td>
@@ -59,14 +61,23 @@
 
 <!--/* Fragments rendered on their own by htmx requests */-->
 <table th:remove="all">
+    <thead>
+    <tr>
+        <th>Visible</th>
+    </tr>
+    </thead>
+    <tbody>
     <tr>
         <td th:fragment="visibility" class="select">
-            <input type="checkbox" role="switch" th:id="|visible-${id}|" th:checked="${visible}"
-                   th:aria-label="#{video.list.toggle(${title})}"
-                   th:hx-put="@{/admin/videos/{id}/visibility(id=${id}, visible=${!visible})}"
-                   hx-target="closest td" hx-swap="outerHTML">
+            <label>
+                <span class="sr-only" th:text="#{video.list.toggle(${title})}">Show on the website</span>
+                <input type="checkbox" role="switch" th:id="|visible-${id}|" th:checked="${visible}"
+                       th:hx-put="@{/admin/videos/{id}/visibility(id=${id}, visible=${!visible})}"
+                       hx-target="closest td" hx-swap="outerHTML">
+            </label>
         </td>
     </tr>
+    </tbody>
 </table>
 </body>
 </html>

@@ -70,18 +70,18 @@ class VideoPageController(
 
     @PostMapping("/visibility")
     fun changeVisibilityOfSelected(
-        @RequestParam(required = false) videoIds: List<UUID>?,
+        @RequestParam(defaultValue = "") videoIds: List<UUID>,
         @RequestParam visible: Boolean,
         @RequestParam(defaultValue = "0") page: Int,
         redirect: RedirectAttributes,
     ): String {
-        if (videoIds.isNullOrEmpty()) {
+        if (videoIds.isEmpty()) {
             redirect.flash("video.flash.noneSelected", error = true)
         } else {
             val changed = videoService.changeVideoVisibility(videoIds, visible)
             redirect.flash(if (visible) "video.flash.published" else "video.flash.hidden", changed.size)
         }
-        return "redirect:/admin/videos?page=$page"
+        return "$REDIRECT_TO_LIST?page=$page"
     }
 
     @GetMapping("/new")
@@ -105,7 +105,7 @@ class VideoPageController(
             // the video exists; only creating its folder on the file server failed
             logger.warn("File server failed after creating video {}", title, e)
             redirect.flash("video.flash.createdWithoutFiles", title.trim(), error = true)
-            "redirect:/admin/videos"
+            REDIRECT_TO_LIST
         }
 
     @GetMapping("/{videoId}")
@@ -128,7 +128,7 @@ class VideoPageController(
         try {
             val video = videoService.updateVideo(videoId, form.toUpdateVideo()).orElseThrow(::notFound)
             redirect.flash("video.flash.saved", video.title)
-            "redirect:/admin/videos"
+            REDIRECT_TO_LIST
         } catch (_: DataIntegrityViolationException) {
             model["error"] = "video.error.conflict"
             editPage(findVideo(videoId), model)
@@ -170,7 +170,7 @@ class VideoPageController(
         return try {
             videoService.deleteVideoById(videoId)
             redirect.flash("video.flash.deleted", video.title)
-            "redirect:/admin/videos"
+            REDIRECT_TO_LIST
         } catch (_: DataIntegrityViolationException) {
             redirect.flash("video.flash.deleteBlocked", video.title, error = true)
             "redirect:/admin/videos/$videoId"
@@ -212,5 +212,6 @@ class VideoPageController(
     private companion object {
         private val logger = LoggerFactory.getLogger(VideoPageController::class.java)
         private const val PAGE_SIZE = 25
+        private const val REDIRECT_TO_LIST = "redirect:/admin/videos"
     }
 }

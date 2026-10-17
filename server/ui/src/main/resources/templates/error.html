@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--/* Spring Boot renders this for every HTML error. AdminErrorAttributes adds the details on admin pages. */-->
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'error')}">
 <head>
     <title th:text="|#{${'error.title.' + (status == 403 or status == 404 ? status : 'other')}} · #{app.title}|">Something went wrong · BSS admin</title>
@@ -20,9 +20,9 @@
                 The admin could not finish this request.
             </p>
             <div class="actions">
-                <a th:if="${reportUrl}" role="button" th:href="${reportUrl}" target="_blank" rel="noopener"
+                <a th:if="${reportUrl}" class="button" th:href="${reportUrl}" target="_blank" rel="noopener"
                    th:text="#{error.report}">Report on GitHub</a>
-                <a role="button" class="secondary" th:href="@{/admin}" th:text="#{error.home}">Back to the dashboard</a>
+                <a class="button secondary" th:href="@{/admin}" th:text="#{error.home}">Back to the dashboard</a>
             </div>
             <p th:if="${reportUrl}" class="muted" th:text="#{error.report.help}">
                 The report opens on GitHub with the details filled in.

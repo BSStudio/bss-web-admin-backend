@@ -19,7 +19,7 @@
 
     document.addEventListener("submit", (event) => {
         loaded.delete(event.target);
-        event.target.removeAttribute("data-dirty");
+        delete event.target.dataset.dirty;
     });
 
     // Forms with data-confirm ask before they submit, e.g. delete buttons in table rows.

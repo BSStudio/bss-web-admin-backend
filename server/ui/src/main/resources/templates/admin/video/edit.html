@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}">
 <head>
     <title th:text="|${video.title} · #{app.title}|">Gólyatábor 2026 - Vám · BSS admin</title>
@@ -58,7 +58,7 @@
                 <span th:text="#{video.field.visible}">Visible on the website</span>
             </label>
             <div class="actions">
-                <a role="button" class="secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
+                <a class="button secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
                 <button type="submit" th:text="#{action.save}">Save</button>
                 <span class="unsaved" role="status" th:text="#{form.unsaved}">Unsaved changes</span>
             </div>
@@ -92,6 +92,13 @@
     <p th:if="${video.crew.isEmpty()}" class="muted" th:text="#{video.crew.empty}">No crew yet.</p>
     <div class="data-table" th:unless="${video.crew.isEmpty()}">
         <table>
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{video.crew.member}">Member</th>
+                <th scope="col" th:text="#{video.crew.position}">Position</th>
+                <th scope="col"><span class="sr-only" th:text="#{table.actions}">Actions</span></th>
+            </tr>
+            </thead>
             <tbody>
             <tr th:each="crew : ${video.crew}">
                 <td>
@@ -111,13 +118,18 @@
         </table>
     </div>
     <form class="inline-form" th:hx-post="@{/admin/videos/{id}/crew(id=${video.id})}" hx-target="#crew" hx-swap="outerHTML">
-        <select id="crew-member" name="memberId" required th:aria-label="#{video.crew.member}"
-                th:autofocus="${crewChanged}">
-            <option value="" selected disabled th:text="#{video.crew.member}">Member</option>
-            <option th:each="m : ${members}" th:value="${m.id}" th:text="${m.name}">Kovács Anna</option>
-        </select>
-        <input type="text" name="position" list="positions" required
-               th:placeholder="#{video.crew.position}" th:aria-label="#{video.crew.position}">
+        <label>
+            <span class="sr-only" th:text="#{video.crew.member}">Member</span>
+            <select id="crew-member" name="memberId" required th:autofocus="${crewChanged}">
+                <option value="" selected disabled th:text="#{video.crew.member}">Member</option>
+                <option th:each="m : ${members}" th:value="${m.id}" th:text="${m.name}">Kovács Anna</option>
+            </select>
+        </label>
+        <label>
+            <span class="sr-only" th:text="#{video.crew.position}">Position</span>
+            <input id="crew-position" type="text" name="position" list="positions" required
+                   th:placeholder="#{video.crew.position}">
+        </label>
         <button type="submit" class="secondary" th:text="#{action.add}">Add</button>
         <datalist id="positions">
             <option th:each="p : ${positions}" th:value="${p}"></option>

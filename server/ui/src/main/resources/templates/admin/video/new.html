@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}">
 <head>
     <title th:text="|#{video.new.title} · #{app.title}|">New video · BSS admin</title>
@@ -25,7 +25,7 @@
             <small id="title-help" th:text="#{video.new.help}">Start with the title.</small>
         </label>
         <div class="actions">
-            <a role="button" class="secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
+            <a class="button secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
             <button type="submit" th:text="#{action.create}">Create</button>
         </div>
     </form>

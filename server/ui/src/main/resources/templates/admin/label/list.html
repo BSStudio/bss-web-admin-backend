@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'labels')}">
 <head>
     <title th:text="|#{label.list.title} · #{app.title}|">Labels · BSS admin</title>
@@ -18,7 +18,7 @@
                 <tr>
                     <th scope="col" th:text="#{label.field.name}">Name</th>
                     <th scope="col" th:text="#{label.field.description}">Description</th>
-                    <th scope="col"><span class="sr-only" th:text="#{label.list.actions}">Actions</span></th>
+                    <th scope="col"><span class="sr-only" th:text="#{table.actions}">Actions</span></th>
                 </tr>
                 </thead>
                 <tbody>
