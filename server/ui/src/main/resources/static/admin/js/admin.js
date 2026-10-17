@@ -83,6 +83,18 @@
         }
     });
 
+    // A select with data-other="<id>" shows that text field, required and focused, while its option marked
+    // data-other is chosen, e.g. "New position…" in a video's crew.
+    document.addEventListener("change", (event) => {
+        const field = document.getElementById(event.target.dataset?.other ?? "");
+        if (!field) return;
+        const other = event.target.selectedOptions[0]?.hasAttribute("data-other") ?? false;
+        field.closest("label").hidden = !other;
+        field.required = other;
+        // after the list has closed, which puts the focus back on the select
+        if (other) setTimeout(() => field.focus());
+    });
+
     window.addEventListener("beforeunload", (event) => {
         if (document.querySelector("form[data-dirty]")) event.preventDefault();
     });

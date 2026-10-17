@@ -529,6 +529,65 @@ textarea {
     min-height: 4rem;
 }
 
+/*
+ * Where the browser supports it (Chromium), the open list of a select is styled too: compact rows, the
+ * table's hover and selection colours, and scrolling past 20rem. Other browsers show their native list.
+ */
+@supports (appearance: base-select) {
+    select,
+    ::picker(select) {
+        appearance: base-select;
+    }
+
+    select {
+        align-items: center;
+    }
+
+    select::picker-icon {
+        display: none; /* Pico draws the arrow */
+    }
+
+    ::picker(select) {
+        max-height: 20rem;
+        padding: 0.25rem 0;
+        border: 1px solid var(--c-border-strong);
+        background: var(--c-bg);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    option {
+        min-height: 2rem;
+        padding: 0.25rem 1rem;
+        color: var(--c-text);
+        font-size: 0.875rem;
+    }
+
+    option:is(:hover, :focus-visible) {
+        background: var(--c-layer-hover);
+        outline: none;
+    }
+
+    option:checked {
+        background: var(--c-layer-selected);
+        font-weight: 600;
+    }
+
+    option:disabled {
+        color: var(--c-text-helper);
+    }
+
+    /* a placeholder like "Position" only labels the closed list */
+    option[value=""]:disabled {
+        display: none;
+    }
+}
+
+label small {
+    margin: 0;
+    color: var(--c-text-helper);
+    font-size: 0.75rem;
+}
+
 [type="checkbox"] {
     --pico-border-width: 1px;
 }

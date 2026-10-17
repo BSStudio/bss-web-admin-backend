@@ -407,6 +407,62 @@ internal class VideoPageControllerTest(
     }
 
     @Test
+    internal fun `should add a crew member in a new position`() {
+        val request = VideoCrewRequest(VIDEO_ID, "Sminkes", MEMBER.id)
+        every { videoCrewService.addPosition(request) } returns Optional.of(DETAILED_VIDEO)
+
+        mockMvc
+            .post("$BASE_URL/$VIDEO_ID/crew") {
+                with(oauth2Login())
+                with(csrf())
+                param("memberId", MEMBER.id.toString())
+                param("position", "+")
+                param("newPosition", " Sminkes ")
+            }.andExpect {
+                status { isOk() }
+            }
+
+        verify { videoCrewService.addPosition(request) }
+    }
+
+    @Test
+    internal fun `should refuse a crew member without a position`() {
+        mockMvc
+            .post("$BASE_URL/$VIDEO_ID/crew") {
+                with(oauth2Login())
+                with(csrf())
+                param("memberId", MEMBER.id.toString())
+                param("position", "+")
+                param("newPosition", " ")
+            }.andExpect {
+                status { isBadRequest() }
+            }
+
+        verify(exactly = 0) { videoCrewService.addPosition(any()) }
+    }
+
+    @Test
+    internal fun `should list positions in Hungarian order, then the new position option`() {
+        every { videoCrewService.getPositions() } returns listOf("Vágó", "Élő kapcsolás", "Operatőr")
+
+        mockMvc
+            .get("$BASE_URL/$VIDEO_ID") {
+                with(oauth2Login())
+            }.andExpect {
+                content {
+                    string(
+                        stringContainsInOrder(
+                            ">Élő kapcsolás</option>",
+                            ">Operatőr</option>",
+                            ">Vágó</option>",
+                            """<option value="+" data-other>New position…</option>""",
+                        ),
+                    )
+                }
+            }
+    }
+
+    @Test
     internal fun `should remove a crew member`() {
         val request = VideoCrewRequest(VIDEO_ID, POSITION, MEMBER.id)
         every { videoCrewService.removePosition(request) } returns Optional.of(DETAILED_VIDEO)

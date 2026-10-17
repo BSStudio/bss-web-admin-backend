@@ -149,13 +149,19 @@
         </label>
         <label>
             <span class="sr-only" th:text="#{video.crew.position}">Position</span>
-            <input id="crew-position" type="text" name="position" list="positions" required
-                   th:placeholder="#{video.crew.position}">
+            <select id="crew-position" name="position" required data-other="crew-new-position">
+                <option value="" selected disabled th:text="#{video.crew.position}">Position</option>
+                <option th:each="p : ${positions}" th:value="${p}" th:text="${p}">Operatőr</option>
+                <option th:value="${newPosition}" data-other th:text="#{video.crew.newPosition}">New position…</option>
+            </select>
+        </label>
+        <!--/* Shown by admin.js while "New position…" is chosen */-->
+        <label hidden>
+            <span class="sr-only" th:text="#{video.crew.newPosition.name}">Name of the new position</span>
+            <input id="crew-new-position" type="text" name="newPosition" maxlength="250"
+                   th:placeholder="#{video.crew.newPosition.name}">
         </label>
         <button type="submit" class="secondary" th:text="#{action.add}">Add</button>
-        <datalist id="positions">
-            <option th:each="p : ${positions}" th:value="${p}"></option>
-        </datalist>
     </form>
 </section>
 </body>

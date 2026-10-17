@@ -38,6 +38,8 @@ import org.springframework.web.client.RestClientException
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import java.text.Collator
+import java.util.Locale
 import java.util.UUID
 
 @Controller
@@ -167,9 +169,12 @@ class VideoPageController(
         @PathVariable videoId: UUID,
         @RequestParam memberId: UUID,
         @RequestParam position: String,
+        @RequestParam(defaultValue = "") newPosition: String,
         model: Model,
     ): String {
-        videoCrewService.addPosition(VideoCrewRequest(videoId, position.trim(), memberId))
+        val chosen = (if (position == NEW_POSITION) newPosition else position).trim()
+        if (chosen.isEmpty()) throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+        videoCrewService.addPosition(VideoCrewRequest(videoId, chosen, memberId))
         return crewFragment(findVideo(videoId), model)
     }
 
@@ -238,7 +243,8 @@ class VideoPageController(
     ) {
         model["video"] = video
         model["members"] = memberService.findAllMembers().sortedBy { it.name }
-        model["positions"] = videoCrewService.getPositions()
+        model["positions"] = videoCrewService.getPositions().sortedWith(Collator.getInstance(HUNGARIAN))
+        model["newPosition"] = NEW_POSITION
     }
 
     private fun notFound() = ResponseStatusException(HttpStatus.NOT_FOUND)
@@ -246,5 +252,11 @@ class VideoPageController(
     private companion object {
         private val logger = LoggerFactory.getLogger(VideoPageController::class.java)
         private const val REDIRECT_TO_LIST = "redirect:/admin/videos"
+
+        // positions are Hungarian words, sorted the Hungarian way whatever the page language
+        private val HUNGARIAN = Locale.forLanguageTag("hu")
+
+        // the position list's "New position…" option; the typed name comes as newPosition
+        private const val NEW_POSITION = "+"
     }
 }

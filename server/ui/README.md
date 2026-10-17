@@ -59,6 +59,10 @@ thousand rows a search takes well under a second; move it into the database when
   panel on the right. *Save* posts the form and redirects to the list with a flash message. Unique constraint
   violations re-render the form with `admin/fragments :: error`.
 - **Sub-lists** such as the crew are a fragment in the same template, re-rendered by htmx after each add or remove.
+- **Choosing from a known list.** Use a `<select>`, not `<datalist>`, which can't be styled and hides options
+  once something is typed. Where the browser supports `appearance: base-select` (Chromium) the open list is
+  styled too. When new values must stay possible, add a last option marked `data-other` and give the select
+  `data-other="<id of a text field>"`: `admin.js` shows that field while the option is chosen, as for crew positions.
 - **Delete** sits in the page header and opens a native `<dialog>` with `command="show-modal"`; no JavaScript is
   needed. The dialog's form posts to `/admin/<section>/{id}/delete`.
 - **Unsaved changes.** Edit forms carry `th:data-unsaved="${error} ? 'pending' : 'track'"` and an
