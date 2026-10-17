@@ -25,7 +25,15 @@ Keep business logic in the `service` module.
 
 ## Page patterns
 
-Videos is the reference section; copy it for events, members and labels.
+| Section |                            List                             |                Edit page                |
+|---------|-------------------------------------------------------------|-----------------------------------------|
+| Videos  | Paged; visibility switch; bulk publish/hide                 | Details, URLs, labels; crew panel       |
+| Events  | Newest first; visibility switch                             | Details; videos panel (add and remove)  |
+| Members | By name, archived last; archived switch; bulk archive       | Profile, status, joined date, archived  |
+| Labels  | One page: table, add form in a side panel, confirmed delete | No edit page; the service has no update |
+
+Videos is the reference section; new sections follow its structure. The event and member services return every
+item at once, so their lists are paged in memory with `ui/paging/Paging.kt`.
 
 - **Layout.** Every page starts with `th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}"`.
   The third argument marks the active item in the top bar. Add new sections to the top bar in `layout.html`.

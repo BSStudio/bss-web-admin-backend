@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'events')}">
+<head>
+    <title th:text="|${event.title} · #{app.title}|">Gólyatábor 2026 · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container">
+    <div class="page-header">
+        <div>
+            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
+                <a th:href="@{/admin/events}" th:text="#{event.list.title}">Events</a>
+            </nav>
+            <h1 th:text="${event.title}">Gólyatábor 2026</h1>
+        </div>
+        <button type="button" class="danger ghost" command="show-modal" commandfor="delete-dialog"
+                th:text="#{event.delete.title}">Delete event</button>
+    </div>
+    <p th:replace="~{admin/fragments :: error(${error})}"></p>
+
+    <div class="columns">
+        <form method="post" th:action="@{/admin/events/{id}(id=${event.id})}" th:object="${form}" class="stack"
+              th:data-unsaved="${error} ? 'pending' : 'track'">
+            <label>
+                <span th:text="#{event.field.title}">Title</span>
+                <input type="text" th:field="*{title}" required autofocus aria-describedby="form-error">
+            </label>
+            <label>
+                <span th:text="#{event.field.url}">URL</span>
+                <input type="text" th:field="*{url}" required aria-describedby="url-help form-error">
+                <small id="url-help" th:text="#{event.field.url.help}">Used in the event’s page address.</small>
+            </label>
+            <div class="grid">
+                <label>
+                    <span th:text="#{event.field.dateFrom}">Starts</span>
+                    <input type="date" th:field="*{dateFrom}" required>
+                </label>
+                <label>
+                    <span th:text="#{event.field.dateTo}">Ends</span>
+                    <input type="date" th:field="*{dateTo}" required>
+                </label>
+            </div>
+            <label>
+                <span th:text="#{event.field.description}">Description</span>
+                <textarea th:field="*{description}" rows="6" maxlength="8192"></textarea>
+            </label>
+            <label class="inline">
+                <input type="checkbox" role="switch" th:field="*{visible}">
+                <span th:text="#{event.field.visible}">Visible on the website</span>
+            </label>
+            <div class="actions">
+                <a class="button secondary" th:href="@{/admin/events}" th:text="#{action.cancel}">Cancel</a>
+                <button type="submit" th:text="#{action.save}">Save</button>
+                <span class="unsaved" role="status" th:text="#{form.unsaved}">Unsaved changes</span>
+            </div>
+        </form>
+
+        <section th:replace="~{admin/event/edit :: videos}"></section>
+    </div>
+
+    <dialog id="delete-dialog">
+        <article>
+            <header>
+                <h2 th:text="#{event.delete.question(${event.title})}">Delete “Gólyatábor 2026”?</h2>
+                <button type="button" class="ghost" command="close" commandfor="delete-dialog"
+                        th:aria-label="#{action.close}">✕</button>
+            </header>
+            <p th:text="#{event.delete.warning}">This can’t be undone.</p>
+            <footer>
+                <button type="button" class="secondary" command="close" commandfor="delete-dialog" autofocus
+                        th:text="#{action.cancel}">Cancel</button>
+                <form method="post" th:action="@{/admin/events/{id}/delete(id=${event.id})}">
+                    <button type="submit" class="danger" th:text="#{action.delete}">Delete</button>
+                </form>
+            </footer>
+        </article>
+    </dialog>
+</main>
+
+<!--/* The videos panel re-renders on its own after each htmx add or remove */-->
+<section id="event-videos" class="panel" th:fragment="videos">
+    <h2 th:text="#{event.videos.title}">Videos</h2>
+    <p th:if="${eventVideos.isEmpty()}" class="muted" th:text="#{event.videos.empty}">No videos in this event yet.</p>
+    <div class="data-table" th:unless="${eventVideos.isEmpty()}">
+        <table>
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{event.videos.video}">Video</th>
+                <th scope="col" th:text="#{video.field.shot}">Shooting date</th>
+                <th scope="col"><span class="sr-only" th:text="#{table.actions}">Actions</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="video : ${eventVideos}">
+                <td><a th:href="@{/admin/videos/{id}(id=${video.id})}" th:text="${video.title}">Gólyatábor 2026 - Vám</a></td>
+                <td class="date" th:text="${video.shootingDateStart}">2026-08-13</td>
+                <td class="row-action">
+                    <button type="button" class="ghost"
+                            th:hx-delete="@{/admin/events/{id}/videos(id=${event.id}, videoId=${video.id})}"
+                            hx-target="#event-videos" hx-swap="outerHTML"
+                            th:aria-label="#{event.videos.remove(${video.title})}"
+                            th:text="#{action.remove}">Remove</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <form class="inline-form" th:hx-post="@{/admin/events/{id}/videos(id=${event.id})}"
+          hx-target="#event-videos" hx-swap="outerHTML">
+        <label>
+            <span class="sr-only" th:text="#{event.videos.video}">Video</span>
+            <select id="event-video" name="videoId" required th:autofocus="${videosChanged}">
+                <option value="" selected disabled th:text="#{event.videos.choose}">Choose a video</option>
+                <option th:each="v : ${videoOptions}" th:value="${v.id}"
+                        th:text="|${v.title} (${v.shootingDateStart})|">Gólyatábor 2026 - Vám (2026-08-13)</option>
+            </select>
+        </label>
+        <button type="submit" class="secondary" th:text="#{action.add}">Add</button>
+    </form>
+</section>
+</body>
+</html>
