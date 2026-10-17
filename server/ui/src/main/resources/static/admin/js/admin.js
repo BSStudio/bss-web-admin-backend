@@ -62,27 +62,6 @@
     document.addEventListener("reset", () => setTimeout(syncSelection));
     document.addEventListener("htmx:afterSettle", syncSelection);
 
-    // Columns menus: which optional columns show is remembered per page, in this browser only.
-    const columnsKey = `bss-admin-columns:${location.pathname}`;
-    try {
-        const shown = JSON.parse(localStorage.getItem(columnsKey)) ?? {};
-        for (const toggle of document.querySelectorAll("input[data-column]")) {
-            toggle.checked = shown[toggle.dataset.column] ?? toggle.checked;
-        }
-    } catch {
-        // no storage (private window, blocked site data): the default columns show
-    }
-    document.addEventListener("change", (event) => {
-        if (!event.target.matches("input[data-column]")) return;
-        const shown = {};
-        for (const toggle of document.querySelectorAll("input[data-column]")) shown[toggle.dataset.column] = toggle.checked;
-        try {
-            localStorage.setItem(columnsKey, JSON.stringify(shown));
-        } catch {
-            // not remembered; the choice still applies until the page is left
-        }
-    });
-
     // A select with data-other="<id>" shows that text field, required and focused, while its option marked
     // data-other is chosen, e.g. "New position…" in a video's crew.
     document.addEventListener("change", (event) => {

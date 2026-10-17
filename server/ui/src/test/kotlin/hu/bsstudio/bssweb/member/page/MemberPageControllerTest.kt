@@ -61,12 +61,48 @@ internal class MemberPageControllerTest(
                 status { isOk() }
                 view { name("admin/member/list") }
                 content { string(stringContainsInOrder(ANNA.name, BENCE.name, ARCHIVED.name)) }
-                content { string(containsString("""<td class="col-status">Member</td>""")) }
+                content { string(containsString("<td>Member</td>")) }
+                content { string(containsString("""href="/admin/members?q=&amp;size=25&amp;sort=status,asc"""")) }
                 content { string(containsString("""<option value="ALUMNI">Alumni</option>""")) }
                 content { string(containsString("""<tr class="archived">""")) }
                 content { string(containsString("<span>1–3 of 3 items</span>")) }
                 content { string(containsString("""srcset="http://localhost:8890/m/${ANNA.id}/profile/m.webp 854w,""")) }
             }
+    }
+
+    @Test
+    internal fun `should sort members by status in the order they go through them`() {
+        val candidate = BENCE.copy(status = MemberStatus.MEMBER_CANDIDATE)
+        val alumni = ARCHIVED.copy(status = MemberStatus.ALUMNI)
+        every { service.findAllMembers() } returns listOf(alumni, ANNA, candidate)
+
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                param("sort", "status,desc")
+            }.andExpectAll {
+                content { string(stringContainsInOrder(alumni.name, ANNA.name, candidate.name)) }
+                content { string(containsString("""aria-sort="descending">""")) }
+            }
+    }
+
+    @Test
+    internal fun `should sort members by URL, joined date and name`() {
+        every { service.findAllMembers() } returns listOf(ARCHIVED, BENCE, ANNA)
+
+        listOf(
+            "url,asc" to listOf(ARCHIVED, ANNA, BENCE),
+            "joinedAt,desc" to listOf(ANNA, BENCE, ARCHIVED),
+            "name,desc" to listOf(BENCE, ANNA, ARCHIVED),
+        ).forEach { (sort, order) ->
+            mockMvc
+                .get(BASE_URL) {
+                    with(oauth2Login())
+                    param("sort", sort)
+                }.andExpect {
+                    content { string(stringContainsInOrder(order.map(Member::name))) }
+                }
+        }
     }
 
     @Test
@@ -143,7 +179,7 @@ internal class MemberPageControllerTest(
                 param("size", "10")
             }.andExpectAll {
                 status { is3xxRedirection() }
-                redirectedUrl("$BASE_URL?q=anna&page=1&size=10")
+                redirectedUrl("$BASE_URL?q=anna&page=1&size=10&sort=")
                 flash { attribute("flash", Flash("member.flash.archived", 1)) }
             }
     }
@@ -191,7 +227,7 @@ internal class MemberPageControllerTest(
                 param("page", "2")
             }.andExpectAll {
                 status { is3xxRedirection() }
-                redirectedUrl("$BASE_URL?q=&page=2&size=25")
+                redirectedUrl("$BASE_URL?q=&page=2&size=25&sort=")
                 flash { attribute("flash", Flash("member.flash.statusChanged", 2)) }
             }
     }

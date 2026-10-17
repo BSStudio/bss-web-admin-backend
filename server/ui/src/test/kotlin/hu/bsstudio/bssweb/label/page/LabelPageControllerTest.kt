@@ -47,6 +47,7 @@ internal class LabelPageControllerTest(
                 status { isOk() }
                 view { name("admin/label/list") }
                 content { string(stringContainsInOrder(UNIVERSITY_LIFE.name, SPORT.name)) }
+                content { string(stringContainsInOrder("""<td class="num">0</td>""", """<td class="num">37</td>""")) }
                 content { string(containsString("""data-confirm="Delete the label “Sport”? It is removed from every video."""")) }
             }
     }
@@ -128,7 +129,7 @@ internal class LabelPageControllerTest(
 
     private companion object {
         private const val BASE_URL = "/admin/labels"
-        private val SPORT = Label(UUID.randomUUID(), "Sport", "Sport events")
+        private val SPORT = Label(UUID.randomUUID(), "Sport", "Sport events", videoCount = 37)
         private val UNIVERSITY_LIFE = Label(UUID.randomUUID(), "Egyetemi élet", "University life")
     }
 }

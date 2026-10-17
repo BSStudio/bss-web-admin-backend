@@ -18,16 +18,18 @@
                 <tr>
                     <th scope="col" th:text="#{label.field.name}">Name</th>
                     <th scope="col" th:text="#{label.field.description}">Description</th>
+                    <th scope="col" class="num" th:text="#{label.column.videos}">Videos</th>
                     <th scope="col"><span class="sr-only" th:text="#{table.actions}">Actions</span></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:if="${labels.isEmpty()}">
-                    <td colspan="3" class="muted" th:text="#{label.list.empty}">No labels yet.</td>
+                    <td colspan="4" class="muted" th:text="#{label.list.empty}">No labels yet.</td>
                 </tr>
                 <tr th:each="label : ${labels}">
                     <td th:text="${label.name}">Egyetemi élet</td>
                     <td class="muted" th:text="${label.description}">University life</td>
+                    <td class="num" th:text="${label.videoCount}">37</td>
                     <td class="row-action">
                         <form method="post" th:action="@{/admin/labels/{id}/delete(id=${label.id})}"
                               th:data-confirm="#{label.delete.question(${label.name})}">

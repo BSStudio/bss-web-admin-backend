@@ -670,42 +670,6 @@ td.row-action form {
     --pico-border-radius: 2px;
 }
 
-/* The Columns menu: Pico's dropdown, compact and opening to the left */
-.column-picker {
-    margin: 0;
-}
-
-.column-picker > summary:not([role]) {
-    height: 2rem;
-    padding: 0 0.75rem;
-    color: var(--c-text);
-    font-size: 0.875rem;
-    line-height: 2rem;
-}
-
-.column-picker > summary + ul {
-    right: 0;
-    left: auto;
-}
-
-.column-picker label {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    margin: 0;
-    font-size: 0.875rem;
-}
-
-/* A column hides while its toggle in the Columns menu is unticked; one rule per column key */
-main:has([data-column="image"]:not(:checked)) .col-image,
-main:has([data-column="url"]:not(:checked)) .col-url,
-main:has([data-column="date"]:not(:checked)) .col-date,
-main:has([data-column="description"]:not(:checked)) .col-description,
-main:has([data-column="role"]:not(:checked)) .col-role,
-main:has([data-column="status"]:not(:checked)) .col-status {
-    display: none;
-}
-
 .batch-actions {
     display: none;
     flex: 1;
@@ -778,6 +742,49 @@ thead th {
     font-weight: 600;
 }
 
+/* Sortable column headers fill their cell; the arrow shows the order (aria-sort) or, on hover, that it sorts */
+th a.sort {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: -0.25rem -1rem;
+    padding: 0.25rem 1rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+th a.sort:hover {
+    background: var(--c-layer-hover);
+    color: inherit;
+}
+
+th a.sort::after {
+    opacity: 0;
+    content: "↕" / "";
+}
+
+th a.sort:is(:hover, :focus-visible)::after {
+    opacity: 0.6;
+}
+
+th[aria-sort] a.sort::after {
+    opacity: 1;
+}
+
+th[aria-sort="ascending"] a.sort::after {
+    content: "↑" / "";
+}
+
+th[aria-sort="descending"] a.sort::after {
+    content: "↓" / "";
+}
+
+:is(th, td).num {
+    width: 1%;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
 tbody tr:last-child td {
     border-bottom: 0;
 }
@@ -803,13 +810,6 @@ td.row-action {
 td.row-action :is(button, [role="button"]) {
     min-height: 1.5rem;
     padding: 0 0.5rem;
-}
-
-td.clip {
-    max-width: 20rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 td.date {

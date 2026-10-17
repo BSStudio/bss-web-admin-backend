@@ -99,14 +99,49 @@ internal class VideoPageControllerTest(
                 content { string(containsString("""selected="selected">1</option>""")) }
                 content { string(containsString("<span>of 1 page</span>")) }
                 content { string(containsString("""<input type="checkbox" data-select-all="videoIds">""")) }
+                content { string(containsString("""aria-sort="descending">""")) }
+                content { string(containsString("""href="/admin/videos?q=&amp;size=25&amp;sort=shootingDateStart,asc"""")) }
+                content { string(containsString("""href="/admin/videos?q=&amp;size=25&amp;sort=title,asc"""")) }
                 content { string(containsString("""srcset="http://localhost:8890/v/$VIDEO_ID/thumbnail/sd.webp 854w,""")) }
                 content { string(containsString("""sizes="auto, 56px" type="image/avif">""")) }
             }
 
         pageable.captured.pageSize shouldBe 25
-        pageable.captured.sort
-            .getOrderFor("shootingDateStart")
-            ?.direction shouldBe Sort.Direction.DESC
+        pageable.captured.sort shouldBe Sort.by(Sort.Order.desc("shootingDateStart"), Sort.Order.asc("title"))
+    }
+
+    @Test
+    internal fun `should sort videos by a column, then the default order`() {
+        val pageable = slot<Pageable>()
+        every { videoService.findAllVideos(capture(pageable)) } returns PageImpl(listOf(VIDEO), PageRequest.of(0, 25), 1)
+
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                param("sort", "title,desc")
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("""href="/admin/videos?q=&amp;size=25&amp;sort=title,asc"""")) }
+                content { string(containsString("""<input type="hidden" name="sort" value="title,desc">""")) }
+            }
+
+        pageable.captured.sort shouldBe Sort.by(Sort.Order.desc("title"), Sort.Order.desc("shootingDateStart"))
+    }
+
+    @Test
+    internal fun `should ignore a sort by a column the table does not have`() {
+        val pageable = slot<Pageable>()
+        every { videoService.findAllVideos(capture(pageable)) } returns PageImpl(emptyList(), PageRequest.of(0, 25), 0)
+
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                param("sort", "description,asc")
+            }.andExpect {
+                status { isOk() }
+            }
+
+        pageable.captured.sort shouldBe Sort.by(Sort.Order.desc("shootingDateStart"), Sort.Order.asc("title"))
     }
 
     @Test
@@ -126,6 +161,22 @@ internal class VideoPageControllerTest(
                 content { string(not(containsString(other.title))) }
                 content { string(containsString("""type="search" name="q" value="GOLYATABOR"""")) }
                 content { string(containsString("<span>1–3 of 3 items</span>")) }
+            }
+    }
+
+    @Test
+    internal fun `should sort search results by a column`() {
+        val older = VIDEO.copy(id = UUID.randomUUID(), title = "Gólyatábor 2025", shootingDateStart = SHOOTING_DATE.minusYears(1))
+        val hidden = VIDEO.copy(id = UUID.randomUUID(), title = "Gólyatábor 2026 - Bál", visible = false)
+        every { videoService.findAllVideos() } returns listOf(VIDEO, older, hidden)
+
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                param("q", "golyatabor")
+                param("sort", "visible,asc")
+            }.andExpect {
+                content { string(stringContainsInOrder(hidden.title, TITLE, older.title)) }
             }
     }
 
@@ -173,9 +224,10 @@ internal class VideoPageControllerTest(
                 param("q", "gólya tábor")
                 param("page", "2")
                 param("size", "50")
+                param("sort", "title,desc")
             }.andExpectAll {
                 status { is3xxRedirection() }
-                redirectedUrl("$BASE_URL?q=g%C3%B3lya+t%C3%A1bor&page=2&size=50")
+                redirectedUrl("$BASE_URL?q=g%C3%B3lya+t%C3%A1bor&page=2&size=50&sort=title%2Cdesc")
                 flash { attribute("flash", Flash("video.flash.published", 1)) }
             }
     }
@@ -192,7 +244,7 @@ internal class VideoPageControllerTest(
                 param("visible", "false")
             }.andExpectAll {
                 status { is3xxRedirection() }
-                redirectedUrl("$BASE_URL?q=&page=0&size=25")
+                redirectedUrl("$BASE_URL?q=&page=0&size=25&sort=")
                 flash { attribute("flash", Flash("video.flash.hidden", 1)) }
             }
     }

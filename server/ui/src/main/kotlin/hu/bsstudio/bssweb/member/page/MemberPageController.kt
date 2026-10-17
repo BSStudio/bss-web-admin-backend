@@ -9,12 +9,15 @@ import hu.bsstudio.bssweb.ui.flash.flash
 import hu.bsstudio.bssweb.ui.media.uploadImage
 import hu.bsstudio.bssweb.ui.paging.PAGE_SIZE
 import hu.bsstudio.bssweb.ui.paging.TableQuery
+import hu.bsstudio.bssweb.ui.paging.TableSort
 import hu.bsstudio.bssweb.ui.paging.backTo
+import hu.bsstudio.bssweb.ui.paging.byText
 import hu.bsstudio.bssweb.ui.paging.search
 import hu.bsstudio.bssweb.ui.paging.toPage
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -51,8 +54,9 @@ class MemberPageController(
             memberService
                 .findAllMembers()
                 .search(q) { listOf(it.name, it.nickname, it.url, it.role) }
-                .sortedWith(compareBy<Member> { it.archived }.thenBy { it.name.lowercase() })
+                .let { SORT.sort(it, pageable) }
                 .toPage(pageable)
+        model["sorting"] = SORT.header(pageable)
         model["statuses"] = STATUSES
         return "admin/member/list"
     }
@@ -208,5 +212,17 @@ class MemberPageController(
 
         // in the order a member goes through them
         private val STATUSES = MemberStatus.entries.reversed()
+
+        private val SORT =
+            TableSort<Member>(
+                Sort.by("archived", "name"),
+                mapOf(
+                    "name" to byText { it.name },
+                    "url" to byText { it.url },
+                    "status" to compareBy { STATUSES.indexOf(it.status) },
+                    "joinedAt" to compareBy { it.joinedAt },
+                    "archived" to compareBy { it.archived },
+                ),
+            )
     }
 }

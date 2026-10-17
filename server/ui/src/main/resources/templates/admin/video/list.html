@@ -19,17 +19,6 @@
         </form>
         <div class="toolbar-actions">
             <search th:replace="~{admin/fragments :: search('/admin/videos', ${page})}"></search>
-            <details class="dropdown column-picker">
-                <summary th:text="#{table.columns}">Columns</summary>
-                <ul>
-                    <th:block th:if="${media.enabled}">
-                        <li th:replace="~{admin/fragments :: column('image', #{video.thumbnail.title}, true)}"></li>
-                    </th:block>
-                    <li th:replace="~{admin/fragments :: column('url', #{video.column.url}, true)}"></li>
-                    <li th:replace="~{admin/fragments :: column('date', #{video.field.shot}, true)}"></li>
-                    <li th:replace="~{admin/fragments :: column('description', #{video.field.description}, false)}"></li>
-                </ul>
-            </details>
             <a class="button" th:href="@{/admin/videos/new}" th:text="#{video.list.new}">New video</a>
         </div>
     </div>
@@ -40,17 +29,16 @@
                 <thead>
                 <tr>
                     <th th:replace="~{admin/fragments :: selectAll('videoIds')}"></th>
-                    <th scope="col" class="col-image" th:if="${media.enabled}"><span class="sr-only" th:text="#{video.thumbnail.title}">Thumbnail</span></th>
-                    <th scope="col" th:text="#{video.field.title}">Title</th>
-                    <th scope="col" class="col-url hide-small" th:text="#{video.column.url}">URL</th>
-                    <th scope="col" class="col-date" th:text="#{video.field.shot}">Shot</th>
-                    <th scope="col" class="col-description" th:text="#{video.field.description}">Description</th>
-                    <th scope="col" th:text="#{video.column.visible}">Visible</th>
+                    <th scope="col" th:if="${media.enabled}"><span class="sr-only" th:text="#{video.thumbnail.title}">Thumbnail</span></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/videos', ${page}, 'title', #{video.field.title}, '')}"></th>
+                    <th scope="col" class="hide-small" th:text="#{video.column.url}">URL</th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/videos', ${page}, 'shootingDateStart', #{video.field.shot}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/videos', ${page}, 'visible', #{video.column.visible}, '')}"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:if="${page.empty}">
-                    <td colspan="7" class="muted"
+                    <td colspan="6" class="muted"
                         th:text="${q.isBlank()} ? #{video.list.empty} : #{table.noMatch(${q})}">No videos yet.</td>
                 </tr>
                 <tr th:each="v : ${page.content}">
@@ -60,17 +48,14 @@
                             <input type="checkbox" name="videoIds" form="bulk" th:value="${v.id}">
                         </label>
                     </td>
-                    <td class="thumb-cell col-image" th:if="${media.enabled}">
+                    <td class="thumb-cell" th:if="${media.enabled}">
                         <div th:replace="~{admin/fragments :: picture(${media.video(v.id)}, '56px', null, '', '', 'thumb')}"></div>
                     </td>
                     <td><a th:href="@{/admin/videos/{id}(id=${v.id})}" th:text="${v.title}">Gólyatábor 2026 - Vám</a></td>
-                    <td class="muted col-url hide-small" th:text="${v.urls.isEmpty()} ? '' : ${v.urls[0]}">golyatabor-2026-vam</td>
-                    <td class="date col-date"
+                    <td class="muted hide-small" th:text="${v.urls.isEmpty()} ? '' : ${v.urls[0]}">golyatabor-2026-vam</td>
+                    <td class="date"
                         th:text="${v.shootingDateStart == v.shootingDateEnd} ? ${v.shootingDateStart} : |${v.shootingDateStart} – ${v.shootingDateEnd}|">
                         2026-08-13
-                    </td>
-                    <td class="muted clip col-description" th:text="${v.description}" th:title="${v.description}">
-                        Az idei gólyatábor vámja.
                     </td>
                     <td th:replace="~{admin/video/list :: visibility(id=${v.id}, title=${v.title}, visible=${v.visible})}"></td>
                 </tr>

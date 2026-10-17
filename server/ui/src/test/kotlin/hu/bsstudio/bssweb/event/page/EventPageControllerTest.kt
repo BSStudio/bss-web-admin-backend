@@ -67,8 +67,24 @@ internal class EventPageControllerTest(
                 view { name("admin/event/list") }
                 content { string(stringContainsInOrder(EVENT.title, OLD_EVENT.title)) }
                 content { string(containsString("2026-08-12 – 2026-08-15")) }
-                content { string(containsString("""<td class="date col-date">2025-05-01</td>""")) }
+                content { string(containsString("""<td class="date">2025-05-01</td>""")) }
+                content { string(stringContainsInOrder("""<td class="num">12</td>""", """<td class="num">0</td>""")) }
             }
+    }
+
+    @Test
+    internal fun `should sort events by a column`() {
+        every { eventService.findAllEvent() } returns listOf(EVENT, OLD_EVENT.copy(visible = false))
+
+        listOf("title,desc", "url,desc", "dateFrom,asc", "videoCount,asc", "visible,asc").forEach { sort ->
+            mockMvc
+                .get(BASE_URL) {
+                    with(oauth2Login())
+                    param("sort", sort)
+                }.andExpect {
+                    content { string(stringContainsInOrder(OLD_EVENT.title, EVENT.title)) }
+                }
+        }
     }
 
     @Test
@@ -383,6 +399,7 @@ internal class EventPageControllerTest(
                 dateFrom = LocalDate.of(2026, 8, 12),
                 dateTo = LocalDate.of(2026, 8, 15),
                 visible = true,
+                videoCount = 12,
             )
         private val OLD_EVENT =
             EVENT.copy(
@@ -391,6 +408,7 @@ internal class EventPageControllerTest(
                 title = "Schönherz Qpa 2025",
                 dateFrom = LocalDate.of(2025, 5, 1),
                 dateTo = LocalDate.of(2025, 5, 1),
+                videoCount = 0,
             )
         private val CAMP =
             DetailedEvent(

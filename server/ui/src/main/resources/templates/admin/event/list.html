@@ -13,14 +13,6 @@
     <div class="table-toolbar">
         <div class="toolbar-actions">
             <search th:replace="~{admin/fragments :: search('/admin/events', ${page})}"></search>
-            <details class="dropdown column-picker">
-                <summary th:text="#{table.columns}">Columns</summary>
-                <ul>
-                    <li th:replace="~{admin/fragments :: column('url', #{event.field.url}, true)}"></li>
-                    <li th:replace="~{admin/fragments :: column('date', #{event.column.dates}, true)}"></li>
-                    <li th:replace="~{admin/fragments :: column('description', #{event.field.description}, false)}"></li>
-                </ul>
-            </details>
             <a class="button" th:href="@{/admin/events/new}" th:text="#{event.list.new}">New event</a>
         </div>
     </div>
@@ -30,11 +22,11 @@
             <table>
                 <thead>
                 <tr>
-                    <th scope="col" th:text="#{event.field.title}">Title</th>
-                    <th scope="col" class="col-url hide-small" th:text="#{event.field.url}">URL</th>
-                    <th scope="col" class="col-date" th:text="#{event.column.dates}">Dates</th>
-                    <th scope="col" class="col-description" th:text="#{event.field.description}">Description</th>
-                    <th scope="col" th:text="#{event.column.visible}">Visible</th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'title', #{event.field.title}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'url', #{event.field.url}, 'hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'dateFrom', #{event.column.dates}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'videoCount', #{event.column.videos}, 'num')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'visible', #{event.column.visible}, '')}"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,14 +36,12 @@
                 </tr>
                 <tr th:each="e : ${page.content}">
                     <td><a th:href="@{/admin/events/{id}(id=${e.id})}" th:text="${e.title}">Gólyatábor 2026</a></td>
-                    <td class="muted col-url hide-small" th:text="${e.url}">golyatabor-2026</td>
-                    <td class="date col-date"
+                    <td class="muted hide-small" th:text="${e.url}">golyatabor-2026</td>
+                    <td class="date"
                         th:text="${e.dateFrom == e.dateTo} ? ${e.dateFrom} : |${e.dateFrom} – ${e.dateTo}|">
                         2026-08-12 – 2026-08-15
                     </td>
-                    <td class="muted clip col-description" th:text="${e.description}" th:title="${e.description}">
-                        Az idei gólyatábor.
-                    </td>
+                    <td class="num" th:text="${e.videoCount}">12</td>
                     <td th:replace="~{admin/event/list :: visibility(id=${e.id}, title=${e.title}, visible=${e.visible})}"></td>
                 </tr>
                 </tbody>

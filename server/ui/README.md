@@ -16,22 +16,22 @@ Keep business logic in the `service` module.
 | `ui/config/UiSecurityConfig.kt`            | Browser login for `/admin/**`                              |
 | `ui/config/UiWebConfig.kt`                 | Language switching and the `/admin/webjars` handler        |
 | `ui/flash/Flash.kt`                        | One-off messages shown after a redirect                    |
-| `ui/paging/`                               | In-memory paging and search, and the table state of a list |
+| `ui/paging/`                               | Paging, search and sorting of lists, and a table's state   |
 | `resources/templates/admin/layout.html`    | Page shell: head, top bar, flash message, language switch  |
-| `resources/templates/admin/fragments.html` | Shared pieces: search, columns, select all, pagination     |
+| `resources/templates/admin/fragments.html` | Shared pieces: search, sort headers, pagination, images    |
 | `resources/templates/admin/<section>/`     | `list.html`, `new.html`, `edit.html` of a section          |
 | `resources/static/admin/css/admin.css`     | Design tokens and compact component styles on top of Pico  |
-| `resources/static/admin/js/admin.js`       | Unsaved changes, select all, columns; our only script      |
+| `resources/static/admin/js/admin.js`       | Unsaved changes, select all; our only script               |
 | `resources/messages*.properties`           | UI text in English (default) and Hungarian                 |
 
 ## Page patterns
 
-| Section |                               List                               |                Edit page                |
-|---------|------------------------------------------------------------------|-----------------------------------------|
-| Videos  | Paged; visibility switch; bulk publish/hide                      | Details, URLs, labels; crew panel       |
-| Events  | Newest first; visibility switch                                  | Details; videos panel (add and remove)  |
-| Members | By name, archived last; archived switch; bulk archive and status | Profile, status, joined date, archived  |
-| Labels  | One page: table, add form in a side panel, confirmed delete      | No edit page; the service has no update |
+| Section |                               List                                |                Edit page                |
+|---------|-------------------------------------------------------------------|-----------------------------------------|
+| Videos  | Newest first; visibility switch; bulk publish/hide                | Details, URLs, labels; crew panel       |
+| Events  | Newest first; video count; visibility switch                      | Details; videos panel (add and remove)  |
+| Members | By name, archived last; archived switch; bulk archive and status  | Profile, status, joined date, archived  |
+| Labels  | One page: video count, add form in a side panel, confirmed delete | No edit page; the service has no update |
 
 Videos is the reference section; new sections follow its structure. The event and member services return every
 item at once, so their lists are paged in memory with `ui/paging/Paging.kt`.
@@ -43,17 +43,18 @@ thousand rows a search takes well under a second; move it into the database when
 - **Layout.** Every page starts with `th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}"`.
   The third argument marks the active item in the top bar. Add new sections to the top bar in `layout.html`.
   The layout's parameters are prefixed with `layout` so they never hide page data such as `title`.
-- **List.** `GET /admin/<section>?q=&page=&size=` shows a toolbar (search, *Columns*, *New*), a compact table, and
-  a footer with the page size, the item range, a page list and previous / next. Searching and paging load the
-  list into `#results` with htmx and update the address, so reloading or sharing it keeps the view.
+- **List.** `GET /admin/<section>?q=&page=&size=&sort=` shows a toolbar (search, *New*), a compact table, and
+  a footer with the page size, the item range, a page list and previous / next. Searching, sorting and paging load
+  the list into `#results` with htmx and update the address, so reloading or sharing it keeps the view.
   Row actions that change one value (the visibility switch) use htmx and swap only their own table cell.
 - **Selection.** Bulk actions are a plain form; the row checkboxes join it with `form="bulk"`, and so do the hidden
-  `q`, `page` and `size` fields under the table, which the controller binds as `TableQuery` and passes to
+  `q`, `page`, `size` and `sort` fields under the table, which the controller binds as `TableQuery` and passes to
   `redirect.backTo(table)`. While any row is selected, CSS (`:has`) swaps the toolbar for the selection bar; its
   *Cancel* is a reset button. The header checkbox (`admin/fragments :: selectAll`) selects the whole page.
-- **Columns.** Optional cells carry a `col-<key>` class and the *Columns* menu has an `admin/fragments :: column`
-  toggle for each key. `admin.css` hides a column while its toggle is unticked (one rule per key; add a rule for a
-  new key) and `admin.js` remembers the choice per page in the browser.
+- **Sorting.** A header made with `admin/fragments :: sortable` links to `sort=<column>,asc`, then `,desc`.
+  Each controller lists its sortable columns in a `TableSort`, with a comparator for each; other columns, or none,
+  get the default order, which also breaks ties. Videos sort in the database unless there is a search; the other
+  lists sort in memory. Text sorts the Hungarian way. Events can also be sorted by their video count, which the database counts as it loads them.
 - **New.** `GET /admin/<section>/new` asks only for the required fields, then opens the edit page.
 - **Edit.** `GET /admin/<section>/{id}` is a full page: the form on the left, related lists (crew) in a side
   panel on the right. *Save* posts the form and redirects to the list with a flash message. Unique constraint
@@ -109,6 +110,10 @@ these files; another host publishes them.
 
 - `bss.media.url` is the base URL of that host. Lists show small thumbnails and avatars, and the edit pages show
   the current image. Without the property, pages show no images, but uploads still work.
+- `admin/fragments :: picture` leaves the choice to the browser: a `<source>` per format picks AVIF where it is
+  supported, and each `srcset` lists the three sizes with their widths. As the images are lazy, `sizes="auto"`
+  lets the browser pick the smallest file that is sharp at the width it shows; the fragment's width argument is the
+  fallback for browsers without `auto`.
 - Uploads go through `MediaService` and swap only the image panel (htmx), so unsaved form changes stay.
   If the video or member has no folder on the file API yet (created before the file API existed), the folder is
   created and the upload retried once.

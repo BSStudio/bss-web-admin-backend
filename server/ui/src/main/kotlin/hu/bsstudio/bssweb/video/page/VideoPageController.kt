@@ -7,7 +7,9 @@ import hu.bsstudio.bssweb.ui.flash.flash
 import hu.bsstudio.bssweb.ui.media.uploadImage
 import hu.bsstudio.bssweb.ui.paging.PAGE_SIZE
 import hu.bsstudio.bssweb.ui.paging.TableQuery
+import hu.bsstudio.bssweb.ui.paging.TableSort
 import hu.bsstudio.bssweb.ui.paging.backTo
+import hu.bsstudio.bssweb.ui.paging.byText
 import hu.bsstudio.bssweb.ui.paging.search
 import hu.bsstudio.bssweb.ui.paging.toPage
 import hu.bsstudio.bssweb.video.model.CreateVideo
@@ -21,7 +23,6 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
-import org.springframework.data.web.SortDefault
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -38,8 +39,6 @@ import org.springframework.web.client.RestClientException
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
-import java.text.Collator
-import java.util.Locale
 import java.util.UUID
 
 @Controller
@@ -54,27 +53,24 @@ class VideoPageController(
 ) {
     @GetMapping
     fun list(
-        @PageableDefault(size = PAGE_SIZE)
-        @SortDefault.SortDefaults(
-            SortDefault(sort = ["shootingDateStart"], direction = Sort.Direction.DESC),
-            SortDefault(sort = ["title"]),
-        )
-        pageable: Pageable,
+        @PageableDefault(size = PAGE_SIZE) pageable: Pageable,
         @RequestParam(defaultValue = "") q: String,
         model: Model,
     ): String {
-        model["q"] = q
-        model["page"] =
+        val page =
             if (q.isBlank()) {
-                videoService.findAllVideos(pageable)
+                videoService.findAllVideos(SORT.page(pageable))
             } else {
                 // the paged service cannot search, so a search goes through the whole list
                 videoService
                     .findAllVideos()
                     .search(q) { listOf(it.title) + it.urls }
-                    .sortedWith(compareByDescending<Video> { it.shootingDateStart }.thenBy { it.title })
+                    .let { SORT.sort(it, pageable) }
                     .toPage(pageable)
             }
+        model["q"] = q
+        model["page"] = page
+        model["sorting"] = SORT.header(pageable)
         return "admin/video/list"
     }
 
@@ -243,7 +239,7 @@ class VideoPageController(
     ) {
         model["video"] = video
         model["members"] = memberService.findAllMembers().sortedBy { it.name }
-        model["positions"] = videoCrewService.getPositions().sortedWith(Collator.getInstance(HUNGARIAN))
+        model["positions"] = videoCrewService.getPositions().sortedWith(byText { it })
         model["newPosition"] = NEW_POSITION
     }
 
@@ -253,8 +249,15 @@ class VideoPageController(
         private val logger = LoggerFactory.getLogger(VideoPageController::class.java)
         private const val REDIRECT_TO_LIST = "redirect:/admin/videos"
 
-        // positions are Hungarian words, sorted the Hungarian way whatever the page language
-        private val HUNGARIAN = Locale.forLanguageTag("hu")
+        private val SORT =
+            TableSort<Video>(
+                Sort.by(Sort.Order.desc("shootingDateStart"), Sort.Order.asc("title")),
+                mapOf(
+                    "title" to byText { it.title },
+                    "shootingDateStart" to compareBy { it.shootingDateStart },
+                    "visible" to compareBy { it.visible },
+                ),
+            )
 
         // the position list's "New position…" option; the typed name comes as newPosition
         private const val NEW_POSITION = "+"

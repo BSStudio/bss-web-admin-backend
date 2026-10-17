@@ -7,11 +7,14 @@ import hu.bsstudio.bssweb.event.service.EventService
 import hu.bsstudio.bssweb.eventvideo.service.EventVideoService
 import hu.bsstudio.bssweb.ui.flash.flash
 import hu.bsstudio.bssweb.ui.paging.PAGE_SIZE
+import hu.bsstudio.bssweb.ui.paging.TableSort
+import hu.bsstudio.bssweb.ui.paging.byText
 import hu.bsstudio.bssweb.ui.paging.search
 import hu.bsstudio.bssweb.ui.paging.toPage
 import hu.bsstudio.bssweb.video.service.VideoService
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -48,8 +51,9 @@ class EventPageController(
             eventService
                 .findAllEvent()
                 .search(q) { listOf(it.title, it.url) }
-                .sortedWith(compareByDescending<Event> { it.dateFrom }.thenBy { it.title.lowercase() })
+                .let { SORT.sort(it, pageable) }
                 .toPage(pageable)
+        model["sorting"] = SORT.header(pageable)
         return "admin/event/list"
     }
 
@@ -182,6 +186,17 @@ class EventPageController(
     private fun notFound() = ResponseStatusException(HttpStatus.NOT_FOUND)
 
     private companion object {
+        private val SORT =
+            TableSort<Event>(
+                Sort.by(Sort.Order.desc("dateFrom"), Sort.Order.asc("title")),
+                mapOf(
+                    "title" to byText { it.title },
+                    "url" to byText { it.url },
+                    "dateFrom" to compareBy { it.dateFrom },
+                    "videoCount" to compareBy { it.videoCount },
+                    "visible" to compareBy { it.visible },
+                ),
+            )
         private const val REDIRECT_TO_LIST = "redirect:/admin/events"
     }
 }

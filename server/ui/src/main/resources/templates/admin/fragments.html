@@ -19,6 +19,7 @@
                    hx-include="closest form">
         </label>
         <input type="hidden" name="size" th:value="${page.size}">
+        <input type="hidden" name="sort" th:value="${sorting.param}">
     </form>
 </search>
 
@@ -31,15 +32,16 @@
 </th>
 
 <!--/*
-  One choice in a table's Columns menu. Cells with the class col-<key> hide while it is unticked (admin.css
-  has a rule for each key); admin.js remembers the choice in the browser.
+  A column header that sorts the table by column: ascending on the first click, then the other way round.
+  sorting (a SortHeader) marks the current column with aria-sort, which admin.css shows as an arrow.
+  The link keeps the search and the page size, and loads the list into #results like paging does.
 */-->
-<li th:fragment="column(key, label, shown)">
-    <label>
-        <input type="checkbox" th:data-column="${key}" th:checked="${shown}">
-        <span th:text="${label}">URL</span>
-    </label>
-</li>
+<th th:fragment="sortable(path, page, column, label, classes)" scope="col" th:class="${classes}"
+    th:aria-sort="${sorting.aria(column)}"
+    th:with="link=@{${path}(q=${q}, size=${page.size}, sort=${sorting.next(column)})}">
+    <a class="sort" th:href="${link}" th:hx-get="${link}" hx-select="#results" hx-target="#results"
+       hx-swap="outerHTML" hx-push-url="true" th:text="${label}">Title</a>
+</th>
 
 <!--/*
   Footer of a data table: page size, which items are shown, and which page, as lists and arrows.
@@ -49,6 +51,7 @@
      th:aria-label="#{pagination.label}" hx-select="#results" hx-target="#results" hx-swap="outerHTML" hx-push-url="true">
     <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-trigger="change">
         <input type="hidden" name="q" th:value="${q}">
+        <input type="hidden" name="sort" th:value="${sorting.param}">
         <label for="page-size" th:text="#{pagination.size}">Items per page:</label>
         <select id="page-size" name="size">
             <option th:each="size : ${ {10, 25, 50, 100} }" th:value="${size}" th:text="${size}"
@@ -57,10 +60,11 @@
         <span th:text="#{pagination.items(${page.number * page.size + 1}, ${page.number * page.size + page.numberOfElements}, ${page.totalElements})}">1–25 of 120 items</span>
     </form>
     <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-trigger="change" class="pages"
-          th:with="previous=@{${path}(q=${q}, size=${page.size}, page=${page.number - 1})},
-                   next=@{${path}(q=${q}, size=${page.size}, page=${page.number + 1})}">
+          th:with="previous=@{${path}(q=${q}, size=${page.size}, sort=${sorting.param}, page=${page.number - 1})},
+                   next=@{${path}(q=${q}, size=${page.size}, sort=${sorting.param}, page=${page.number + 1})}">
         <input type="hidden" name="q" th:value="${q}">
         <input type="hidden" name="size" th:value="${page.size}">
+        <input type="hidden" name="sort" th:value="${sorting.param}">
         <select id="page-number" name="page" th:aria-label="#{pagination.page}">
             <option th:each="number : ${#numbers.sequence(0, page.totalPages - 1)}" th:value="${number}"
                     th:text="${number + 1}" th:selected="${number == page.number}">1</option>
@@ -75,6 +79,7 @@
     <input type="hidden" form="bulk" name="q" th:value="${q}">
     <input type="hidden" form="bulk" name="page" th:value="${page.number}">
     <input type="hidden" form="bulk" name="size" th:value="${page.size}">
+    <input type="hidden" form="bulk" name="sort" th:value="${sorting.param}">
 </nav>
 
 <!--/*

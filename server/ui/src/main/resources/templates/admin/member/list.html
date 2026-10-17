@@ -27,19 +27,6 @@
         </form>
         <div class="toolbar-actions">
             <search th:replace="~{admin/fragments :: search('/admin/members', ${page})}"></search>
-            <details class="dropdown column-picker">
-                <summary th:text="#{table.columns}">Columns</summary>
-                <ul>
-                    <th:block th:if="${media.enabled}">
-                        <li th:replace="~{admin/fragments :: column('image', #{member.picture.title}, true)}"></li>
-                    </th:block>
-                    <li th:replace="~{admin/fragments :: column('url', #{member.field.url}, true)}"></li>
-                    <li th:replace="~{admin/fragments :: column('role', #{member.field.role}, false)}"></li>
-                    <li th:replace="~{admin/fragments :: column('status', #{member.field.status}, true)}"></li>
-                    <li th:replace="~{admin/fragments :: column('date', #{member.field.joinedAt}, true)}"></li>
-                    <li th:replace="~{admin/fragments :: column('description', #{member.field.description}, false)}"></li>
-                </ul>
-            </details>
             <a class="button" th:href="@{/admin/members/new}" th:text="#{member.list.new}">New member</a>
         </div>
     </div>
@@ -50,18 +37,16 @@
                 <thead>
                 <tr>
                     <th th:replace="~{admin/fragments :: selectAll('memberIds')}"></th>
-                    <th scope="col" th:text="#{member.field.name}">Name</th>
-                    <th scope="col" class="col-url hide-small" th:text="#{member.field.url}">URL</th>
-                    <th scope="col" class="col-role" th:text="#{member.field.role}">Role</th>
-                    <th scope="col" class="col-status" th:text="#{member.field.status}">Status</th>
-                    <th scope="col" class="col-date hide-small" th:text="#{member.field.joinedAt}">Joined</th>
-                    <th scope="col" class="col-description" th:text="#{member.field.description}">Description</th>
-                    <th scope="col" th:text="#{member.field.archived}">Archived</th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'name', #{member.field.name}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'url', #{member.field.url}, 'hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'status', #{member.field.status}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'joinedAt', #{member.field.joinedAt}, 'hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'archived', #{member.field.archived}, '')}"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:if="${page.empty}">
-                    <td colspan="8" class="muted"
+                    <td colspan="6" class="muted"
                         th:text="${q.isBlank()} ? #{member.list.empty} : #{table.noMatch(${q})}">No members yet.</td>
                 </tr>
                 <tr th:each="m : ${page.content}" th:classappend="${m.archived} ? 'archived'">
@@ -76,13 +61,9 @@
                         <a th:href="@{/admin/members/{id}(id=${m.id})}" th:text="${m.name}">Kovács Anna</a>
                         <span class="muted" th:unless="${m.nickname.isBlank()}" th:text="|(${m.nickname})|">(Panni)</span>
                     </td>
-                    <td class="muted col-url hide-small" th:text="${m.url}">kovacs-anna</td>
-                    <td class="col-role" th:text="${m.role}">Operatőr</td>
-                    <td class="col-status" th:text="#{${'member.status.' + m.status}}">Member</td>
-                    <td class="date col-date hide-small" th:text="${m.joinedAt}">2024-09-01</td>
-                    <td class="muted clip col-description" th:text="${m.description}" th:title="${m.description}">
-                        Operatőr és vágó.
-                    </td>
+                    <td class="muted hide-small" th:text="${m.url}">kovacs-anna</td>
+                    <td th:text="#{${'member.status.' + m.status}}">Member</td>
+                    <td class="date hide-small" th:text="${m.joinedAt}">2024-09-01</td>
                     <td th:replace="~{admin/member/list :: archived(id=${m.id}, name=${m.name}, archived=${m.archived})}"></td>
                 </tr>
                 </tbody>
