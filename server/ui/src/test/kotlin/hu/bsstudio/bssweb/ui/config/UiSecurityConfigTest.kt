@@ -33,6 +33,17 @@ internal class UiSecurityConfigTest(
     }
 
     @Test
+    internal fun `should ask htmx to reload the page when the session has expired`() {
+        mockMvc
+            .get("/admin/videos") {
+                header("HX-Request", "true")
+            }.andExpectAll {
+                status { isUnauthorized() }
+                header { string("HX-Refresh", "true") }
+            }
+    }
+
+    @Test
     internal fun `should start the authorization code flow`() {
         mockMvc.get("/oauth2/authorization/authentik").andExpect {
             status { is3xxRedirection() }
@@ -52,6 +63,7 @@ internal class UiSecurityConfigTest(
     internal fun `should serve stylesheets and webjars without login`() {
         listOf(
             "/admin/css/admin.css",
+            "/admin/js/admin.js",
             "/admin/webjars/picocss__pico/css/pico.min.css",
             "/admin/webjars/htmx.org/dist/htmx.min.js",
         ).forEach { url ->

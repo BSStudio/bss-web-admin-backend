@@ -4,6 +4,7 @@ import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.metrics.model.BssMetrics
 import hu.bsstudio.bssweb.metrics.service.MetricsService
 import hu.bsstudio.bssweb.ui.config.UiSecurityConfig
+import hu.bsstudio.bssweb.ui.flash.Flash
 import io.mockk.every
 import jakarta.servlet.http.Cookie
 import org.hamcrest.Matchers.containsString
@@ -40,7 +41,11 @@ internal class DashboardPageControllerTest(
                 model { attribute("metrics", METRICS) }
                 content { string(containsString("""<html lang="en">""")) }
                 content { string(containsString("<h1>Dashboard</h1>")) }
-                content { string(containsString("""<p class="metric">42</p>""")) }
+                content { string(containsString("""<span class="metric">42</span>""")) }
+                content { string(containsString("""<a class="skip-link" href="#main">Skip to content</a>""")) }
+                content { string(containsString("""<main id="main" class="container">""")) }
+                content { string(containsString("""<meta name="htmx-config"""")) }
+                content { string(containsString("&quot;Accept&quot;: &quot;text/html&quot;")) }
             }
     }
 
@@ -80,6 +85,30 @@ internal class DashboardPageControllerTest(
             }.andExpectAll {
                 status { isOk() }
                 content { string(containsString("<h1>Dashboard</h1>")) }
+            }
+    }
+
+    @Test
+    internal fun `should show a message carried over from the previous page`() {
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                flashAttr("flash", Flash("video.flash.saved", "Gólyatábor 2026 - Vám"))
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("""<p class="flash" role="status">Saved “Gólyatábor 2026 - Vám”.</p>""")) }
+            }
+    }
+
+    @Test
+    internal fun `should show an error message as an alert`() {
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                flashAttr("flash", Flash("video.flash.noneSelected", error = true))
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("""<p class="flash error" role="alert">Select at least one video first.</p>""")) }
             }
     }
 

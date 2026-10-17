@@ -1,73 +1,833 @@
 /*
- * BSS colours on top of Pico: blue links, orange primary buttons, navy top bar.
- * The selectors mirror Pico's theme selectors so these variables win in light and dark mode.
+ * BSS admin theme on top of Pico.
+ * Compact and data-dense: 14px text, 32px controls and table rows, spacing in steps of 4px.
+ * Navy shell, blue for links and focus, orange for the one primary action on a screen,
+ * neutrals tinted towards the navy.
  */
-:root:not([data-theme="dark"]),
-[data-theme="dark"] {
-    --pico-primary-background: #f8b046;
-    --pico-primary-border: #f8b046;
-    --pico-primary-hover-background: #fdd657;
-    --pico-primary-hover-border: #fdd657;
-    --pico-primary-inverse: #153470;
-}
 
-:root:not([data-theme="dark"]),
-[data-theme="light"] {
-    --pico-primary: #204085;
-    --pico-primary-hover: #153470;
-    --pico-primary-focus: rgba(32, 64, 133, 0.25);
-    --pico-primary-underline: rgba(32, 64, 133, 0.5);
+/* ---------- Tokens ---------- */
+
+:root {
+    --bss-navy: #153470;
+    --bss-orange: #f8b046;
+    --bss-orange-hover: #eea33a;
+    --bss-gold: #fdd657;
+
+    --c-bg: #ffffff;
+    --c-layer: #f3f5f9;
+    --c-layer-hover: #e8ecf3;
+    --c-layer-selected: #dbe3f1;
+    --c-layer-accent: #e3e8f1;
+    --c-border: #d6dce8;
+    --c-border-strong: #8a94a8;
+    --c-text: #172033;
+    --c-text-secondary: #4b5568;
+    --c-text-helper: #667085;
+    --c-link: #0d5287;
+    --c-link-hover: #153470;
+    --c-focus: #204085;
+    --c-checked: #204085;
+    --c-selection-bar: #204085;
+    --c-secondary: #3a4560;
+    --c-secondary-hover: #4b5775;
+    --c-danger: #c62828;
+    --c-danger-hover: #a51f1f;
+    --c-danger-text: #c62828;
+    --c-success: #1f7a4d;
+    --c-success-bg: #e3f4ea;
+    --c-error-bg: #fbe9e9;
+    --c-toggle-off: #8a94a8;
+    --c-overlay: rgba(15, 23, 41, 0.6);
+    --c-field-focus: #eef3fc;
 }
 
 @media only screen and (prefers-color-scheme: dark) {
     :root:not([data-theme]) {
-        --pico-primary: #94b8ff;
-        --pico-primary-hover: #b8d0ff;
-        --pico-primary-focus: rgba(148, 184, 255, 0.25);
-        --pico-primary-underline: rgba(148, 184, 255, 0.5);
+        --c-bg: #0f1729;
+        --c-layer: #18223a;
+        --c-layer-hover: #212d48;
+        --c-layer-selected: #2a3858;
+        --c-layer-accent: #24304d;
+        --c-border: #2c3a58;
+        --c-border-strong: #6b7895;
+        --c-text: #e7ecf5;
+        --c-text-secondary: #b3bdd1;
+        --c-text-helper: #8f9ab0;
+        --c-link: #94b8ff;
+        --c-link-hover: #b8d0ff;
+        --c-focus: #fdd657;
+        --c-checked: #4d7fd6;
+        --c-selection-bar: #2d4f94;
+        --c-secondary: #3a4766;
+        --c-secondary-hover: #4a5878;
+        --c-danger: #c93b3b;
+        --c-danger-hover: #b03030;
+        --c-danger-text: #ff8a8a;
+        --c-success: #4fbf86;
+        --c-success-bg: rgba(79, 191, 134, 0.14);
+        --c-error-bg: rgba(255, 107, 107, 0.14);
+        --c-toggle-off: #6b7895;
+        --c-overlay: rgba(5, 9, 18, 0.7);
+        --c-field-focus: #1c2a48;
     }
 }
 
 [data-theme="dark"] {
-    --pico-primary: #94b8ff;
-    --pico-primary-hover: #b8d0ff;
-    --pico-primary-focus: rgba(148, 184, 255, 0.25);
-    --pico-primary-underline: rgba(148, 184, 255, 0.5);
+    --c-bg: #0f1729;
+    --c-layer: #18223a;
+    --c-layer-hover: #212d48;
+    --c-layer-selected: #2a3858;
+    --c-layer-accent: #24304d;
+    --c-border: #2c3a58;
+    --c-border-strong: #6b7895;
+    --c-text: #e7ecf5;
+    --c-text-secondary: #b3bdd1;
+    --c-text-helper: #8f9ab0;
+    --c-link: #94b8ff;
+    --c-link-hover: #b8d0ff;
+    --c-focus: #fdd657;
+    --c-checked: #4d7fd6;
+    --c-selection-bar: #2d4f94;
+    --c-secondary: #3a4766;
+    --c-secondary-hover: #4a5878;
+    --c-danger: #c93b3b;
+    --c-danger-hover: #b03030;
+    --c-danger-text: #ff8a8a;
+    --c-success: #4fbf86;
+    --c-success-bg: rgba(79, 191, 134, 0.14);
+    --c-error-bg: rgba(255, 107, 107, 0.14);
+    --c-toggle-off: #6b7895;
+    --c-overlay: rgba(5, 9, 18, 0.7);
+    --c-field-focus: #1c2a48;
 }
 
+/* Pico's own variables, fed from the tokens. The selector mirrors Pico's theme selectors so these win. */
+:root:not([data-theme="dark"]),
+[data-theme="dark"] {
+    --pico-font-size: 100%;
+    --pico-line-height: 1.43;
+    --pico-border-radius: 2px;
+    --pico-spacing: 1rem;
+    --pico-typography-spacing-vertical: 0.75rem;
+    --pico-block-spacing-vertical: 1rem;
+    --pico-block-spacing-horizontal: 1rem;
+    --pico-form-element-spacing-vertical: 0.375rem;
+    --pico-form-element-spacing-horizontal: 0.75rem;
+    --pico-outline-width: 1px;
+    --pico-transition: 0.1s ease-in-out;
+
+    --pico-background-color: var(--c-bg);
+    --pico-color: var(--c-text);
+    --pico-h1-color: var(--c-text);
+    --pico-h2-color: var(--c-text);
+    --pico-h3-color: var(--c-text);
+    --pico-muted-color: var(--c-text-secondary);
+    --pico-muted-border-color: var(--c-border);
+
+    --pico-primary: var(--c-link);
+    --pico-primary-hover: var(--c-link-hover);
+    --pico-primary-underline: transparent;
+    --pico-primary-hover-underline: currentcolor;
+    --pico-primary-focus: transparent;
+    --pico-primary-background: var(--bss-orange);
+    --pico-primary-border: var(--bss-orange);
+    --pico-primary-hover-background: var(--bss-orange-hover);
+    --pico-primary-hover-border: var(--bss-orange-hover);
+    --pico-primary-inverse: var(--bss-navy);
+    --pico-secondary: var(--c-text-secondary);
+    --pico-secondary-hover: var(--c-text);
+    --pico-secondary-focus: transparent;
+    --pico-secondary-background: var(--c-secondary);
+    --pico-secondary-border: var(--c-secondary);
+    --pico-secondary-hover-background: var(--c-secondary-hover);
+    --pico-secondary-hover-border: var(--c-secondary-hover);
+    --pico-secondary-inverse: #ffffff;
+    --pico-button-box-shadow: none;
+    --pico-button-hover-box-shadow: none;
+
+    --pico-form-element-background-color: var(--c-bg);
+    --pico-form-element-selected-background-color: var(--c-layer-selected);
+    --pico-form-element-border-color: var(--c-border-strong);
+    --pico-form-element-color: var(--c-text);
+    --pico-form-element-placeholder-color: var(--c-text-helper);
+    --pico-form-element-active-background-color: var(--c-field-focus);
+    --pico-form-element-active-border-color: var(--c-focus);
+    --pico-form-element-focus-color: transparent;
+    --pico-form-element-invalid-border-color: var(--c-danger-text);
+    --pico-form-element-invalid-active-border-color: var(--c-danger-text);
+    --pico-form-element-invalid-focus-color: transparent;
+    --pico-form-element-valid-focus-color: transparent;
+    --pico-switch-background-color: var(--c-toggle-off);
+    --pico-switch-checked-background-color: var(--c-success);
+    --pico-switch-color: #ffffff;
+    --pico-switch-thumb-box-shadow: none;
+
+    --pico-table-border-color: var(--c-border);
+    --pico-card-background-color: var(--c-layer);
+    --pico-card-sectioning-background-color: var(--c-layer);
+    --pico-card-border-color: var(--c-border);
+    --pico-card-box-shadow: none;
+    --pico-modal-overlay-background-color: var(--c-overlay);
+    --pico-modal-overlay-backdrop-filter: none;
+}
+
+/* ---------- Type ---------- */
+
+body {
+    font-size: 0.875rem;
+}
+
+h1 {
+    --pico-font-size: 1.75rem;
+    --pico-line-height: 1.25;
+    --pico-font-weight: 400;
+}
+
+h2 {
+    --pico-font-size: 1.25rem;
+    --pico-line-height: 1.4;
+    --pico-font-weight: 400;
+}
+
+h3 {
+    --pico-font-size: 1rem;
+    --pico-font-weight: 600;
+}
+
+/* ---------- Focus and keyboard ---------- */
+
+/* Everything reachable with Tab gets the same clear ring. */
+:focus-visible {
+    outline: 2px solid var(--c-focus);
+    outline-offset: 2px;
+}
+
+/* The field being edited is highlighted however it got focus, and so is its label.
+   Pico tints its background from --pico-form-element-active-background-color. */
+:is(input:not([type="checkbox"], [type="radio"]), select, textarea):focus {
+    outline: 2px solid var(--c-focus);
+    outline-offset: -1px;
+}
+
+label:focus-within > span:first-child,
+fieldset:focus-within > legend {
+    color: var(--c-focus);
+}
+
+/* A required field left empty, or a value the browser rejects, shows up once the user has moved on. */
+:is(input, select, textarea):user-invalid {
+    --pico-border-color: var(--c-danger-text);
+    border-color: var(--c-danger-text);
+}
+
+.skip-link {
+    position: absolute;
+    top: -3rem;
+    left: 0.5rem;
+    z-index: 10;
+    padding: 0.5rem 1rem;
+    background: var(--bss-orange);
+    color: var(--bss-navy);
+}
+
+.skip-link:focus {
+    top: 0.5rem;
+}
+
+/* ---------- Shell ---------- */
+
 .admin-bar {
-    background: #153470;
-    color: #e9efff;
-    --pico-color: #e9efff;
-    --pico-primary: #ffe088;
-    --pico-primary-hover: #fdd657;
-    --pico-secondary: #b8c8ee;
-    --pico-secondary-border: #b8c8ee;
-    --pico-secondary-hover: #ffffff;
-    --pico-secondary-hover-border: #ffffff;
+    --c-focus: var(--bss-gold);
+    background: var(--bss-navy);
+}
+
+.admin-bar > nav {
+    --pico-nav-element-spacing-vertical: 0;
+    --pico-nav-element-spacing-horizontal: 0;
+    --pico-nav-link-spacing-vertical: 0;
+    --pico-nav-link-spacing-horizontal: 0;
+    flex-wrap: wrap;
+    min-height: 3rem;
+}
+
+.admin-bar :is(a, button) {
+    display: flex;
+    align-items: center;
+    height: 3rem;
+    margin: 0;
+    padding: 0 1rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #d3ddf5;
+    font-size: 0.875rem;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.admin-bar :is(a, button):hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.admin-bar a[aria-current="page"] {
+    color: #ffffff;
+    box-shadow: inset 0 -3px 0 var(--bss-orange);
 }
 
 .admin-bar .brand {
     color: #ffffff;
-    text-decoration: none;
 }
 
 .admin-bar .brand strong {
-    color: #fdd657;
+    margin-right: 0.25rem;
+    color: var(--bss-gold);
+    font-weight: 600;
 }
 
-.admin-bar form,
-.admin-bar button {
+.admin-bar .user {
+    padding: 0 1rem;
+    color: #a9b8db;
+}
+
+.admin-bar form {
     margin: 0;
 }
 
-.admin-bar button {
-    padding: 0.25rem 0.75rem;
+/* ---------- Page ---------- */
+
+.container {
+    max-width: 90rem;
+    padding-inline: 2rem;
+}
+
+main.container {
+    padding-block: 1.5rem 3rem;
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+    margin: 0;
+}
+
+.breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    margin-bottom: 0.25rem;
+}
+
+.breadcrumb::after {
+    content: "/";
+    color: var(--c-text-secondary);
+}
+
+.columns {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+.narrow {
+    max-width: 36rem;
+}
+
+.panel {
+    padding: 1rem;
+    background: var(--c-layer);
+}
+
+.panel h2 {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.muted {
+    color: var(--c-text-secondary);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* ---------- Buttons ---------- */
+
+:is(button, [role="button"], input[type="submit"]) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-height: 2rem;
+    margin: 0;
+    padding: 0 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25;
+    white-space: nowrap;
+}
+
+:is(button, [role="button"]).ghost {
+    --pico-background-color: transparent;
+    --pico-border-color: transparent;
+    --pico-color: var(--c-link);
+}
+
+:is(button, [role="button"]).ghost:is(:hover, :active, :focus) {
+    --pico-background-color: var(--c-layer-hover);
+    --pico-border-color: transparent;
+    --pico-color: var(--c-link-hover);
+}
+
+:is(button, [role="button"]).danger {
+    --pico-background-color: var(--c-danger);
+    --pico-border-color: var(--c-danger);
+    --pico-color: #ffffff;
+}
+
+:is(button, [role="button"]).danger:is(:hover, :active, :focus) {
+    --pico-background-color: var(--c-danger-hover);
+    --pico-border-color: var(--c-danger-hover);
+    --pico-color: #ffffff;
+}
+
+:is(button, [role="button"]).danger.ghost {
+    --pico-background-color: transparent;
+    --pico-border-color: transparent;
+    --pico-color: var(--c-danger-text);
+}
+
+:is(button, [role="button"]).danger.ghost:is(:hover, :active, :focus) {
+    --pico-background-color: var(--c-danger);
+    --pico-border-color: var(--c-danger);
+    --pico-color: #ffffff;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Shown by admin.js while a form has changes that are not saved yet */
+.unsaved {
+    display: none;
+    gap: 0.375rem;
+    align-items: center;
+    margin-left: 0.5rem;
+    color: var(--c-text-secondary);
+}
+
+.unsaved::before {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--bss-orange);
+    content: "";
+}
+
+form[data-dirty] .unsaved {
+    display: inline-flex;
+}
+
+/* ---------- Forms ---------- */
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+}
+
+.stack label,
+.stack fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+}
+
+label > span:first-child,
+legend {
+    color: var(--c-text-secondary);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+legend {
+    margin-bottom: 0.25rem;
+}
+
+label > :is(input, select, textarea) {
+    margin-top: 0;
+}
+
+:is(input:not([type="checkbox"], [type="radio"]), select, textarea) {
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
+
+input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]),
+select {
+    height: 2rem;
+    padding-block: 0;
+}
+
+textarea {
+    min-height: 4rem;
+}
+
+label small {
+    margin: 0;
+    color: var(--c-text-helper);
+    font-size: 0.75rem;
+}
+
+[type="checkbox"] {
+    --pico-border-width: 1px;
+}
+
+[type="checkbox"]:not([role="switch"]) {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+}
+
+[type="checkbox"]:not([role="switch"]):is(:checked, :checked:focus, :checked:active) {
+    --pico-background-color: var(--c-checked);
+    --pico-border-color: var(--c-checked);
+}
+
+.stack label.inline,
+label.inline {
+    display: inline-flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    margin-right: 1.25rem;
+    color: var(--c-text);
+    font-size: 0.875rem;
+}
+
+.inline-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+}
+
+/* ---------- Data tables ---------- */
+
+.table-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 3rem;
+    padding: 0.5rem;
+    border: 1px solid var(--c-border);
+    border-bottom: 0;
+    background: var(--c-layer);
+}
+
+.batch-actions {
+    display: none;
+    flex: 1;
+    gap: 0.25rem;
+    align-items: center;
+    margin: 0;
+}
+
+.batch-actions > span {
+    flex: 1;
+    padding-left: 0.5rem;
+}
+
+.batch-actions :is(button, [role="button"]) {
+    --pico-background-color: transparent;
+    --pico-border-color: transparent;
+    --pico-color: #ffffff;
+}
+
+.batch-actions :is(button, [role="button"]):is(:hover, :active, :focus) {
+    --pico-background-color: rgba(255, 255, 255, 0.14);
+    --pico-border-color: transparent;
+    --pico-color: #ffffff;
+}
+
+/* While any row is selected, the selection bar replaces the toolbar. Its Cancel is a reset button. */
+main:has([form="bulk"]:checked) .table-toolbar {
+    --c-focus: var(--bss-gold);
+    background: var(--c-selection-bar);
+    color: #ffffff;
+}
+
+main:has([form="bulk"]:checked) .batch-actions {
+    display: flex;
+}
+
+main:has([form="bulk"]:checked) .toolbar-actions {
+    display: none;
+}
+
+.data-table {
+    overflow-x: auto;
+    border: 1px solid var(--c-border);
+}
+
+table {
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+table :is(th, td) {
+    height: 2rem;
+    padding: 0.25rem 1rem;
+    border-bottom: 1px solid var(--c-border);
+    background: var(--c-bg);
+    vertical-align: middle;
+}
+
+thead th {
+    background: var(--c-layer-accent);
+    color: var(--c-text);
+    font-weight: 600;
+}
+
+tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+tbody tr:hover td {
+    background: var(--c-layer-hover);
+}
+
+tbody tr:has([form="bulk"]:checked) td {
+    background: var(--c-layer-selected);
+}
+
+td.select,
+td.row-action {
+    width: 1%;
+    white-space: nowrap;
+}
+
+td.row-action :is(button, [role="button"]) {
+    min-height: 1.5rem;
+    padding: 0 0.5rem;
+}
+
+td.date {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+td input[role="switch"] {
+    margin: 0;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 2.5rem;
+    padding-left: 1rem;
+    border: 1px solid var(--c-border);
+    border-top: 0;
+    background: var(--c-layer);
+    color: var(--c-text-secondary);
+    font-variant-numeric: tabular-nums;
+}
+
+.pagination .pages {
+    display: flex;
+    align-items: center;
+}
+
+.pagination .pages > span:first-child {
+    padding-right: 1rem;
+}
+
+.pagination .pages > :is(a, .disabled) {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-left: 1px solid var(--c-border);
+    color: var(--c-text);
+    text-decoration: none;
+}
+
+.pagination .pages > a:hover {
+    background: var(--c-layer-hover);
+}
+
+.pagination .pages > .disabled {
+    color: var(--c-text-helper);
+    opacity: 0.5;
+}
+
+/* ---------- Notifications ---------- */
+
+.flash {
+    margin: 1rem 0 0;
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--c-success);
+    background: var(--c-success-bg);
+    color: var(--c-text);
+}
+
+.flash.error {
+    border-left-color: var(--c-danger-text);
+    background: var(--c-error-bg);
+}
+
+main .flash {
+    margin: 0 0 1rem;
+}
+
+/* ---------- Error page ---------- */
+
+.details {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 0.25rem 1rem;
+    margin: 0 0 1rem;
+}
+
+.details dt {
+    color: var(--c-text-secondary);
+}
+
+.details dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.trace {
+    max-height: 20rem;
+    margin: 0.5rem 0 0;
+    padding: 0.75rem;
+    overflow: auto;
+    border: 1px solid var(--c-border);
+    background: var(--c-bg);
+    font-size: 0.75rem;
+    white-space: pre;
+}
+
+/* ---------- Tiles ---------- */
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 1rem;
+}
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: var(--c-layer);
+    color: var(--c-text);
+    text-decoration: none;
+}
+
+a.tile:hover {
+    background: var(--c-layer-hover);
+    color: var(--c-text);
+}
+
+.tile .label {
+    color: var(--c-text-secondary);
 }
 
 .metric {
     margin: 0;
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: 300;
+    line-height: 1.25;
     font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Dialog ---------- */
+
+dialog > article {
+    width: 100%;
+    max-width: 30rem;
+    padding: 0;
+    background: var(--c-bg);
+}
+
+dialog > article > :is(header, footer) {
+    margin: 0;
+    padding: 1rem;
+    border: 0;
+    background: transparent;
+}
+
+dialog > article > header {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+dialog > article > header h2 {
+    margin: 0;
+}
+
+dialog > article > p {
+    margin: 0;
+    padding: 0 1rem 1.5rem;
+}
+
+dialog > article > footer {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    background: var(--c-layer);
+}
+
+dialog > article > footer form {
+    margin: 0;
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 64rem) {
+    .columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 40rem) {
+    .container {
+        padding-inline: 1rem;
+    }
+
+    .inline-form {
+        grid-template-columns: 1fr;
+    }
+
+    .hide-small {
+        display: none;
+    }
 }

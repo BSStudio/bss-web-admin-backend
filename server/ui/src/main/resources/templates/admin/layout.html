@@ -1,24 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      th:fragment="layout(title, content)"
+      th:fragment="layout(layoutTitle, layoutContent, layoutSection)"
       th:lang="${#locale.language}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:replace="${title}">BSS admin</title>
+    <!--/* htmx shows error responses (the error page) in place of the whole page instead of ignoring them */-->
+    <meta name="htmx-config"
+          content='{"responseHandling":[{"code":"204","swap":false},{"code":"[23]..","swap":true},{"code":"[45]..","swap":true,"error":true,"target":"body","swapOverride":"innerHTML"}]}'>
+    <title th:replace="${layoutTitle}">BSS admin</title>
     <link rel="stylesheet" th:href="@{/admin/webjars/picocss__pico/css/pico.min.css}">
     <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
     <script th:src="@{/admin/webjars/htmx.org/dist/htmx.min.js}" defer></script>
+    <script th:src="@{/admin/js/admin.js}" defer></script>
 </head>
-<body th:hx-headers='|{"${_csrf.headerName}": "${_csrf.token}"}|'>
+<body th:hx-headers='|{"${_csrf?.headerName}": "${_csrf?.token}", "Accept": "text/html"}|'>
+<a class="skip-link" href="#main" th:text="#{nav.skip}">Skip to content</a>
 <header class="admin-bar">
     <nav class="container">
         <ul>
-            <li><a th:href="@{/admin}" class="brand"><strong>BSS</strong> <span th:text="#{app.name}">admin</span></a></li>
-        </ul>
-        <ul>
-            <li><a th:href="@{/admin}" th:text="#{nav.dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/admin}" class="brand"><strong>BSS</strong><span th:text="#{app.name}">admin</span></a></li>
+            <li><a th:href="@{/admin}" th:aria-current="${layoutSection == 'dashboard'} ? 'page'" th:text="#{nav.dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/admin/videos}" th:aria-current="${layoutSection == 'videos'} ? 'page'" th:text="#{nav.videos}">Videos</a></li>
         </ul>
         <ul>
             <li>
@@ -26,15 +30,19 @@
                    th:lang="#{language.other.code}"
                    th:text="#{language.other.name}">Magyar</a>
             </li>
-            <li sec:authorize="isAuthenticated()" sec:authentication="name">user</li>
+            <li class="user" sec:authorize="isAuthenticated()" sec:authentication="name">user</li>
             <li sec:authorize="isAuthenticated()">
                 <form th:action="@{/admin/logout}" method="post">
-                    <button type="submit" class="outline secondary" th:text="#{nav.logout}">Log out</button>
+                    <button type="submit" th:text="#{nav.logout}">Log out</button>
                 </form>
             </li>
         </ul>
     </nav>
 </header>
-<main th:replace="${content}" class="container">Page content</main>
+<div class="container" th:if="${flash}">
+    <p class="flash" th:classappend="${flash.error} ? 'error'" th:attr="role=${flash.error} ? 'alert' : 'status'"
+       th:text="#{${flash.key}(${flash.arg})}">Saved.</p>
+</div>
+<main th:replace="${layoutContent}" class="container">Page content</main>
 </body>
 </html>

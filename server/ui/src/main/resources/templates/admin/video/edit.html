@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}">
+<head>
+    <title th:text="|${video.title} · #{app.title}|">Gólyatábor 2026 - Vám · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container">
+    <div class="page-header">
+        <div>
+            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
+                <a th:href="@{/admin/videos}" th:text="#{video.list.title}">Videos</a>
+            </nav>
+            <h1 th:text="${video.title}">Gólyatábor 2026 - Vám</h1>
+        </div>
+        <button type="button" class="danger ghost" command="show-modal" commandfor="delete-dialog"
+                th:text="#{video.delete.title}">Delete video</button>
+    </div>
+    <p th:replace="~{admin/fragments :: error(${error})}"></p>
+
+    <div class="columns">
+        <form method="post" th:action="@{/admin/videos/{id}(id=${video.id})}" th:object="${form}" class="stack"
+              th:data-unsaved="${error} ? 'pending' : 'track'">
+            <label>
+                <span th:text="#{video.field.title}">Title</span>
+                <input type="text" th:field="*{title}" required autofocus aria-describedby="form-error">
+            </label>
+            <div class="grid">
+                <label>
+                    <span th:text="#{video.field.shootingDateStart}">Shooting started</span>
+                    <input type="date" th:field="*{shootingDateStart}" required>
+                </label>
+                <label>
+                    <span th:text="#{video.field.shootingDateEnd}">Shooting ended</span>
+                    <input type="date" th:field="*{shootingDateEnd}" required>
+                </label>
+            </div>
+            <label>
+                <span th:text="#{video.field.urls}">URLs</span>
+                <textarea th:field="*{urls}" rows="2" aria-describedby="urls-help"></textarea>
+                <small id="urls-help" th:text="#{video.field.urls.help}">One per line.</small>
+            </label>
+            <label>
+                <span th:text="#{video.field.description}">Description</span>
+                <textarea th:field="*{description}" rows="4"></textarea>
+            </label>
+            <fieldset th:unless="${labels.isEmpty()}">
+                <legend th:text="#{video.field.labels}">Labels</legend>
+                <div>
+                    <label th:each="label : ${labels}" class="inline" th:title="${label.description}">
+                        <input type="checkbox" th:field="*{labels}" th:value="${label.name}">
+                        <span th:text="${label.name}">Egyetemi élet</span>
+                    </label>
+                </div>
+            </fieldset>
+            <label class="inline">
+                <input type="checkbox" role="switch" th:field="*{visible}">
+                <span th:text="#{video.field.visible}">Visible on the website</span>
+            </label>
+            <div class="actions">
+                <a role="button" class="secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
+                <button type="submit" th:text="#{action.save}">Save</button>
+                <span class="unsaved" role="status" th:text="#{form.unsaved}">Unsaved changes</span>
+            </div>
+        </form>
+
+        <section th:replace="~{admin/video/edit :: crew}"></section>
+    </div>
+
+    <dialog id="delete-dialog">
+        <article>
+            <header>
+                <h2 th:text="#{video.delete.question(${video.title})}">Delete “Gólyatábor 2026 - Vám”?</h2>
+                <button type="button" class="ghost" command="close" commandfor="delete-dialog"
+                        th:aria-label="#{action.close}">✕</button>
+            </header>
+            <p th:text="#{video.delete.warning}">This can’t be undone.</p>
+            <footer>
+                <button type="button" class="secondary" command="close" commandfor="delete-dialog" autofocus
+                        th:text="#{action.cancel}">Cancel</button>
+                <form method="post" th:action="@{/admin/videos/{id}/delete(id=${video.id})}">
+                    <button type="submit" class="danger" th:text="#{action.delete}">Delete</button>
+                </form>
+            </footer>
+        </article>
+    </dialog>
+</main>
+
+<!--/* The crew panel re-renders on its own after each htmx add or remove */-->
+<section id="crew" class="panel" th:fragment="crew">
+    <h2 th:text="#{video.crew.title}">Crew</h2>
+    <p th:if="${video.crew.isEmpty()}" class="muted" th:text="#{video.crew.empty}">No crew yet.</p>
+    <div class="data-table" th:unless="${video.crew.isEmpty()}">
+        <table>
+            <tbody>
+            <tr th:each="crew : ${video.crew}">
+                <td>
+                    <span th:text="${crew.member.name}">Kovács Anna</span>
+                    <span class="muted" th:if="${!crew.member.nickname.isBlank()}" th:text="|(${crew.member.nickname})|">(Panni)</span>
+                </td>
+                <td th:text="${crew.position}">Camera</td>
+                <td class="row-action">
+                    <button type="button" class="ghost"
+                            th:hx-delete="@{/admin/videos/{id}/crew(id=${video.id}, memberId=${crew.member.id}, position=${crew.position})}"
+                            hx-target="#crew" hx-swap="outerHTML"
+                            th:aria-label="#{video.crew.remove(${crew.member.name}, ${crew.position})}"
+                            th:text="#{action.remove}">Remove</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <form class="inline-form" th:hx-post="@{/admin/videos/{id}/crew(id=${video.id})}" hx-target="#crew" hx-swap="outerHTML">
+        <select id="crew-member" name="memberId" required th:aria-label="#{video.crew.member}"
+                th:autofocus="${crewChanged}">
+            <option value="" selected disabled th:text="#{video.crew.member}">Member</option>
+            <option th:each="m : ${members}" th:value="${m.id}" th:text="${m.name}">Kovács Anna</option>
+        </select>
+        <input type="text" name="position" list="positions" required
+               th:placeholder="#{video.crew.position}" th:aria-label="#{video.crew.position}">
+        <button type="submit" class="secondary" th:text="#{action.add}">Add</button>
+        <datalist id="positions">
+            <option th:each="p : ${positions}" th:value="${p}"></option>
+        </datalist>
+    </form>
+</section>
+</body>
+</html>

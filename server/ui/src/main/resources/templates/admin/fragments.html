@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--/* Footer of a data table: which items are shown, and previous / next page */-->
+<nav th:fragment="pagination(page, path)" th:unless="${page.empty}" class="pagination"
+     th:aria-label="#{pagination.label}">
+    <span th:text="#{pagination.items(${page.number * page.size + 1}, ${page.number * page.size + page.numberOfElements}, ${page.totalElements})}">1–25 of 120 items</span>
+    <span class="pages">
+        <span th:text="#{pagination.position(${page.number + 1}, ${page.totalPages})}">Page 1 of 5</span>
+        <a th:if="${page.hasPrevious()}" th:href="@{${path}(page=${page.number - 1})}"
+           th:aria-label="#{pagination.previous}">‹</a>
+        <span th:unless="${page.hasPrevious()}" class="disabled" aria-hidden="true">‹</span>
+        <a th:if="${page.hasNext()}" th:href="@{${path}(page=${page.number + 1})}"
+           th:aria-label="#{pagination.next}">›</a>
+        <span th:unless="${page.hasNext()}" class="disabled" aria-hidden="true">›</span>
+    </span>
+</nav>
+
+<!--/* An error message above a form, e.g. after a unique constraint violation */-->
+<p th:fragment="error(key)" th:if="${key}" id="form-error" class="flash error" role="alert" th:text="#{${key}}">Could not save.</p>
+
+</body>
+</html>

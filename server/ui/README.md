@@ -9,19 +9,86 @@ Keep business logic in the `service` module.
 
 ## Layout
 
-|                  Path                   |                     What it holds                     |
-|-----------------------------------------|-------------------------------------------------------|
-| `<feature>/page/*PageController.kt`     | One controller per feature, returning template names  |
-| `ui/config/UiSecurityConfig.kt`         | Browser login for `/admin/**`                         |
-| `ui/config/UiWebConfig.kt`              | Language switching and the `/admin/webjars` handler   |
-| `resources/templates/admin/layout.html` | Page shell: head, top bar, language switch, logout    |
-| `resources/templates/admin/*.html`      | Pages; each one fills the layout's title and `<main>` |
-| `resources/static/admin/css/admin.css`  | BSS colours on top of Pico                            |
-| `resources/messages*.properties`        | UI text in English (default) and Hungarian            |
+|                    Path                    |                       What it holds                        |
+|--------------------------------------------|------------------------------------------------------------|
+| `<feature>/page/*PageController.kt`        | One controller per section, returning template names       |
+| `<feature>/page/*Form.kt`                  | Form fields of an edit page and their mapping to the model |
+| `ui/config/UiSecurityConfig.kt`            | Browser login for `/admin/**`                              |
+| `ui/config/UiWebConfig.kt`                 | Language switching and the `/admin/webjars` handler        |
+| `ui/flash/Flash.kt`                        | One-off messages shown after a redirect                    |
+| `resources/templates/admin/layout.html`    | Page shell: head, top bar, flash message, language switch  |
+| `resources/templates/admin/fragments.html` | Shared pieces: pagination, form error                      |
+| `resources/templates/admin/<section>/`     | `list.html`, `new.html`, `edit.html` of a section          |
+| `resources/static/admin/css/admin.css`     | Design tokens and compact component styles on top of Pico  |
+| `resources/static/admin/js/admin.js`       | The unsaved-changes marker; the only script of our own     |
+| `resources/messages*.properties`           | UI text in English (default) and Hungarian                 |
 
-A new page needs a controller method, a template that starts with
-`th:replace="~{admin/layout :: layout(~{::title}, ~{::main})}"`,
-and its text keys in **both** message files.
+## Page patterns
+
+Videos is the reference section; copy it for events, members and labels.
+
+- **Layout.** Every page starts with `th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}"`.
+  The third argument marks the active item in the top bar. Add new sections to the top bar in `layout.html`.
+  The layout's parameters are prefixed with `layout` so they never hide page data such as `title`.
+- **List.** `GET /admin/<section>` shows a toolbar with the *New* button, a compact table, and a footer with
+  the item range and previous / next. Row actions that change one value (the visibility switch) use htmx and swap
+  only their own table cell. Bulk actions are a plain form; the row checkboxes join it with `form="bulk"`.
+  While any row is selected, CSS (`:has`) swaps the toolbar for the selection bar; its *Cancel* is a reset button.
+- **New.** `GET /admin/<section>/new` asks only for the required fields, then opens the edit page.
+- **Edit.** `GET /admin/<section>/{id}` is a full page: the form on the left, related lists (crew) in a side
+  panel on the right. *Save* posts the form and redirects to the list with a flash message. Unique constraint
+  violations re-render the form with `admin/fragments :: error`.
+- **Sub-lists** such as the crew are a fragment in the same template, re-rendered by htmx after each add or remove.
+- **Delete** sits in the page header and opens a native `<dialog>` with `command="show-modal"`; no JavaScript is
+  needed. The dialog's form posts to `/admin/<section>/{id}/delete`.
+- **Unsaved changes.** Edit forms carry `th:data-unsaved="${error} ? 'pending' : 'track'"` and an
+  `<span class="unsaved">` next to *Save*. `admin.js` shows it while the values differ from the loaded ones and
+  asks before leaving the page; after a failed save the form counts as unsaved from the start.
+- **File server failures.** Saving a video also tells the file API about its URLs, after the database change is
+  committed. If that call fails, the page says the video was saved but the file server wasn't updated, instead of
+  showing the error page.
+- **Messages after a redirect.** Call `redirect.flash("video.flash.saved", title)`; pass `error = true` for failures.
+
+## Look and feel
+
+Compact and data-dense, using IBM's Carbon design system as a reference for density and component patterns,
+not for its exact look:
+
+- 14px text, 32px inputs, buttons and table rows, spacing in steps of 4px.
+- A navy top bar; the current section is underlined in orange.
+- Orange for the one primary action on a screen, blue for links and focus, red only for destructive actions.
+- Buttons: primary (default), `secondary`, `outline`, `ghost`, `danger`, `danger ghost`.
+- Every colour is a `--c-*` token in `admin.css`, defined for light and dark mode and fed into Pico's variables.
+  Add new colours as tokens, never as literals in component rules.
+
+## Errors
+
+Spring Boot renders `templates/error.html` for every HTML error, in the admin layout.
+On admin pages, `AdminErrorAttributes` adds the details for logged-in users: the request, the error message,
+a short reference, the start of the stack trace for server errors, and a *Report on GitHub* link. Anonymous visitors
+and API responses keep Spring's defaults, without messages.
+
+- The reference is logged with the full stack trace (`Admin UI error <reference> on <request>`), so a reported
+  reference leads straight to the log entry.
+- *Report on GitHub* opens [`.github/ISSUE_TEMPLATE/admin-ui-error.yml`](../../.github/ISSUE_TEMPLATE/admin-ui-error.yml)
+  with the page, reference and details filled in. Issue form fields are pre-filled by their `id`, so keep the ids
+  in the form and the parameter names in `AdminErrorAttributes` the same.
+- When an htmx update fails, the error page replaces the whole page (`htmx-config` in `layout.html`).
+  When the session has expired, htmx reloads the page, which leads to the login.
+- The admin filter chain serves `/error` and permits it, so the page also renders after a session has expired.
+
+## Keyboard and focus
+
+- The first Tab on every page reaches *Skip to content*, which jumps to `<main id="main">`. Keep `id="main"` on new pages.
+- The first field of a form has `autofocus`, so you can type straight away.
+- Everything reachable with Tab gets a 2px focus ring. The field being edited is also tinted, and its label turns blue.
+- A required field left empty turns red once you move on (`:user-invalid`). Errors from the server set
+  `aria-invalid="true"` on the field and point `aria-describedby` at the `form-error` message.
+- htmx swaps keep your place. htmx puts focus back on an element with the same `id` (the visibility switch), and
+  focuses an `autofocus` element in swapped-in content (the crew member list after adding or removing crew).
+- Dialogs open with the safe choice (*Cancel*) focused; Esc closes them.
+
+htmx requests send the CSRF token from the `hx-headers` attribute on `<body>`, so htmx forms need no hidden field.
 
 ## Languages
 
@@ -29,7 +96,11 @@ English is the default. `?lang=hu` on any admin URL switches to Hungarian and st
 `bss-admin-lang` cookie; `?lang=en` switches back. Unknown languages fall back to English.
 
 Never write UI text into a template; use `#{key}` and add the key to `messages.properties` and
-`messages_hu.properties`.
+`messages_hu.properties`. Keys follow `<section>.<area>.<name>`, for example `video.flash.saved`.
+`MessagesTest` fails when a key is missing from either file.
+
+Messages that take arguments go through `MessageFormat`, so an ASCII apostrophe must be doubled (`''`).
+Prefer the typographic apostrophe (’), which needs no escaping.
 
 ## Login
 

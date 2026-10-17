@@ -1,6 +1,9 @@
 spring:
   messages:
     fallback-to-system-locale: false
+  mvc:
+    format:
+      date: iso
   security:
     oauth2:
       client:

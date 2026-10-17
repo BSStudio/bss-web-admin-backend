@@ -5,6 +5,9 @@ spring:
     open-in-view: false
   messages:
     fallback-to-system-locale: false
+  mvc:
+    format:
+      date: iso
 springdoc:
   swagger-ui:
     url: /open-api.yaml
