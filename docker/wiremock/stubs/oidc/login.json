@@ -1,0 +1,71 @@
+{
+  "mappings": [
+    {
+      "name": "Login: the form, standing in for the identity provider's login page",
+      "request": {
+        "method": "GET",
+        "urlPath": "/login/authorize"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "text/html; charset=utf-8"
+        },
+        "body": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Local login</title>\n<style>body{font:16px system-ui,sans-serif;max-width:20rem;margin:4rem auto;padding:0 1rem}label,input,button{display:block;width:100%;box-sizing:border-box}input,button{margin-top:.5rem;padding:.5rem;font:inherit}</style>\n</head>\n<body>\n<h1>Local login</h1>\n<p>Any username works. A member's URL (for example <code>anna</code>) logs you in as that member.</p>\n<form action=\"/login/approve\" method=\"get\">\n<input type=\"hidden\" name=\"redirect_uri\" value=\"{{request.query.redirect_uri}}\">\n<input type=\"hidden\" name=\"state\" value=\"{{request.query.state}}\">\n<label>Username <input name=\"username\" required></label>\n<button>Log in</button>\n</form>\n</body>\n</html>\n",
+        "transformers": [
+          "response-template"
+        ]
+      }
+    },
+    {
+      "name": "Login: back to the app, with the username as the authorization code",
+      "request": {
+        "method": "GET",
+        "urlPath": "/login/approve"
+      },
+      "response": {
+        "status": 302,
+        "headers": {
+          "Location": "{{{request.query.redirect_uri}}}?code={{{urlEncode request.query.username}}}&state={{{urlEncode request.query.state}}}"
+        },
+        "transformers": [
+          "response-template"
+        ]
+      }
+    },
+    {
+      "name": "Login: token request; the code (the username) becomes the access token",
+      "request": {
+        "method": "POST",
+        "urlPath": "/login/token"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{{formData request.body 'form' urlDecode=true}}{\"access_token\": \"{{form.code}}\", \"token_type\": \"Bearer\", \"expires_in\": 3600}",
+        "transformers": [
+          "response-template"
+        ]
+      }
+    },
+    {
+      "name": "Login: user info for the access token (the username)",
+      "request": {
+        "method": "GET",
+        "urlPath": "/login/userinfo"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{{regexExtract request.headers.Authorization 'Bearer (.+)' 'token'}}{\"sub\": \"{{token.0}}\", \"preferred_username\": \"{{token.0}}\", \"name\": \"{{token.0}}\"}",
+        "transformers": [
+          "response-template"
+        ]
+      }
+    }
+  ]
+}

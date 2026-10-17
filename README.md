@@ -147,6 +147,22 @@ Gradle:
 ./gradlew bootRun
 ```
 
+### Mock login
+
+The `mock-oidc` WireMock fakes the API's token check, and it also fakes an OAuth2 login for browser logins
+(the admin UI). Its stubs in `docker/wiremock/stubs/oidc/login.json` give it a login form where any username logs
+in. They load every time `mock-oidc` starts; they cost nothing when unused, and keeping them there needs no extra
+compose configuration. The login is plain OAuth2 (scope `profile`), because the mock has no ID tokens to sign.
+
+|          Stub          |                                    Does                                     |
+|------------------------|-----------------------------------------------------------------------------|
+| `GET /login/authorize` | Shows the login form, carrying the app's `redirect_uri` and `state` along   |
+| `GET /login/approve`   | Redirects back to the app with the typed username as the authorization code |
+| `POST /login/token`    | Returns the code (the username) as the access token                         |
+| `GET /login/userinfo`  | Returns the token (the username) as `sub`, `preferred_username` and `name`  |
+
+Nothing is checked and there is no password, so this is for local use only.
+
 ## Developer docs
 
 Please read the documentation for each module to understand the codebase.
