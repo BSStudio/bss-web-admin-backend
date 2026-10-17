@@ -54,6 +54,7 @@
       }
     },
     {
+      "name": "Update a video's folder; [?(@.urls)] only checks that the key is there, so a video without URLs (an empty array) matches too",
       "request": {
         "method": "PUT",
         "url": "/api/v1/video",
@@ -66,7 +67,7 @@
             "matchesJsonPath": "$.id"
           },
           {
-            "matchesJsonPath": "$.urls"
+            "matchesJsonPath": "$[?(@.urls)]"
           }
         ]
       },
