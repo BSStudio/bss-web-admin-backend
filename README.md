@@ -32,6 +32,7 @@ classDiagram
      namespace server {
          class src
          class web
+         class ui
          class operation
          class service
          class model
@@ -44,12 +45,14 @@ classDiagram
     integration ..> data
     web ..> operation
     web ..> service
+    ui ..> service
     service ..> data
     operation ..> model
     model ..> common
     data ..> common
     service ..> model
     src ..> web
+    src ..> ui
 ```
 
 > Note: client can only access operation, model, common. No business code
@@ -177,4 +180,5 @@ Please read the documentation for each module to understand the codebase.
     - [model](server/model/README.md)
     - [operation](server/operation/README.md)
     - [service](server/service/README.md)
+    - [ui](server/ui/README.md)
     - [web](server/web/README.md)

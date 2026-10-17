@@ -10,5 +10,6 @@ include(
     "server:model",
     "server:operation",
     "server:service",
+    "server:ui",
     "server:web",
 )
