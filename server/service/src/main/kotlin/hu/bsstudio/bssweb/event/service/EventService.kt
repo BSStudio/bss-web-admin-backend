@@ -14,11 +14,11 @@ interface EventService {
 
     fun findEventById(eventId: UUID): Optional<DetailedEvent>
 
-    /** Shows or hides the events in one update, without touching their other fields; returns how many it changed. */
+    /** Shows or hides the events, and returns the ids of the ones it found, like `VideoService.changeVideoVisibility`. */
     fun changeEventVisibility(
         eventIds: List<UUID>,
         visible: Boolean,
-    ): Int
+    ): List<UUID>
 
     fun updateEvent(
         eventId: UUID,

@@ -8,7 +8,6 @@ import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
 import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
@@ -37,7 +36,14 @@ class DefaultEventService(
     override fun changeEventVisibility(
         eventIds: List<UUID>,
         visible: Boolean,
-    ): Int = repository.updateVisibility(eventIds, visible, Instant.now())
+    ): List<UUID> =
+        repository
+            .findAllById(eventIds)
+            .map {
+                it.visible = visible
+                it
+            }.map(repository::save)
+            .map { it.id }
 
     override fun updateEvent(
         eventId: UUID,

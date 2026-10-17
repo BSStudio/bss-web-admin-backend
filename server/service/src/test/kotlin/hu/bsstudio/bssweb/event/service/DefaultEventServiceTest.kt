@@ -13,12 +13,12 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
-import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.Optional
@@ -35,9 +35,16 @@ internal class DefaultEventServiceTest(
 
     @Test
     internal fun `should change the visibility of events`() {
-        every { mockRepository.updateVisibility(listOf(EVENT_ID), true, any()) } returns 1
+        val eventIds = listOf(EVENT_ID)
+        every { mockRepository.findAllById(eventIds) } returns listOf(EVENT_ENTITY)
+        every { EVENT_ENTITY.visible = true } returns Unit
+        every { mockRepository.save(EVENT_ENTITY) } returns EVENT_ENTITY
+        every { EVENT_ENTITY.id } returns EVENT_ID
 
-        underTest.changeEventVisibility(listOf(EVENT_ID), true) shouldBe 1
+        val actual = underTest.changeEventVisibility(eventIds, true)
+
+        actual.shouldContainExactly(EVENT_ID)
+        verify { EVENT_ENTITY.visible = true }
     }
 
     @Test
