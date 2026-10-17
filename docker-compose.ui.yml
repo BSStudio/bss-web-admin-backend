@@ -1,0 +1,20 @@
+# Turns on the admin UI in the app container, logging in through the mock-oidc WireMock.
+# The login stubs (docker/wiremock/stubs/oidc/login.json) load with mock-oidc every time;
+# they cost nothing when unused, and the integration tests don't use this file.
+#   docker compose -f docker-compose.yml -f docker-compose.ui.yml --profile app up -d --build
+# With ./gradlew bootRun, plain `docker compose up -d` is enough; see server/ui/README.md.
+# Open http://localhost:8080/admin and type any username on the login form.
+services:
+  app:
+    environment:
+      spring.security.oauth2.client.registration.authentik.client-id: "admin-ui"
+      spring.security.oauth2.client.registration.authentik.client-secret: "secret"
+      spring.security.oauth2.client.registration.authentik.authorization-grant-type: "authorization_code"
+      spring.security.oauth2.client.registration.authentik.redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+      # plain OAuth2 locally (no openid): the mock has no ID tokens to sign
+      spring.security.oauth2.client.registration.authentik.scope: "profile"
+      # the browser goes to localhost, the app calls the container
+      spring.security.oauth2.client.provider.authentik.authorization-uri: "http://localhost:8998/login/authorize"
+      spring.security.oauth2.client.provider.authentik.token-uri: "http://mock-oidc:8080/login/token"
+      spring.security.oauth2.client.provider.authentik.user-info-uri: "http://mock-oidc:8080/login/userinfo"
+      spring.security.oauth2.client.provider.authentik.user-name-attribute: "sub"

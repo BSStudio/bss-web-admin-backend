@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Shared fragments</title>
+</head>
+<body>
+
+<!--/*
+  Search above a table. Typing filters the rows: htmx loads the list (only #results, see the controllers) into
+  #results and updates the address. The search field takes the form's target, swap and history settings.
+  The page size stays; the page goes back to the first.
+*/-->
+<search th:fragment="search(path, page)" class="table-search" th:assert="${q != null}, ${sorting != null}">
+    <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-target:inherited="#results"
+          hx-swap:inherited="outerHTML" hx-push-url:inherited="true">
+        <label>
+            <span class="sr-only" th:text="#{table.search}">Search</span>
+            <input id="table-search" type="search" name="q" th:value="${q}" th:placeholder="#{table.search}"
+                   autocomplete="off" th:hx-get="@{${path}}" hx-trigger="input changed delay:300ms"
+                   hx-include="closest form">
+        </label>
+        <input type="hidden" name="size" th:value="${page.size}">
+        <input type="hidden" name="sort" th:value="${sorting.param}">
+    </form>
+</search>
+
+<!--/* The header cell that selects every row on the page; name is the row checkboxes' name. See admin.js. */-->
+<th th:fragment="selectAll(name)" scope="col" class="select">
+    <label>
+        <span class="sr-only" th:text="#{table.selectAll}">Select all rows</span>
+        <input type="checkbox" th:data-select-all="${name}">
+    </label>
+</th>
+
+<!--/*
+  A column header that sorts the table by column: ascending on the first click, then the other way round.
+  sorting (a SortHeader) marks the current column with aria-sort, which admin.css shows as an arrow.
+  The link keeps the search and the page size, and loads the list into #results like paging does.
+*/-->
+<th th:fragment="sortable(path, page, column, label, classes)" th:assert="${sorting != null}" scope="col" th:class="${classes}"
+    th:aria-sort="${sorting.aria(column)}"
+    th:with="link=@{${path}(q=${q}, size=${page.size}, sort=${sorting.next(column)})}">
+    <a class="sort" th:href="${link}" th:hx-get="${link}" hx-target="#results" hx-swap="outerHTML" hx-push-url="true"
+       th:text="${label}">Title</a>
+</th>
+
+<!--/*
+  Footer of a data table: page size, which items are shown, and which page, as lists and arrows.
+  A change loads that page into #results. The hidden fields tell the bulk actions where to come back to.
+*/-->
+<nav th:fragment="pagination(page, path)" th:assert="${q != null}, ${sorting != null}" th:unless="${page.empty}" class="pagination"
+     th:aria-label="#{pagination.label}" hx-target:inherited="#results" hx-swap:inherited="outerHTML"
+     hx-push-url:inherited="true">
+    <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-trigger="change">
+        <input type="hidden" name="q" th:value="${q}">
+        <input type="hidden" name="sort" th:value="${sorting.param}">
+        <label for="page-size" th:text="#{pagination.size}">Items per page:</label>
+        <select id="page-size" name="size">
+            <option th:each="size : ${ {10, 25, 50, 100} }" th:value="${size}" th:text="${size}"
+                    th:selected="${size == page.size}">25</option>
+        </select>
+        <span th:text="#{pagination.items(${page.number * page.size + 1}, ${page.number * page.size + page.numberOfElements}, ${page.totalElements})}">1–25 of 120 items</span>
+    </form>
+    <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-trigger="change" class="pages"
+          th:with="previous=@{${path}(q=${q}, size=${page.size}, sort=${sorting.param}, page=${page.number - 1})},
+                   next=@{${path}(q=${q}, size=${page.size}, sort=${sorting.param}, page=${page.number + 1})}">
+        <input type="hidden" name="q" th:value="${q}">
+        <input type="hidden" name="size" th:value="${page.size}">
+        <input type="hidden" name="sort" th:value="${sorting.param}">
+        <label>
+            <span class="sr-only" th:text="#{pagination.page}">Page</span>
+            <select id="page-number" name="page">
+                <option th:each="number : ${#numbers.sequence(0, page.totalPages - 1)}" th:value="${number}"
+                        th:text="${number + 1}" th:selected="${number == page.number}">1</option>
+            </select>
+        </label>
+        <span th:text="#{pagination.pages(${page.totalPages})}">of 5 pages</span>
+        <a th:if="${page.hasPrevious()}" th:href="${previous}" th:hx-get="${previous}"
+           th:aria-label="#{pagination.previous}">‹</a>
+        <span th:unless="${page.hasPrevious()}" class="disabled" aria-hidden="true">‹</span>
+        <a th:if="${page.hasNext()}" th:href="${next}" th:hx-get="${next}" th:aria-label="#{pagination.next}">›</a>
+        <span th:unless="${page.hasNext()}" class="disabled" aria-hidden="true">›</span>
+    </form>
+    <input type="hidden" form="bulk" name="q" th:value="${q}">
+    <input type="hidden" form="bulk" name="page" th:value="${page.number}">
+    <input type="hidden" form="bulk" name="size" th:value="${page.size}">
+    <input type="hidden" form="bulk" name="sort" th:value="${sorting.param}">
+</nav>
+
+<!--/*
+  Where an image goes (a video thumbnail, a member's picture) until uploading images to the file API is added.
+  kind sets the shape: wide or portrait.
+*/-->
+<div th:fragment="imagePlaceholder(kind)" th:class="|media-preview ${kind}|">
+    <span th:text="#{media.placeholder}">Image uploads are coming in a later update.</span>
+</div>
+
+<!--/*
+  A date, or a range when to differs from from, in the page's language (e.g. Oct 16, 2026 or 2026. okt. 16.).
+  Each date is a <time> holding the ISO date, and admin.css keeps a date on one line.
+*/-->
+<th:block th:fragment="dates(from, to)" th:assert="${from != null}"><time th:datetime="${from}" th:text="${#temporals.format(from, 'MEDIUM')}">Aug 13, 2026</time><th:block
+        th:if="${to != null and to != from}"> – <time th:datetime="${to}" th:text="${#temporals.format(to, 'MEDIUM')}">Aug 15, 2026</time></th:block></th:block>
+
+<!--/*
+  Asks before deleting. id names the dialog, since a page may have several (a label list has one per row); action
+  is the address the form posts to. A button opens it with command="show-modal" and commandfor="<id>" (admin.js
+  does the same in browsers without invoker commands). Cancel has the focus, so Enter doesn't delete by accident.
+*/-->
+<dialog th:fragment="deleteDialog(id, action, question, warning)" th:id="${id}" th:aria-labelledby="|${id}-title|">
+    <header>
+        <h2 th:id="|${id}-title|" th:text="${question}">Delete “Gólyatábor 2026 - Vám”?</h2>
+        <button type="button" class="ghost" command="close" th:commandfor="${id}" th:aria-label="#{action.close}">✕</button>
+    </header>
+    <p th:text="${warning}">This can’t be undone.</p>
+    <footer>
+        <button type="button" class="secondary" command="close" th:commandfor="${id}" autofocus
+                th:text="#{action.cancel}">Cancel</button>
+        <form method="post" th:action="${action}">
+            <button type="submit" class="danger" th:text="#{action.delete}">Delete</button>
+        </form>
+    </footer>
+</dialog>
+
+<!--/*
+  At the top of a form (inside its th:object) after a failed save: the form's own errors, which belong to no single
+  field (e.g. another event has this title or URL), or else a note that fields need fixing. role="alert" has it read
+  out as the page shows it.
+*/-->
+<p th:fragment="formError" th:if="${#fields.hasAnyErrors()}" id="form-error" class="flash error" role="alert"
+   th:text="${#fields.hasGlobalErrors()} ? ${#strings.listJoin(#fields.globalErrors(), ' ')} : #{form.invalid}">
+    Some fields need fixing.
+</p>
+
+<!--/*
+  A field's error, if it has one, under the field. Its id is <field>-error, so the field points at it:
+  th:aria-invalid="${#fields.hasErrors('title')} ? 'true'"
+  th:aria-describedby="${#fields.hasErrors('title')} ? 'title-error'"
+*/-->
+<small th:fragment="fieldError(field)" th:if="${#fields.hasErrors(field)}" th:id="|${field}-error|" class="field-error"
+       th:errors="*{__${field}__}">Fill this in.</small>
+
+</body>
+</html>

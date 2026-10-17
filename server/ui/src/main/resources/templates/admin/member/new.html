@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'members')}">
+<head>
+    <title th:text="|#{member.new.title} · #{app.title}|">New member · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${form != null}">
+    <div class="page-header">
+        <div>
+            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
+                <a th:href="@{/admin/members}" th:text="#{member.list.title}">Members</a>
+            </nav>
+            <h1 th:text="#{member.new.title}">New member</h1>
+        </div>
+    </div>
+
+    <form method="post" th:action="@{/admin/members}" th:object="${form}" class="stack narrow"
+          th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
+        <p th:replace="~{admin/fragments :: formError}"></p>
+        <label>
+            <span th:text="#{member.field.name}">Name</span>
+            <input type="text" th:field="*{name}" required maxlength="250" autofocus
+                   th:aria-invalid="${#fields.hasErrors('name')} ? 'true'"
+                   th:aria-describedby="${#fields.hasErrors('name')} ? 'name-error'">
+            <small th:replace="~{admin/fragments :: fieldError('name')}"></small>
+        </label>
+        <label>
+            <span th:text="#{member.field.url}">URL</span>
+            <input type="text" th:field="*{url}" required maxlength="250"
+                   th:aria-invalid="${#fields.hasErrors('url')} ? 'true'"
+                   th:aria-describedby="${#fields.hasErrors('url')} ? 'url-help url-error' : 'url-help'">
+            <small id="url-help" th:text="#{member.field.url.help}">Used in the member’s page address.</small>
+            <small th:replace="~{admin/fragments :: fieldError('url')}"></small>
+        </label>
+        <p class="muted" th:text="#{member.new.help}">Start with the name and URL.</p>
+        <div class="actions">
+            <a class="button secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
+            <button type="submit" th:text="#{action.create}">Create</button>
+            <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
+        </div>
+    </form>
+</main>
+</body>
+</html>
