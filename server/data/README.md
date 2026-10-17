@@ -18,6 +18,12 @@ directory.
 The project uses the `private` schema for all the tables.
 The `public` schema is used for rendering views for the [GraphQL backend][graphql-backend].
 
+## Batch fetching
+
+`BatchFetchConfig` sets Hibernate's `default_batch_fetch_size` to 100. Collections, such as a video's URLs,
+then load for up to 100 entities in one query instead of one query each. Loading every video (about 2,300) went
+from 2,274 statements to 24. It is in code rather than in `application.yml` so that the reason can sit next to it.
+
 ## Testing
 
 The tests in this module will set up a Postgres database
