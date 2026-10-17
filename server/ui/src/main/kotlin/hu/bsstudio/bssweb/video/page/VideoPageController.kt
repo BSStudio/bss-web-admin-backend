@@ -5,8 +5,14 @@ import hu.bsstudio.bssweb.media.service.MediaService
 import hu.bsstudio.bssweb.member.service.MemberService
 import hu.bsstudio.bssweb.ui.flash.flash
 import hu.bsstudio.bssweb.ui.media.uploadImage
+import hu.bsstudio.bssweb.ui.paging.PAGE_SIZE
+import hu.bsstudio.bssweb.ui.paging.TableQuery
+import hu.bsstudio.bssweb.ui.paging.backTo
+import hu.bsstudio.bssweb.ui.paging.search
+import hu.bsstudio.bssweb.ui.paging.toPage
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
+import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.service.VideoService
 import hu.bsstudio.bssweb.videocrew.model.VideoCrewRequest
 import hu.bsstudio.bssweb.videocrew.service.VideoCrewService
@@ -52,9 +58,21 @@ class VideoPageController(
             SortDefault(sort = ["title"]),
         )
         pageable: Pageable,
+        @RequestParam(defaultValue = "") q: String,
         model: Model,
     ): String {
-        model["page"] = videoService.findAllVideos(pageable)
+        model["q"] = q
+        model["page"] =
+            if (q.isBlank()) {
+                videoService.findAllVideos(pageable)
+            } else {
+                // the paged service cannot search, so a search goes through the whole list
+                videoService
+                    .findAllVideos()
+                    .search(q) { listOf(it.title) + it.urls }
+                    .sortedWith(compareByDescending<Video> { it.shootingDateStart }.thenBy { it.title })
+                    .toPage(pageable)
+            }
         return "admin/video/list"
     }
 
@@ -76,7 +94,7 @@ class VideoPageController(
     fun changeVisibilityOfSelected(
         @RequestParam(defaultValue = "") videoIds: List<UUID>,
         @RequestParam visible: Boolean,
-        @RequestParam(defaultValue = "0") page: Int,
+        table: TableQuery,
         redirect: RedirectAttributes,
     ): String {
         if (videoIds.isEmpty()) {
@@ -85,7 +103,8 @@ class VideoPageController(
             val changed = videoService.changeVideoVisibility(videoIds, visible)
             redirect.flash(if (visible) "video.flash.published" else "video.flash.hidden", changed.size)
         }
-        return "$REDIRECT_TO_LIST?page=$page"
+        redirect.backTo(table)
+        return REDIRECT_TO_LIST
     }
 
     @GetMapping("/new")
@@ -226,7 +245,6 @@ class VideoPageController(
 
     private companion object {
         private val logger = LoggerFactory.getLogger(VideoPageController::class.java)
-        private const val PAGE_SIZE = 25
         private const val REDIRECT_TO_LIST = "redirect:/admin/videos"
     }
 }

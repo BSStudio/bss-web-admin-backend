@@ -12,54 +12,84 @@
 
     <div class="table-toolbar">
         <form id="bulk" method="post" th:action="@{/admin/members/archived}" class="batch-actions">
-            <input type="hidden" name="page" th:value="${page.number}">
-            <span th:text="#{member.list.batch}">Selected members</span>
-            <button type="submit" name="archived" value="true" th:text="#{member.list.archive}">Archive</button>
-            <button type="submit" name="archived" value="false" th:text="#{member.list.restore}">Restore</button>
+            <span class="selected-count" th:data-template="#{table.selected}" th:text="#{member.list.batch}">Selected members</span>
+            <label>
+                <span class="sr-only" th:text="#{member.field.status}">Status</span>
+                <select name="status" required>
+                    <option value="" selected disabled th:text="#{member.list.status}">Status…</option>
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
+                </select>
+            </label>
+            <button type="submit" th:formaction="@{/admin/members/status}" th:text="#{member.list.setStatus}">Set status</button>
+            <button type="submit" name="archived" value="true" formnovalidate th:text="#{member.list.archive}">Archive</button>
+            <button type="submit" name="archived" value="false" formnovalidate th:text="#{member.list.restore}">Restore</button>
             <button type="reset" th:text="#{action.cancel}">Cancel</button>
         </form>
         <div class="toolbar-actions">
+            <search th:replace="~{admin/fragments :: search('/admin/members', ${page})}"></search>
+            <details class="dropdown column-picker">
+                <summary th:text="#{table.columns}">Columns</summary>
+                <ul>
+                    <th:block th:if="${media.enabled}">
+                        <li th:replace="~{admin/fragments :: column('image', #{member.picture.title}, true)}"></li>
+                    </th:block>
+                    <li th:replace="~{admin/fragments :: column('url', #{member.field.url}, true)}"></li>
+                    <li th:replace="~{admin/fragments :: column('role', #{member.field.role}, false)}"></li>
+                    <li th:replace="~{admin/fragments :: column('status', #{member.field.status}, true)}"></li>
+                    <li th:replace="~{admin/fragments :: column('date', #{member.field.joinedAt}, true)}"></li>
+                    <li th:replace="~{admin/fragments :: column('description', #{member.field.description}, false)}"></li>
+                </ul>
+            </details>
             <a class="button" th:href="@{/admin/members/new}" th:text="#{member.list.new}">New member</a>
         </div>
     </div>
 
-    <div class="data-table">
-        <table>
-            <thead>
-            <tr>
-                <th scope="col"><span class="sr-only" th:text="#{table.selection}">Selection</span></th>
-                <th scope="col" th:text="#{member.field.name}">Name</th>
-                <th scope="col" class="hide-small" th:text="#{member.field.url}">URL</th>
-                <th scope="col" th:text="#{member.field.status}">Status</th>
-                <th scope="col" class="hide-small" th:text="#{member.field.joinedAt}">Joined</th>
-                <th scope="col" th:text="#{member.field.archived}">Archived</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:if="${page.empty}">
-                <td colspan="6" class="muted" th:text="#{member.list.empty}">No members yet.</td>
-            </tr>
-            <tr th:each="m : ${page.content}" th:classappend="${m.archived} ? 'archived'">
-                <td class="select">
-                    <label>
-                        <span class="sr-only" th:text="#{member.list.select(${m.name})}">Select</span>
-                        <input type="checkbox" name="memberIds" form="bulk" th:value="${m.id}">
-                    </label>
-                </td>
-                <td>
-                    <div th:replace="~{admin/fragments :: picture(${media.member(m.id)}, 'm', null, '', '', 'avatar')}"></div>
-                    <a th:href="@{/admin/members/{id}(id=${m.id})}" th:text="${m.name}">Kovács Anna</a>
-                    <span class="muted" th:unless="${m.nickname.isBlank()}" th:text="|(${m.nickname})|">(Panni)</span>
-                </td>
-                <td class="muted hide-small" th:text="${m.url}">kovacs-anna</td>
-                <td th:text="#{${'member.status.' + m.status}}">Member</td>
-                <td class="date hide-small" th:text="${m.joinedAt}">2024-09-01</td>
-                <td th:replace="~{admin/member/list :: archived(id=${m.id}, name=${m.name}, archived=${m.archived})}"></td>
-            </tr>
-            </tbody>
-        </table>
+    <div id="results">
+        <div class="data-table">
+            <table>
+                <thead>
+                <tr>
+                    <th th:replace="~{admin/fragments :: selectAll('memberIds')}"></th>
+                    <th scope="col" th:text="#{member.field.name}">Name</th>
+                    <th scope="col" class="col-url hide-small" th:text="#{member.field.url}">URL</th>
+                    <th scope="col" class="col-role" th:text="#{member.field.role}">Role</th>
+                    <th scope="col" class="col-status" th:text="#{member.field.status}">Status</th>
+                    <th scope="col" class="col-date hide-small" th:text="#{member.field.joinedAt}">Joined</th>
+                    <th scope="col" class="col-description" th:text="#{member.field.description}">Description</th>
+                    <th scope="col" th:text="#{member.field.archived}">Archived</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${page.empty}">
+                    <td colspan="8" class="muted"
+                        th:text="${q.isBlank()} ? #{member.list.empty} : #{table.noMatch(${q})}">No members yet.</td>
+                </tr>
+                <tr th:each="m : ${page.content}" th:classappend="${m.archived} ? 'archived'">
+                    <td class="select">
+                        <label>
+                            <span class="sr-only" th:text="#{member.list.select(${m.name})}">Select</span>
+                            <input type="checkbox" name="memberIds" form="bulk" th:value="${m.id}">
+                        </label>
+                    </td>
+                    <td>
+                        <div th:replace="~{admin/fragments :: picture(${media.member(m.id)}, 'm', null, '', '', 'avatar col-image')}"></div>
+                        <a th:href="@{/admin/members/{id}(id=${m.id})}" th:text="${m.name}">Kovács Anna</a>
+                        <span class="muted" th:unless="${m.nickname.isBlank()}" th:text="|(${m.nickname})|">(Panni)</span>
+                    </td>
+                    <td class="muted col-url hide-small" th:text="${m.url}">kovacs-anna</td>
+                    <td class="col-role" th:text="${m.role}">Operatőr</td>
+                    <td class="col-status" th:text="#{${'member.status.' + m.status}}">Member</td>
+                    <td class="date col-date hide-small" th:text="${m.joinedAt}">2024-09-01</td>
+                    <td class="muted clip col-description" th:text="${m.description}" th:title="${m.description}">
+                        Operatőr és vágó.
+                    </td>
+                    <td th:replace="~{admin/member/list :: archived(id=${m.id}, name=${m.name}, archived=${m.archived})}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav th:replace="~{admin/fragments :: pagination(${page}, '/admin/members')}"></nav>
     </div>
-    <nav th:replace="~{admin/fragments :: pagination(${page}, '/admin/members')}"></nav>
 </main>
 
 <!--/* Fragments rendered on their own by htmx requests */-->

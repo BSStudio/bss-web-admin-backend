@@ -67,7 +67,22 @@ internal class EventPageControllerTest(
                 view { name("admin/event/list") }
                 content { string(stringContainsInOrder(EVENT.title, OLD_EVENT.title)) }
                 content { string(containsString("2026-08-12 – 2026-08-15")) }
-                content { string(containsString("<td class=\"date\">2025-05-01</td>")) }
+                content { string(containsString("""<td class="date col-date">2025-05-01</td>""")) }
+            }
+    }
+
+    @Test
+    internal fun `should search events by title and URL`() {
+        every { eventService.findAllEvent() } returns listOf(OLD_EVENT, EVENT)
+
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                param("q", "qpa-2025")
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString(OLD_EVENT.title)) }
+                content { string(not(containsString(EVENT.title))) }
             }
     }
 

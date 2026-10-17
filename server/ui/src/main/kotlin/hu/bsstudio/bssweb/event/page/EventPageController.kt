@@ -6,6 +6,8 @@ import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.service.EventService
 import hu.bsstudio.bssweb.eventvideo.service.EventVideoService
 import hu.bsstudio.bssweb.ui.flash.flash
+import hu.bsstudio.bssweb.ui.paging.PAGE_SIZE
+import hu.bsstudio.bssweb.ui.paging.search
 import hu.bsstudio.bssweb.ui.paging.toPage
 import hu.bsstudio.bssweb.video.service.VideoService
 import org.springframework.dao.DataIntegrityViolationException
@@ -38,11 +40,14 @@ class EventPageController(
     @GetMapping
     fun list(
         @PageableDefault(size = PAGE_SIZE) pageable: Pageable,
+        @RequestParam(defaultValue = "") q: String,
         model: Model,
     ): String {
+        model["q"] = q
         model["page"] =
             eventService
                 .findAllEvent()
+                .search(q) { listOf(it.title, it.url) }
                 .sortedWith(compareByDescending<Event> { it.dateFrom }.thenBy { it.title.lowercase() })
                 .toPage(pageable)
         return "admin/event/list"
@@ -177,7 +182,6 @@ class EventPageController(
     private fun notFound() = ResponseStatusException(HttpStatus.NOT_FOUND)
 
     private companion object {
-        private const val PAGE_SIZE = 25
         private const val REDIRECT_TO_LIST = "redirect:/admin/events"
     }
 }

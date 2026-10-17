@@ -7,6 +7,10 @@ import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.service.MemberService
 import hu.bsstudio.bssweb.ui.flash.flash
 import hu.bsstudio.bssweb.ui.media.uploadImage
+import hu.bsstudio.bssweb.ui.paging.PAGE_SIZE
+import hu.bsstudio.bssweb.ui.paging.TableQuery
+import hu.bsstudio.bssweb.ui.paging.backTo
+import hu.bsstudio.bssweb.ui.paging.search
 import hu.bsstudio.bssweb.ui.paging.toPage
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
@@ -39,13 +43,17 @@ class MemberPageController(
     @GetMapping
     fun list(
         @PageableDefault(size = PAGE_SIZE) pageable: Pageable,
+        @RequestParam(defaultValue = "") q: String,
         model: Model,
     ): String {
+        model["q"] = q
         model["page"] =
             memberService
                 .findAllMembers()
+                .search(q) { listOf(it.name, it.nickname, it.url, it.role) }
                 .sortedWith(compareBy<Member> { it.archived }.thenBy { it.name.lowercase() })
                 .toPage(pageable)
+        model["statuses"] = STATUSES
         return "admin/member/list"
     }
 
@@ -67,7 +75,7 @@ class MemberPageController(
     fun changeArchivedOfSelected(
         @RequestParam(defaultValue = "") memberIds: List<UUID>,
         @RequestParam archived: Boolean,
-        @RequestParam(defaultValue = "0") page: Int,
+        table: TableQuery,
         redirect: RedirectAttributes,
     ): String {
         if (memberIds.isEmpty()) {
@@ -76,7 +84,25 @@ class MemberPageController(
             val changed = memberService.archiveMembers(memberIds, archived)
             redirect.flash(if (archived) "member.flash.archived" else "member.flash.restored", changed.size)
         }
-        return "redirect:/admin/members?page=$page"
+        redirect.backTo(table)
+        return REDIRECT_TO_LIST
+    }
+
+    @PostMapping("/status")
+    fun changeStatusOfSelected(
+        @RequestParam(defaultValue = "") memberIds: List<UUID>,
+        @RequestParam status: MemberStatus,
+        table: TableQuery,
+        redirect: RedirectAttributes,
+    ): String {
+        if (memberIds.isEmpty()) {
+            redirect.flash("member.flash.noneSelected", error = true)
+        } else {
+            val changed = memberService.changeMemberStatus(memberIds, status)
+            redirect.flash("member.flash.statusChanged", changed.size)
+        }
+        redirect.backTo(table)
+        return REDIRECT_TO_LIST
     }
 
     @GetMapping("/new")
@@ -102,7 +128,7 @@ class MemberPageController(
             // the member exists; only creating their folder on the file server failed
             logger.warn("File server failed after creating member {}", url, e)
             redirect.flash("member.flash.createdWithoutFiles", name.trim(), error = true)
-            "redirect:/admin/members"
+            REDIRECT_TO_LIST
         }
 
     @GetMapping("/{memberId}")
@@ -125,7 +151,7 @@ class MemberPageController(
         try {
             val member = memberService.updateMember(memberId, form.toUpdateMember()).orElseThrow(::notFound)
             redirect.flash("member.flash.saved", member.name)
-            "redirect:/admin/members"
+            REDIRECT_TO_LIST
         } catch (_: DataIntegrityViolationException) {
             model["error"] = "member.error.duplicateUrl"
             editPage(findMember(memberId), model)
@@ -156,7 +182,7 @@ class MemberPageController(
         return try {
             memberService.removeMember(memberId)
             redirect.flash("member.flash.deleted", member.name)
-            "redirect:/admin/members"
+            REDIRECT_TO_LIST
         } catch (_: DataIntegrityViolationException) {
             redirect.flash("member.flash.deleteBlocked", member.name, error = true)
             "redirect:/admin/members/$memberId"
@@ -170,8 +196,7 @@ class MemberPageController(
         model: Model,
     ): String {
         model["member"] = member
-        // in the order a member goes through them
-        model["statuses"] = MemberStatus.entries.reversed()
+        model["statuses"] = STATUSES
         return "admin/member/edit"
     }
 
@@ -179,6 +204,9 @@ class MemberPageController(
 
     private companion object {
         private val logger = LoggerFactory.getLogger(MemberPageController::class.java)
-        private const val PAGE_SIZE = 25
+        private const val REDIRECT_TO_LIST = "redirect:/admin/members"
+
+        // in the order a member goes through them
+        private val STATUSES = MemberStatus.entries.reversed()
     }
 }

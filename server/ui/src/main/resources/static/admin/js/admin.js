@@ -41,6 +41,48 @@
         if (image.complete && image.naturalWidth === 0) showPlaceholder(image);
     }
 
+    // Select all: the header checkbox (data-select-all names the row checkboxes) ticks every row on the page and
+    // shows a dash while only some are ticked. The selection bar counts the ticked rows.
+    const syncSelection = () => {
+        const all = document.querySelector("input[data-select-all]");
+        if (!all) return;
+        const rows = [...document.querySelectorAll(`input[name="${all.dataset.selectAll}"]`)];
+        const ticked = rows.filter((row) => row.checked).length;
+        all.checked = ticked > 0 && ticked === rows.length;
+        all.indeterminate = ticked > 0 && ticked < rows.length;
+        const count = document.querySelector(".selected-count[data-template]");
+        if (count) count.textContent = count.dataset.template.replace("{0}", ticked);
+    };
+    document.addEventListener("change", (event) => {
+        const name = event.target.dataset?.selectAll;
+        if (name) for (const row of document.querySelectorAll(`input[name="${name}"]`)) row.checked = event.target.checked;
+        syncSelection();
+    });
+    // the selection bar's Cancel unticks the rows only after its reset event; a new page brings new rows
+    document.addEventListener("reset", () => setTimeout(syncSelection));
+    document.addEventListener("htmx:afterSettle", syncSelection);
+
+    // Columns menus: which optional columns show is remembered per page, in this browser only.
+    const columnsKey = `bss-admin-columns:${location.pathname}`;
+    try {
+        const shown = JSON.parse(localStorage.getItem(columnsKey)) ?? {};
+        for (const toggle of document.querySelectorAll("input[data-column]")) {
+            toggle.checked = shown[toggle.dataset.column] ?? toggle.checked;
+        }
+    } catch {
+        // no storage (private window, blocked site data): the default columns show
+    }
+    document.addEventListener("change", (event) => {
+        if (!event.target.matches("input[data-column]")) return;
+        const shown = {};
+        for (const toggle of document.querySelectorAll("input[data-column]")) shown[toggle.dataset.column] = toggle.checked;
+        try {
+            localStorage.setItem(columnsKey, JSON.stringify(shown));
+        } catch {
+            // not remembered; the choice still applies until the page is left
+        }
+    });
+
     window.addEventListener("beforeunload", (event) => {
         if (document.querySelector("form[data-dirty]")) event.preventDefault();
     });

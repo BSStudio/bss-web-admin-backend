@@ -26,6 +26,7 @@ import io.mockk.slot
 import io.mockk.verify
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.not
+import org.hamcrest.Matchers.stringContainsInOrder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -94,6 +95,10 @@ internal class VideoPageControllerTest(
                 content { string(containsString(TITLE)) }
                 content { string(containsString("""hx-put="$BASE_URL/$VIDEO_ID/visibility?visible=false"""")) }
                 content { string(containsString("<span>1–1 of 1 item</span>")) }
+                content { string(containsString("""<option value="25" selected="selected">25</option>""")) }
+                content { string(containsString("""selected="selected">1</option>""")) }
+                content { string(containsString("<span>of 1 page</span>")) }
+                content { string(containsString("""<input type="checkbox" data-select-all="videoIds">""")) }
                 content { string(containsString("""srcset="http://localhost:8890/v/$VIDEO_ID/thumbnail/sd.webp"""")) }
             }
 
@@ -101,6 +106,39 @@ internal class VideoPageControllerTest(
         pageable.captured.sort
             .getOrderFor("shootingDateStart")
             ?.direction shouldBe Sort.Direction.DESC
+    }
+
+    @Test
+    internal fun `should search all videos by title and URL, newest first, then by title`() {
+        val opening = VIDEO.copy(id = UUID.randomUUID(), title = "Gólyatábor 2026 - Megnyitó", urls = emptyList())
+        val older = VIDEO.copy(id = UUID.randomUUID(), title = "Gólyatábor 2025", shootingDateStart = SHOOTING_DATE.minusYears(1))
+        val other = VIDEO.copy(id = UUID.randomUUID(), title = "Schönherz Qpa", urls = listOf("qpa"))
+        every { videoService.findAllVideos() } returns listOf(older, VIDEO, other, opening)
+
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                param("q", "GOLYATABOR")
+            }.andExpectAll {
+                status { isOk() }
+                content { string(stringContainsInOrder(opening.title, TITLE, older.title)) }
+                content { string(not(containsString(other.title))) }
+                content { string(containsString("""type="search" name="q" value="GOLYATABOR"""")) }
+                content { string(containsString("<span>1–3 of 3 items</span>")) }
+            }
+    }
+
+    @Test
+    internal fun `should say when no video matches the search`() {
+        every { videoService.findAllVideos() } returns listOf(VIDEO)
+
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                param("q", "qpa")
+            }.andExpect {
+                content { string(containsString("Nothing matches “qpa”.")) }
+            }
     }
 
     @Test
@@ -131,10 +169,12 @@ internal class VideoPageControllerTest(
                 with(csrf())
                 param("videoIds", VIDEO_ID.toString())
                 param("visible", "true")
+                param("q", "gólya tábor")
                 param("page", "2")
+                param("size", "50")
             }.andExpectAll {
                 status { is3xxRedirection() }
-                redirectedUrl("$BASE_URL?page=2")
+                redirectedUrl("$BASE_URL?q=g%C3%B3lya+t%C3%A1bor&page=2&size=50")
                 flash { attribute("flash", Flash("video.flash.published", 1)) }
             }
     }
@@ -151,7 +191,7 @@ internal class VideoPageControllerTest(
                 param("visible", "false")
             }.andExpectAll {
                 status { is3xxRedirection() }
-                redirectedUrl("$BASE_URL?page=0")
+                redirectedUrl("$BASE_URL?q=&page=0&size=25")
                 flash { attribute("flash", Flash("video.flash.hidden", 1)) }
             }
     }

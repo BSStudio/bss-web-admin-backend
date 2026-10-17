@@ -529,12 +529,6 @@ textarea {
     min-height: 4rem;
 }
 
-label small {
-    margin: 0;
-    color: var(--c-text-helper);
-    font-size: 0.75rem;
-}
-
 [type="checkbox"] {
     --pico-border-width: 1px;
 }
@@ -595,6 +589,64 @@ td.row-action form {
     background: var(--c-layer);
 }
 
+.toolbar-actions {
+    display: flex;
+    flex: 1;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.table-search {
+    flex: 1;
+    max-width: 20rem;
+    margin-right: auto;
+}
+
+.table-search :is(form, label) {
+    margin: 0;
+}
+
+.table-search [type="search"] {
+    --pico-border-radius: 2px;
+}
+
+/* The Columns menu: Pico's dropdown, compact and opening to the left */
+.column-picker {
+    margin: 0;
+}
+
+.column-picker > summary:not([role]) {
+    height: 2rem;
+    padding: 0 0.75rem;
+    color: var(--c-text);
+    font-size: 0.875rem;
+    line-height: 2rem;
+}
+
+.column-picker > summary + ul {
+    right: 0;
+    left: auto;
+}
+
+.column-picker label {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+/* A column hides while its toggle in the Columns menu is unticked; one rule per column key */
+main:has([data-column="image"]:not(:checked)) .col-image,
+main:has([data-column="url"]:not(:checked)) .col-url,
+main:has([data-column="date"]:not(:checked)) .col-date,
+main:has([data-column="description"]:not(:checked)) .col-description,
+main:has([data-column="role"]:not(:checked)) .col-role,
+main:has([data-column="status"]:not(:checked)) .col-status {
+    display: none;
+}
+
 .batch-actions {
     display: none;
     flex: 1;
@@ -606,6 +658,14 @@ td.row-action form {
 .batch-actions > span {
     flex: 1;
     padding-left: 0.5rem;
+}
+
+.batch-actions label {
+    margin: 0;
+}
+
+.batch-actions select {
+    width: auto;
 }
 
 .batch-actions :is(button, [role="button"]) {
@@ -686,6 +746,13 @@ td.row-action :is(button, [role="button"]) {
     padding: 0 0.5rem;
 }
 
+td.clip {
+    max-width: 20rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 td.date {
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
@@ -698,11 +765,9 @@ td input[role="switch"] {
 .pagination {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 1rem;
     align-items: center;
     justify-content: space-between;
     min-height: 2.5rem;
-    padding-left: 1rem;
     border: 1px solid var(--c-border);
     border-top: 0;
     background: var(--c-layer);
@@ -710,13 +775,29 @@ td input[role="switch"] {
     font-variant-numeric: tabular-nums;
 }
 
-.pagination .pages {
+.pagination form {
     display: flex;
     align-items: center;
+    margin: 0;
 }
 
-.pagination .pages > span:first-child {
-    padding-right: 1rem;
+.pagination label {
+    margin: 0;
+    padding: 0 0.5rem 0 1rem;
+    color: inherit;
+    font-size: inherit;
+}
+
+.pagination select {
+    width: auto;
+    height: 2.5rem;
+    border-width: 0 1px;
+    border-radius: 0;
+    background-color: transparent;
+}
+
+.pagination form > span {
+    padding: 0 1rem;
 }
 
 .pagination .pages > :is(a, .disabled) {

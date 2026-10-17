@@ -61,10 +61,40 @@ internal class MemberPageControllerTest(
                 status { isOk() }
                 view { name("admin/member/list") }
                 content { string(stringContainsInOrder(ANNA.name, BENCE.name, ARCHIVED.name)) }
-                content { string(containsString("<td>Member</td>")) }
+                content { string(containsString("""<td class="col-status">Member</td>""")) }
+                content { string(containsString("""<option value="ALUMNI">Alumni</option>""")) }
                 content { string(containsString("""<tr class="archived">""")) }
                 content { string(containsString("<span>1–3 of 3 items</span>")) }
                 content { string(containsString("""srcset="http://localhost:8890/m/${ANNA.id}/profile/m.webp"""")) }
+            }
+    }
+
+    @Test
+    internal fun `should search members by name, nickname, URL and role`() {
+        every { service.findAllMembers() } returns listOf(ARCHIVED, BENCE, ANNA)
+
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                param("q", "Panni kovacs")
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString(ANNA.name)) }
+                content { string(not(containsString(BENCE.name))) }
+                content { string(containsString("<span>1–1 of 1 item</span>")) }
+            }
+    }
+
+    @Test
+    internal fun `should say when no member matches the search`() {
+        every { service.findAllMembers() } returns listOf(ANNA)
+
+        mockMvc
+            .get(BASE_URL) {
+                with(oauth2Login())
+                param("q", "bence")
+            }.andExpect {
+                content { string(containsString("Nothing matches “bence”.")) }
             }
     }
 
@@ -108,10 +138,12 @@ internal class MemberPageControllerTest(
                 with(csrf())
                 param("memberIds", ANNA.id.toString())
                 param("archived", "true")
+                param("q", "anna")
                 param("page", "1")
+                param("size", "10")
             }.andExpectAll {
                 status { is3xxRedirection() }
-                redirectedUrl("$BASE_URL?page=1")
+                redirectedUrl("$BASE_URL?q=anna&page=1&size=10")
                 flash { attribute("flash", Flash("member.flash.archived", 1)) }
             }
     }
@@ -143,6 +175,40 @@ internal class MemberPageControllerTest(
                 status { is3xxRedirection() }
                 flash { attribute("flash", Flash("member.flash.noneSelected", error = true)) }
             }
+    }
+
+    @Test
+    internal fun `should change the status of selected members`() {
+        val memberIds = listOf(ANNA.id, BENCE.id)
+        every { service.changeMemberStatus(memberIds, MemberStatus.ALUMNI) } returns memberIds
+
+        mockMvc
+            .post("$BASE_URL/status") {
+                with(oauth2Login())
+                with(csrf())
+                param("memberIds", ANNA.id.toString(), BENCE.id.toString())
+                param("status", "ALUMNI")
+                param("page", "2")
+            }.andExpectAll {
+                status { is3xxRedirection() }
+                redirectedUrl("$BASE_URL?q=&page=2&size=25")
+                flash { attribute("flash", Flash("member.flash.statusChanged", 2)) }
+            }
+    }
+
+    @Test
+    internal fun `should ask for a selection before changing the status`() {
+        mockMvc
+            .post("$BASE_URL/status") {
+                with(oauth2Login())
+                with(csrf())
+                param("status", "ALUMNI")
+            }.andExpectAll {
+                status { is3xxRedirection() }
+                flash { attribute("flash", Flash("member.flash.noneSelected", error = true)) }
+            }
+
+        verify(exactly = 0) { service.changeMemberStatus(any(), any()) }
     }
 
     @Test
