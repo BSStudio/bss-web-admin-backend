@@ -18,6 +18,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.Optional
@@ -31,6 +32,20 @@ internal class DefaultEventServiceTest(
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultEventService
+
+    @Test
+    internal fun `should change the visibility of events`() {
+        val eventIds = listOf(EVENT_ID)
+        every { mockRepository.findAllById(eventIds) } returns listOf(EVENT_ENTITY)
+        every { EVENT_ENTITY.visible = true } returns Unit
+        every { mockRepository.save(EVENT_ENTITY) } returns EVENT_ENTITY
+        every { EVENT_ENTITY.id } returns EVENT_ID
+
+        val actual = underTest.changeEventVisibility(eventIds, true)
+
+        actual.shouldContainExactly(EVENT_ID)
+        verify { EVENT_ENTITY.visible = true }
+    }
 
     @Test
     internal fun `should return all events`() {

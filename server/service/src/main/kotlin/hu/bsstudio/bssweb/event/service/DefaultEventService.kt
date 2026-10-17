@@ -33,6 +33,18 @@ class DefaultEventService(
             .findById(eventId)
             .map(mapper::entityToModel)
 
+    override fun changeEventVisibility(
+        eventIds: List<UUID>,
+        visible: Boolean,
+    ): List<UUID> =
+        repository
+            .findAllById(eventIds)
+            .map {
+                it.visible = visible
+                it
+            }.map(repository::save)
+            .map { it.id }
+
     override fun updateEvent(
         eventId: UUID,
         updateEvent: UpdateEvent,
