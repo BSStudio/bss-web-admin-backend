@@ -2,11 +2,13 @@ package hu.bsstudio.bssweb.member.repository
 
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
+import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.date.shouldBeCloseTo
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
@@ -54,6 +56,19 @@ internal class MemberRepositoryTest(
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()
+    }
+
+    @Test
+    internal fun `update the status of members in one statement`() {
+        val changed = listOf("first", "second").map { underTest.save(DetailedMemberEntity(url = it, name = it)).id }
+        val untouched = underTest.save(DetailedMemberEntity(url = "third", name = "third")).id
+        entityManager.flush()
+        val updatedAt = Instant.parse("2026-10-17T12:00:00Z")
+
+        underTest.updateStatus(changed, MemberStatus.ALUMNI, updatedAt) shouldBe 2
+
+        underTest.findAllById(changed).map { it.status to it.updatedAt } shouldContainOnly listOf(MemberStatus.ALUMNI to updatedAt)
+        underTest.findById(untouched) shouldBePresent { it.status shouldBe MemberStatus.MEMBER_CANDIDATE_CANDIDATE }
     }
 
     private companion object {

@@ -1,13 +1,18 @@
 package hu.bsstudio.bssweb.member.service
 
+import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.mapper.MemberMapper
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.repository.MemberRepository
+import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
+// each method is one transaction, so a bulk change is all or nothing
+@Transactional
 class DefaultMemberService(
     private val repository: MemberRepository,
     private val mapper: MemberMapper,
@@ -34,6 +39,11 @@ class DefaultMemberService(
                 it
             }.map(repository::save)
             .map { it.id }
+
+    override fun changeMemberStatus(
+        memberIds: List<UUID>,
+        status: MemberStatus,
+    ): Int = repository.updateStatus(memberIds, status, Instant.now())
 
     override fun updateMember(
         memberId: UUID,

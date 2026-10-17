@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.member.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
 import hu.bsstudio.bssweb.fileserver.model.MemberFileUpdate
+import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
@@ -65,6 +66,16 @@ internal class FileUpdatingMemberServiceTest(
         val actual = underTest.archiveMembers(memberIds, false)
 
         actual shouldBeEqual memberIds
+    }
+
+    @Test
+    internal fun `should change the status of members`() {
+        val memberIds = listOf(MEMBER_ID)
+        every { mockService.changeMemberStatus(memberIds, MemberStatus.ALUMNI) } returns 1
+
+        val actual = underTest.changeMemberStatus(memberIds, MemberStatus.ALUMNI)
+
+        actual shouldBeEqual 1
     }
 
     @Test
