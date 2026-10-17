@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.member.service
 
+import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
@@ -14,6 +15,11 @@ interface MemberService {
     fun archiveMembers(
         memberIds: List<UUID>,
         archive: Boolean,
+    ): List<UUID>
+
+    fun changeMemberStatus(
+        memberIds: List<UUID>,
+        status: MemberStatus,
     ): List<UUID>
 
     fun findMemberById(memberIds: UUID): Optional<Member>

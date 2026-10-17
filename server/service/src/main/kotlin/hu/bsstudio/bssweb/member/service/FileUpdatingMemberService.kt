@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.member.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
 import hu.bsstudio.bssweb.fileserver.model.MemberFileUpdate
+import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
@@ -23,6 +24,11 @@ class FileUpdatingMemberService(
         memberIds: List<UUID>,
         archive: Boolean,
     ): List<UUID> = this.server.archiveMembers(memberIds, archive)
+
+    override fun changeMemberStatus(
+        memberIds: List<UUID>,
+        status: MemberStatus,
+    ): List<UUID> = this.server.changeMemberStatus(memberIds, status)
 
     override fun findMemberById(memberIds: UUID): Optional<Member> = this.server.findMemberById(memberIds)
 

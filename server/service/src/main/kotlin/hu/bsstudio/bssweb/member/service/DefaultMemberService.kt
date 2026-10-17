@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.member.service
 
+import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.mapper.MemberMapper
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
@@ -31,6 +32,18 @@ class DefaultMemberService(
             .findAllById(memberIds)
             .map {
                 it.archived = archive
+                it
+            }.map(repository::save)
+            .map { it.id }
+
+    override fun changeMemberStatus(
+        memberIds: List<UUID>,
+        status: MemberStatus,
+    ): List<UUID> =
+        repository
+            .findAllById(memberIds)
+            .map {
+                it.status = status
                 it
             }.map(repository::save)
             .map { it.id }

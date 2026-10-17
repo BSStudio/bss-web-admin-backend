@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.member.service
 
+import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.member.mapper.MemberMapper
 import hu.bsstudio.bssweb.member.model.CreateMember
@@ -15,6 +16,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.util.Optional
@@ -60,6 +62,20 @@ internal class DefaultMemberServiceTest(
         val actual = underTest.archiveMembers(memberIds, true)
 
         actual.shouldContainExactly(MEMBER_ID)
+    }
+
+    @Test
+    internal fun `should change the status of members`() {
+        val memberIds = listOf(MEMBER_ID)
+        every { mockRepository.findAllById(memberIds) } returns listOf(MEMBER_ENTITY)
+        every { MEMBER_ENTITY.status = MemberStatus.ALUMNI } returns Unit
+        every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
+        every { MEMBER_ENTITY.id } returns MEMBER_ID
+
+        val actual = underTest.changeMemberStatus(memberIds, MemberStatus.ALUMNI)
+
+        actual.shouldContainExactly(MEMBER_ID)
+        verify { MEMBER_ENTITY.status = MemberStatus.ALUMNI }
     }
 
     @Test
