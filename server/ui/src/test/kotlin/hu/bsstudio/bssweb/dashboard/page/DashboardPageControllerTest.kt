@@ -41,6 +41,8 @@ internal class DashboardPageControllerTest(
                 model { attribute("metrics", METRICS) }
                 content { string(containsString("""<html lang="en">""")) }
                 content { string(containsString("<h1>Dashboard</h1>")) }
+                content { string(containsString("""class="brand" title="Dashboard"""")) }
+                content { string(containsString("""aria-current="page"><strong>BSS</strong>""")) }
                 content { string(containsString("""<span class="metric">42</span>""")) }
                 content { string(containsString("""<a class="skip-link" href="#main">Skip to content</a>""")) }
                 content { string(containsString("""<main id="main" class="container">""")) }

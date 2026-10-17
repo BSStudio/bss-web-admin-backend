@@ -80,7 +80,7 @@ Compact and data-dense, using IBM's Carbon design system as a reference for dens
 not for its exact look:
 
 - 14px text, 32px inputs, buttons and table rows, spacing in steps of 4px.
-- A navy top bar; the current section is underlined in orange.
+- A navy top bar; the current section is underlined in orange. The logo leads to the dashboard.
 - Orange for the one primary action on a screen, blue for links and focus, red only for destructive actions.
 - Buttons: primary (default), `secondary`, `outline`, `ghost`, `danger`, `danger ghost`.
 - Every colour is a `--c-*` token in `admin.css`, defined for light and dark mode and fed into Pico's variables.

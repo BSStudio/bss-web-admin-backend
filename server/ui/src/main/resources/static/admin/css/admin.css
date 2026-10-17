@@ -279,6 +279,11 @@ fieldset:focus-within > legend {
     color: #ffffff;
 }
 
+/* The logo leads to the dashboard; it needs no underline there */
+.admin-bar .brand[aria-current="page"] {
+    box-shadow: none;
+}
+
 .admin-bar .brand strong {
     margin-right: 0.25rem;
     color: var(--bss-gold);
