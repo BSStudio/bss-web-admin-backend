@@ -10,7 +10,8 @@ plugins {
 
 dependencies {
     implementation("org.springframework:spring-context")
-    implementation("org.springframework:spring-web")
+    // the client's methods take spring-web types such as MultipartFile
+    api("org.springframework:spring-web")
     implementation("tools.jackson.module:jackson-module-kotlin")
     testImplementation(libs.kotestAssertionsJson)
     testImplementation("org.springframework.boot:spring-boot-starter-jackson-test")
