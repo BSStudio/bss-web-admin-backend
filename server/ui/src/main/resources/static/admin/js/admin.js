@@ -28,6 +28,19 @@
         if (question && !window.confirm(question)) event.preventDefault();
     });
 
+    // Images the file API has not made yet (nothing uploaded so far) show their placeholder text instead.
+    const showPlaceholder = (image) => image.closest(".media-preview")?.classList.add("missing");
+    document.addEventListener(
+        "error",
+        (event) => {
+            if (event.target.matches?.("img[data-media]")) showPlaceholder(event.target);
+        },
+        true,
+    );
+    for (const image of document.querySelectorAll("img[data-media]")) {
+        if (image.complete && image.naturalWidth === 0) showPlaceholder(image);
+    }
+
     window.addEventListener("beforeunload", (event) => {
         if (document.querySelector("form[data-dirty]")) event.preventDefault();
     });

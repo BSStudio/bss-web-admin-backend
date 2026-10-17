@@ -28,6 +28,7 @@
             <thead>
             <tr>
                 <th scope="col"><span class="sr-only" th:text="#{table.selection}">Selection</span></th>
+                <th scope="col" th:if="${media.enabled}"><span class="sr-only" th:text="#{video.thumbnail.title}">Thumbnail</span></th>
                 <th scope="col" th:text="#{video.field.title}">Title</th>
                 <th scope="col" class="hide-small" th:text="#{video.column.url}">URL</th>
                 <th scope="col" th:text="#{video.field.shot}">Shot</th>
@@ -36,7 +37,7 @@
             </thead>
             <tbody>
             <tr th:if="${page.empty}">
-                <td colspan="5" class="muted" th:text="#{video.list.empty}">No videos yet.</td>
+                <td colspan="6" class="muted" th:text="#{video.list.empty}">No videos yet.</td>
             </tr>
             <tr th:each="v : ${page.content}">
                 <td class="select">
@@ -44,6 +45,9 @@
                         <span class="sr-only" th:text="#{video.list.select(${v.title})}">Select</span>
                         <input type="checkbox" name="videoIds" form="bulk" th:value="${v.id}">
                     </label>
+                </td>
+                <td class="thumb-cell" th:if="${media.enabled}">
+                    <div th:replace="~{admin/fragments :: picture(${media.video(v.id)}, 'sd', null, '', '', 'thumb')}"></div>
                 </td>
                 <td><a th:href="@{/admin/videos/{id}(id=${v.id})}" th:text="${v.title}">Gólyatábor 2026 - Vám</a></td>
                 <td class="muted hide-small" th:text="${v.urls.isEmpty()} ? '' : ${v.urls[0]}">golyatabor-2026-vam</td>

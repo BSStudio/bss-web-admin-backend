@@ -18,55 +18,59 @@
     </div>
     <p th:replace="~{admin/fragments :: error(${error})}"></p>
 
-    <form method="post" th:action="@{/admin/members/{id}(id=${member.id})}" th:object="${form}" class="stack narrow"
-          th:data-unsaved="${error} ? 'pending' : 'track'">
-        <div class="grid">
+    <div class="columns">
+        <form method="post" th:action="@{/admin/members/{id}(id=${member.id})}" th:object="${form}" class="stack"
+              th:data-unsaved="${error} ? 'pending' : 'track'">
+            <div class="grid">
+                <label>
+                    <span th:text="#{member.field.name}">Name</span>
+                    <input type="text" th:field="*{name}" required autofocus>
+                </label>
+                <label>
+                    <span th:text="#{member.field.nickname}">Nickname</span>
+                    <input type="text" th:field="*{nickname}">
+                </label>
+            </div>
+            <div class="grid">
+                <label>
+                    <span th:text="#{member.field.url}">URL</span>
+                    <input type="text" th:field="*{url}" required aria-describedby="url-help form-error">
+                    <small id="url-help" th:text="#{member.field.url.help}">Used in the member’s page address.</small>
+                </label>
+                <label>
+                    <span th:text="#{member.field.role}">Role</span>
+                    <input type="text" th:field="*{role}">
+                </label>
+            </div>
+            <div class="grid">
+                <label>
+                    <span th:text="#{member.field.status}">Status</span>
+                    <select th:field="*{status}">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
+                    </select>
+                </label>
+                <label>
+                    <span th:text="#{member.field.joinedAt}">Joined</span>
+                    <input type="date" th:field="*{joinedAt}" required>
+                </label>
+            </div>
             <label>
-                <span th:text="#{member.field.name}">Name</span>
-                <input type="text" th:field="*{name}" required autofocus>
+                <span th:text="#{member.field.description}">Description</span>
+                <textarea th:field="*{description}" rows="4"></textarea>
             </label>
-            <label>
-                <span th:text="#{member.field.nickname}">Nickname</span>
-                <input type="text" th:field="*{nickname}">
+            <label class="inline">
+                <input type="checkbox" role="switch" th:field="*{archived}">
+                <span th:text="#{member.field.archived.help}">Archived: no longer an active member</span>
             </label>
-        </div>
-        <div class="grid">
-            <label>
-                <span th:text="#{member.field.url}">URL</span>
-                <input type="text" th:field="*{url}" required aria-describedby="url-help form-error">
-                <small id="url-help" th:text="#{member.field.url.help}">Used in the member’s page address.</small>
-            </label>
-            <label>
-                <span th:text="#{member.field.role}">Role</span>
-                <input type="text" th:field="*{role}">
-            </label>
-        </div>
-        <div class="grid">
-            <label>
-                <span th:text="#{member.field.status}">Status</span>
-                <select th:field="*{status}">
-                    <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
-                </select>
-            </label>
-            <label>
-                <span th:text="#{member.field.joinedAt}">Joined</span>
-                <input type="date" th:field="*{joinedAt}" required>
-            </label>
-        </div>
-        <label>
-            <span th:text="#{member.field.description}">Description</span>
-            <textarea th:field="*{description}" rows="4"></textarea>
-        </label>
-        <label class="inline">
-            <input type="checkbox" role="switch" th:field="*{archived}">
-            <span th:text="#{member.field.archived.help}">Archived: no longer an active member</span>
-        </label>
-        <div class="actions">
-            <a class="button secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
-            <button type="submit" th:text="#{action.save}">Save</button>
-            <span class="unsaved" role="status" th:text="#{form.unsaved}">Unsaved changes</span>
-        </div>
-    </form>
+            <div class="actions">
+                <a class="button secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
+                <button type="submit" th:text="#{action.save}">Save</button>
+                <span class="unsaved" role="status" th:text="#{form.unsaved}">Unsaved changes</span>
+            </div>
+        </form>
+
+        <section th:replace="~{admin/member/edit :: picture}"></section>
+    </div>
 
     <dialog id="delete-dialog">
         <article>
@@ -86,5 +90,24 @@
         </article>
     </dialog>
 </main>
+
+<!--/* The picture panel re-renders on its own after an htmx upload, so unsaved form changes stay */-->
+<section id="member-picture" class="panel" th:fragment="picture">
+    <h2 th:text="#{member.picture.title}">Profile picture</h2>
+    <p th:if="${uploadError}" class="flash error" role="alert" th:text="#{${uploadError}}">Could not upload.</p>
+    <p th:if="${uploadMessage}" class="flash" role="status" th:text="#{${uploadMessage}}">Uploaded.</p>
+    <div th:replace="~{admin/fragments :: picture(${media.member(member.id)}, 'l', ${imageVersion},
+         #{member.picture.alt(${member.name})}, #{media.missing}, 'portrait')}"></div>
+    <form class="inline-form" th:hx-post="@{/admin/members/{id}/picture(id=${member.id})}"
+          hx-encoding="multipart/form-data" hx-target="#member-picture" hx-swap="outerHTML">
+        <label>
+            <span class="sr-only" th:text="#{media.field.image}">Image</span>
+            <input id="picture-image" type="file" name="image" accept="image/*" required
+                   aria-describedby="picture-help">
+        </label>
+        <button type="submit" class="secondary" th:text="#{media.upload}">Upload</button>
+    </form>
+    <small id="picture-help" class="muted" th:text="#{media.help}">JPEG, PNG or WebP, up to 20 MB.</small>
+</section>
 </body>
 </html>

@@ -1,10 +1,12 @@
 package hu.bsstudio.bssweb.member.page
 
+import hu.bsstudio.bssweb.media.service.MediaService
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.service.MemberService
 import hu.bsstudio.bssweb.ui.flash.flash
+import hu.bsstudio.bssweb.ui.media.uploadImage
 import hu.bsstudio.bssweb.ui.paging.toPage
 import org.slf4j.LoggerFactory
 import org.springframework.dao.DataIntegrityViolationException
@@ -22,14 +24,17 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.RestClientException
+import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.util.UUID
 
 @Controller
 @RequestMapping("/admin/members")
+@Suppress("TooManyFunctions")
 class MemberPageController(
     private val memberService: MemberService,
+    private val mediaService: MediaService,
 ) {
     @GetMapping
     fun list(
@@ -130,6 +135,17 @@ class MemberPageController(
             redirect.flash("member.flash.savedWithoutFiles", form.name.trim(), error = true)
             "redirect:/admin/members/$memberId"
         }
+
+    @PostMapping("/{memberId}/picture")
+    fun uploadPicture(
+        @PathVariable memberId: UUID,
+        @RequestParam image: MultipartFile,
+        model: Model,
+    ): String {
+        model["member"] = findMember(memberId)
+        uploadImage(model, "member.picture.uploaded") { mediaService.uploadMemberPicture(memberId, image) }
+        return "admin/member/edit :: picture"
+    }
 
     @PostMapping("/{memberId}/delete")
     fun delete(

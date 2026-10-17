@@ -1,8 +1,10 @@
 package hu.bsstudio.bssweb.video.page
 
 import hu.bsstudio.bssweb.label.service.LabelService
+import hu.bsstudio.bssweb.media.service.MediaService
 import hu.bsstudio.bssweb.member.service.MemberService
 import hu.bsstudio.bssweb.ui.flash.flash
+import hu.bsstudio.bssweb.ui.media.uploadImage
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.service.VideoService
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.client.RestClientException
+import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.util.UUID
@@ -39,6 +42,7 @@ class VideoPageController(
     private val labelService: LabelService,
     private val memberService: MemberService,
     private val videoCrewService: VideoCrewService,
+    private val mediaService: MediaService,
 ) {
     @GetMapping
     fun list(
@@ -159,6 +163,17 @@ class VideoPageController(
     ): String {
         videoCrewService.removePosition(VideoCrewRequest(videoId, position, memberId))
         return crewFragment(findVideo(videoId), model)
+    }
+
+    @PostMapping("/{videoId}/thumbnail")
+    fun uploadThumbnail(
+        @PathVariable videoId: UUID,
+        @RequestParam image: MultipartFile,
+        model: Model,
+    ): String {
+        model["video"] = findVideo(videoId)
+        uploadImage(model, "video.thumbnail.uploaded") { mediaService.uploadVideoThumbnail(videoId, image) }
+        return "admin/video/edit :: thumbnail"
     }
 
     @PostMapping("/{videoId}/delete")

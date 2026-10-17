@@ -3,6 +3,7 @@ package hu.bsstudio.bssweb.video.page
 import com.ninjasquad.springmockk.MockkBean
 import hu.bsstudio.bssweb.label.model.Label
 import hu.bsstudio.bssweb.label.service.LabelService
+import hu.bsstudio.bssweb.media.service.MediaService
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.SimpleMember
@@ -35,13 +36,17 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
+import org.springframework.http.HttpStatus
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.multipart
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
+import org.springframework.web.client.HttpServerErrorException
 import org.springframework.web.client.ResourceAccessException
 import java.time.LocalDate
 import java.util.Optional
@@ -63,6 +68,9 @@ internal class VideoPageControllerTest(
 
     @MockkBean
     private lateinit var videoCrewService: VideoCrewService
+
+    @MockkBean
+    private lateinit var mediaService: MediaService
 
     @BeforeEach
     internal fun setUp() {
@@ -86,6 +94,7 @@ internal class VideoPageControllerTest(
                 content { string(containsString(TITLE)) }
                 content { string(containsString("""hx-put="$BASE_URL/$VIDEO_ID/visibility?visible=false"""")) }
                 content { string(containsString("<span>1–1 of 1 item</span>")) }
+                content { string(containsString("""srcset="http://localhost:8890/v/$VIDEO_ID/thumbnail/sd.webp"""")) }
             }
 
         pageable.captured.pageSize shouldBe 25
@@ -235,6 +244,8 @@ internal class VideoPageControllerTest(
                 content { string(containsString("""value="2026-08-13"""")) }
                 content { string(containsString(MEMBER.name)) }
                 content { string(containsString("""required autofocus aria-describedby="form-error"""")) }
+                content { string(containsString("""src="http://localhost:8890/v/$VIDEO_ID/thumbnail/hd.jpeg"""")) }
+                content { string(containsString("""alt="Thumbnail of “$TITLE”"""")) }
                 content { string(containsString("""data-unsaved="track">""")) }
                 content { string(containsString("""<span class="unsaved" role="status">Unsaved changes</span>""")) }
                 content { string(not(containsString("""autofocus="autofocus""""))) }
@@ -374,6 +385,54 @@ internal class VideoPageControllerTest(
     }
 
     @Test
+    internal fun `should upload a thumbnail and show the new one`() {
+        every { mediaService.uploadVideoThumbnail(VIDEO_ID, IMAGE) } just runs
+
+        mockMvc
+            .multipart("$BASE_URL/$VIDEO_ID/thumbnail") {
+                with(oauth2Login())
+                with(csrf())
+                file(IMAGE)
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("""<section id="video-thumbnail" class="panel">""")) }
+                content { string(containsString("Thumbnail uploaded.")) }
+                content { string(containsString("/thumbnail/hd.jpeg?v=")) }
+                content { string(not(containsString("<html"))) }
+            }
+    }
+
+    @Test
+    internal fun `should explain an image the file server refuses`() {
+        every { mediaService.uploadVideoThumbnail(VIDEO_ID, any()) } throws HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR)
+
+        mockMvc
+            .multipart("$BASE_URL/$VIDEO_ID/thumbnail") {
+                with(oauth2Login())
+                with(csrf())
+                file(IMAGE)
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("The file server couldn’t process this image.")) }
+            }
+    }
+
+    @Test
+    internal fun `should explain that the file server is down`() {
+        every { mediaService.uploadVideoThumbnail(VIDEO_ID, any()) } throws ResourceAccessException("connection refused")
+
+        mockMvc
+            .multipart("$BASE_URL/$VIDEO_ID/thumbnail") {
+                with(oauth2Login())
+                with(csrf())
+                file(IMAGE)
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("The file server can’t be reached right now.")) }
+            }
+    }
+
+    @Test
     internal fun `should delete a video`() {
         every { videoService.deleteVideoById(VIDEO_ID) } just runs
 
@@ -421,6 +480,7 @@ internal class VideoPageControllerTest(
         private const val TITLE = "Gólyatábor 2026 - Vám"
         private const val URL = "golyatabor-2026-vam"
         private const val POSITION = "Camera"
+        private val IMAGE = MockMultipartFile("image", "vam.jpg", "image/jpeg", byteArrayOf(1, 2, 3))
         private val VIDEO_ID = UUID.randomUUID()
         private val SHOOTING_DATE = LocalDate.of(2026, 8, 13)
         private val LABEL = Label(UUID.randomUUID(), "Egyetemi élet", "University life")

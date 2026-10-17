@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.member.page
 
 import com.ninjasquad.springmockk.MockkBean
+import hu.bsstudio.bssweb.media.service.MediaService
 import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
@@ -20,10 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import org.springframework.test.web.servlet.multipart
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
 import org.springframework.web.client.ResourceAccessException
@@ -38,6 +41,9 @@ internal class MemberPageControllerTest(
 ) {
     @MockkBean
     private lateinit var service: MemberService
+
+    @MockkBean
+    private lateinit var mediaService: MediaService
 
     @BeforeEach
     internal fun setUp() {
@@ -58,6 +64,7 @@ internal class MemberPageControllerTest(
                 content { string(containsString("<td>Member</td>")) }
                 content { string(containsString("""<tr class="archived">""")) }
                 content { string(containsString("<span>1–3 of 3 items</span>")) }
+                content { string(containsString("""srcset="http://localhost:8890/m/${ANNA.id}/profile/m.webp"""")) }
             }
     }
 
@@ -275,6 +282,24 @@ internal class MemberPageControllerTest(
                 formFields(ANNA.name)
             }.andExpect {
                 status { isNotFound() }
+            }
+    }
+
+    @Test
+    internal fun `should upload a profile picture and show the new one`() {
+        val image = MockMultipartFile("image", "anna.png", "image/png", byteArrayOf(1, 2, 3))
+        every { mediaService.uploadMemberPicture(ANNA.id, image) } just runs
+
+        mockMvc
+            .multipart("$BASE_URL/${ANNA.id}/picture") {
+                with(oauth2Login())
+                with(csrf())
+                file(image)
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("""<section id="member-picture" class="panel">""")) }
+                content { string(containsString("Profile picture uploaded.")) }
+                content { string(containsString("""src="http://localhost:8890/m/${ANNA.id}/profile/l.jpeg?v=""")) }
             }
     }
 

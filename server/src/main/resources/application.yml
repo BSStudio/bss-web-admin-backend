@@ -8,6 +8,10 @@ spring:
   mvc:
     format:
       date: iso
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
 springdoc:
   swagger-ui:
     url: /open-api.yaml

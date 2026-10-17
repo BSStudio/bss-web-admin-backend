@@ -85,6 +85,28 @@ and API responses keep Spring's defaults, without messages.
   When the session has expired, htmx reloads the page, which leads to the login.
 - The admin filter chain serves `/error` and permits it, so the page also renders after a session has expired.
 
+## Images
+
+Video thumbnails and member profile pictures are uploaded to the file API, which converts each upload to AVIF, WebP
+and JPEG in three sizes (`/v/{id}/thumbnail/{sd,hd,fhd}.*`, `/m/{id}/profile/{m,l,xl}.*`). The file API only writes
+these files; another host publishes them.
+
+- `bss.media.url` is the base URL of that host. Lists show small thumbnails and avatars, and the edit pages show
+  the current image. Without the property, pages show no images, but uploads still work.
+- Uploads go through `MediaService` and swap only the image panel (htmx), so unsaved form changes stay.
+  If the video or member has no folder on the file API yet (created before the file API existed), the folder is
+  created and the upload retried once.
+- `admin.js` replaces an image that does not exist yet with the panel's "No image yet" text.
+- Uploads can be up to 20 MB (`spring.servlet.multipart.*`).
+
+To try uploads with real images locally, run the real file API and the static host for its files:
+
+```shell
+FILE_API_URL=http://file-api:8000 MEDIA_URL=http://localhost:8890 docker compose --profile app --profile files up -d --build
+```
+
+Without these, the app uses the WireMock mock of the file API, which accepts uploads but stores nothing.
+
 ## Keyboard and focus
 
 - The first Tab on every page reaches *Skip to content*, which jumps to `<main id="main">`. Keep `id="main"` on new pages.

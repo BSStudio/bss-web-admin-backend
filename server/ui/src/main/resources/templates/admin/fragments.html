@@ -20,6 +20,19 @@
     </span>
 </nav>
 
+<!--/*
+  An image from the file API in AVIF, WebP or JPEG. kind sets the shape: wide, thumb, avatar or portrait.
+  version busts the browser cache right after an upload. admin.js shows the "empty" text when there is no image yet.
+*/-->
+<div th:fragment="picture(base, size, version, alt, empty, kind)" th:if="${media.enabled}"
+     th:class="|media-preview ${kind}|" th:data-empty="${empty}">
+    <picture>
+        <source th:srcset="|${base}/${size}.avif${version ?: ''}|" type="image/avif">
+        <source th:srcset="|${base}/${size}.webp${version ?: ''}|" type="image/webp">
+        <img th:src="|${base}/${size}.jpeg${version ?: ''}|" th:alt="${alt}" data-media loading="lazy">
+    </picture>
+</div>
+
 <!--/* An error message above a form, e.g. after a unique constraint violation */-->
 <p th:fragment="error(key)" th:if="${key}" id="form-error" class="flash error" role="alert" th:text="#{${key}}">Could not save.</p>
 

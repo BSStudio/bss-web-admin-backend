@@ -108,6 +108,50 @@
           "url": "url"
         }
       }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "urlPathPattern": "/api/v1/video/[0-9a-f-]{36}/thumbnail",
+        "basicAuthCredentials": {
+          "username": "username",
+          "password": "password"
+        },
+        "headers": {
+          "Content-Type": {
+            "contains": "multipart/form-data"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": "01234567-0123-0123-0123-0123456789ab"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "urlPathPattern": "/api/v1/member/[0-9a-f-]{36}/profilePicture",
+        "basicAuthCredentials": {
+          "username": "username",
+          "password": "password"
+        },
+        "headers": {
+          "Content-Type": {
+            "contains": "multipart/form-data"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": "01234567-0123-0123-0123-0123456789ab"
+      }
     }
   ]
 }

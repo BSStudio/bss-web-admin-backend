@@ -11,7 +11,9 @@ services:
       - postgres
       - mock-login
     environment:
-      bss.file-api.url: "http://mock-file-api:8080"
+      # the WireMock mock by default; the real file API with the "files" profile (see server/ui/README.md)
+      bss.file-api.url: "${FILE_API_URL:-http://mock-file-api:8080}"
+      bss.media.url: "${MEDIA_URL:-}"
       bss.file-api.username: "username"
       bss.file-api.password: "password"
       spring.security.oauth2.resourceserver.opaquetoken.introspection-uri: "http://mock-oidc:8080/o/introspect"
@@ -83,6 +85,38 @@ services:
     environment:
       JSON_CONFIG: '{"interactiveLogin": true}'
 
+  file-api:
+    # the real file API, to try image uploads locally (profile "files")
+    image: "ghcr.io/bsstudio/bss-web-file-api:v2.2.195@sha256:45a49cda13504bae22b50c5942ade4711ca844a32a1fc7d793438c3e3a108256"
+    profiles:
+      - files
+    environment:
+      SERVER_BASE_PATH: "/home/nonroot/media"
+      USERNAME: "username"
+      PASSWORD: "password"
+    volumes:
+      # the home folder, because the image creates it for its non-root user and so it stays writable
+      - "media:/home/nonroot"
+
+  media:
+    # publishes the files the file API writes, like the production media host (profile "files")
+    image: "ghcr.io/bsstudio/bss-web-file-api:v2.2.195@sha256:45a49cda13504bae22b50c5942ade4711ca844a32a1fc7d793438c3e3a108256"
+    profiles:
+      - files
+    command: ["python", "-m", "http.server", "8000", "--directory", "/home/nonroot/media"]
+    ports:
+      - "127.0.0.1:8890:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      file-api:
+        condition: service_healthy
+    volumes:
+      - "media:/home/nonroot:ro"
+
   prometheus:
     image: "prom/prometheus:v3.15.0@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e"
     ports:
@@ -109,3 +143,6 @@ services:
       - prometheus
     healthcheck:
       test: curl -fs http://localhost:3000/api/health | grep -q "\"ok\""
+
+volumes:
+  media:

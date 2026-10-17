@@ -64,7 +64,10 @@
             </div>
         </form>
 
-        <section th:replace="~{admin/video/edit :: crew}"></section>
+        <div>
+            <section th:replace="~{admin/video/edit :: thumbnail}"></section>
+            <section th:replace="~{admin/video/edit :: crew}"></section>
+        </div>
     </div>
 
     <dialog id="delete-dialog">
@@ -85,6 +88,25 @@
         </article>
     </dialog>
 </main>
+
+<!--/* The thumbnail panel re-renders on its own after an htmx upload, so unsaved form changes stay */-->
+<section id="video-thumbnail" class="panel" th:fragment="thumbnail">
+    <h2 th:text="#{video.thumbnail.title}">Thumbnail</h2>
+    <p th:if="${uploadError}" class="flash error" role="alert" th:text="#{${uploadError}}">Could not upload.</p>
+    <p th:if="${uploadMessage}" class="flash" role="status" th:text="#{${uploadMessage}}">Uploaded.</p>
+    <div th:replace="~{admin/fragments :: picture(${media.video(video.id)}, 'hd', ${imageVersion},
+         #{video.thumbnail.alt(${video.title})}, #{media.missing}, 'wide')}"></div>
+    <form class="inline-form" th:hx-post="@{/admin/videos/{id}/thumbnail(id=${video.id})}"
+          hx-encoding="multipart/form-data" hx-target="#video-thumbnail" hx-swap="outerHTML">
+        <label>
+            <span class="sr-only" th:text="#{media.field.image}">Image</span>
+            <input id="thumbnail-image" type="file" name="image" accept="image/*" required
+                   aria-describedby="thumbnail-help">
+        </label>
+        <button type="submit" class="secondary" th:text="#{media.upload}">Upload</button>
+    </form>
+    <small id="thumbnail-help" class="muted" th:text="#{media.help}">JPEG, PNG or WebP, up to 20 MB.</small>
+</section>
 
 <!--/* The crew panel re-renders on its own after each htmx add or remove */-->
 <section id="crew" class="panel" th:fragment="crew">
