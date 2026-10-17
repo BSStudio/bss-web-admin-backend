@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'members')}">
+<head>
+    <title th:text="|#{member.new.title} · #{app.title}|">New member · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container">
+    <div class="page-header">
+        <div>
+            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
+                <a th:href="@{/admin/members}" th:text="#{member.list.title}">Members</a>
+            </nav>
+            <h1 th:text="#{member.new.title}">New member</h1>
+        </div>
+    </div>
+    <p th:replace="~{admin/fragments :: error(${error})}"></p>
+
+    <form method="post" th:action="@{/admin/members}" class="stack narrow"
+          th:data-unsaved="${error} ? 'pending' : 'track'">
+        <label>
+            <span th:text="#{member.field.name}">Name</span>
+            <input type="text" name="name" th:value="${name}" required autofocus>
+        </label>
+        <label>
+            <span th:text="#{member.field.url}">URL</span>
+            <input type="text" name="url" th:value="${url}" required aria-describedby="url-help form-error"
+                   th:aria-invalid="${error} ? 'true'">
+            <small id="url-help" th:text="#{member.field.url.help}">Used in the member’s page address.</small>
+        </label>
+        <p class="muted" th:text="#{member.new.help}">Start with the name and URL.</p>
+        <div class="actions">
+            <a class="button secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
+            <button type="submit" th:text="#{action.create}">Create</button>
+            <span class="unsaved" role="status" th:text="#{form.unsaved}">Unsaved changes</span>
+        </div>
+    </form>
+</main>
+</body>
+</html>

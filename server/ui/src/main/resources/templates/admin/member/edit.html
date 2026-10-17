@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'members')}">
+<head>
+    <title th:text="|${member.name} · #{app.title}|">Kovács Anna · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container">
+    <div class="page-header">
+        <div>
+            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
+                <a th:href="@{/admin/members}" th:text="#{member.list.title}">Members</a>
+            </nav>
+            <h1 th:text="${member.name}">Kovács Anna</h1>
+        </div>
+        <button type="button" class="danger ghost" command="show-modal" commandfor="delete-dialog"
+                th:text="#{member.delete.title}">Delete member</button>
+    </div>
+    <p th:replace="~{admin/fragments :: error(${error})}"></p>
+
+    <form method="post" th:action="@{/admin/members/{id}(id=${member.id})}" th:object="${form}" class="stack narrow"
+          th:data-unsaved="${error} ? 'pending' : 'track'">
+        <div class="grid">
+            <label>
+                <span th:text="#{member.field.name}">Name</span>
+                <input type="text" th:field="*{name}" required autofocus>
+            </label>
+            <label>
+                <span th:text="#{member.field.nickname}">Nickname</span>
+                <input type="text" th:field="*{nickname}">
+            </label>
+        </div>
+        <div class="grid">
+            <label>
+                <span th:text="#{member.field.url}">URL</span>
+                <input type="text" th:field="*{url}" required aria-describedby="url-help form-error">
+                <small id="url-help" th:text="#{member.field.url.help}">Used in the member’s page address.</small>
+            </label>
+            <label>
+                <span th:text="#{member.field.role}">Role</span>
+                <input type="text" th:field="*{role}">
+            </label>
+        </div>
+        <div class="grid">
+            <label>
+                <span th:text="#{member.field.status}">Status</span>
+                <select th:field="*{status}">
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
+                </select>
+            </label>
+            <label>
+                <span th:text="#{member.field.joinedAt}">Joined</span>
+                <input type="date" th:field="*{joinedAt}" required>
+            </label>
+        </div>
+        <label>
+            <span th:text="#{member.field.description}">Description</span>
+            <textarea th:field="*{description}" rows="4"></textarea>
+        </label>
+        <label class="inline">
+            <input type="checkbox" role="switch" th:field="*{archived}">
+            <span th:text="#{member.field.archived.help}">Archived: no longer an active member</span>
+        </label>
+        <div class="actions">
+            <a class="button secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
+            <button type="submit" th:text="#{action.save}">Save</button>
+            <span class="unsaved" role="status" th:text="#{form.unsaved}">Unsaved changes</span>
+        </div>
+    </form>
+
+    <dialog id="delete-dialog">
+        <article>
+            <header>
+                <h2 th:text="#{member.delete.question(${member.name})}">Delete “Kovács Anna”?</h2>
+                <button type="button" class="ghost" command="close" commandfor="delete-dialog"
+                        th:aria-label="#{action.close}">✕</button>
+            </header>
+            <p th:text="#{member.delete.warning}">This can’t be undone.</p>
+            <footer>
+                <button type="button" class="secondary" command="close" commandfor="delete-dialog" autofocus
+                        th:text="#{action.cancel}">Cancel</button>
+                <form method="post" th:action="@{/admin/members/{id}/delete(id=${member.id})}">
+                    <button type="submit" class="danger" th:text="#{action.delete}">Delete</button>
+                </form>
+            </footer>
+        </article>
+    </dialog>
+</main>
+</body>
+</html>

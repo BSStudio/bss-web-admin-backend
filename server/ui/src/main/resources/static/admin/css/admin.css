@@ -671,6 +671,10 @@ tbody tr:has([form="bulk"]:checked) td {
     background: var(--c-layer-selected);
 }
 
+tbody tr.archived td {
+    color: var(--c-text-secondary);
+}
+
 td.select,
 td.row-action {
     width: 1%;
