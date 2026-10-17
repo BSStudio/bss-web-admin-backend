@@ -11,4 +11,6 @@ data class Event(
     val dateFrom: LocalDate,
     val dateTo: LocalDate,
     val visible: Boolean,
+    /** How many videos the event has. */
+    val videoCount: Long = 0,
 )

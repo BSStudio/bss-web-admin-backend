@@ -20,6 +20,7 @@ class EventMapper(
             dateFrom = entity.dateFrom,
             dateTo = entity.dateTo,
             visible = entity.visible,
+            videoCount = entity.videoCount,
         )
 
     fun entityToModel(entity: DetailedEventEntity): DetailedEvent =

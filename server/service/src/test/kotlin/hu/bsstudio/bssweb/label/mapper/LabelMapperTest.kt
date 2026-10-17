@@ -40,12 +40,14 @@ internal class LabelMapperTest {
                 description = DESCRIPTION,
             ).apply {
                 this.id = ID
+                this.videoCount = 4
             }
         private val LABEL =
             Label(
                 id = ID,
                 name = NAME,
                 description = DESCRIPTION,
+                videoCount = 4,
             )
         private val CREATE_LABEL =
             CreateLabel(

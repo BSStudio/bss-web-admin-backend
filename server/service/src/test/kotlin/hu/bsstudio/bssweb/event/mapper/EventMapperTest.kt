@@ -71,8 +71,13 @@ internal class EventMapperTest(
         private val DATE_FROM = mockk<LocalDate>()
         private val DATE_TO = mockk<LocalDate>()
         private const val VISIBLE = true
-        private val ENTITY = SimpleEventEntity(URL, TITLE, DESCRIPTION, DATE_FROM, DATE_TO, VISIBLE).apply { id = ID }
-        private val MODEL = Event(ID, URL, TITLE, DESCRIPTION, DATE_FROM, DATE_TO, VISIBLE)
+        private const val VIDEO_COUNT = 3L
+        private val ENTITY =
+            SimpleEventEntity(URL, TITLE, DESCRIPTION, DATE_FROM, DATE_TO, VISIBLE).apply {
+                id = ID
+                videoCount = VIDEO_COUNT
+            }
+        private val MODEL = Event(ID, URL, TITLE, DESCRIPTION, DATE_FROM, DATE_TO, VISIBLE, VIDEO_COUNT)
         private val VIDEO_ENTITY = mockk<SimpleVideoEntity>()
         private val VIDEO = mockk<Video>()
         private val DETAILED_ENTITY =

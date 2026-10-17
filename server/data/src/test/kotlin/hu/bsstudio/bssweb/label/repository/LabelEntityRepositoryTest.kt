@@ -1,6 +1,8 @@
 package hu.bsstudio.bssweb.label.repository
 
 import hu.bsstudio.bssweb.label.entity.LabelEntity
+import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
 import io.kotest.matchers.longs.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
@@ -13,6 +15,7 @@ import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class LabelEntityRepositoryTest(
     @param:Autowired private val underTest: LabelRepository,
+    @param:Autowired private val videoRepository: DetailedVideoRepository,
     @param:Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
@@ -35,5 +38,18 @@ internal class LabelEntityRepositoryTest(
         underTest.count() shouldBeExactly 2
         val actual = underTest.findAllByNameIn(listOf(label0.name, label1.name, "Nonexistent label"))
         actual shouldBe savedLabels
+    }
+
+    @Test
+    internal fun `it should count the videos of each label when loading them`() {
+        val labels = listOf("Popular", "Rare", "Unused").map { underTest.save(LabelEntity(name = it, description = it)) }
+        videoRepository.save(DetailedVideoEntity(title = "Both").apply { this.labels = labels.take(2) })
+        videoRepository.save(DetailedVideoEntity(title = "Popular only").apply { this.labels = labels.take(1) })
+        entityManager.run {
+            flush()
+            clear()
+        }
+
+        underTest.findAll().associate { it.name to it.videoCount } shouldBe mapOf("Popular" to 2L, "Rare" to 1L, "Unused" to 0L)
     }
 }

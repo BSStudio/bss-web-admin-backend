@@ -26,6 +26,13 @@ internal class LabelTest(
         actual shouldBeEqual CREATE_LABEL
     }
 
+    @Test
+    internal fun `test deserialization without a video count`() {
+        val actual = this.underTest.parseObject(JSON.replace(Regex(",\\s*\"videoCount\": \\d+"), ""))
+
+        actual shouldBeEqual CREATE_LABEL.copy(videoCount = 0)
+    }
+
     private companion object {
         private val ID = UUID.randomUUID()
         private const val NAME = "name"
@@ -35,13 +42,15 @@ internal class LabelTest(
                 id = ID,
                 name = NAME,
                 description = DESCRIPTION,
+                videoCount = 2,
             )
         private val JSON =
             """
             {
                 "id": "$ID",
                 "name": "$NAME",
-                "description": "$DESCRIPTION"
+                "description": "$DESCRIPTION",
+                "videoCount": 2
             }
             """.trimIndent()
     }
