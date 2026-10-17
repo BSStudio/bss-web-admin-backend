@@ -18,6 +18,23 @@ directory.
 The project uses the `private` schema for all the tables.
 The `public` schema is used for rendering views for the [GraphQL backend][graphql-backend].
 
+## Batch fetching
+
+`BatchFetchConfig` sets Hibernate's `hibernate.default_batch_fetch_size` to 100. Hibernate's default is to batch
+nothing (except where `@BatchSize` asks for it), so every collection loads with its own query. A video's URLs are an
+eager collection, so loading every video (about 2,300) ran 2,274 statements; with batches of 100 it runs 24.
+
+- **What it changes:** every collection and lazy association, not only video URLs. When the code reaches one
+  uninitialized collection, Hibernate loads up to 99 more of the same kind from the persistence context with it.
+- **The trade-off:** a higher size means fewer queries, but each brings more rows into memory at once, and loads
+  collections the code may not need. A lower size means more round trips. Here the mappers read every collection
+  they load, so batching changes the number of queries, not the amount of data.
+- **Why 100:** it is the largest page of the admin's lists, and a batch stays small, since a video has only a
+  handful of URLs. Hibernate's docs give no number.
+
+The KDoc of `BatchFetchConfig` has the details and links to Hibernate's docs. It is in code rather than in
+`application.yml` so that the reason can sit next to it.
+
 ## Testing
 
 The tests in this module will set up a Postgres database
