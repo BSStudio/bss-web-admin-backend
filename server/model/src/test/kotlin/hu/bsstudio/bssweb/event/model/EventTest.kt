@@ -27,6 +27,13 @@ internal class EventTest(
         actual shouldBeEqual EVENT
     }
 
+    @Test
+    internal fun `test deserialization without a video count`() {
+        val actual = this.underTest.parseObject(JSON.replace(Regex(",\\s*\"videoCount\": \\d+"), ""))
+
+        actual shouldBeEqual EVENT.copy(videoCount = 0)
+    }
+
     private companion object {
         private val ID = UUID.randomUUID()
         private const val URL = "url"
@@ -44,6 +51,7 @@ internal class EventTest(
                 dateFrom = DATE_FROM,
                 dateTo = DATE_TO,
                 visible = VISIBLE,
+                videoCount = 3,
             )
         private val JSON =
             """
@@ -54,7 +62,8 @@ internal class EventTest(
                 "description": "$DESCRIPTION",
                 "dateFrom": "$DATE_FROM",
                 "dateTo": "$DATE_TO",
-                "visible": $VISIBLE
+                "visible": $VISIBLE,
+                "videoCount": 3
             }
             """.trimIndent()
     }

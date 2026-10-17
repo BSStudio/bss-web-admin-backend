@@ -6,6 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.Formula
 import org.hibernate.annotations.UpdateTimestamp
 import java.time.Instant
 import java.time.LocalDate
@@ -30,6 +31,10 @@ data class SimpleEventEntity(
 
     @UpdateTimestamp
     override lateinit var updatedAt: Instant
+
+    /** How many videos the event has, counted in the same query that loads the event. */
+    @Formula("(select count(*) from event_video ev where ev.event_id = id)")
+    var videoCount: Long = 0
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

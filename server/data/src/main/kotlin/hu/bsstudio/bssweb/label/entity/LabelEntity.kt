@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.Hibernate
+import org.hibernate.annotations.Formula
 import java.util.UUID
 
 @Entity
@@ -16,6 +17,10 @@ data class LabelEntity(
     @Id
     @GeneratedValue
     lateinit var id: UUID
+
+    /** How many videos have the label, counted in the same query that loads the label. */
+    @Formula("(select count(*) from video_label vl where vl.label_id = id)")
+    var videoCount: Long = 0
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

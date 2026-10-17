@@ -729,6 +729,11 @@ components:
             type: string
             format: uuid
             nullable: false
+          videoCount:
+            type: integer
+            format: int64
+            readOnly: true
+            description: How many videos have the label
       - $ref: "#/components/schemas/CreateLabel"
     CreateEvent:
       type: object
@@ -759,6 +764,11 @@ components:
           id:
             type: string
             format: uuid
+          videoCount:
+            type: integer
+            format: int64
+            readOnly: true
+            description: How many videos the event has
       - $ref: "#/components/schemas/UpdateEvent"
     DetailedEvent:
       allOf:

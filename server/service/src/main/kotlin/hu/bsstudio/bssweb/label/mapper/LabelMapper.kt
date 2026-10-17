@@ -10,6 +10,7 @@ class LabelMapper {
             id = entity.id,
             name = entity.name,
             description = entity.description,
+            videoCount = entity.videoCount,
         )
 
     fun modelToEntity(model: CreateLabel): LabelEntity =

@@ -1,11 +1,16 @@
 package hu.bsstudio.bssweb.event.repository
 
 import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
+import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
+import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
+import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
+import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
 import io.kotest.matchers.date.shouldBeCloseTo
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
@@ -19,6 +24,8 @@ import kotlin.time.Duration.Companion.minutes
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class EventRepositoryTest(
     @param:Autowired private val underTest: SimpleEventRepository,
+    @param:Autowired private val videoRepository: SimpleVideoRepository,
+    @param:Autowired private val eventVideoRepository: EventVideoRepository,
     @param:Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
@@ -52,6 +59,21 @@ internal class EventRepositoryTest(
 
         underTest.deleteById(id)
         underTest.findById(id).shouldBeEmpty()
+    }
+
+    @Test
+    internal fun `count the videos of each event when loading them`() {
+        val eventId = underTest.save(SimpleEventEntity(url = URL, title = TITLE)).id
+        val emptyId = underTest.save(SimpleEventEntity(url = "empty", title = "Empty")).id
+        listOf("first", "second")
+            .map { videoRepository.save(SimpleVideoEntity(title = it)).id }
+            .forEach { eventVideoRepository.save(EventVideoEntity(eventId, it)) }
+        entityManager.run {
+            flush()
+            clear()
+        }
+
+        underTest.findAll().associate { it.id to it.videoCount } shouldBe mapOf(eventId to 2L, emptyId to 0L)
     }
 
     private companion object {
