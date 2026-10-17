@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'events')}">
+<head>
+    <title th:text="|#{event.list.title} · #{app.title}|">Events · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${page != null}, ${q != null}, ${sorting != null}">
+    <div class="page-header">
+        <h1 th:text="#{event.list.title}">Events</h1>
+    </div>
+
+    <div class="table-toolbar">
+        <div class="toolbar-actions">
+            <search th:replace="~{admin/fragments :: search('/admin/events', ${page})}"></search>
+            <a class="button" th:href="@{/admin/events/new}" th:text="#{event.list.new}">New event</a>
+        </div>
+    </div>
+
+    <!--/* htmx requests get only this part: see the controller */-->
+    <div id="results" th:fragment="results">
+        <div class="data-table">
+            <table>
+                <caption class="sr-only" th:text="#{event.list.title}">Events</caption>
+                <thead>
+                <tr>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'title', #{event.field.title}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'url', #{event.field.url}, 'hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'dateFrom', #{event.column.dates}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'videoCount', #{event.column.videos}, 'num hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'visible', #{event.column.visible}, '')}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${page.empty}">
+                    <td colspan="5" class="muted"
+                        th:text="${q.isBlank()} ? #{event.list.empty} : #{table.noMatch(${q})}">No events yet.</td>
+                </tr>
+                <tr th:each="e : ${page.content}">
+                    <td><a th:href="@{/admin/events/{id}(id=${e.id})}" th:text="${e.title}">Gólyatábor 2026</a></td>
+                    <td class="muted hide-small" th:text="${e.url}">golyatabor-2026</td>
+                    <td class="date" th:insert="~{admin/fragments :: dates(${e.dateFrom}, ${e.dateTo})}">Aug 12, 2026</td>
+                    <td class="num hide-small" th:text="${e.videoCount}">12</td>
+                    <td th:replace="~{admin/event/list :: visibility(id=${e.id}, title=${e.title}, visible=${e.visible})}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav th:replace="~{admin/fragments :: pagination(${page}, '/admin/events')}"></nav>
+    </div>
+</main>
+
+<!--/* Fragments rendered on their own by htmx requests */-->
+<table th:remove="all">
+    <thead>
+    <tr>
+        <th>Visible</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:fragment="visibility" th:assert="${id != null}" class="select">
+            <label>
+                <span class="sr-only" th:text="#{event.list.toggle(${title})}">Show on the website</span>
+                <input type="checkbox" th:id="|visible-${id}|" th:checked="${visible}"
+                       th:hx-put="@{/admin/events/{id}/visibility(id=${id}, visible=${!visible})}"
+                       hx-target="closest td" hx-swap="outerHTML">
+            </label>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

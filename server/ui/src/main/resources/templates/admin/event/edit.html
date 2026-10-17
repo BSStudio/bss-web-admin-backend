@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'events')}">
+<head>
+    <title th:text="|${event.title} · #{app.title}|">Gólyatábor 2026 · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${event != null}, ${form != null}">
+    <div class="page-header">
+        <div>
+            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
+                <a th:href="@{/admin/events}" th:text="#{event.list.title}">Events</a>
+            </nav>
+            <h1 th:text="${event.title}">Gólyatábor 2026</h1>
+        </div>
+        <button type="button" class="danger ghost" command="show-modal" commandfor="delete-dialog"
+                th:text="#{event.delete.title}">Delete event</button>
+    </div>
+
+    <div class="columns">
+        <form method="post" th:action="@{/admin/events/{id}(id=${event.id})}" th:object="${form}" class="stack"
+              th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
+            <p th:replace="~{admin/fragments :: formError}"></p>
+            <label>
+                <span th:text="#{event.field.title}">Title</span>
+                <input type="text" th:field="*{title}" required maxlength="250"
+                       th:aria-invalid="${#fields.hasErrors('title')} ? 'true'"
+                       th:aria-describedby="${#fields.hasErrors('title')} ? 'title-error'">
+                <small th:replace="~{admin/fragments :: fieldError('title')}"></small>
+            </label>
+            <label>
+                <span th:text="#{event.field.url}">URL</span>
+                <input type="text" th:field="*{url}" required maxlength="250"
+                       th:aria-invalid="${#fields.hasErrors('url')} ? 'true'"
+                       th:aria-describedby="${#fields.hasErrors('url')} ? 'url-help url-error' : 'url-help'">
+                <small id="url-help" th:text="#{event.field.url.help}">Used in the event’s page address.</small>
+                <small th:replace="~{admin/fragments :: fieldError('url')}"></small>
+            </label>
+            <div class="grid">
+                <label>
+                    <span th:text="#{event.field.dateFrom}">Starts</span>
+                    <input type="date" th:field="*{dateFrom}" required
+                           th:aria-invalid="${#fields.hasErrors('dateFrom')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('dateFrom')} ? 'dateFrom-error'">
+                    <small th:replace="~{admin/fragments :: fieldError('dateFrom')}"></small>
+                </label>
+                <label>
+                    <span th:text="#{event.field.dateTo}">Ends</span>
+                    <input type="date" th:field="*{dateTo}" required
+                           th:aria-invalid="${#fields.hasErrors('dateTo') or #fields.hasErrors('datesInOrder')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('datesInOrder')} ? 'datesInOrder-error' : (${#fields.hasErrors('dateTo')} ? 'dateTo-error')">
+                    <small th:replace="~{admin/fragments :: fieldError('dateTo')}"></small>
+                    <small th:replace="~{admin/fragments :: fieldError('datesInOrder')}"></small>
+                </label>
+            </div>
+            <label>
+                <span th:text="#{event.field.description}">Description</span>
+                <textarea th:field="*{description}" rows="6" maxlength="8192"
+                          th:aria-invalid="${#fields.hasErrors('description')} ? 'true'"
+                          th:aria-describedby="${#fields.hasErrors('description')} ? 'description-error'"></textarea>
+                <small th:replace="~{admin/fragments :: fieldError('description')}"></small>
+            </label>
+            <label class="inline">
+                <input type="checkbox" th:field="*{visible}" aria-describedby="visible-help">
+                <span th:text="#{event.field.visible}">Visible on the website</span>
+            </label>
+            <small id="visible-help" class="muted" th:text="#{event.field.visible.help}">
+                Hiding the event hides its videos too.
+            </small>
+            <div class="actions">
+                <a class="button secondary" th:href="@{/admin/events}" th:text="#{action.cancel}">Cancel</a>
+                <button type="submit" th:text="#{action.save}">Save</button>
+                <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
+            </div>
+        </form>
+
+        <section th:replace="~{admin/event/edit :: videos}"></section>
+    </div>
+
+    <dialog th:replace="~{admin/fragments :: deleteDialog('delete-dialog', @{/admin/events/{id}/delete(id=${event.id})},
+            #{event.delete.question(${event.title})}, #{event.delete.warning})}"></dialog>
+</main>
+
+<!--/* The videos panel re-renders on its own after each htmx add or remove */-->
+<section id="event-videos" class="panel" th:fragment="videos" th:assert="${event != null}, ${eventVideos != null}">
+    <h2 th:text="#{event.videos.title}">Videos</h2>
+    <p th:if="${eventVideos.isEmpty()}" class="muted" th:text="#{event.videos.empty}">No videos in this event yet.</p>
+    <div class="data-table" th:unless="${eventVideos.isEmpty()}">
+        <table>
+            <caption class="sr-only" th:text="#{event.videos.title}">Videos</caption>
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{event.videos.video}">Video</th>
+                <th scope="col" th:text="#{video.field.shot}">Shooting date</th>
+                <th scope="col"><span class="sr-only" th:text="#{table.actions}">Actions</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="video : ${eventVideos}">
+                <td><a th:href="@{/admin/videos/{id}(id=${video.id})}" th:text="${video.title}">Gólyatábor 2026 - Vám</a></td>
+                <td class="date" th:insert="~{admin/fragments :: dates(${video.shootingDateStart}, null)}">Aug 13, 2026</td>
+                <td class="row-action">
+                    <button type="button" class="ghost"
+                            th:hx-delete="@{/admin/events/{id}/videos(id=${event.id}, videoId=${video.id})}"
+                            hx-target="#event-videos" hx-swap="outerHTML"
+                            th:aria-label="#{event.videos.remove(${video.title})}"
+                            th:text="#{action.remove}">Remove</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--/* Typing searches the videos (htmx), and each match has its own Add button */-->
+    <label class="video-search">
+        <span th:text="#{event.videos.search}">Find a video to add</span>
+        <input id="event-video-search" type="search" name="q" autocomplete="off" th:autofocus="${videosChanged}"
+               th:hx-get="@{/admin/events/{id}/videos/search(id=${event.id})}" hx-trigger="input changed delay:300ms"
+               hx-target="#video-matches" hx-swap="outerHTML">
+    </label>
+    <ul id="video-matches" class="matches" th:fragment="videoMatches" th:assert="${event != null}, ${q != null}, ${videoMatches != null}"
+        aria-live="polite">
+        <li th:if="${!q.isBlank() and videoMatches.isEmpty()}" class="muted" th:text="#{table.noMatch(${q})}">
+            Nothing matches “qpa”.
+        </li>
+        <li th:each="v : ${videoMatches}">
+            <span th:text="${v.title}">Gólyatábor 2026 - Vám</span>
+            <span class="muted date" th:insert="~{admin/fragments :: dates(${v.shootingDateStart}, null)}">Aug 13, 2026</span>
+            <button type="button" class="secondary"
+                    th:hx-post="@{/admin/events/{id}/videos(id=${event.id}, videoId=${v.id})}"
+                    hx-target="#event-videos" hx-swap="outerHTML"
+                    th:aria-label="#{event.videos.add(${v.title})}" th:text="#{action.add}">Add</button>
+        </li>
+    </ul>
+</section>
+</body>
+</html>

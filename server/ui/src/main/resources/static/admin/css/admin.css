@@ -1,0 +1,943 @@
+/*
+ * BSS admin layout.
+ * Deliberately plain: system colours (light or dark, following the browser), native form controls and the browser's
+ * own focus ring. This file places things; the look comes in a later change.
+ */
+
+/* ---------- Tokens ---------- */
+
+:root {
+    color-scheme: light dark;
+
+    --bar-height: 3rem;
+    --control-height: 2.25rem;
+    --gap: 1rem;
+
+    /* Every colour is a system colour or mixed from one, so both colour schemes work without a second set */
+    --muted: color-mix(in srgb, CanvasText 70%, Canvas);
+    --line: color-mix(in srgb, CanvasText 20%, Canvas);
+    --layer: color-mix(in srgb, CanvasText 5%, Canvas);
+    --layer-hover: color-mix(in srgb, CanvasText 10%, Canvas);
+    --selected: color-mix(in srgb, Highlight 30%, Canvas);
+    --danger: #b3261e;
+    --shadow: 0 4px 8px rgb(0 0 0 / 0.25);
+    --backdrop: rgb(0 0 0 / 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --danger: #f2b8b5;
+    }
+}
+
+/* ---------- Reset ---------- */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: Canvas;
+    color: CanvasText;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.25;
+}
+
+h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.125rem;
+}
+
+:where(input, select, textarea, button) {
+    font: inherit;
+}
+
+/* ---------- Shared ---------- */
+
+.muted {
+    color: var(--muted);
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.skip-link {
+    position: absolute;
+    top: -3rem;
+    left: 0.5rem;
+    z-index: 10;
+    padding: 0.5rem 1rem;
+    background: Canvas;
+}
+
+.skip-link:focus {
+    top: 0.5rem;
+}
+
+.container {
+    max-width: 90rem;
+    margin-inline: auto;
+    padding-inline: 2rem;
+}
+
+/* ---------- Top bar ---------- */
+
+.admin-bar {
+    border-bottom: 1px solid var(--line);
+    background: var(--layer);
+}
+
+.admin-bar > nav {
+    display: flex;
+    align-items: center;
+    min-height: var(--bar-height);
+}
+
+.admin-bar :is(a, button) {
+    display: flex;
+    align-items: center;
+    height: var(--bar-height);
+    padding: 0 1rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    text-decoration: none;
+}
+
+.admin-bar :is(a, button):hover {
+    background: var(--layer-hover);
+}
+
+.admin-bar a[aria-current="page"] {
+    box-shadow: inset 0 -3px 0 currentcolor;
+}
+
+/* The logo leads to the dashboard; it needs no underline there */
+.admin-bar .brand[aria-current="page"] {
+    box-shadow: none;
+}
+
+.admin-bar .brand strong {
+    margin-right: 0.25rem;
+}
+
+.admin-bar form {
+    margin: 0;
+}
+
+.admin-bar .sections {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* The sections: inline on wide screens; on narrow ones a menu that the ☰ button opens as a popover */
+.admin-bar .menu-toggle {
+    display: none;
+    gap: 0.5rem;
+}
+
+@media (min-width: 48rem) {
+    .admin-bar .sections {
+        display: flex;
+        position: static;
+        inset: auto;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        border: 0;
+        background: none;
+        color: inherit;
+    }
+}
+
+@media (max-width: 47.99rem) {
+    .admin-bar .menu-toggle {
+        display: flex;
+    }
+
+    .admin-bar .sections:popover-open {
+        display: flex;
+        position: fixed;
+        inset: var(--bar-height) 0 auto;
+        flex-direction: column;
+        width: auto;
+        height: auto;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        background: Canvas;
+        box-shadow: var(--shadow);
+    }
+
+    .admin-bar .sections a[aria-current="page"] {
+        box-shadow: inset 3px 0 0 currentcolor;
+    }
+
+    .admin-bar .profile-toggle .name {
+        display: none;
+    }
+}
+
+/* The signed-in person: avatar (initials) and the button that opens their menu */
+.admin-bar .profile {
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin-left: auto;
+    anchor-name: --profile;
+}
+
+.admin-bar .avatar {
+    padding: 0 0.25rem 0 0.75rem;
+}
+
+.admin-bar .avatar .initials {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.admin-bar .profile-toggle {
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+}
+
+/* The person's menu: shown while a mouse is over the profile, or opened with the button (a popover) */
+.admin-bar .profile-menu {
+    min-width: 12rem;
+    margin: 0;
+    padding: 0.25rem 0;
+    border: 1px solid var(--line);
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: var(--shadow);
+}
+
+/* Esc dismisses the hover-opened menu (data-dismissed, see admin.js) */
+@media (hover: hover) {
+    .admin-bar .profile:hover:not([data-dismissed]) .profile-menu:not(:popover-open) {
+        display: block;
+        position: absolute;
+        inset: 100% 0 auto auto;
+    }
+}
+
+.admin-bar .profile-menu:popover-open {
+    position: fixed;
+    inset: var(--bar-height) 1rem auto auto;
+}
+
+@supports (anchor-name: --profile) {
+    .admin-bar .profile-menu:popover-open {
+        position-anchor: --profile;
+        inset: anchor(bottom) anchor(right) auto auto;
+    }
+}
+
+.admin-bar .profile-menu p {
+    margin: 0;
+    padding: 0.25rem 1rem;
+}
+
+.admin-bar .profile-menu .who {
+    font-weight: 600;
+}
+
+.admin-bar .profile-menu .language {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    color: var(--muted);
+}
+
+.admin-bar .profile-menu .language span {
+    margin-right: auto;
+}
+
+.admin-bar .profile-menu .language a {
+    height: var(--control-height);
+    padding: 0 0.5rem;
+}
+
+.admin-bar .profile-menu .language a[aria-current] {
+    color: CanvasText;
+    font-weight: 600;
+    box-shadow: inset 0 -2px 0 currentcolor;
+}
+
+.admin-bar .profile-menu button {
+    justify-content: flex-start;
+    width: 100%;
+    height: var(--control-height);
+}
+
+/* ---------- Page ---------- */
+
+main.container {
+    padding-block: 1.5rem 3rem;
+}
+
+.page-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem var(--gap);
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.page-header p {
+    margin: 0;
+}
+
+.breadcrumb {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.breadcrumb::after {
+    color: var(--muted);
+    content: "/";
+}
+
+/* The main form and its side panels; one column on narrower screens (see the end of the file) */
+.columns {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Fields side by side while there is room, e.g. a start and an end date */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--gap);
+}
+
+.narrow {
+    max-width: 36rem;
+}
+
+.panel {
+    padding: var(--gap);
+    background: var(--layer);
+}
+
+.panel + .panel {
+    margin-top: var(--gap);
+}
+
+.panel p {
+    margin: 0 0 0.75rem;
+}
+
+/* ---------- Buttons ---------- */
+
+/* :where keeps these at zero specificity, so the bar and the tables can change them with a single class */
+:where(button, a.button) {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--control-height);
+    padding: 0 0.875rem;
+    border: 1px solid var(--line);
+    border-radius: 0.25rem;
+    background: ButtonFace;
+    color: ButtonText;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+:where(button, a.button):hover {
+    background: var(--layer-hover);
+}
+
+:where(button).ghost {
+    border-color: transparent;
+    background: transparent;
+}
+
+:where(button).danger {
+    border-color: currentcolor;
+    color: var(--danger);
+}
+
+:where(button).danger.ghost {
+    border-color: transparent;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Empty, until admin.js writes into it that the form has changes that are not saved yet */
+.unsaved {
+    margin-left: 0.5rem;
+    color: var(--muted);
+}
+
+/* ---------- Forms ---------- */
+
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    margin: 0;
+}
+
+.stack label,
+.stack fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0;
+}
+
+fieldset {
+    padding: 0;
+    border: 0;
+}
+
+legend {
+    margin-bottom: 0.25rem;
+    padding: 0;
+}
+
+label > span:first-child,
+legend {
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+label small {
+    color: var(--muted);
+    font-size: 0.875rem;
+}
+
+:where(input:not([type="checkbox"], [type="radio"], [type="file"]), select) {
+    min-height: var(--control-height);
+    padding-inline: 0.5rem;
+}
+
+textarea {
+    min-height: 4rem;
+    padding: 0.375rem 0.5rem;
+    resize: vertical;
+}
+
+.stack :is(input:not([type="checkbox"], [type="radio"]), select, textarea) {
+    width: 100%;
+}
+
+/* A field's error message from the server, under the field */
+.field-error {
+    color: var(--danger);
+    font-size: 0.875rem;
+}
+
+/* A required field left empty, a value the browser rejects, or one the server rejected */
+:is(input, select, textarea):is(:user-invalid, [aria-invalid="true"]) {
+    border-color: var(--danger);
+}
+
+[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+}
+
+.stack label.inline,
+label.inline {
+    display: inline-flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    margin-right: 1.25rem;
+    color: inherit;
+}
+
+.inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+}
+
+.inline-form > label {
+    flex: 1 1 10rem;
+}
+
+.inline-form :is(input, select) {
+    width: 100%;
+}
+
+/*
+ * Where the browser supports it (Chromium), the open list of a select gets compact rows that scroll past 20rem,
+ * which matters for the long member list. Other browsers show their native list.
+ */
+@supports (appearance: base-select) {
+    select,
+    ::picker(select) {
+        appearance: base-select;
+    }
+
+    ::picker(select) {
+        max-height: 20rem;
+    }
+
+    option {
+        min-height: var(--control-height);
+        padding: 0.25rem 0.75rem;
+    }
+
+    /* A placeholder like "Position" only labels the closed list */
+    option[value=""]:disabled {
+        display: none;
+    }
+}
+
+/* The event page's video search and its matches */
+.video-search {
+    display: block;
+    margin-top: 0.75rem;
+}
+
+.video-search input {
+    width: 100%;
+}
+
+.matches {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.matches li {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid var(--line);
+}
+
+/* ---------- Data tables ---------- */
+
+.table-toolbar {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    min-height: var(--bar-height);
+    padding: 0.5rem;
+    border: 1px solid var(--line);
+    border-bottom: 0;
+    background: var(--layer);
+}
+
+.toolbar-actions {
+    display: flex;
+    flex: 1;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.table-search {
+    flex: 1;
+    max-width: 20rem;
+    margin-right: auto;
+}
+
+.table-search :is(form, label) {
+    margin: 0;
+}
+
+.table-search input {
+    width: 100%;
+}
+
+.batch-actions {
+    display: none;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    align-items: center;
+    margin: 0;
+}
+
+.batch-actions > span {
+    flex: 1;
+    padding-left: 0.5rem;
+}
+
+/* While any row is selected, the selection bar replaces the toolbar. Its Cancel is a reset button. */
+main:has([form="bulk"]:checked) .table-toolbar {
+    background: var(--selected);
+}
+
+main:has([form="bulk"]:checked) .batch-actions {
+    display: flex;
+}
+
+main:has([form="bulk"]:checked) .toolbar-actions {
+    display: none;
+}
+
+/* position: relative keeps the hidden labels inside the scrolling table, so phones don't zoom out to fit them */
+.data-table {
+    position: relative;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+}
+
+/* Tables are a step smaller than the text around them, so a list fits a phone without scrolling sideways */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+:is(th, td) {
+    padding: 0.375rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+    text-align: start;
+    vertical-align: middle;
+}
+
+thead th {
+    background: var(--layer);
+}
+
+/* A long word (a title, an address) may break, so the table fits a phone and its last column stays on screen */
+td {
+    overflow-wrap: anywhere;
+}
+
+tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+tbody tr:has([form="bulk"]:checked) td {
+    background: var(--selected);
+}
+
+tbody tr.archived td {
+    color: var(--muted);
+}
+
+/* Sortable column headers fill their cell; the arrow shows the order (aria-sort) or, on hover, that it sorts */
+th a.sort {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: -0.375rem -0.75rem;
+    padding: 0.375rem 0.75rem;
+    color: inherit;
+    text-decoration: none;
+}
+
+th a.sort:hover {
+    background: var(--layer-hover);
+}
+
+th a.sort::after {
+    opacity: 0;
+    content: "↕" / "";
+}
+
+th a.sort:is(:hover, :focus-visible)::after {
+    opacity: 0.6;
+}
+
+th[aria-sort] a.sort::after {
+    opacity: 1;
+}
+
+th[aria-sort="ascending"] a.sort::after {
+    content: "↑" / "";
+}
+
+th[aria-sort="descending"] a.sort::after {
+    content: "↓" / "";
+}
+
+:is(th, td).num {
+    width: 1%;
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+}
+
+:is(th, td).select,
+td.row-action {
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* The checkbox's label fills the cell, so the whole cell is a target, not just the 1rem box */
+:is(th, td).select label {
+    display: grid;
+    place-items: center;
+    min-width: 2rem;
+    min-height: 2rem;
+}
+
+td.row-action form {
+    margin: 0;
+}
+
+/* A message under a row's checkbox, e.g. why a video couldn't be shown, wraps instead of widening the column */
+td.select .field-error {
+    display: block;
+    min-width: 8rem;
+    white-space: normal;
+}
+
+/* A date range may break between its dates, never inside one */
+.date {
+    font-variant-numeric: tabular-nums;
+}
+
+.date time {
+    white-space: nowrap;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--line);
+    border-top: 0;
+    background: var(--layer);
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.pagination form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0;
+    padding: 0.25rem 0.5rem;
+}
+
+.pagination .pages > :is(a, .disabled) {
+    display: grid;
+    place-items: center;
+    width: var(--control-height);
+    height: var(--control-height);
+    color: CanvasText;
+    text-decoration: none;
+}
+
+.pagination .pages > a:hover {
+    background: var(--layer-hover);
+}
+
+.pagination .pages > .disabled {
+    opacity: 0.4;
+}
+
+/* ---------- Image placeholders ---------- */
+
+/* Where a video thumbnail or a member's picture will go, until uploading images is added */
+.media-preview {
+    display: grid;
+    place-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border: 1px dashed var(--line);
+    color: var(--muted);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.media-preview.wide {
+    max-width: 24rem;
+    aspect-ratio: 16 / 9;
+}
+
+.media-preview.portrait {
+    width: 10rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}
+
+/* ---------- Notifications ---------- */
+
+.flash {
+    margin: var(--gap) 0 0;
+    padding: 0.75rem var(--gap);
+    border-left: 3px solid currentcolor;
+    background: var(--layer);
+}
+
+.flash.error {
+    border-left-color: var(--danger);
+}
+
+main .flash {
+    margin: 0 0 var(--gap);
+}
+
+/* ---------- Error page ---------- */
+
+.details {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 0.25rem var(--gap);
+    margin: 0 0 var(--gap);
+}
+
+.details dt {
+    color: var(--muted);
+}
+
+.details dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.trace {
+    max-height: 20rem;
+    margin: 0.5rem 0 0;
+    padding: 0.75rem;
+    overflow: auto;
+    border: 1px solid var(--line);
+    background: Canvas;
+    font-size: 0.75rem;
+    white-space: pre;
+}
+
+/* ---------- Dashboard ---------- */
+
+.tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: var(--gap);
+}
+
+.tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: var(--gap);
+    border: 1px solid var(--line);
+    color: inherit;
+    text-decoration: none;
+}
+
+a.tile:hover {
+    background: var(--layer-hover);
+}
+
+.tile .label {
+    color: var(--muted);
+}
+
+.metric {
+    font-size: 2rem;
+    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Dialog ---------- */
+
+dialog {
+    width: min(30rem, 100% - 2rem);
+    padding: 0;
+    border: 1px solid var(--line);
+    background: Canvas;
+    color: CanvasText;
+}
+
+dialog::backdrop {
+    background: var(--backdrop);
+}
+
+dialog :is(header, footer) {
+    display: flex;
+    gap: var(--gap);
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: var(--gap);
+}
+
+dialog header h2 {
+    margin: 0;
+}
+
+dialog p {
+    margin: 0;
+    padding: 0 var(--gap) 1.5rem;
+}
+
+dialog footer {
+    justify-content: flex-end;
+    gap: 0.5rem;
+    background: var(--layer);
+}
+
+dialog footer form {
+    margin: 0;
+}
+
+/* ---------- Narrow screens ---------- */
+
+@media (max-width: 64rem) {
+    .columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 40rem) {
+    .container {
+        padding-inline: var(--gap);
+    }
+
+    .hide-small {
+        display: none;
+    }
+
+    :is(th, td) {
+        padding-inline: 0.5rem;
+    }
+
+    th a.sort {
+        margin-inline: -0.5rem;
+        padding-inline: 0.5rem;
+    }
+
+    .table-search {
+        max-width: none;
+    }
+}

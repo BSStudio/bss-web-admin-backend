@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'dashboard')}">
+<head>
+    <title th:text="|#{dashboard.title} · #{app.title}|">Dashboard · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${metrics != null}">
+    <div class="page-header">
+        <h1 th:text="#{dashboard.title}">Dashboard</h1>
+    </div>
+    <section class="tiles">
+        <a class="tile" th:href="@{/admin/videos}">
+            <span class="label" th:text="#{dashboard.videos}">Videos</span>
+            <span class="metric" th:text="${metrics.videoCount}">0</span>
+        </a>
+        <a class="tile" th:href="@{/admin/events}">
+            <span class="label" th:text="#{dashboard.events}">Events</span>
+            <span class="metric" th:text="${metrics.eventCount}">0</span>
+        </a>
+        <a class="tile" th:href="@{/admin/members}">
+            <span class="label" th:text="#{dashboard.members}">Members</span>
+            <span class="metric" th:text="${metrics.memberCount}">0</span>
+        </a>
+    </section>
+</main>
+</body>
+</html>

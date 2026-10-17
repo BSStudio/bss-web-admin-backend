@@ -5,6 +5,8 @@ kotest = "6.2.6"
 spotless = "8.10.4"
 detekt = "2.0.0-alpha.6"
 kotlin = "2.4.21"
+htmx = "4.0.0"
+htmx-spring-boot = "6.0.0"
 # Security overrides: raise versions Spring Boot 4.1.1 still manages at vulnerable releases.
 # Drop each one once springBoot manages an equal or newer version.
 jackson = "3.2.3"
@@ -17,6 +19,8 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 [libraries]
 springdocOpenapiStarterWebmvcUi = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 kotestAssertionsJson = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
+webjars-htmx = { module = "org.webjars.npm:htmx.org", version.ref = "htmx" }
+htmx-spring-boot = { module = "io.github.wimdeblauwe:htmx-spring-boot", version.ref = "htmx-spring-boot" }
 
 jackson-bom = { module = "tools.jackson:jackson-bom", version.ref = "jackson" }
 jackson2-bom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson2" }

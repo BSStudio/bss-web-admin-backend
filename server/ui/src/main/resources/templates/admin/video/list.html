@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}">
+<head>
+    <title th:text="|#{video.list.title} · #{app.title}|">Videos · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${page != null}, ${q != null}, ${sorting != null}">
+    <div class="page-header">
+        <h1 th:text="#{video.list.title}">Videos</h1>
+    </div>
+
+    <div class="table-toolbar">
+        <form id="bulk" method="post" th:action="@{/admin/videos/visibility}" class="batch-actions">
+            <span class="selected-count" th:data-template="#{table.selected}" th:text="#{video.list.batch}">Selected videos</span>
+            <button type="submit" name="visible" value="true" th:text="#{video.list.publish}">Publish</button>
+            <button type="submit" name="visible" value="false" th:text="#{video.list.hide}">Hide</button>
+            <button type="reset" th:text="#{action.cancel}">Cancel</button>
+        </form>
+        <div class="toolbar-actions">
+            <search th:replace="~{admin/fragments :: search('/admin/videos', ${page})}"></search>
+            <a class="button" th:href="@{/admin/videos/new}" th:text="#{video.list.new}">New video</a>
+        </div>
+    </div>
+
+    <!--/* htmx requests get only this part: see the controller */-->
+    <div id="results" th:fragment="results">
+        <div class="data-table">
+            <table>
+                <caption class="sr-only" th:text="#{video.list.title}">Videos</caption>
+                <thead>
+                <tr>
+                    <th th:replace="~{admin/fragments :: selectAll('videoIds')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/videos', ${page}, 'title', #{video.field.title}, '')}"></th>
+                    <th scope="col" class="hide-small" th:text="#{video.column.url}">URL</th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/videos', ${page}, 'shootingDateStart', #{video.field.shot}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/videos', ${page}, 'visible', #{video.column.visible}, '')}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${page.empty}">
+                    <td colspan="5" class="muted"
+                        th:text="${q.isBlank()} ? #{video.list.empty} : #{table.noMatch(${q})}">No videos yet.</td>
+                </tr>
+                <tr th:each="v : ${page.content}">
+                    <td class="select">
+                        <label>
+                            <span class="sr-only" th:text="#{video.list.select(${v.title})}">Select</span>
+                            <input type="checkbox" name="videoIds" form="bulk" th:value="${v.id}">
+                        </label>
+                    </td>
+                    <td><a th:href="@{/admin/videos/{id}(id=${v.id})}" th:text="${v.title}">Gólyatábor 2026 - Vám</a></td>
+                    <td class="muted hide-small" th:text="${v.urls.isEmpty()} ? '' : ${v.urls[0]}">golyatabor-2026-vam</td>
+                    <td class="date"
+                        th:insert="~{admin/fragments :: dates(${v.shootingDateStart}, ${v.shootingDateEnd})}">Aug 13, 2026</td>
+                    <td th:replace="~{admin/video/list :: visibility(id=${v.id}, title=${v.title}, visible=${v.visible})}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav th:replace="~{admin/fragments :: pagination(${page}, '/admin/videos')}"></nav>
+    </div>
+</main>
+
+<!--/* Fragments rendered on their own by htmx requests */-->
+<table th:remove="all">
+    <thead>
+    <tr>
+        <th>Visible</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:fragment="visibility" th:assert="${id != null}" class="select">
+            <label>
+                <span class="sr-only" th:text="#{video.list.toggle(${title})}">Show on the website</span>
+                <input type="checkbox" th:id="|visible-${id}|" th:checked="${visible}"
+                       th:hx-put="@{/admin/videos/{id}/visibility(id=${id}, visible=${!visible})}"
+                       hx-target="closest td" hx-swap="outerHTML">
+            </label>
+            <!--/* The database refuses to show a video while one of its events is hidden */-->
+            <small th:if="${inHiddenEvent}" class="field-error" role="alert" th:text="#{video.list.inHiddenEvent}">
+                Its event is hidden.
+            </small>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

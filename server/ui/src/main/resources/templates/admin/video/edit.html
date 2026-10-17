@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}">
+<head>
+    <title th:text="|${video.title} · #{app.title}|">Gólyatábor 2026 - Vám · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${video != null}, ${form != null}, ${labels != null}">
+    <div class="page-header">
+        <div>
+            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
+                <a th:href="@{/admin/videos}" th:text="#{video.list.title}">Videos</a>
+            </nav>
+            <h1 th:text="${video.title}">Gólyatábor 2026 - Vám</h1>
+        </div>
+        <button type="button" class="danger ghost" command="show-modal" commandfor="delete-dialog"
+                th:text="#{video.delete.title}">Delete video</button>
+    </div>
+
+    <div class="columns">
+        <form method="post" th:action="@{/admin/videos/{id}(id=${video.id})}" th:object="${form}" class="stack"
+              th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
+            <p th:replace="~{admin/fragments :: formError}"></p>
+            <label>
+                <span th:text="#{video.field.title}">Title</span>
+                <input type="text" th:field="*{title}" required maxlength="250"
+                       th:aria-invalid="${#fields.hasErrors('title')} ? 'true'"
+                       th:aria-describedby="${#fields.hasErrors('title')} ? 'title-error'">
+                <small th:replace="~{admin/fragments :: fieldError('title')}"></small>
+            </label>
+            <div class="grid">
+                <label>
+                    <span th:text="#{video.field.shootingDateStart}">Shooting started</span>
+                    <input type="date" th:field="*{shootingDateStart}" required
+                           th:aria-invalid="${#fields.hasErrors('shootingDateStart')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('shootingDateStart')} ? 'shootingDateStart-error'">
+                    <small th:replace="~{admin/fragments :: fieldError('shootingDateStart')}"></small>
+                </label>
+                <label>
+                    <span th:text="#{video.field.shootingDateEnd}">Shooting ended</span>
+                    <input type="date" th:field="*{shootingDateEnd}" required
+                           th:aria-invalid="${#fields.hasErrors('shootingDateEnd') or #fields.hasErrors('datesInOrder')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('datesInOrder')} ? 'datesInOrder-error' : (${#fields.hasErrors('shootingDateEnd')} ? 'shootingDateEnd-error')">
+                    <small th:replace="~{admin/fragments :: fieldError('shootingDateEnd')}"></small>
+                    <small th:replace="~{admin/fragments :: fieldError('datesInOrder')}"></small>
+                </label>
+            </div>
+            <label>
+                <span th:text="#{video.field.urls}">URLs</span>
+                <textarea th:field="*{urls}" rows="2" aria-describedby="urls-help"></textarea>
+                <small id="urls-help" th:text="#{video.field.urls.help}">One per line.</small>
+            </label>
+            <label>
+                <span th:text="#{video.field.description}">Description</span>
+                <textarea th:field="*{description}" rows="4" maxlength="2000"
+                          th:aria-invalid="${#fields.hasErrors('description')} ? 'true'"
+                          th:aria-describedby="${#fields.hasErrors('description')} ? 'description-error'"></textarea>
+                <small th:replace="~{admin/fragments :: fieldError('description')}"></small>
+            </label>
+            <fieldset th:unless="${labels.isEmpty()}">
+                <legend th:text="#{video.field.labels}">Labels</legend>
+                <div>
+                    <label th:each="label : ${labels}" class="inline" th:title="${label.description}">
+                        <input type="checkbox" th:field="*{labels}" th:value="${label.name}">
+                        <span th:text="${label.name}">Egyetemi élet</span>
+                    </label>
+                </div>
+            </fieldset>
+            <label class="inline">
+                <input type="checkbox" th:field="*{visible}" th:aria-invalid="${#fields.hasErrors('visible')} ? 'true'"
+                       th:aria-describedby="${#fields.hasErrors('visible')} ? 'visible-error'">
+                <span th:text="#{video.field.visible}">Visible on the website</span>
+            </label>
+            <small th:replace="~{admin/fragments :: fieldError('visible')}"></small>
+            <div class="actions">
+                <a class="button secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
+                <button type="submit" th:text="#{action.save}">Save</button>
+                <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
+            </div>
+        </form>
+
+        <div>
+            <section class="panel">
+                <h2 th:text="#{video.thumbnail.title}">Thumbnail</h2>
+                <div th:replace="~{admin/fragments :: imagePlaceholder('wide')}"></div>
+            </section>
+            <section th:replace="~{admin/video/edit :: crew}"></section>
+        </div>
+    </div>
+
+    <dialog th:replace="~{admin/fragments :: deleteDialog('delete-dialog', @{/admin/videos/{id}/delete(id=${video.id})},
+            #{video.delete.question(${video.title})}, #{video.delete.warning})}"></dialog>
+</main>
+
+<!--/* The crew panel re-renders on its own after each htmx add or remove */-->
+<section id="crew" class="panel" th:fragment="crew"
+         th:assert="${video != null}, ${members != null}, ${positions != null}, ${newPosition != null}">
+    <h2 th:text="#{video.crew.title}">Crew</h2>
+    <p th:if="${video.crew.isEmpty()}" class="muted" th:text="#{video.crew.empty}">No crew yet.</p>
+    <div class="data-table" th:unless="${video.crew.isEmpty()}">
+        <table>
+            <caption class="sr-only" th:text="#{video.crew.title}">Crew</caption>
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{video.crew.member}">Member</th>
+                <th scope="col" th:text="#{video.crew.position}">Position</th>
+                <th scope="col"><span class="sr-only" th:text="#{table.actions}">Actions</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="crew : ${video.crew}">
+                <td>
+                    <span th:text="${crew.member.name}">Kovács Anna</span>
+                    <span class="muted" th:if="${!crew.member.nickname.isBlank()}" th:text="|(${crew.member.nickname})|">(Panni)</span>
+                </td>
+                <td th:text="${crew.position}">Camera</td>
+                <td class="row-action">
+                    <button type="button" class="ghost"
+                            th:hx-delete="@{/admin/videos/{id}/crew(id=${video.id}, memberId=${crew.member.id}, position=${crew.position})}"
+                            hx-target="#crew" hx-swap="outerHTML"
+                            th:aria-label="#{video.crew.remove(${crew.member.name}, ${crew.position})}"
+                            th:text="#{action.remove}">Remove</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <form class="inline-form" th:hx-post="@{/admin/videos/{id}/crew(id=${video.id})}" hx-target="#crew" hx-swap="outerHTML">
+        <label>
+            <span class="sr-only" th:text="#{video.crew.member}">Member</span>
+            <select id="crew-member" name="memberId" required th:autofocus="${crewChanged}">
+                <option value="" selected disabled th:text="#{video.crew.member}">Member</option>
+                <option th:each="m : ${members}" th:value="${m.id}" th:text="${m.name}">Kovács Anna</option>
+            </select>
+        </label>
+        <label>
+            <span class="sr-only" th:text="#{video.crew.position}">Position</span>
+            <select id="crew-position" name="position" required data-other="crew-new-position">
+                <option value="" selected disabled th:text="#{video.crew.position}">Position</option>
+                <option th:each="p : ${positions}" th:value="${p}" th:text="${p}">Operatőr</option>
+                <option th:value="${newPosition}" data-other th:text="#{video.crew.newPosition}">New position…</option>
+            </select>
+        </label>
+        <!--/* Shown by admin.js while "New position…" is chosen */-->
+        <label hidden>
+            <span class="sr-only" th:text="#{video.crew.newPosition.name}">Name of the new position</span>
+            <input id="crew-new-position" type="text" name="newPosition" maxlength="250"
+                   th:placeholder="#{video.crew.newPosition.name}">
+        </label>
+        <button type="submit" class="secondary" th:text="#{action.add}">Add</button>
+    </form>
+</section>
+</body>
+</html>

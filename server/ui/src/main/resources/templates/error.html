@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--/* Spring Boot renders this for every HTML error. AdminErrorAttributes adds the details on admin pages. */-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'error')}">
+<head>
+    <title th:text="|#{${'error.title.' + (status == 403 or status == 404 ? status : 'other')}} · #{app.title}|">Something went wrong · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${status != null}">
+    <div class="page-header">
+        <div>
+            <p class="muted" th:text="|${status} ${error}|">500 Internal Server Error</p>
+            <h1 th:text="#{${'error.title.' + (status == 403 or status == 404 ? status : 'other')}}">Something went wrong</h1>
+        </div>
+    </div>
+
+    <div class="columns">
+        <section class="stack">
+            <p th:text="#{${'error.lead.' + (status == 403 or status == 404 ? status : 'other')}}">
+                The admin could not finish this request.
+            </p>
+            <div class="actions">
+                <a th:if="${reportUrl}" class="button" th:href="${reportUrl}" target="_blank" rel="noopener"
+                   th:text="#{error.report}">Report on GitHub</a>
+                <a class="button secondary" th:href="@{/admin}" th:text="#{error.home}">Back to the dashboard</a>
+            </div>
+            <p th:if="${reportUrl}" class="muted" th:text="#{error.report.help}">
+                The report opens on GitHub with the details filled in.
+            </p>
+        </section>
+
+        <section th:if="${reference}" class="panel">
+            <h2 th:text="#{error.details}">Details</h2>
+            <dl class="details">
+                <dt th:text="#{error.request}">Request</dt>
+                <dd><code th:text="${request}">POST /admin/videos/…</code></dd>
+                <dt th:text="#{error.time}">Time</dt>
+                <dd><time th:datetime="${#dates.formatISO(timestamp)}" th:text="${#dates.format(timestamp, 'yyyy-MM-dd HH:mm:ss')}">2026-10-17 10:00:00</time></dd>
+                <dt th:text="#{error.reference}">Reference</dt>
+                <dd><code th:text="${reference}">1a2b3c4d</code></dd>
+                <th:block th:if="${message}">
+                    <dt th:text="#{error.message}">Message</dt>
+                    <dd th:text="${message}">Database is down</dd>
+                </th:block>
+            </dl>
+            <details th:if="${trace}">
+                <summary th:text="#{error.trace}">Stack trace</summary>
+                <pre class="trace" th:text="${trace}">java.lang.IllegalStateException: Database is down</pre>
+            </details>
+        </section>
+    </div>
+</main>
+</body>
+</html>

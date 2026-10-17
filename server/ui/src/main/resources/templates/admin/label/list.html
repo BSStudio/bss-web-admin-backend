@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'labels')}">
+<head>
+    <title th:text="|#{label.list.title} · #{app.title}|">Labels · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${labels != null}, ${form != null}">
+    <div class="page-header">
+        <h1 th:text="#{label.list.title}">Labels</h1>
+    </div>
+
+    <div class="columns">
+        <div class="data-table">
+            <table>
+                <caption class="sr-only" th:text="#{label.list.title}">Labels</caption>
+                <thead>
+                <tr>
+                    <th scope="col" th:text="#{label.field.name}">Name</th>
+                    <th scope="col" th:text="#{label.field.description}">Description</th>
+                    <th scope="col" class="num" th:text="#{label.column.videos}">Videos</th>
+                    <th scope="col"><span class="sr-only" th:text="#{table.actions}">Actions</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${labels.isEmpty()}">
+                    <td colspan="4" class="muted" th:text="#{label.list.empty}">No labels yet.</td>
+                </tr>
+                <tr th:each="label : ${labels}">
+                    <td th:text="${label.name}">Egyetemi élet</td>
+                    <td class="muted" th:text="${label.description}">University life</td>
+                    <td class="num" th:text="${label.videoCount}">37</td>
+                    <td class="row-action">
+                        <button type="button" class="danger ghost" command="show-modal"
+                                th:commandfor="|delete-${label.id}|" th:aria-label="#{label.delete.label(${label.name})}"
+                                th:text="#{action.delete}">Delete</button>
+                        <dialog th:replace="~{admin/fragments :: deleteDialog(|delete-${label.id}|,
+                                @{/admin/labels/{id}/delete(id=${label.id})},
+                                #{label.delete.question(${label.name})}, #{label.delete.warning})}"></dialog>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <section class="panel">
+            <h2 th:text="#{label.new.title}">New label</h2>
+            <form method="post" th:action="@{/admin/labels}" th:object="${form}" class="stack"
+                  th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
+                <p th:replace="~{admin/fragments :: formError}"></p>
+                <label>
+                    <span th:text="#{label.field.name}">Name</span>
+                    <input type="text" th:field="*{name}" required maxlength="64"
+                           th:aria-invalid="${#fields.hasErrors('name')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('name')} ? 'name-error'">
+                    <small th:replace="~{admin/fragments :: fieldError('name')}"></small>
+                </label>
+                <label>
+                    <span th:text="#{label.field.description}">Description</span>
+                    <input type="text" th:field="*{description}" required maxlength="256"
+                           th:aria-invalid="${#fields.hasErrors('description')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('description')} ? 'description-help description-error' : 'description-help'">
+                    <small id="description-help" th:text="#{label.field.description.help}">What the label is for.</small>
+                    <small th:replace="~{admin/fragments :: fieldError('description')}"></small>
+                </label>
+                <div class="actions">
+                    <button type="submit" th:text="#{label.new.submit}">Add label</button>
+                    <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+</body>
+</html>
