@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'members')}">
+<head>
+    <title th:text="|#{member.list.title} · #{app.title}|">Members · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${page != null}, ${q != null}, ${sorting != null}, ${statuses != null}">
+    <div class="page-header">
+        <h1 th:text="#{member.list.title}">Members</h1>
+    </div>
+
+    <div class="table-toolbar">
+        <form id="bulk" method="post" th:action="@{/admin/members/archived}" class="batch-actions">
+            <span class="selected-count" th:data-template="#{table.selected}" th:text="#{member.list.batch}">Selected members</span>
+            <label>
+                <span class="sr-only" th:text="#{member.field.status}">Status</span>
+                <select name="status" required>
+                    <option value="" selected disabled th:text="#{member.list.status}">Status…</option>
+                    <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
+                </select>
+            </label>
+            <button type="submit" th:formaction="@{/admin/members/status}" th:text="#{member.list.setStatus}">Set status</button>
+            <button type="submit" name="archived" value="true" formnovalidate th:text="#{member.list.archive}">Archive</button>
+            <button type="submit" name="archived" value="false" formnovalidate th:text="#{member.list.restore}">Restore</button>
+            <button type="reset" th:text="#{action.cancel}">Cancel</button>
+        </form>
+        <div class="toolbar-actions">
+            <search th:replace="~{admin/fragments :: search('/admin/members', ${page})}"></search>
+            <a class="button" th:href="@{/admin/members/new}" th:text="#{member.list.new}">New member</a>
+        </div>
+    </div>
+
+    <!--/* htmx requests get only this part: see the controller */-->
+    <div id="results" th:fragment="results">
+        <div class="data-table">
+            <table>
+                <caption class="sr-only" th:text="#{member.list.title}">Members</caption>
+                <thead>
+                <tr>
+                    <th th:replace="~{admin/fragments :: selectAll('memberIds')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'name', #{member.field.name}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'url', #{member.field.url}, 'hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'status', #{member.field.status}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'joinedAt', #{member.field.joinedAt}, 'hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'archived', #{member.field.archived}, '')}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${page.empty}">
+                    <td colspan="6" class="muted"
+                        th:text="${q.isBlank()} ? #{member.list.empty} : #{table.noMatch(${q})}">No members yet.</td>
+                </tr>
+                <tr th:each="m : ${page.content}" th:classappend="${m.archived} ? 'archived'">
+                    <td class="select">
+                        <label>
+                            <span class="sr-only" th:text="#{member.list.select(${m.name})}">Select</span>
+                            <input type="checkbox" name="memberIds" form="bulk" th:value="${m.id}">
+                        </label>
+                    </td>
+                    <td>
+                        <a th:href="@{/admin/members/{id}(id=${m.id})}" th:text="${m.name}">Kovács Anna</a>
+                        <span class="muted" th:unless="${m.nickname.isBlank()}" th:text="|(${m.nickname})|">(Panni)</span>
+                    </td>
+                    <td class="muted hide-small" th:text="${m.url}">kovacs-anna</td>
+                    <td th:text="#{${'member.status.' + m.status}}">Member</td>
+                    <td class="date hide-small" th:insert="~{admin/fragments :: dates(${m.joinedAt}, null)}">Sep 1, 2024</td>
+                    <td th:replace="~{admin/member/list :: archived(id=${m.id}, name=${m.name}, archived=${m.archived})}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav th:replace="~{admin/fragments :: pagination(${page}, '/admin/members')}"></nav>
+    </div>
+</main>
+
+<!--/* Fragments rendered on their own by htmx requests */-->
+<table th:remove="all">
+    <thead>
+    <tr>
+        <th>Archived</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td th:fragment="archived" th:assert="${id != null}" class="select">
+            <label>
+                <span class="sr-only" th:text="#{member.list.toggle(${name})}">Archive</span>
+                <input type="checkbox" th:id="|archived-${id}|" th:checked="${archived}"
+                       th:hx-put="@{/admin/members/{id}/archived(id=${id}, archived=${!archived})}"
+                       hx-target="closest td" hx-swap="outerHTML">
+            </label>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

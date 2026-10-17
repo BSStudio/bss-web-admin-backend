@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'videos')}">
+<head>
+    <title th:text="|#{video.new.title} · #{app.title}|">New video · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${form != null}">
+    <div class="page-header">
+        <div>
+            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
+                <a th:href="@{/admin/videos}" th:text="#{video.list.title}">Videos</a>
+            </nav>
+            <h1 th:text="#{video.new.title}">New video</h1>
+        </div>
+    </div>
+
+    <form method="post" th:action="@{/admin/videos}" th:object="${form}" class="stack narrow"
+          th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
+        <p th:replace="~{admin/fragments :: formError}"></p>
+        <label>
+            <span th:text="#{video.field.title}">Title</span>
+            <input type="text" th:field="*{title}" required maxlength="250" autofocus
+                   th:aria-invalid="${#fields.hasErrors('title')} ? 'true'"
+                   th:aria-describedby="${#fields.hasErrors('title')} ? 'title-help title-error' : 'title-help'">
+            <small id="title-help" th:text="#{video.new.help}">Start with the title.</small>
+            <small th:replace="~{admin/fragments :: fieldError('title')}"></small>
+        </label>
+        <div class="actions">
+            <a class="button secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
+            <button type="submit" th:text="#{action.create}">Create</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

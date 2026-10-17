@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{admin/layout :: layout(~{::title}, ~{::main}, 'members')}">
+<head>
+    <title th:text="|${member.name} · #{app.title}|">Kovács Anna · BSS admin</title>
+</head>
+<body>
+<main id="main" class="container" th:assert="${member != null}, ${form != null}, ${statuses != null}">
+    <div class="page-header">
+        <div>
+            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
+                <a th:href="@{/admin/members}" th:text="#{member.list.title}">Members</a>
+            </nav>
+            <h1 th:text="${member.name}">Kovács Anna</h1>
+        </div>
+        <button type="button" class="danger ghost" command="show-modal" commandfor="delete-dialog"
+                th:text="#{member.delete.title}">Delete member</button>
+    </div>
+
+    <div class="columns">
+        <form method="post" th:action="@{/admin/members/{id}(id=${member.id})}" th:object="${form}" class="stack"
+              th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
+            <p th:replace="~{admin/fragments :: formError}"></p>
+            <div class="grid">
+                <label>
+                    <span th:text="#{member.field.name}">Name</span>
+                    <input type="text" th:field="*{name}" required maxlength="250"
+                           th:aria-invalid="${#fields.hasErrors('name')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('name')} ? 'name-error'">
+                    <small th:replace="~{admin/fragments :: fieldError('name')}"></small>
+                </label>
+                <label>
+                    <span th:text="#{member.field.nickname}">Nickname</span>
+                    <input type="text" th:field="*{nickname}" maxlength="250"
+                           th:aria-invalid="${#fields.hasErrors('nickname')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('nickname')} ? 'nickname-error'">
+                    <small th:replace="~{admin/fragments :: fieldError('nickname')}"></small>
+                </label>
+            </div>
+            <div class="grid">
+                <label>
+                    <span th:text="#{member.field.url}">URL</span>
+                    <input type="text" th:field="*{url}" required maxlength="250"
+                           th:aria-invalid="${#fields.hasErrors('url')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('url')} ? 'url-help url-error' : 'url-help'">
+                    <small id="url-help" th:text="#{member.field.url.help}">Used in the member’s page address.</small>
+                    <small th:replace="~{admin/fragments :: fieldError('url')}"></small>
+                </label>
+                <label>
+                    <span th:text="#{member.field.role}">Role</span>
+                    <input type="text" th:field="*{role}" maxlength="250"
+                           th:aria-invalid="${#fields.hasErrors('role')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('role')} ? 'role-error'">
+                    <small th:replace="~{admin/fragments :: fieldError('role')}"></small>
+                </label>
+            </div>
+            <div class="grid">
+                <label>
+                    <span th:text="#{member.field.status}">Status</span>
+                    <select th:field="*{status}"
+                            th:aria-invalid="${#fields.hasErrors('status')} ? 'true'"
+                            th:aria-describedby="${#fields.hasErrors('status')} ? 'status-error'">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
+                    </select>
+                    <small th:replace="~{admin/fragments :: fieldError('status')}"></small>
+                </label>
+                <label>
+                    <span th:text="#{member.field.joinedAt}">Joined</span>
+                    <input type="date" th:field="*{joinedAt}" required
+                           th:aria-invalid="${#fields.hasErrors('joinedAt')} ? 'true'"
+                           th:aria-describedby="${#fields.hasErrors('joinedAt')} ? 'joinedAt-error'">
+                    <small th:replace="~{admin/fragments :: fieldError('joinedAt')}"></small>
+                </label>
+            </div>
+            <label>
+                <span th:text="#{member.field.description}">Description</span>
+                <textarea th:field="*{description}" rows="4" maxlength="2000"
+                          th:aria-invalid="${#fields.hasErrors('description')} ? 'true'"
+                          th:aria-describedby="${#fields.hasErrors('description')} ? 'description-error'"></textarea>
+                <small th:replace="~{admin/fragments :: fieldError('description')}"></small>
+            </label>
+            <label class="inline">
+                <input type="checkbox" th:field="*{archived}">
+                <span th:text="#{member.field.archived.help}">Archived: no longer an active member</span>
+            </label>
+            <div class="actions">
+                <a class="button secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
+                <button type="submit" th:text="#{action.save}">Save</button>
+                <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
+            </div>
+        </form>
+
+        <section class="panel">
+            <h2 th:text="#{member.picture.title}">Profile picture</h2>
+            <div th:replace="~{admin/fragments :: imagePlaceholder('portrait')}"></div>
+        </section>
+    </div>
+
+    <dialog th:replace="~{admin/fragments :: deleteDialog('delete-dialog', @{/admin/members/{id}/delete(id=${member.id})},
+            #{member.delete.question(${member.name})}, #{member.delete.warning})}"></dialog>
+</main>
+
+</body>
+</html>
