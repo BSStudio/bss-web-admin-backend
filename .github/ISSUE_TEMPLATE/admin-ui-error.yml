@@ -1,0 +1,40 @@
+name: Admin UI error
+description: Report an error page you got in the admin UI.
+title: "[Admin UI] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting this. If you came from the error page, the technical details below are already filled in.
+        Add what you were doing, then submit.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What were you doing?
+      description: The steps that led to the error.
+      placeholder: Opened a video, added two URLs, then clicked Save.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      placeholder: The video is saved and I'm back on the list.
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      description: The request that failed.
+      placeholder: POST /admin/videos/…
+  - type: input
+    id: reference
+    attributes:
+      label: Error reference
+      description: Find the full stack trace in the server logs by searching for this reference.
+  - type: textarea
+    id: details
+    attributes:
+      label: Technical details
+      description: Copied from the error page.
+      render: text
