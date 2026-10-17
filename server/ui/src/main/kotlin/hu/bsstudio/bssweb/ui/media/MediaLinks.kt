@@ -20,9 +20,15 @@ class MediaLinks(
     @ModelAttribute("media")
     fun media() = this
 
-    /** The folder with a video's thumbnail in every size and format, e.g. `…/hd.webp`. */
-    fun video(videoId: UUID) = "$baseUrl/v/$videoId/thumbnail"
+    /** A video's thumbnail, for example `…/v/{id}/thumbnail/hd.webp`. */
+    fun video(videoId: UUID) = MediaImage("$baseUrl/v/$videoId/thumbnail", VIDEO_SIZES)
 
-    /** The folder with a member's profile picture in every size and format, e.g. `…/m.webp`. */
-    fun member(memberId: UUID) = "$baseUrl/m/$memberId/profile"
+    /** A member's profile picture, for example `…/m/{id}/profile/m.webp`. */
+    fun member(memberId: UUID) = MediaImage("$baseUrl/m/$memberId/profile", MEMBER_SIZES)
+
+    private companion object {
+        // the widths the file API resizes uploads to (it keeps the aspect ratio within 16:9 boxes)
+        private val VIDEO_SIZES = mapOf("sd" to 854, "hd" to 1280, "fhd" to 1920)
+        private val MEMBER_SIZES = mapOf("m" to 854, "l" to 1280, "xl" to 1920)
+    }
 }

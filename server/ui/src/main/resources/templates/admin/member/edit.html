@@ -96,7 +96,7 @@
     <h2 th:text="#{member.picture.title}">Profile picture</h2>
     <p th:if="${uploadError}" class="flash error" role="alert" th:text="#{${uploadError}}">Could not upload.</p>
     <p th:if="${uploadMessage}" class="flash" role="status" th:text="#{${uploadMessage}}">Uploaded.</p>
-    <div th:replace="~{admin/fragments :: picture(${media.member(member.id)}, 'l', ${imageVersion},
+    <div th:replace="~{admin/fragments :: picture(${media.member(member.id)}, '160px', ${imageVersion},
          #{member.picture.alt(${member.name})}, #{media.missing}, 'portrait')}"></div>
     <form class="inline-form" th:hx-post="@{/admin/members/{id}/picture(id=${member.id})}"
           hx-encoding="multipart/form-data" hx-target="#member-picture" hx-swap="outerHTML">

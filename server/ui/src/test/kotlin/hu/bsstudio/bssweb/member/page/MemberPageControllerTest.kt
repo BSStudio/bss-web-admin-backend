@@ -65,7 +65,7 @@ internal class MemberPageControllerTest(
                 content { string(containsString("""<option value="ALUMNI">Alumni</option>""")) }
                 content { string(containsString("""<tr class="archived">""")) }
                 content { string(containsString("<span>1–3 of 3 items</span>")) }
-                content { string(containsString("""srcset="http://localhost:8890/m/${ANNA.id}/profile/m.webp"""")) }
+                content { string(containsString("""srcset="http://localhost:8890/m/${ANNA.id}/profile/m.webp 854w,""")) }
             }
     }
 
@@ -365,7 +365,7 @@ internal class MemberPageControllerTest(
                 status { isOk() }
                 content { string(containsString("""<section id="member-picture" class="panel">""")) }
                 content { string(containsString("Profile picture uploaded.")) }
-                content { string(containsString("""src="http://localhost:8890/m/${ANNA.id}/profile/l.jpeg?v=""")) }
+                content { string(containsString("""src="http://localhost:8890/m/${ANNA.id}/profile/m.jpeg?v=""")) }
             }
     }
 

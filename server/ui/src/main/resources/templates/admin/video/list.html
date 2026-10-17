@@ -61,7 +61,7 @@
                         </label>
                     </td>
                     <td class="thumb-cell col-image" th:if="${media.enabled}">
-                        <div th:replace="~{admin/fragments :: picture(${media.video(v.id)}, 'sd', null, '', '', 'thumb')}"></div>
+                        <div th:replace="~{admin/fragments :: picture(${media.video(v.id)}, '56px', null, '', '', 'thumb')}"></div>
                     </td>
                     <td><a th:href="@{/admin/videos/{id}(id=${v.id})}" th:text="${v.title}">Gólyatábor 2026 - Vám</a></td>
                     <td class="muted col-url hide-small" th:text="${v.urls.isEmpty()} ? '' : ${v.urls[0]}">golyatabor-2026-vam</td>

@@ -72,7 +72,7 @@
                         </label>
                     </td>
                     <td>
-                        <div th:replace="~{admin/fragments :: picture(${media.member(m.id)}, 'm', null, '', '', 'avatar col-image')}"></div>
+                        <div th:replace="~{admin/fragments :: picture(${media.member(m.id)}, '24px', null, '', '', 'avatar')}"></div>
                         <a th:href="@{/admin/members/{id}(id=${m.id})}" th:text="${m.name}">Kovács Anna</a>
                         <span class="muted" th:unless="${m.nickname.isBlank()}" th:text="|(${m.nickname})|">(Panni)</span>
                     </td>

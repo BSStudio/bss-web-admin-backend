@@ -99,7 +99,8 @@ internal class VideoPageControllerTest(
                 content { string(containsString("""selected="selected">1</option>""")) }
                 content { string(containsString("<span>of 1 page</span>")) }
                 content { string(containsString("""<input type="checkbox" data-select-all="videoIds">""")) }
-                content { string(containsString("""srcset="http://localhost:8890/v/$VIDEO_ID/thumbnail/sd.webp"""")) }
+                content { string(containsString("""srcset="http://localhost:8890/v/$VIDEO_ID/thumbnail/sd.webp 854w,""")) }
+                content { string(containsString("""sizes="auto, 56px" type="image/avif">""")) }
             }
 
         pageable.captured.pageSize shouldBe 25
@@ -284,7 +285,7 @@ internal class VideoPageControllerTest(
                 content { string(containsString("""value="2026-08-13"""")) }
                 content { string(containsString(MEMBER.name)) }
                 content { string(containsString("""required autofocus aria-describedby="form-error"""")) }
-                content { string(containsString("""src="http://localhost:8890/v/$VIDEO_ID/thumbnail/hd.jpeg"""")) }
+                content { string(containsString("""src="http://localhost:8890/v/$VIDEO_ID/thumbnail/sd.jpeg"""")) }
                 content { string(containsString("""alt="Thumbnail of “$TITLE”"""")) }
                 content { string(containsString("""data-unsaved="track">""")) }
                 content { string(containsString("""<span class="unsaved" role="status">Unsaved changes</span>""")) }
@@ -493,7 +494,7 @@ internal class VideoPageControllerTest(
                 status { isOk() }
                 content { string(containsString("""<section id="video-thumbnail" class="panel">""")) }
                 content { string(containsString("Thumbnail uploaded.")) }
-                content { string(containsString("/thumbnail/hd.jpeg?v=")) }
+                content { string(containsString("/thumbnail/sd.jpeg?v=")) }
                 content { string(not(containsString("<html"))) }
             }
     }

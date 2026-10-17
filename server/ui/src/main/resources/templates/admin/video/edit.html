@@ -94,7 +94,7 @@
     <h2 th:text="#{video.thumbnail.title}">Thumbnail</h2>
     <p th:if="${uploadError}" class="flash error" role="alert" th:text="#{${uploadError}}">Could not upload.</p>
     <p th:if="${uploadMessage}" class="flash" role="status" th:text="#{${uploadMessage}}">Uploaded.</p>
-    <div th:replace="~{admin/fragments :: picture(${media.video(video.id)}, 'hd', ${imageVersion},
+    <div th:replace="~{admin/fragments :: picture(${media.video(video.id)}, '(max-width: 64rem) 100vw, 40vw', ${imageVersion},
          #{video.thumbnail.alt(${video.title})}, #{media.missing}, 'wide')}"></div>
     <form class="inline-form" th:hx-post="@{/admin/videos/{id}/thumbnail(id=${video.id})}"
           hx-encoding="multipart/form-data" hx-target="#video-thumbnail" hx-swap="outerHTML">
