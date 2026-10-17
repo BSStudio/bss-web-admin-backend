@@ -11,7 +11,6 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
-import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -68,9 +67,15 @@ internal class DefaultMemberServiceTest(
     @Test
     internal fun `should change the status of members`() {
         val memberIds = listOf(MEMBER_ID)
-        every { mockRepository.updateStatus(memberIds, MemberStatus.ALUMNI, any()) } returns 1
+        every { mockRepository.findAllById(memberIds) } returns listOf(MEMBER_ENTITY)
+        every { MEMBER_ENTITY.status = MemberStatus.ALUMNI } returns Unit
+        every { mockRepository.save(MEMBER_ENTITY) } returns MEMBER_ENTITY
+        every { MEMBER_ENTITY.id } returns MEMBER_ID
 
-        underTest.changeMemberStatus(memberIds, MemberStatus.ALUMNI) shouldBe 1
+        val actual = underTest.changeMemberStatus(memberIds, MemberStatus.ALUMNI)
+
+        actual.shouldContainExactly(MEMBER_ID)
+        verify { MEMBER_ENTITY.status = MemberStatus.ALUMNI }
     }
 
     @Test

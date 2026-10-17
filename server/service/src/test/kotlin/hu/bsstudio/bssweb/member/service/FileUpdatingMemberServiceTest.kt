@@ -71,11 +71,11 @@ internal class FileUpdatingMemberServiceTest(
     @Test
     internal fun `should change the status of members`() {
         val memberIds = listOf(MEMBER_ID)
-        every { mockService.changeMemberStatus(memberIds, MemberStatus.ALUMNI) } returns 1
+        every { mockService.changeMemberStatus(memberIds, MemberStatus.ALUMNI) } returns memberIds
 
         val actual = underTest.changeMemberStatus(memberIds, MemberStatus.ALUMNI)
 
-        actual shouldBeEqual 1
+        actual shouldBeEqual memberIds
     }
 
     @Test

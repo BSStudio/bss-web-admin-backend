@@ -17,11 +17,11 @@ interface MemberService {
         archive: Boolean,
     ): List<UUID>
 
-    /** Gives the members [status] in one update, and returns how many it changed. */
+    /** Gives the members [status], and returns the ids of the ones it found, like [archiveMembers]. */
     fun changeMemberStatus(
         memberIds: List<UUID>,
         status: MemberStatus,
-    ): Int
+    ): List<UUID>
 
     fun findMemberById(memberIds: UUID): Optional<Member>
 

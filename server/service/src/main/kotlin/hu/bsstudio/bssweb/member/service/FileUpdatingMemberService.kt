@@ -28,7 +28,7 @@ class FileUpdatingMemberService(
     override fun changeMemberStatus(
         memberIds: List<UUID>,
         status: MemberStatus,
-    ): Int = this.server.changeMemberStatus(memberIds, status)
+    ): List<UUID> = this.server.changeMemberStatus(memberIds, status)
 
     override fun findMemberById(memberIds: UUID): Optional<Member> = this.server.findMemberById(memberIds)
 

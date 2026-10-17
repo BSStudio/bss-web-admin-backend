@@ -7,7 +7,6 @@ import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import org.springframework.transaction.annotation.Transactional
-import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
@@ -43,7 +42,14 @@ class DefaultMemberService(
     override fun changeMemberStatus(
         memberIds: List<UUID>,
         status: MemberStatus,
-    ): Int = repository.updateStatus(memberIds, status, Instant.now())
+    ): List<UUID> =
+        repository
+            .findAllById(memberIds)
+            .map {
+                it.status = status
+                it
+            }.map(repository::save)
+            .map { it.id }
 
     override fun updateMember(
         memberId: UUID,
