@@ -76,6 +76,23 @@ internal class EventRepositoryTest(
         underTest.findAll().associate { it.id to it.videoCount } shouldBe mapOf(eventId to 2L, emptyId to 0L)
     }
 
+    @Test
+    internal fun `change the visibility of events in one statement`() {
+        val changed = underTest.save(SimpleEventEntity(url = URL, title = TITLE)).id
+        val untouched = underTest.save(SimpleEventEntity(url = "other", title = "Other")).id
+        entityManager.flush()
+        val updatedAt = Instant.parse("2026-10-17T12:00:00Z")
+
+        underTest.updateVisibility(listOf(changed), true, updatedAt) shouldBe 1
+
+        underTest.findById(changed) shouldBePresent {
+            it.visible shouldBe true
+            it.updatedAt shouldBe updatedAt
+            it.title shouldBe TITLE
+        }
+        underTest.findById(untouched) shouldBePresent { it.visible shouldBe false }
+    }
+
     private companion object {
         private const val URL = "simonyi-konferencia"
         private const val TITLE = "Simonyi Konferencia"

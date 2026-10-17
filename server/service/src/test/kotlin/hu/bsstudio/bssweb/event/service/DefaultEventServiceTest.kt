@@ -13,6 +13,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -31,6 +32,13 @@ internal class DefaultEventServiceTest(
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultEventService
+
+    @Test
+    internal fun `should change the visibility of events`() {
+        every { mockRepository.updateVisibility(listOf(EVENT_ID), true, any()) } returns 1
+
+        underTest.changeEventVisibility(listOf(EVENT_ID), true) shouldBe 1
+    }
 
     @Test
     internal fun `should return all events`() {
