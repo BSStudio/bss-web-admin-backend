@@ -16,6 +16,7 @@ COPY ./server/data/build.gradle.kts      ./server/data/
 COPY ./server/model/build.gradle.kts     ./server/model/
 COPY ./server/operation/build.gradle.kts ./server/operation/
 COPY ./server/service/build.gradle.kts   ./server/service/
+COPY ./server/ui/build.gradle.kts        ./server/ui/
 COPY ./server/web/build.gradle.kts       ./server/web/
 COPY ./gradlew                           ./
 COPY ./gradle.properties                 ./
