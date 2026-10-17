@@ -18,6 +18,21 @@ directory.
 The project uses the `private` schema for all the tables.
 The `public` schema is used for rendering views for the [GraphQL backend][graphql-backend].
 
+## A hidden event hides its videos
+
+A video is visible only while every event it belongs to is visible. Triggers in
+`V9__hide_videos_of_hidden_events.sql` keep it that way for every writer (the API, the admin UI, plain SQL):
+
+- Hiding an event hides its videos.
+- Adding a video to a hidden event hides the video. New events start hidden, so their videos are hidden until the
+  event is shown and the videos are shown again.
+- Showing a video that is in a hidden event fails with a `check_violation` naming the constraint
+  `video_in_hidden_event`; JPA reports it as a `DataIntegrityViolationException`.
+- Showing an event again leaves its videos hidden, since which of them were visible before isn't recorded.
+
+The triggers change rows that Hibernate may have loaded already. Code that needs the videos' new visibility in the
+same transaction has to read them again.
+
 ## Batch fetching
 
 `BatchFetchConfig` sets Hibernate's `hibernate.default_batch_fetch_size` to 100. Hibernate's default is to batch
