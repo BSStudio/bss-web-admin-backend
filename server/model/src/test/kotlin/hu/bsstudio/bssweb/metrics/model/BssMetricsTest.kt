@@ -29,18 +29,21 @@ internal class BssMetricsTest(
         private const val VIDEO_COUNT = 10L
         private const val EVENT_COUNT = 5L
         private const val MEMBER_COUNT = 100L
+        private const val LABEL_COUNT = 12L
         private val BSS_METRICS =
             BssMetrics(
                 videoCount = VIDEO_COUNT,
                 eventCount = EVENT_COUNT,
                 memberCount = MEMBER_COUNT,
+                labelCount = LABEL_COUNT,
             )
         private val JSON =
             """
             {
                 "videoCount": $VIDEO_COUNT,
                 "eventCount": $EVENT_COUNT,
-                "memberCount": $MEMBER_COUNT
+                "memberCount": $MEMBER_COUNT,
+                "labelCount": $LABEL_COUNT
             }
             """.trimIndent()
     }

@@ -47,6 +47,8 @@ internal class DashboardPageControllerTest(
                 content { string(containsString("""class="cds--header__name brand" title="Dashboard"""")) }
                 content { string(containsString("""aria-current="page"><strong class="badge">BSS</strong>""")) }
                 content { string(containsString("""<span class="metric">42</span>""")) }
+                content { string(containsString("""<span class="metric">9</span>""")) }
+                content { string(containsString("""<h2 id="guide-title">How the admin works</h2>""")) }
                 content { string(containsString("""<a class="cds--skip-to-content skip-link" href="#main">Skip to content</a>""")) }
                 content { string(containsString("""<main id="main" class="container">""")) }
                 content { string(containsString("""<meta name="htmx-config"""")) }
@@ -167,6 +169,6 @@ internal class DashboardPageControllerTest(
     private companion object {
         private const val BASE_URL = "/admin"
         private const val LOCALE_COOKIE = "bss-admin-lang"
-        private val METRICS = BssMetrics(videoCount = 42, eventCount = 7, memberCount = 120)
+        private val METRICS = BssMetrics(videoCount = 42, eventCount = 7, memberCount = 120, labelCount = 9)
     }
 }

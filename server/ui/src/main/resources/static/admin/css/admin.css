@@ -582,6 +582,16 @@ main.container {
     margin: 0;
 }
 
+/* An introduction under the page title, e.g. on the dashboard */
+.page-header .lede {
+    max-inline-size: 42rem;
+    margin-block-start: 0.5rem;
+    color: var(--cds-text-secondary);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    letter-spacing: 0;
+}
+
 .page-header .cds--breadcrumb {
     margin-block-end: 0.5rem;
 }
@@ -592,6 +602,11 @@ main.container {
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
     gap: 2rem;
     align-items: start;
+}
+
+/* A small form beside its list (labels): the form takes the narrower column, on the left */
+.columns.form-first {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
 }
 
 /* Fields side by side while there is room, e.g. a start and an end date */
@@ -605,7 +620,12 @@ main.container {
     max-width: 36rem;
 }
 
+/* A panel is a layer above the page, so its fields take the next layer's colours, as Carbon's layering does */
 .panel {
+    --cds-field: var(--cds-field-02);
+    --cds-field-hover: var(--cds-field-hover-02);
+    --cds-border-strong: var(--cds-border-strong-02);
+
     padding: 1rem;
 }
 
@@ -687,6 +707,12 @@ main.container {
         display: none;
     }
 
+    /* A base-select's button is a block that puts its text at the top; centre it in Carbon's field like a native one */
+    select.cds--select-input {
+        display: flex;
+        align-items: center;
+    }
+
     ::picker(select) {
         max-height: 20rem;
         border: 0;
@@ -714,10 +740,32 @@ main.container {
     }
 }
 
+/* A video's labels: columns of checkboxes, each label's whole cell a target */
 .checkboxes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    inline-size: 100%;
+}
+
+.checkboxes .cds--checkbox-wrapper {
+    margin: 0;
+}
+
+/* The padding makes the label a 40px row; Carbon draws the box at the label's top, so it moves down as much */
+.checkboxes .cds--checkbox-label {
+    inline-size: 100%;
+    padding-block: 0.6875rem;
+    padding-inline-end: 0.5rem;
+    cursor: pointer;
+}
+
+.checkboxes .cds--checkbox-label::before,
+.checkboxes .cds--checkbox-label::after {
+    margin-block-start: 0.6875rem;
+}
+
+.checkboxes .cds--checkbox-label:hover {
+    background: var(--cds-layer-hover);
 }
 
 /* The crew's add row: member, position and the button side by side while there is room */
@@ -1065,8 +1113,8 @@ dialog.modal .cds--modal-content p {
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    min-block-size: 8rem;
+    gap: 0.5rem;
+    min-block-size: 10rem;
     background-position: bottom;
     background-size: 100% 2px;
     background-repeat: no-repeat;
@@ -1084,6 +1132,37 @@ dialog.modal .cds--modal-content p {
     font-variant-numeric: tabular-nums;
 }
 
+/* What the section holds; it leaves room for the arrow in the corner */
+.tile .description {
+    padding-inline-end: 2rem;
+    color: var(--cds-text-secondary);
+    line-height: 1.25rem;
+}
+
+/* The dashboard's short manual */
+.guide {
+    margin-block-start: 3rem;
+}
+
+.guide-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 2rem;
+}
+
+.guide-items h3 {
+    margin-block-end: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.125rem;
+}
+
+.guide-items p {
+    margin: 0;
+    color: var(--cds-text-secondary);
+    line-height: 1.25rem;
+}
+
 .tile svg {
     position: absolute;
     inset: auto 1rem 1rem auto;
@@ -1093,7 +1172,8 @@ dialog.modal .cds--modal-content p {
 /* ---------- Narrow screens ---------- */
 
 @media (max-width: 64rem) {
-    .columns {
+    .columns,
+    .columns.form-first {
         grid-template-columns: 1fr;
     }
 }

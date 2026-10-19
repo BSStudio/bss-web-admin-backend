@@ -37,6 +37,6 @@ internal class MetricsControllerTest(
         private const val BASE_URL = "/api/v1/metrics"
         private const val USERNAME = "user"
         private const val PASSWORD = "password"
-        private val METRICS = BssMetrics(videoCount = 1, eventCount = 1, memberCount = 1)
+        private val METRICS = BssMetrics(videoCount = 1, eventCount = 1, memberCount = 1, labelCount = 1)
     }
 }

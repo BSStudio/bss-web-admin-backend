@@ -4,4 +4,5 @@ data class BssMetrics(
     val videoCount: Long,
     val eventCount: Long,
     val memberCount: Long,
+    val labelCount: Long,
 )

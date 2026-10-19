@@ -17,6 +17,10 @@ UI. This file lists what those don't say, or what is easy to get wrong.
   if that happens.
 - The local login is a mock: any username logs in, and a member's URL logs in as that member.
 - Tests that use Testcontainers need Docker running.
+- **Never run `./gradlew integrationTest` against a database that holds data you want to keep.** The integration
+  tests connect to `localhost:5432` (the compose Postgres) and call `deleteAll()` on every table before each test. They
+  also need the app running on `localhost:8080`. Leave them to CI, or run them only after a fresh
+  `docker compose down -v && docker compose up -d`.
 
 ## Before you push
 
