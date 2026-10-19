@@ -14,8 +14,8 @@ spring:
           content:
             enabled: true
             paths:
-              - /admin/**
-              - /webjars/**
+            - /admin/**
+            - /webjars/**
 server:
   forward-headers-strategy: native
 springdoc:

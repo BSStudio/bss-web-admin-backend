@@ -15,7 +15,7 @@ Keep business logic in the `service` module.
 | `<feature>/page/*Form.kt`                  | A form's fields, their validation and mapping to the model |
 | `ui/config/ConditionalOnAdminUi.kt`        | Turns every UI bean on or off together                     |
 | `ui/config/UiSecurityConfig.kt`            | Browser login and security headers for `/admin/**`         |
-| `ui/config/UiWebConfig.kt`                 | Languages, the UI's messages and the `/admin/webjars`      |
+| `ui/config/UiWebConfig.kt`                 | Languages and locale interceptors for `/admin/**`          |
 | `ui/config/AdminLocaleResolver.kt`         | Language cookie for `/admin`, Accept-Language elsewhere    |
 | `ui/config/LanguageLinksAdvice.kt`         | Language links that keep the current address               |
 | `ui/flash/Flash.kt`                        | One-off messages shown after a redirect                    |
