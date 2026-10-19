@@ -3,4 +3,5 @@
 #
 # These are explicitly windows files and should use crlf
 *.bat           text eol=crlf
-
+server/ui/src/main/resources/static/admin/icons/*.png filter=lfs diff=lfs merge=lfs -text
+server/ui/src/main/resources/static/admin/icons/*.ico filter=lfs diff=lfs merge=lfs -text

@@ -18,6 +18,7 @@ class SecurityConfig {
         http {
             authorizeHttpRequests {
                 authorize(EndpointRequest.to(HealthEndpoint::class.java, InfoEndpoint::class.java), permitAll)
+                authorize("/webjars/**", permitAll)
                 authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer { opaqueToken { } }

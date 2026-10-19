@@ -10,14 +10,11 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.filter.UrlHandlerFilter
 import org.springframework.web.servlet.LocaleResolver
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor
-import org.springframework.web.servlet.resource.LiteWebJarsResourceResolver
 
 /**
  * English by default; `?lang=hu` switches to Hungarian and remembers it in a cookie.
- * WebJars are served under `/admin/webjars` without version numbers in the path.
  */
 @Configuration
 @ConditionalOnAdminUi
@@ -54,14 +51,6 @@ class UiWebConfig : WebMvcConfigurer {
         registry
             .addInterceptor(LocaleChangeInterceptor().apply { paramName = LOCALE_PARAM })
             .addPathPatterns("/admin/**")
-    }
-
-    override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry
-            .addResourceHandler("/admin/webjars/**")
-            .addResourceLocations("classpath:/META-INF/resources/webjars/")
-            .resourceChain(true)
-            .addResolver(LiteWebJarsResourceResolver())
     }
 
     companion object {

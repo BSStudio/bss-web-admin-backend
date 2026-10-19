@@ -38,7 +38,7 @@ class UiSecurityConfig {
             authorizeHttpRequests {
                 authorize("/admin/css/**", permitAll)
                 authorize("/admin/js/**", permitAll)
-                authorize("/admin/webjars/**", permitAll)
+                authorize("/admin/icons/**", permitAll)
                 authorize("/error", permitAll)
                 authorize(anyRequest, authenticated)
             }
