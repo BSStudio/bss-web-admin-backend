@@ -977,24 +977,21 @@ dialog.modal .cds--modal-content p {
 
 /* ---------- Buttons ---------- */
 
-/* Ink buttons: their text and icon follow the ink, and hovering draws the brand edge along the bottom */
+/*
+ * Ink buttons: their text and icon follow the ink, and hovering draws the brand edge along the bottom. The edge's
+ * size and place are set before the hover, so a hover only swaps the image: Carbon transitions the whole
+ * background, which would otherwise sweep the gradient down over the label.
+ */
 .cds--btn--primary {
+    background-position: bottom;
+    background-size: 100% 3px;
+    background-repeat: no-repeat;
     color: var(--bss-on-ink);
 }
 
 .cds--btn--primary .cds--btn__icon,
 .cds--btn--primary .cds--btn__icon path:not([data-icon-path]) {
     fill: var(--bss-on-ink);
-}
-
-/*
- * The edge's size and place are set before the hover, so a hover only swaps the image: Carbon transitions the
- * whole background, which would otherwise sweep the gradient down over the label.
- */
-.cds--btn--primary {
-    background-position: bottom;
-    background-size: 100% 3px;
-    background-repeat: no-repeat;
 }
 
 .cds--btn--primary:hover {

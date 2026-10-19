@@ -56,7 +56,7 @@
     <div class="cds--checkbox--inline cds--checkbox-wrapper">
         <input type="checkbox" class="cds--checkbox" id="row" th:id="|${name}-${value}|" th:name="${name}" form="bulk"
                th:value="${value}">
-        <label class="cds--checkbox-label" th:for="|${name}-${value}|">
+        <label class="cds--checkbox-label" for="row" th:for="|${name}-${value}|">
             <span class="cds--checkbox-label-text cds--visually-hidden" th:text="${label}">Select</span>
         </label>
     </div>
@@ -158,8 +158,8 @@
 */-->
 <div th:fragment="switch(id, checked, label, on, off, put)" class="cds--toggle switch">
     <input type="checkbox" role="switch" class="cds--toggle__button" id="switch" th:id="${id}" th:checked="${checked}"
-           th:aria-checked="${checked}" th:hx-put="${put}" hx-target="closest td" hx-swap="outerHTML">
-    <label class="cds--toggle__label" th:for="${id}">
+           aria-checked="false" th:aria-checked="${checked}" th:hx-put="${put}" hx-target="closest td" hx-swap="outerHTML">
+    <label class="cds--toggle__label" for="switch" th:for="${id}">
         <span class="cds--visually-hidden" th:text="${label}">Show on the website</span>
         <span class="cds--toggle__appearance cds--toggle__appearance--sm">
             <span class="cds--toggle__switch">

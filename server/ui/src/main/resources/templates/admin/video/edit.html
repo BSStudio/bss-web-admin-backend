@@ -70,7 +70,7 @@
                     <div th:each="label, row : ${labels}" class="cds--checkbox-wrapper" th:title="${label.description}">
                         <input type="checkbox" class="cds--checkbox" name="labels" id="label" th:id="|labels-${row.count}|"
                                th:value="${label.name}" th:checked="${#lists.contains(form.labels, label.name)}">
-                        <label class="cds--checkbox-label" th:for="|labels-${row.count}|">
+                        <label class="cds--checkbox-label" for="label" th:for="|labels-${row.count}|">
                             <span class="cds--checkbox-label-text" th:text="${label.name}">Egyetemi élet</span>
                         </label>
                     </div>
