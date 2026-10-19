@@ -1,70 +1,232 @@
 /*
- * BSS admin layout.
- * Deliberately plain: system colours (light or dark, following the browser), native form controls and the browser's
- * own focus ring. This file places things; the look comes in a later change.
+ * BSS admin on IBM Carbon.
+ * Carbon draws the components (carbon.min.css: @carbon/styles, downloaded by build.gradle.kts). It sits in a
+ * cascade layer, so every rule here wins over it without fighting its specificity. This file gives Carbon's
+ * tokens the BSS colours, lays out the pages, and does in CSS what Carbon does with JavaScript: the selection
+ * bar, the switch's state and the modal in a <dialog>.
  */
+@import url("carbon.min.css") layer(carbon);
 
-/* ---------- Tokens ---------- */
+/* ---------- Theme ---------- */
 
 :root {
     color-scheme: light dark;
 
-    --bar-height: 3rem;
-    --control-height: 2.25rem;
-    --gap: 1rem;
+    /* The icon's two colours. The brand appears only as this gradient, as a thin line along an edge. */
+    --bss-orange: oklch(0.745 0.142 52);
+    --bss-blue: oklch(0.58 0.228 267.5);
+    --bss-edge: linear-gradient(90deg in oklch, var(--bss-orange), var(--bss-blue));
+    --bss-frame: linear-gradient(135deg in oklch, var(--bss-orange), var(--bss-blue));
 
-    /* Every colour is a system colour or mixed from one, so both colour schemes work without a second set */
-    --muted: color-mix(in srgb, CanvasText 70%, Canvas);
-    --line: color-mix(in srgb, CanvasText 20%, Canvas);
-    --layer: color-mix(in srgb, CanvasText 5%, Canvas);
-    --layer-hover: color-mix(in srgb, CanvasText 10%, Canvas);
-    --selected: color-mix(in srgb, Highlight 30%, Canvas);
-    --danger: #b3261e;
-    --shadow: 0 4px 8px rgb(0 0 0 / 0.25);
-    --backdrop: rgb(0 0 0 / 0.5);
+    /* Primary actions are ink: near-black, near-white in the dark scheme. Blue is for links, focus and selection. */
+    --bss-ink: light-dark(oklch(0.2 0.006 267), oklch(0.967 0.006 267));
+    --bss-on-ink: light-dark(oklch(1 0 0), oklch(0.2 0.006 267));
+
+    --bss-ease-entrance: cubic-bezier(0, 0, 0.38, 0.9);
+    --bss-ease-exit: cubic-bezier(0.2, 0, 1, 0.9);
+    --bss-ease: cubic-bezier(0.2, 0, 0.38, 0.9);
+
+    /*
+     * Carbon's White (light) and Gray 100 (dark) themes, one light-dark() per token, so the scheme picks the value
+     * and any element can switch with color-scheme. Carbon's greys are OKLCH greys at the same lightness with a
+     * faint tint of the brand blue (hue 267); its blues are the icon's blue; status colours are Carbon's own.
+     */
+    --cds-background: light-dark(oklch(1 0 0), oklch(0.200 0.006 267));
+    --cds-background-active: light-dark(oklch(0.643 0.006 267 / 0.5), oklch(0.643 0.006 267 / 0.4));
+    --cds-background-brand: oklch(0.557 0.230 267);
+    --cds-background-hover: light-dark(oklch(0.643 0.006 267 / 0.12), oklch(0.643 0.006 267 / 0.16));
+    --cds-background-inverse: light-dark(oklch(0.345 0.006 267), oklch(0.967 0.006 267));
+    --cds-background-inverse-hover: light-dark(oklch(0.398 0.006 267), oklch(0.931 0.006 267));
+    --cds-background-selected: light-dark(oklch(0.643 0.006 267 / 0.2), oklch(0.643 0.006 267 / 0.24));
+    --cds-background-selected-hover: oklch(0.643 0.006 267 / 0.32);
+    --cds-border-disabled: light-dark(oklch(0.827 0.006 267), oklch(0.643 0.006 267 / 0.5));
+    --cds-border-interactive: light-dark(oklch(0.557 0.230 267), oklch(0.647 0.189 267));
+    --cds-border-inverse: light-dark(oklch(0.200 0.006 267), oklch(0.967 0.006 267));
+    --cds-border-strong-01: light-dark(oklch(0.643 0.006 267), oklch(0.542 0.006 267));
+    --cds-border-strong-02: oklch(0.643 0.006 267);
+    --cds-border-strong-03: light-dark(oklch(0.643 0.006 267), oklch(0.732 0.006 267));
+    --cds-border-subtle-00: light-dark(oklch(0.907 0.006 267), oklch(0.345 0.006 267));
+    --cds-border-subtle-01: light-dark(oklch(0.827 0.006 267), oklch(0.439 0.006 267));
+    --cds-border-subtle-02: light-dark(oklch(0.907 0.006 267), oklch(0.542 0.006 267));
+    --cds-border-subtle-03: light-dark(oklch(0.827 0.006 267), oklch(0.542 0.006 267));
+    --cds-border-subtle-selected-01: light-dark(oklch(0.827 0.006 267), oklch(0.542 0.006 267));
+    --cds-border-subtle-selected-02: light-dark(oklch(0.827 0.006 267), oklch(0.643 0.006 267));
+    --cds-border-subtle-selected-03: light-dark(oklch(0.827 0.006 267), oklch(0.643 0.006 267));
+    --cds-border-tile-01: light-dark(oklch(0.827 0.006 267), oklch(0.439 0.006 267));
+    --cds-border-tile-02: light-dark(oklch(0.732 0.006 267), oklch(0.542 0.006 267));
+    --cds-border-tile-03: light-dark(oklch(0.827 0.006 267), oklch(0.643 0.006 267));
+    --cds-field-01: light-dark(oklch(0.967 0.006 267), oklch(0.269 0.006 267));
+    --cds-field-02: light-dark(oklch(1 0 0), oklch(0.345 0.006 267));
+    --cds-field-03: light-dark(oklch(0.967 0.006 267), oklch(0.439 0.006 267));
+    --cds-field-hover-01: light-dark(oklch(0.931 0.006 267), oklch(0.321 0.006 267));
+    --cds-field-hover-02: light-dark(oklch(0.931 0.006 267), oklch(0.398 0.006 267));
+    --cds-field-hover-03: light-dark(oklch(0.931 0.006 267), oklch(0.500 0.006 267));
+    --cds-focus: light-dark(oklch(0.557 0.230 267), oklch(1 0 0));
+    --cds-focus-inset: light-dark(oklch(1 0 0), oklch(0.200 0.006 267));
+    --cds-focus-inverse: light-dark(oklch(1 0 0), oklch(0.557 0.230 267));
+    --cds-highlight: light-dark(oklch(0.908 0.044 267), oklch(0.280 0.140 267));
+    --cds-icon-disabled: light-dark(oklch(0.200 0.006 267 / 0.25), oklch(0.967 0.006 267 / 0.25));
+    --cds-icon-interactive: light-dark(oklch(0.557 0.230 267), oklch(1 0 0));
+    --cds-icon-inverse: light-dark(oklch(1 0 0), oklch(0.200 0.006 267));
+    --cds-icon-on-color: oklch(1 0 0);
+    --cds-icon-on-color-disabled: light-dark(oklch(0.643 0.006 267), oklch(1 0 0 / 0.25));
+    --cds-icon-primary: light-dark(oklch(0.200 0.006 267), oklch(0.967 0.006 267));
+    --cds-icon-secondary: light-dark(oklch(0.439 0.006 267), oklch(0.827 0.006 267));
+    --cds-interactive: light-dark(oklch(0.557 0.230 267), oklch(0.647 0.189 267));
+    --cds-layer-01: light-dark(oklch(0.967 0.006 267), oklch(0.269 0.006 267));
+    --cds-layer-02: light-dark(oklch(1 0 0), oklch(0.345 0.006 267));
+    --cds-layer-03: light-dark(oklch(0.967 0.006 267), oklch(0.439 0.006 267));
+    --cds-layer-accent-01: light-dark(oklch(0.907 0.006 267), oklch(0.345 0.006 267));
+    --cds-layer-accent-02: light-dark(oklch(0.907 0.006 267), oklch(0.439 0.006 267));
+    --cds-layer-accent-03: light-dark(oklch(0.907 0.006 267), oklch(0.542 0.006 267));
+    --cds-layer-accent-active-01: light-dark(oklch(0.732 0.006 267), oklch(0.542 0.006 267));
+    --cds-layer-accent-active-02: light-dark(oklch(0.732 0.006 267), oklch(0.643 0.006 267));
+    --cds-layer-accent-active-03: light-dark(oklch(0.732 0.006 267), oklch(0.345 0.006 267));
+    --cds-layer-accent-hover-01: light-dark(oklch(0.861 0.006 267), oklch(0.398 0.006 267));
+    --cds-layer-accent-hover-02: light-dark(oklch(0.861 0.006 267), oklch(0.500 0.006 267));
+    --cds-layer-accent-hover-03: light-dark(oklch(0.861 0.006 267), oklch(0.482 0.006 267));
+    --cds-layer-active-01: light-dark(oklch(0.827 0.006 267), oklch(0.439 0.006 267));
+    --cds-layer-active-02: light-dark(oklch(0.827 0.006 267), oklch(0.542 0.006 267));
+    --cds-layer-active-03: light-dark(oklch(0.827 0.006 267), oklch(0.643 0.006 267));
+    --cds-layer-background-01: light-dark(oklch(1 0 0), oklch(0.200 0.006 267));
+    --cds-layer-background-02: light-dark(oklch(0.967 0.006 267), oklch(0.269 0.006 267));
+    --cds-layer-background-03: light-dark(oklch(1 0 0), oklch(0.345 0.006 267));
+    --cds-layer-hover-01: light-dark(oklch(0.931 0.006 267), oklch(0.321 0.006 267));
+    --cds-layer-hover-02: light-dark(oklch(0.931 0.006 267), oklch(0.398 0.006 267));
+    --cds-layer-hover-03: light-dark(oklch(0.931 0.006 267), oklch(0.500 0.006 267));
+    --cds-layer-selected-01: light-dark(oklch(0.907 0.006 267), oklch(0.345 0.006 267));
+    --cds-layer-selected-02: light-dark(oklch(0.907 0.006 267), oklch(0.439 0.006 267));
+    --cds-layer-selected-03: light-dark(oklch(0.907 0.006 267), oklch(0.542 0.006 267));
+    --cds-layer-selected-disabled: light-dark(oklch(0.643 0.006 267), oklch(0.732 0.006 267));
+    --cds-layer-selected-hover-01: light-dark(oklch(0.861 0.006 267), oklch(0.398 0.006 267));
+    --cds-layer-selected-hover-02: light-dark(oklch(0.861 0.006 267), oklch(0.500 0.006 267));
+    --cds-layer-selected-hover-03: light-dark(oklch(0.861 0.006 267), oklch(0.482 0.006 267));
+    --cds-layer-selected-inverse: light-dark(oklch(0.200 0.006 267), oklch(0.967 0.006 267));
+    --cds-link-inverse: light-dark(oklch(0.736 0.136 267), oklch(0.557 0.230 267));
+    --cds-link-inverse-active: light-dark(oklch(0.967 0.006 267), oklch(0.200 0.006 267));
+    --cds-link-inverse-hover: light-dark(oklch(0.828 0.086 267), oklch(0.454 0.221 267));
+    --cds-link-inverse-visited: light-dark(#be95ff, #8a3ffc);
+    --cds-link-primary: light-dark(oklch(0.557 0.230 267), oklch(0.736 0.136 267));
+    --cds-link-primary-hover: light-dark(oklch(0.454 0.221 267), oklch(0.828 0.086 267));
+    --cds-link-secondary: light-dark(oklch(0.454 0.221 267), oklch(0.828 0.086 267));
+    --cds-link-visited: light-dark(#8a3ffc, #be95ff);
+    --cds-overlay: oklch(0 0 0 / 0.6);
+    --cds-shadow: light-dark(oklch(0 0 0 / 0.3), oklch(0 0 0 / 0.8));
+    --cds-skeleton-background: light-dark(oklch(0.931 0.006 267), oklch(0.281 0.006 267));
+    --cds-skeleton-element: light-dark(oklch(0.827 0.006 267), oklch(0.345 0.006 267));
+    --cds-support-caution-major: #ff832b;
+    --cds-support-caution-minor: #f1c21b;
+    --cds-support-caution-undefined: light-dark(#8a3ffc, #a56eff);
+    --cds-support-error: light-dark(#da1e28, #fa4d56);
+    --cds-support-error-inverse: light-dark(#fa4d56, #da1e28);
+    --cds-support-info: light-dark(oklch(0.454 0.221 267), oklch(0.647 0.189 267));
+    --cds-support-info-inverse: light-dark(oklch(0.647 0.189 267), oklch(0.454 0.221 267));
+    --cds-support-success: light-dark(#24a148, #42be65);
+    --cds-support-success-inverse: light-dark(#42be65, #24a148);
+    --cds-support-warning: #f1c21b;
+    --cds-support-warning-inverse: #f1c21b;
+    --cds-text-disabled: light-dark(oklch(0.200 0.006 267 / 0.25), oklch(0.967 0.006 267 / 0.25));
+    --cds-text-error: light-dark(#da1e28, #ff8389);
+    --cds-text-helper: light-dark(oklch(0.542 0.006 267), oklch(0.732 0.006 267));
+    --cds-text-inverse: light-dark(oklch(1 0 0), oklch(0.200 0.006 267));
+    --cds-text-on-color: oklch(1 0 0);
+    --cds-text-on-color-disabled: light-dark(oklch(0.643 0.006 267), oklch(1 0 0 / 0.25));
+    --cds-text-placeholder: light-dark(oklch(0.200 0.006 267 / 0.4), oklch(0.967 0.006 267 / 0.4));
+    --cds-text-primary: light-dark(oklch(0.200 0.006 267), oklch(0.967 0.006 267));
+    --cds-text-secondary: light-dark(oklch(0.439 0.006 267), oklch(0.827 0.006 267));
+    --cds-toggle-off: light-dark(oklch(0.643 0.006 267), oklch(0.542 0.006 267));
+    --cds-layer: var(--cds-layer-01, #f4f4f4);
+    --cds-layer-active: var(--cds-layer-active-01, #c6c6c6);
+    --cds-layer-background: var(--cds-layer-background-01, #ffffff);
+    --cds-layer-hover: var(--cds-layer-hover-01, #e8e8e8);
+    --cds-layer-selected: var(--cds-layer-selected-01, #e0e0e0);
+    --cds-layer-selected-hover: var(--cds-layer-selected-hover-01, #d1d1d1);
+    --cds-layer-accent: var(--cds-layer-accent-01, #e0e0e0);
+    --cds-layer-accent-hover: var(--cds-layer-accent-hover-01, #d1d1d1);
+    --cds-layer-accent-active: var(--cds-layer-accent-active-01, #a8a8a8);
+    --cds-field: var(--cds-field-01, #f4f4f4);
+    --cds-field-hover: var(--cds-field-hover-01, #e8e8e8);
+    --cds-border-subtle: var(--cds-border-subtle-00, #e0e0e0);
+    --cds-border-subtle-selected: var(--cds-border-subtle-selected-01, #c6c6c6);
+    --cds-border-strong: var(--cds-border-strong-01, #8d8d8d);
+    --cds-border-tile: var(--cds-border-tile-01, #c6c6c6);
+    --cds-button-separator: light-dark(oklch(0.907 0.006 267), oklch(0.200 0.006 267));
+    --cds-button-primary: oklch(0.557 0.230 267);
+    --cds-button-secondary: light-dark(oklch(0.345 0.006 267), oklch(0.542 0.006 267));
+    --cds-button-tertiary: light-dark(oklch(0.557 0.230 267), oklch(1 0 0));
+    --cds-button-danger-primary: #da1e28;
+    --cds-button-danger-secondary: light-dark(#da1e28, #fa4d56);
+    --cds-button-danger-active: #750e13;
+    --cds-button-primary-active: oklch(0.363 0.184 267);
+    --cds-button-secondary-active: light-dark(oklch(0.542 0.006 267), oklch(0.345 0.006 267));
+    --cds-button-tertiary-active: light-dark(oklch(0.363 0.184 267), oklch(0.827 0.006 267));
+    --cds-button-danger-hover: #b81921;
+    --cds-button-primary-hover: oklch(0.500 0.230 267);
+    --cds-button-secondary-hover: light-dark(oklch(0.398 0.006 267), oklch(0.482 0.006 267));
+    --cds-button-tertiary-hover: light-dark(oklch(0.500 0.230 267), oklch(0.967 0.006 267));
+    --cds-button-disabled: light-dark(oklch(0.827 0.006 267), oklch(0.643 0.006 267 / 0.3));
+    --cds-notification-background-error: light-dark(#fff1f1, oklch(0.269 0.006 267));
+    --cds-notification-background-success: light-dark(#defbe6, oklch(0.269 0.006 267));
+    --cds-notification-background-info: light-dark(oklch(0.967 0.016 267), oklch(0.269 0.006 267));
+    --cds-notification-background-warning: light-dark(#fcf4d6, oklch(0.269 0.006 267));
+    --cds-notification-action-hover: oklch(1 0 0);
+    --cds-notification-action-tertiary-inverse: light-dark(oklch(1 0 0), oklch(0.557 0.230 267));
+    --cds-notification-action-tertiary-inverse-active: light-dark(oklch(0.827 0.006 267), oklch(0.363 0.184 267));
+    --cds-notification-action-tertiary-inverse-hover: light-dark(oklch(0.967 0.006 267), oklch(0.500 0.230 267));
+    --cds-notification-action-tertiary-inverse-text: light-dark(oklch(0.200 0.006 267), oklch(1 0 0));
+    --cds-notification-action-tertiary-inverse-text-on-color-disabled: light-dark(oklch(1 0 0 / 0.25), oklch(0.643 0.006 267));
+    /* Ink, not IBM Blue, for primary buttons */
+    --cds-button-primary: var(--bss-ink);
+    --cds-button-primary-hover: light-dark(oklch(0.32 0.006 267), oklch(0.86 0.006 267));
+    --cds-button-primary-active: light-dark(oklch(0.42 0.006 267), oklch(0.78 0.006 267));
 }
 
+/* ---------- Base ---------- */
+
+/* Carbon's own font is IBM Plex; the CSP keeps web fonts out, so it is used only where it is installed */
+body {
+    padding-block-start: 3rem;
+    background: var(--cds-background);
+    color: var(--cds-text-primary);
+    font-family: "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.42857;
+    letter-spacing: 0.16px;
+}
+
+/* Light text on a dark ground looks heavier than it is */
 @media (prefers-color-scheme: dark) {
-    :root {
-        --danger: #f2b8b5;
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 }
 
-/* ---------- Reset ---------- */
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background: Canvas;
-    color: CanvasText;
-    font-family: system-ui, sans-serif;
-    line-height: 1.5;
+/* Carbon gives many of its parts a display, which would beat the hidden attribute */
+[hidden] {
+    display: none !important;
 }
 
 h1 {
-    margin: 0;
-    font-size: 1.5rem;
-    line-height: 1.25;
+    font-size: 1.75rem;
+    font-weight: 400;
+    line-height: 2.25rem;
+    text-wrap: balance;
 }
 
 h2 {
-    margin: 0 0 0.75rem;
-    font-size: 1.125rem;
+    margin-block-end: 1rem;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.75rem;
 }
 
-:where(input, select, textarea, button) {
-    font: inherit;
+strong {
+    font-weight: 600;
 }
-
-/* ---------- Shared ---------- */
 
 .muted {
-    color: var(--muted);
+    color: var(--cds-text-secondary);
 }
 
 .sr-only {
@@ -76,250 +238,352 @@ h2 {
     white-space: nowrap;
 }
 
-.skip-link {
-    position: absolute;
-    top: -3rem;
-    left: 0.5rem;
-    z-index: 10;
-    padding: 0.5rem 1rem;
-    background: Canvas;
-}
-
-.skip-link:focus {
-    top: 0.5rem;
-}
-
 .container {
-    max-width: 90rem;
+    max-width: 99rem;
     margin-inline: auto;
     padding-inline: 2rem;
 }
 
-/* ---------- Top bar ---------- */
+/* ---------- Top bar (Carbon's UI shell header) ---------- */
 
+/* Dark in both schemes, like the BSS badge: the tokens inside it resolve to their dark values */
 .admin-bar {
-    border-bottom: 1px solid var(--line);
-    background: var(--layer);
+    color-scheme: dark;
+    border-block-end: 0;
+    anchor-name: --bar;
 }
 
-.admin-bar > nav {
-    display: flex;
-    align-items: center;
-    min-height: var(--bar-height);
+/* The brand edge under the bar. While htmx is loading something, a stretch of it runs along. */
+.admin-bar::after,
+.admin-bar::before {
+    position: absolute;
+    inset: auto 0 0;
+    block-size: 2px;
+    content: "";
+    pointer-events: none;
 }
 
-.admin-bar :is(a, button) {
-    display: flex;
-    align-items: center;
-    height: var(--bar-height);
-    padding: 0 1rem;
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-    color: inherit;
-    text-decoration: none;
+.admin-bar::after {
+    background: var(--bss-edge);
+    transition: opacity 110ms var(--bss-ease);
 }
 
-.admin-bar :is(a, button):hover {
-    background: var(--layer-hover);
+.admin-bar::before {
+    z-index: 1;
+    background: var(--bss-edge) no-repeat;
+    background-size: 40% 100%;
+    opacity: 0;
 }
 
-.admin-bar a[aria-current="page"] {
-    box-shadow: inset 0 -3px 0 currentcolor;
+body:has(.htmx-request) .admin-bar::after {
+    opacity: 0.25;
 }
 
-/* The logo leads to the dashboard; it needs no underline there */
+body:has(.htmx-request) .admin-bar::before {
+    opacity: 1;
+    animation: bss-loading 1.1s var(--bss-ease) infinite;
+}
+
+@keyframes bss-loading {
+    from {
+        background-position: -100% 0;
+    }
+
+    to {
+        background-position: 170% 0;
+    }
+}
+
+@keyframes bss-pulse {
+    50% {
+        opacity: 0.3;
+    }
+}
+
+.admin-bar .brand {
+    gap: 0.5rem;
+    padding-inline: 1rem 2rem;
+}
+
 .admin-bar .brand[aria-current="page"] {
-    box-shadow: none;
+    color: var(--cds-text-primary);
 }
 
-.admin-bar .brand strong {
-    margin-right: 0.25rem;
+/* The icon's mark: white letters on black in a gradient frame. The one rounded shape, since it is the logo. */
+.badge {
+    padding: 0 0.3rem;
+    border: 2px solid transparent;
+    border-radius: 0.25rem;
+    background: linear-gradient(oklch(0.08 0 0), oklch(0.08 0 0)) padding-box, var(--bss-frame) border-box;
+    color: oklch(1 0 0);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.25rem;
 }
 
-.admin-bar form {
-    margin: 0;
+/* The current section is a lighter cell; the brand edge under the bar replaces Carbon's blue underline */
+.admin-bar a.cds--header__menu-item[aria-current="page"] {
+    background-color: var(--cds-background-selected);
 }
 
+.admin-bar a.cds--header__menu-item[aria-current="page"]::after {
+    display: none;
+}
+
+.admin-bar .cds--header__nav {
+    display: block;
+}
+
+/* The sections: a menu bar on wide screens; on narrow ones a menu that the ☰ button opens as a popover */
 .admin-bar .sections {
+    position: static;
+    inset: auto;
+    inline-size: auto;
+    block-size: 100%;
     margin: 0;
     padding: 0;
-    list-style: none;
+    overflow: visible;
+    border: 0;
+    background: none;
+    color: inherit;
 }
 
-/* The sections: inline on wide screens; on narrow ones a menu that the ☰ button opens as a popover */
-.admin-bar .menu-toggle {
+.menu-toggle {
     display: none;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    inline-size: auto;
+    padding-inline: 1rem;
+    color: var(--cds-text-primary);
+    font: inherit;
 }
 
-@media (min-width: 48rem) {
-    .admin-bar .sections {
-        display: flex;
-        position: static;
-        inset: auto;
-        width: auto;
-        height: auto;
-        overflow: visible;
-        border: 0;
-        background: none;
-        color: inherit;
-    }
+.menu-toggle svg {
+    fill: currentColor;
 }
 
 @media (max-width: 47.99rem) {
-    .admin-bar .menu-toggle {
+    .menu-toggle {
         display: flex;
+        align-items: center;
+    }
+
+    .admin-bar .brand {
+        padding-inline: 0.5rem 1rem;
+    }
+
+    .admin-bar .cds--header__nav {
+        padding: 0;
+    }
+
+    .admin-bar .cds--header__nav::before {
+        display: none;
+    }
+
+    .admin-bar .sections:not(:popover-open) {
+        display: none;
     }
 
     .admin-bar .sections:popover-open {
-        display: flex;
         position: fixed;
-        inset: var(--bar-height) 0 auto;
+        inset: 3rem 0 auto;
         flex-direction: column;
-        width: auto;
-        height: auto;
-        border: 0;
-        border-bottom: 1px solid var(--line);
-        background: Canvas;
-        box-shadow: var(--shadow);
+        block-size: auto;
+        background: var(--cds-layer);
+        box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
     }
 
-    .admin-bar .sections a[aria-current="page"] {
-        box-shadow: inset 3px 0 0 currentcolor;
+    .admin-bar .sections a.cds--header__menu-item {
+        block-size: 3rem;
     }
 
-    .admin-bar .profile-toggle .name {
+    .profile-toggle .name {
         display: none;
     }
 }
 
-/* The signed-in person: avatar (initials) and the button that opens their menu */
-.admin-bar .profile {
-    display: flex;
+/* The signed-in person: their initials (a link to their member page) and the button that opens their menu */
+.profile {
     position: relative;
-    align-items: center;
-    margin-left: auto;
     anchor-name: --profile;
 }
 
-.admin-bar .avatar {
-    padding: 0 0.25rem 0 0.75rem;
-}
-
-.admin-bar .avatar .initials {
+.avatar {
     display: grid;
     place-items: center;
-    width: 2rem;
-    height: 2rem;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    font-size: 0.75rem;
-    font-weight: 600;
+    color: var(--cds-text-primary);
+    text-decoration: none;
 }
 
-.admin-bar .profile-toggle {
+.avatar .initials {
+    display: grid;
+    place-items: center;
+    inline-size: 2rem;
+    block-size: 2rem;
+    border: 1px solid var(--cds-border-strong);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.32px;
+}
+
+.profile-toggle {
+    display: flex;
     gap: 0.5rem;
-    padding: 0 0.75rem;
+    align-items: center;
+    block-size: 100%;
+    padding-inline: 1rem;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.profile-toggle svg {
+    fill: currentColor;
 }
 
 /* The person's menu: shown while a mouse is over the profile, or opened with the button (a popover) */
-.admin-bar .profile-menu {
-    min-width: 12rem;
+.profile-menu {
+    min-inline-size: 13rem;
     margin: 0;
-    padding: 0.25rem 0;
-    border: 1px solid var(--line);
-    background: Canvas;
-    color: CanvasText;
-    box-shadow: var(--shadow);
+    padding: 0.5rem 0;
+    border: 0;
+    background: var(--cds-layer);
+    color: var(--cds-text-primary);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
 }
 
 /* Esc dismisses the hover-opened menu (data-dismissed, see admin.js) */
 @media (hover: hover) {
-    .admin-bar .profile:hover:not([data-dismissed]) .profile-menu:not(:popover-open) {
+    .profile:hover:not([data-dismissed]) .profile-menu:not(:popover-open) {
         display: block;
         position: absolute;
         inset: 100% 0 auto auto;
     }
 }
 
-.admin-bar .profile-menu:popover-open {
+.profile-menu:popover-open {
     position: fixed;
-    inset: var(--bar-height) 1rem auto auto;
+    position-anchor: --profile;
+    inset: anchor(bottom) anchor(right) auto auto;
 }
 
-@supports (anchor-name: --profile) {
-    .admin-bar .profile-menu:popover-open {
-        position-anchor: --profile;
-        inset: anchor(bottom) anchor(right) auto auto;
-    }
-}
-
-.admin-bar .profile-menu p {
+.profile-menu p {
     margin: 0;
-    padding: 0.25rem 1rem;
+    padding: 0.5rem 1rem;
 }
 
-.admin-bar .profile-menu .who {
+.profile-menu .who {
     font-weight: 600;
 }
 
-.admin-bar .profile-menu .language {
+.profile-menu .language {
     display: flex;
     gap: 0.25rem;
     align-items: center;
-    color: var(--muted);
+    color: var(--cds-text-secondary);
 }
 
-.admin-bar .profile-menu .language span {
-    margin-right: auto;
+.profile-menu .language span {
+    margin-inline-end: auto;
 }
 
-.admin-bar .profile-menu .language a {
-    height: var(--control-height);
-    padding: 0 0.5rem;
+.profile-menu .language a {
+    display: grid;
+    place-items: center;
+    inline-size: 2.5rem;
+    block-size: 2rem;
+    color: var(--cds-text-secondary);
+    text-decoration: none;
 }
 
-.admin-bar .profile-menu .language a[aria-current] {
-    color: CanvasText;
+.profile-menu .language a:hover {
+    background: var(--cds-layer-hover);
+    color: var(--cds-text-primary);
+}
+
+.profile-menu .language a[aria-current] {
+    background: var(--cds-layer-selected);
+    color: var(--cds-text-primary);
     font-weight: 600;
-    box-shadow: inset 0 -2px 0 currentcolor;
 }
 
-.admin-bar .profile-menu button {
-    justify-content: flex-start;
-    width: 100%;
-    height: var(--control-height);
+.profile-menu form .cds--btn {
+    inline-size: 100%;
+    max-inline-size: none;
+}
+
+/* ---------- Toasts ---------- */
+
+/*
+ * Top right under the bar, newest on top. A toast fades in, then out after five seconds; the pointer or the focus
+ * on it holds it. With reduced motion it only fades.
+ */
+.toasts {
+    position: fixed;
+    z-index: 9000;
+    inset-block-start: 3.5rem;
+    inset-inline-end: 0.5rem;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    align-items: end;
+    pointer-events: none;
+}
+
+.toasts > * {
+    margin: 0;
+    pointer-events: auto;
+}
+
+.toast {
+    animation:
+        bss-toast-in 240ms var(--bss-ease-entrance) both,
+        bss-toast-out 240ms var(--bss-ease-exit) 5s forwards;
+}
+
+.toast:is(:hover, :focus-within) {
+    animation-play-state: paused;
+}
+
+@keyframes bss-toast-in {
+    from {
+        opacity: 0;
+        translate: var(--bss-toast-from, 1.5rem 0);
+    }
+}
+
+@keyframes bss-toast-out {
+    to {
+        visibility: hidden;
+        opacity: 0;
+    }
 }
 
 /* ---------- Page ---------- */
 
 main.container {
-    padding-block: 1.5rem 3rem;
+    padding-block: 2rem 4rem;
+}
+
+.container > .flash {
+    margin-block-start: 1.5rem;
 }
 
 .page-header {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem var(--gap);
+    gap: 1rem;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    margin-block-end: 2rem;
 }
 
 .page-header p {
     margin: 0;
 }
 
-.breadcrumb {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 0.25rem;
-}
-
-.breadcrumb::after {
-    color: var(--muted);
-    content: "/";
+.page-header .cds--breadcrumb {
+    margin-block-end: 0.5rem;
 }
 
 /* The main form and its side panels; one column on narrower screens (see the end of the file) */
@@ -334,7 +598,7 @@ main.container {
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    gap: var(--gap);
+    gap: 1.5rem 1rem;
 }
 
 .narrow {
@@ -342,66 +606,27 @@ main.container {
 }
 
 .panel {
-    padding: var(--gap);
-    background: var(--layer);
+    padding: 1rem;
 }
 
 .panel + .panel {
-    margin-top: var(--gap);
+    margin-block-start: 1rem;
 }
 
-.panel p {
-    margin: 0 0 0.75rem;
+.panel > p {
+    margin-block-end: 1rem;
 }
 
-/* ---------- Buttons ---------- */
-
-/* :where keeps these at zero specificity, so the bar and the tables can change them with a single class */
-:where(button, a.button) {
-    display: inline-flex;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: center;
-    min-height: var(--control-height);
-    padding: 0 0.875rem;
-    border: 1px solid var(--line);
-    border-radius: 0.25rem;
-    background: ButtonFace;
-    color: ButtonText;
-    text-decoration: none;
-    white-space: nowrap;
-    cursor: pointer;
-}
-
-:where(button, a.button):hover {
-    background: var(--layer-hover);
-}
-
-:where(button).ghost {
-    border-color: transparent;
-    background: transparent;
-}
-
-:where(button).danger {
-    border-color: currentcolor;
-    color: var(--danger);
-}
-
-:where(button).danger.ghost {
-    border-color: transparent;
-}
-
+/* A form's buttons: Carbon's button set, flush, with Cancel before the primary action */
 .actions {
-    display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
     align-items: center;
 }
 
 /* Empty, until admin.js writes into it that the form has changes that are not saved yet */
 .unsaved {
-    margin-left: 0.5rem;
-    color: var(--muted);
+    margin-inline-start: 1rem;
+    color: var(--cds-text-secondary);
 }
 
 /* ---------- Forms ---------- */
@@ -409,99 +634,48 @@ main.container {
 .stack {
     display: flex;
     flex-direction: column;
-    gap: var(--gap);
-    margin: 0;
+    gap: 1.5rem;
 }
 
-.stack label,
-.stack fieldset {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    margin: 0;
-}
-
-fieldset {
-    padding: 0;
-    border: 0;
-}
-
-legend {
-    margin-bottom: 0.25rem;
-    padding: 0;
-}
-
-label > span:first-child,
-legend {
-    color: var(--muted);
-    font-size: 0.875rem;
-}
-
-label small {
-    color: var(--muted);
-    font-size: 0.875rem;
-}
-
-:where(input:not([type="checkbox"], [type="radio"], [type="file"]), select) {
-    min-height: var(--control-height);
-    padding-inline: 0.5rem;
-}
-
-textarea {
-    min-height: 4rem;
-    padding: 0.375rem 0.5rem;
-    resize: vertical;
-}
-
-.stack :is(input:not([type="checkbox"], [type="radio"]), select, textarea) {
-    width: 100%;
+.stack > .cds--form-item,
+.grid > .cds--form-item {
+    inline-size: 100%;
 }
 
 /* A field's error message from the server, under the field */
 .field-error {
-    color: var(--danger);
-    font-size: 0.875rem;
+    display: block;
+    margin-block-start: 0.25rem;
+    color: var(--cds-text-error);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    letter-spacing: 0.32px;
 }
 
 /* A required field left empty, a value the browser rejects, or one the server rejected */
-:is(input, select, textarea):is(:user-invalid, [aria-invalid="true"]) {
-    border-color: var(--danger);
+:is(.cds--text-input, .cds--text-area, .cds--select-input):is(:user-invalid, [aria-invalid="true"]) {
+    outline: 2px solid var(--cds-support-error);
+    outline-offset: -2px;
 }
 
-[type="checkbox"] {
-    width: 1rem;
-    height: 1rem;
-    margin: 0;
+@media (prefers-contrast: more) {
+    :is(.cds--text-input, .cds--text-area, .cds--select-input):is(:user-invalid, [aria-invalid="true"]) {
+        outline-style: dotted;
+    }
 }
 
-.stack label.inline,
-label.inline {
-    display: inline-flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    align-items: center;
-    margin-right: 1.25rem;
-    color: inherit;
-}
-
-.inline-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 0.75rem 0 0;
-}
-
-.inline-form > label {
-    flex: 1 1 10rem;
-}
-
-.inline-form :is(input, select) {
-    width: 100%;
+/* Text areas grow with their text, between a few lines and twenty; field-sizing would size their width too */
+.cds--text-area {
+    inline-size: 100%;
+    field-sizing: content;
+    min-block-size: 4.5rem;
+    max-block-size: calc(20lh + 1.375rem);
+    resize: vertical;
 }
 
 /*
- * Where the browser supports it (Chromium), the open list of a select gets compact rows that scroll past 20rem,
- * which matters for the long member list. Other browsers show their native list.
+ * Where the browser supports it (Chromium, Safari 27), the open list of a select gets compact rows that scroll past
+ * 20rem, which matters for the long member list. Carbon's chevron stays the only arrow. Others show their own list.
  */
 @supports (appearance: base-select) {
     select,
@@ -509,13 +683,29 @@ label.inline {
         appearance: base-select;
     }
 
+    select::picker-icon {
+        display: none;
+    }
+
     ::picker(select) {
         max-height: 20rem;
+        border: 0;
+        background: var(--cds-layer);
+        color: var(--cds-text-primary);
+        box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
     }
 
     option {
-        min-height: var(--control-height);
-        padding: 0.25rem 0.75rem;
+        min-height: 2.5rem;
+        padding: 0.25rem 1rem;
+    }
+
+    option:hover {
+        background: var(--cds-layer-hover);
+    }
+
+    option:checked {
+        background: var(--cds-layer-selected);
     }
 
     /* A placeholder like "Position" only labels the closed list */
@@ -524,14 +714,28 @@ label.inline {
     }
 }
 
-/* The event page's video search and its matches */
-.video-search {
-    display: block;
-    margin-top: 0.75rem;
+.checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
 }
 
-.video-search input {
-    width: 100%;
+/* The crew's add row: member, position and the button side by side while there is room */
+.inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: end;
+    margin-block-start: 1rem;
+}
+
+.inline-form > :is(.cds--select, .cds--form-item) {
+    flex: 1 1 10rem;
+}
+
+/* The event page's video search and its matches */
+.video-search {
+    margin-block-start: 1.5rem;
 }
 
 .matches {
@@ -542,151 +746,97 @@ label.inline {
 
 .matches li {
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.25rem 0;
-    border-bottom: 1px solid var(--line);
+    min-block-size: 2.5rem;
+    padding-inline-start: 1rem;
+    border-block-end: 1px solid var(--cds-border-subtle);
+}
+
+.matches li > :first-child {
+    flex: 1;
 }
 
 /* ---------- Data tables ---------- */
 
 .table-toolbar {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    min-height: var(--bar-height);
-    padding: 0.5rem;
-    border: 1px solid var(--line);
-    border-bottom: 0;
-    background: var(--layer);
-}
-
-.toolbar-actions {
-    display: flex;
-    flex: 1;
-    gap: 0.5rem;
-    align-items: center;
-    justify-content: flex-end;
+    --cds-layout-size-height-local: 3rem;
 }
 
 .table-search {
-    flex: 1;
-    max-width: 20rem;
-    margin-right: auto;
+    flex: 1 1 auto;
 }
 
-.table-search :is(form, label) {
-    margin: 0;
+.table-search .cds--search {
+    block-size: 100%;
 }
 
-.table-search input {
-    width: 100%;
+/*
+ * While any row is selected, the selection bar covers the toolbar, as Carbon's JavaScript would do it. It has the
+ * opposite colour scheme to the page, like Carbon's inverse surfaces, so its own controls follow. Its Cancel is a
+ * reset button.
+ */
+.cds--batch-actions {
+    color-scheme: dark;
+    background-color: light-dark(oklch(0.967 0.006 267), oklch(0.345 0.006 267));
 }
 
-.batch-actions {
-    display: none;
-    flex: 1;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-    align-items: center;
-    margin: 0;
+@media (prefers-color-scheme: dark) {
+    .cds--batch-actions {
+        color-scheme: light;
+    }
 }
 
-.batch-actions > span {
-    flex: 1;
-    padding-left: 0.5rem;
+main:has([form="bulk"]:checked) .cds--batch-actions {
+    z-index: 1;
+    clip-path: polygon(0 0, 300% 0, 300% 300%, 0 300%);
+    opacity: 1;
+    pointer-events: all;
+    transform: none;
 }
 
-/* While any row is selected, the selection bar replaces the toolbar. Its Cancel is a reset button. */
-main:has([form="bulk"]:checked) .table-toolbar {
-    background: var(--selected);
+main:has([form="bulk"]:checked) .cds--toolbar-content {
+    clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    transform: translate3d(0, var(--cds-layout-size-height-local), 0);
 }
 
-main:has([form="bulk"]:checked) .batch-actions {
-    display: flex;
+.cds--batch-summary {
+    background: none;
+    color: var(--cds-text-primary);
 }
 
-main:has([form="bulk"]:checked) .toolbar-actions {
-    display: none;
+.cds--batch-actions .cds--btn {
+    background: transparent;
+    color: var(--cds-text-primary);
 }
 
-/* position: relative keeps the hidden labels inside the scrolling table, so phones don't zoom out to fit them */
+.cds--batch-actions .cds--btn:hover {
+    background: var(--cds-background-hover);
+}
+
+.cds--batch-actions .cds--batch-summary__cancel::before {
+    background-color: var(--cds-border-strong);
+}
+
+.batch-status .cds--select-input {
+    background-color: transparent;
+}
+
 .data-table {
-    position: relative;
-    overflow-x: auto;
-    border: 1px solid var(--line);
+    background: var(--cds-layer);
 }
 
-/* Tables are a step smaller than the text around them, so a list fits a phone without scrolling sideways */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-}
-
-:is(th, td) {
-    padding: 0.375rem 0.75rem;
-    border-bottom: 1px solid var(--line);
-    text-align: start;
-    vertical-align: middle;
-}
-
-thead th {
-    background: var(--layer);
-}
-
-/* A long word (a title, an address) may break, so the table fits a phone and its last column stays on screen */
-td {
+.cds--data-table td {
     overflow-wrap: anywhere;
 }
 
-tbody tr:last-child td {
-    border-bottom: 0;
+/* Rows ticked for the selection bar */
+.cds--data-table tbody tr:has([form="bulk"]:checked) td {
+    background-color: var(--cds-layer-selected);
 }
 
-tbody tr:has([form="bulk"]:checked) td {
-    background: var(--selected);
-}
-
-tbody tr.archived td {
-    color: var(--muted);
-}
-
-/* Sortable column headers fill their cell; the arrow shows the order (aria-sort) or, on hover, that it sorts */
-th a.sort {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    margin: -0.375rem -0.75rem;
-    padding: 0.375rem 0.75rem;
-    color: inherit;
-    text-decoration: none;
-}
-
-th a.sort:hover {
-    background: var(--layer-hover);
-}
-
-th a.sort::after {
-    opacity: 0;
-    content: "↕" / "";
-}
-
-th a.sort:is(:hover, :focus-visible)::after {
-    opacity: 0.6;
-}
-
-th[aria-sort] a.sort::after {
-    opacity: 1;
-}
-
-th[aria-sort="ascending"] a.sort::after {
-    content: "↑" / "";
-}
-
-th[aria-sort="descending"] a.sort::after {
-    content: "↓" / "";
+.cds--data-table tbody tr.archived td {
+    color: var(--cds-text-secondary);
 }
 
 :is(th, td).num {
@@ -701,22 +851,9 @@ td.row-action {
     white-space: nowrap;
 }
 
-/* The checkbox's label fills the cell, so the whole cell is a target, not just the 1rem box */
-:is(th, td).select label {
-    display: grid;
-    place-items: center;
-    min-width: 2rem;
-    min-height: 2rem;
-}
-
-td.row-action form {
-    margin: 0;
-}
-
-/* A message under a row's checkbox, e.g. why a video couldn't be shown, wraps instead of widening the column */
+/* A message under a row's switch, e.g. why a video couldn't be shown, wraps instead of widening the column */
 td.select .field-error {
-    display: block;
-    min-width: 8rem;
+    min-inline-size: 8rem;
     white-space: normal;
 }
 
@@ -729,42 +866,132 @@ td.select .field-error {
     white-space: nowrap;
 }
 
-.pagination {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid var(--line);
-    border-top: 0;
-    background: var(--layer);
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-}
-
-.pagination form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    align-items: center;
-    margin: 0;
-    padding: 0.25rem 0.5rem;
-}
-
-.pagination .pages > :is(a, .disabled) {
-    display: grid;
-    place-items: center;
-    width: var(--control-height);
-    height: var(--control-height);
-    color: CanvasText;
+.cds--table-sort {
+    color: var(--cds-text-primary);
     text-decoration: none;
 }
 
-.pagination .pages > a:hover {
-    background: var(--layer-hover);
+.pagination {
+    font-variant-numeric: tabular-nums;
 }
 
-.pagination .pages > .disabled {
-    opacity: 0.4;
+.pagination .cds--btn--disabled {
+    pointer-events: none;
+}
+
+/* ---------- Switch (Carbon's small toggle on a real checkbox) ---------- */
+
+.switch .cds--toggle__switch {
+    display: block;
+}
+
+.cds--toggle__button:checked + .cds--toggle__label .cds--toggle__switch {
+    background-color: var(--cds-support-success);
+}
+
+.cds--toggle__button:checked + .cds--toggle__label .cds--toggle__switch::before {
+    transform: translateX(1.5rem);
+}
+
+.cds--toggle__button:checked + .cds--toggle__label .cds--toggle__appearance--sm .cds--toggle__switch::before {
+    transform: translateX(1rem);
+}
+
+.cds--toggle__button:checked + .cds--toggle__label .cds--toggle__check {
+    visibility: visible;
+}
+
+.switch .cds--toggle__button:checked + .cds--toggle__label .off,
+.switch .cds--toggle__button:not(:checked) + .cds--toggle__label .on {
+    display: none;
+}
+
+.switch .cds--toggle__label {
+    cursor: pointer;
+}
+
+/* ---------- Modal (Carbon's modal in a <dialog>, which brings focus trapping, Esc and the top layer) ---------- */
+
+dialog.modal:not([open]) {
+    display: none;
+}
+
+/* The delete form is only there for the footer's Delete button (form=…), outside Carbon's modal grid */
+dialog.modal > form {
+    display: none;
+}
+
+dialog.modal {
+    position: fixed;
+    inset: 0;
+    inline-size: min(36rem, 100% - 2rem);
+    block-size: fit-content;
+    max-inline-size: none;
+    max-block-size: calc(100% - 2rem);
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: var(--bss-edge) top / 100% 3px no-repeat, var(--cds-layer);
+    color: var(--cds-text-primary);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
+    opacity: 0;
+    transform: none;
+    transition:
+        opacity 240ms var(--bss-ease-entrance),
+        translate 240ms var(--bss-ease-entrance),
+        display 240ms allow-discrete,
+        overlay 240ms allow-discrete;
+}
+
+dialog.modal[open] {
+    opacity: 1;
+}
+
+@starting-style {
+    dialog.modal[open] {
+        opacity: 0;
+    }
+}
+
+dialog.modal::backdrop {
+    background: transparent;
+    transition:
+        background-color 240ms var(--bss-ease-entrance),
+        display 240ms allow-discrete,
+        overlay 240ms allow-discrete;
+}
+
+dialog.modal[open]::backdrop {
+    background-color: var(--cds-overlay);
+}
+
+@starting-style {
+    dialog.modal[open]::backdrop {
+        background-color: transparent;
+    }
+}
+
+dialog.modal .cds--modal-content p {
+    margin: 0;
+}
+
+/* ---------- Buttons ---------- */
+
+/* Ink buttons: their text and icon follow the ink, and hovering draws the brand edge along the bottom */
+.cds--btn--primary {
+    color: var(--bss-on-ink);
+}
+
+.cds--btn--primary .cds--btn__icon,
+.cds--btn--primary .cds--btn__icon path:not([data-icon-path]) {
+    fill: var(--bss-on-ink);
+}
+
+.cds--btn--primary:hover {
+    background-image: var(--bss-edge);
+    background-position: bottom;
+    background-size: 100% 3px;
+    background-repeat: no-repeat;
 }
 
 /* ---------- Image placeholders ---------- */
@@ -773,11 +1000,11 @@ td.select .field-error {
 .media-preview {
     display: grid;
     place-items: center;
-    margin-bottom: 0.75rem;
     padding: 0.5rem;
-    border: 1px dashed var(--line);
-    color: var(--muted);
-    font-size: 0.875rem;
+    border: 1px dashed var(--cds-border-strong);
+    color: var(--cds-text-secondary);
+    font-size: 0.75rem;
+    letter-spacing: 0.32px;
     text-align: center;
 }
 
@@ -789,24 +1016,6 @@ td.select .field-error {
 .media-preview.portrait {
     width: 10rem;
     aspect-ratio: 1;
-    border-radius: 50%;
-}
-
-/* ---------- Notifications ---------- */
-
-.flash {
-    margin: var(--gap) 0 0;
-    padding: 0.75rem var(--gap);
-    border-left: 3px solid currentcolor;
-    background: var(--layer);
-}
-
-.flash.error {
-    border-left-color: var(--danger);
-}
-
-main .flash {
-    margin: 0 0 var(--gap);
 }
 
 /* ---------- Error page ---------- */
@@ -814,12 +1023,12 @@ main .flash {
 .details {
     display: grid;
     grid-template-columns: max-content minmax(0, 1fr);
-    gap: 0.25rem var(--gap);
-    margin: 0 0 var(--gap);
+    gap: 0.5rem 1rem;
+    margin: 0 0 1rem;
 }
 
 .details dt {
-    color: var(--muted);
+    color: var(--cds-text-secondary);
 }
 
 .details dd {
@@ -830,85 +1039,51 @@ main .flash {
 .trace {
     max-height: 20rem;
     margin: 0.5rem 0 0;
-    padding: 0.75rem;
+    padding: 1rem;
     overflow: auto;
-    border: 1px solid var(--line);
-    background: Canvas;
+    background: var(--cds-background);
+    font-family: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
     font-size: 0.75rem;
     white-space: pre;
 }
 
 /* ---------- Dashboard ---------- */
 
+/* Carbon's clickable tiles, joined by hairlines */
 .tiles {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-    gap: var(--gap);
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1px;
+    background: var(--cds-border-subtle);
 }
 
 .tile {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: var(--gap);
-    border: 1px solid var(--line);
-    color: inherit;
+    gap: 1.5rem;
+    min-block-size: 8rem;
     text-decoration: none;
 }
 
-a.tile:hover {
-    background: var(--layer-hover);
+.tile:hover {
+    background-image: var(--bss-edge);
+    background-position: bottom;
+    background-size: 100% 2px;
+    background-repeat: no-repeat;
 }
 
-.tile .label {
-    color: var(--muted);
-}
-
-.metric {
+.tile .metric {
     font-size: 2rem;
-    line-height: 1.25;
+    font-weight: 300;
+    line-height: 2.5rem;
     font-variant-numeric: tabular-nums;
 }
 
-/* ---------- Dialog ---------- */
-
-dialog {
-    width: min(30rem, 100% - 2rem);
-    padding: 0;
-    border: 1px solid var(--line);
-    background: Canvas;
-    color: CanvasText;
-}
-
-dialog::backdrop {
-    background: var(--backdrop);
-}
-
-dialog :is(header, footer) {
-    display: flex;
-    gap: var(--gap);
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: var(--gap);
-}
-
-dialog header h2 {
-    margin: 0;
-}
-
-dialog p {
-    margin: 0;
-    padding: 0 var(--gap) 1.5rem;
-}
-
-dialog footer {
-    justify-content: flex-end;
-    gap: 0.5rem;
-    background: var(--layer);
-}
-
-dialog footer form {
-    margin: 0;
+.tile svg {
+    position: absolute;
+    inset: auto 1rem 1rem auto;
+    fill: var(--cds-icon-interactive);
 }
 
 /* ---------- Narrow screens ---------- */
@@ -921,23 +1096,67 @@ dialog footer form {
 
 @media (max-width: 40rem) {
     .container {
-        padding-inline: var(--gap);
+        padding-inline: 1rem;
     }
 
     .hide-small {
         display: none;
     }
 
-    :is(th, td) {
+    /* A list fits a phone: tighter cells, and the switches without their words (the tick on the thumb stays) */
+    .cds--data-table :is(th, td) {
         padding-inline: 0.5rem;
     }
 
-    th a.sort {
-        margin-inline: -0.5rem;
+    .cds--data-table .cds--table-sort {
         padding-inline: 0.5rem;
     }
 
-    .table-search {
-        max-width: none;
+    .switch .cds--toggle__text {
+        display: none;
+    }
+}
+
+/* ---------- Motion and contrast preferences ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+    dialog.modal {
+        translate: 0 -1.5rem;
+    }
+
+    dialog.modal[open] {
+        translate: 0 0;
+    }
+
+    @starting-style {
+        dialog.modal[open] {
+            translate: 0 -1.5rem;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast {
+        --bss-toast-from: 0 0;
+    }
+
+    body:has(.htmx-request) .admin-bar::before {
+        background-size: 100% 100%;
+        animation: bss-pulse 1.2s ease-in-out infinite;
+    }
+}
+
+/* Forced colours drop the gradients and fills: give the edges and the switch a real line */
+@media (forced-colors: active) {
+    .admin-bar {
+        border-block-end: 1px solid CanvasText;
+    }
+
+    .cds--toggle__switch {
+        border: 1px solid CanvasText;
+    }
+
+    .cds--toggle__button:checked + .cds--toggle__label .cds--toggle__switch {
+        background-color: Highlight;
     }
 }

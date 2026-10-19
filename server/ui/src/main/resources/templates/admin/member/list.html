@@ -10,31 +10,43 @@
         <h1 th:text="#{member.list.title}">Members</h1>
     </div>
 
-    <div class="table-toolbar">
-        <form id="bulk" method="post" th:action="@{/admin/members/archived}" class="batch-actions">
-            <span class="selected-count" th:data-template="#{table.selected}" th:text="#{member.list.batch}">Selected members</span>
-            <label>
-                <span class="sr-only" th:text="#{member.field.status}">Status</span>
-                <select name="status" required>
-                    <option value="" selected disabled th:text="#{member.list.status}">Status…</option>
-                    <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
-                </select>
-            </label>
-            <button type="submit" th:formaction="@{/admin/members/status}" th:text="#{member.list.setStatus}">Set status</button>
-            <button type="submit" name="archived" value="true" formnovalidate th:text="#{member.list.archive}">Archive</button>
-            <button type="submit" name="archived" value="false" formnovalidate th:text="#{member.list.restore}">Restore</button>
-            <button type="reset" th:text="#{action.cancel}">Cancel</button>
+    <section class="cds--table-toolbar table-toolbar" th:aria-label="#{table.toolbar}">
+        <form id="bulk" method="post" th:action="@{/admin/members/archived}" class="cds--batch-actions batch-actions">
+            <div class="cds--batch-summary">
+                <p class="cds--batch-summary__para">
+                    <span class="selected-count" th:data-template="#{table.selected}" th:text="#{member.list.batch}">Selected members</span>
+                </p>
+            </div>
+            <div class="cds--action-list">
+                <div class="cds--select cds--select--inline batch-status">
+                    <label for="batch-status" class="cds--label cds--visually-hidden" th:text="#{member.field.status}">Status</label>
+                    <div class="cds--select-input__wrapper">
+                        <select id="batch-status" name="status" class="cds--select-input" required>
+                            <option value="" selected disabled th:text="#{member.list.status}">Status…</option>
+                            <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
+                        </select>
+                        <svg th:replace="~{admin/fragments :: icon('chevron--down', 16, 'cds--select__arrow')}"></svg>
+                    </div>
+                </div>
+                <button type="submit" class="cds--btn cds--btn--primary" th:formaction="@{/admin/members/status}" th:text="#{member.list.setStatus}">Set status</button>
+                <button type="submit" class="cds--btn cds--btn--primary" name="archived" value="true" formnovalidate th:text="#{member.list.archive}">Archive</button>
+                <button type="submit" class="cds--btn cds--btn--primary" name="archived" value="false" formnovalidate th:text="#{member.list.restore}">Restore</button>
+                <button type="reset" class="cds--btn cds--btn--primary cds--batch-summary__cancel" th:text="#{action.cancel}">Cancel</button>
+            </div>
         </form>
-        <div class="toolbar-actions">
+        <div class="cds--toolbar-content toolbar-actions">
             <search th:replace="~{admin/fragments :: search('/admin/members', ${page})}"></search>
-            <a class="button" th:href="@{/admin/members/new}" th:text="#{member.list.new}">New member</a>
+            <a class="cds--btn cds--btn--primary" th:href="@{/admin/members/new}">
+                <span th:text="#{member.list.new}">New member</span>
+                <svg th:replace="~{admin/fragments :: icon('add', 16, 'cds--btn__icon')}"></svg>
+            </a>
         </div>
-    </div>
+    </section>
 
     <!--/* htmx requests get only this part: see the controller */-->
     <div id="results" th:fragment="results">
-        <div class="data-table">
-            <table>
+        <div class="cds--data-table-content data-table">
+            <table class="cds--data-table cds--data-table--md">
                 <caption class="sr-only" th:text="#{member.list.title}">Members</caption>
                 <thead>
                 <tr>
@@ -52,14 +64,9 @@
                         th:text="${q.isBlank()} ? #{member.list.empty} : #{table.noMatch(${q})}">No members yet.</td>
                 </tr>
                 <tr th:each="m : ${page.content}" th:classappend="${m.archived} ? 'archived'">
-                    <td class="select">
-                        <label>
-                            <span class="sr-only" th:text="#{member.list.select(${m.name})}">Select</span>
-                            <input type="checkbox" name="memberIds" form="bulk" th:value="${m.id}">
-                        </label>
-                    </td>
+                    <td th:replace="~{admin/fragments :: selectRow('memberIds', ${m.id}, #{member.list.select(${m.name})})}"></td>
                     <td>
-                        <a th:href="@{/admin/members/{id}(id=${m.id})}" th:text="${m.name}">Kovács Anna</a>
+                        <a class="cds--link" th:href="@{/admin/members/{id}(id=${m.id})}" th:text="${m.name}">Kovács Anna</a>
                         <span class="muted" th:unless="${m.nickname.isBlank()}" th:text="|(${m.nickname})|">(Panni)</span>
                     </td>
                     <td class="muted hide-small" th:text="${m.url}">kovacs-anna</td>
@@ -84,12 +91,10 @@
     <tbody>
     <tr>
         <td th:fragment="archived" th:assert="${id != null}" class="select">
-            <label>
-                <span class="sr-only" th:text="#{member.list.toggle(${name})}">Archive</span>
-                <input type="checkbox" th:id="|archived-${id}|" th:checked="${archived}"
-                       th:hx-put="@{/admin/members/{id}/archived(id=${id}, archived=${!archived})}"
-                       hx-target="closest td" hx-swap="outerHTML">
-            </label>
+            <div th:replace="~{admin/fragments :: switch(|archived-${id}|, ${archived}, #{member.list.toggle(${name})},
+                    #{member.archived.on}, #{member.archived.off}, @{/admin/members/{id}/archived(id=${id}, archived=${!archived})})}"></div>
+            <!--/* After a change, a toast says what happened (htmx adds it to #toasts) */-->
+            <th:block th:if="${toast}"><div hx-swap-oob="beforeend:#toasts"><div th:replace="~{admin/fragments :: toast(${toast})}"></div></div></th:block>
         </td>
     </tr>
     </tbody>

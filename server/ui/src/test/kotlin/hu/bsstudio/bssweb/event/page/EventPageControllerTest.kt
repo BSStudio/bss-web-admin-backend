@@ -165,7 +165,27 @@ internal class EventPageControllerTest(
             }.andExpectAll {
                 status { isOk() }
                 content { string(containsString("""hx-put="$BASE_URL/${CAMP.id}/visibility?visible=true"""")) }
+                content { string(containsString("""role="switch"""")) }
+                content { string(containsString("""<div hx-swap-oob="beforeend:#toasts">""")) }
+                content { string(containsString("“${CAMP.title}” is hidden from the website.")) }
                 content { string(not(containsString("<html"))) }
+            }
+    }
+
+    @Test
+    internal fun `should say in a toast that an event is shown`() {
+        every { eventService.changeEventVisibility(listOf(CAMP.id), true) } returns listOf(CAMP.id)
+        every { eventService.findEventById(CAMP.id) } returns Optional.of(CAMP.copy(visible = true))
+
+        mockMvc
+            .put("$BASE_URL/${CAMP.id}/visibility") {
+                with(oauth2Login())
+                with(csrf())
+                param("visible", "true")
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("""hx-put="$BASE_URL/${CAMP.id}/visibility?visible=false"""")) }
+                content { string(containsString("“${CAMP.title}” is shown on the website.")) }
             }
     }
 
@@ -213,7 +233,7 @@ internal class EventPageControllerTest(
                 content {
                     string(
                         containsString(
-                            """<p id="form-error" class="flash error" role="alert">Another event already uses this title or URL.""",
+                            """<div class="cds--inline-notification__subtitle">Another event already uses this title or URL.</div>""",
                         ),
                     )
                 }
@@ -253,7 +273,9 @@ internal class EventPageControllerTest(
                 content { string(not(containsString("""autofocus="autofocus""""))) }
                 content {
                     string(
-                        containsString("""<small id="visible-help" class="muted">Hiding the event hides its videos too.</small>"""),
+                        containsString(
+                            """<small id="visible-help" class="cds--form__helper-text">Hiding the event hides its videos too.</small>""",
+                        ),
                     )
                 }
             }
@@ -400,7 +422,7 @@ internal class EventPageControllerTest(
                 param("videoId", OPEN_DAY.id.toString())
             }.andExpectAll {
                 status { isOk() }
-                content { string(containsString("""<section id="event-videos" class="panel">""")) }
+                content { string(containsString("""<section id="event-videos" class="cds--tile panel">""")) }
                 content { string(containsString("""autofocus="autofocus"""")) }
                 content { string(not(containsString("<html"))) }
             }

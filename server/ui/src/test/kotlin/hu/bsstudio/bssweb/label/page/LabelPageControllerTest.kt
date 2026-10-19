@@ -49,8 +49,14 @@ internal class LabelPageControllerTest(
                 content { string(stringContainsInOrder(UNIVERSITY_LIFE.name, SPORT.name)) }
                 content { string(stringContainsInOrder("""<td class="num">0</td>""", """<td class="num">37</td>""")) }
                 content { string(containsString("""commandfor="delete-${SPORT.id}" aria-label="Delete Sport">Delete</button>""")) }
-                content { string(containsString("""<dialog id="delete-${SPORT.id}" aria-labelledby="delete-${SPORT.id}-title">""")) }
-                content { string(containsString("""<h2 id="delete-${SPORT.id}-title">Delete the label “Sport”?</h2>""")) }
+                content { string(containsString("""<dialog id="delete-${SPORT.id}" aria-labelledby="delete-${SPORT.id}-title"""")) }
+                content {
+                    string(
+                        containsString(
+                            """<h2 class="cds--modal-header__heading" id="delete-${SPORT.id}-title">Delete the label “Sport”?</h2>""",
+                        ),
+                    )
+                }
                 content { string(containsString("""<p>It is removed from every video. This can’t be undone.</p>""")) }
                 content { string(containsString("""action="/admin/labels/${SPORT.id}/delete">""")) }
             }

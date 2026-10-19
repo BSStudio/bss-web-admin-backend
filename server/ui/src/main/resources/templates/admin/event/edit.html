@@ -8,68 +8,75 @@
 <main id="main" class="container" th:assert="${event != null}, ${form != null}">
     <div class="page-header">
         <div>
-            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
-                <a th:href="@{/admin/events}" th:text="#{event.list.title}">Events</a>
+            <nav th:aria-label="#{nav.breadcrumb}">
+                <ol class="cds--breadcrumb">
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/events}" th:text="#{event.list.title}">Events</a></li>
+                </ol>
             </nav>
             <h1 th:text="${event.title}">Gólyatábor 2026</h1>
         </div>
-        <button type="button" class="danger ghost" command="show-modal" commandfor="delete-dialog"
+        <button type="button" class="cds--btn cds--btn--danger--ghost" command="show-modal" commandfor="delete-dialog"
                 th:text="#{event.delete.title}">Delete event</button>
     </div>
 
     <div class="columns">
         <form method="post" th:action="@{/admin/events/{id}(id=${event.id})}" th:object="${form}" class="stack"
               th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
-            <p th:replace="~{admin/fragments :: formError}"></p>
-            <label>
-                <span th:text="#{event.field.title}">Title</span>
-                <input type="text" th:field="*{title}" required maxlength="250"
+            <div th:replace="~{admin/fragments :: formError}"></div>
+            <div class="cds--form-item">
+                <label for="title" class="cds--label" th:text="#{event.field.title}">Title</label>
+                <input type="text" class="cds--text-input" th:field="*{title}" required maxlength="250"
                        th:aria-invalid="${#fields.hasErrors('title')} ? 'true'"
                        th:aria-describedby="${#fields.hasErrors('title')} ? 'title-error'">
                 <small th:replace="~{admin/fragments :: fieldError('title')}"></small>
-            </label>
-            <label>
-                <span th:text="#{event.field.url}">URL</span>
-                <input type="text" th:field="*{url}" required maxlength="250"
+            </div>
+            <div class="cds--form-item">
+                <label for="url" class="cds--label" th:text="#{event.field.url}">URL</label>
+                <input type="text" class="cds--text-input" th:field="*{url}" required maxlength="250"
                        th:aria-invalid="${#fields.hasErrors('url')} ? 'true'"
                        th:aria-describedby="${#fields.hasErrors('url')} ? 'url-help url-error' : 'url-help'">
-                <small id="url-help" th:text="#{event.field.url.help}">Used in the event’s page address.</small>
+                <small id="url-help" class="cds--form__helper-text" th:text="#{event.field.url.help}">Used in the event’s page address.</small>
                 <small th:replace="~{admin/fragments :: fieldError('url')}"></small>
-            </label>
+            </div>
             <div class="grid">
-                <label>
-                    <span th:text="#{event.field.dateFrom}">Starts</span>
-                    <input type="date" th:field="*{dateFrom}" required
+                <div class="cds--form-item">
+                    <label for="dateFrom" class="cds--label" th:text="#{event.field.dateFrom}">Starts</label>
+                    <input type="date" class="cds--text-input" th:field="*{dateFrom}" required
                            th:aria-invalid="${#fields.hasErrors('dateFrom')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('dateFrom')} ? 'dateFrom-error'">
                     <small th:replace="~{admin/fragments :: fieldError('dateFrom')}"></small>
-                </label>
-                <label>
-                    <span th:text="#{event.field.dateTo}">Ends</span>
-                    <input type="date" th:field="*{dateTo}" required
+                </div>
+                <div class="cds--form-item">
+                    <label for="dateTo" class="cds--label" th:text="#{event.field.dateTo}">Ends</label>
+                    <input type="date" class="cds--text-input" th:field="*{dateTo}" required
                            th:aria-invalid="${#fields.hasErrors('dateTo') or #fields.hasErrors('datesInOrder')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('datesInOrder')} ? 'datesInOrder-error' : (${#fields.hasErrors('dateTo')} ? 'dateTo-error')">
                     <small th:replace="~{admin/fragments :: fieldError('dateTo')}"></small>
                     <small th:replace="~{admin/fragments :: fieldError('datesInOrder')}"></small>
-                </label>
+                </div>
             </div>
-            <label>
-                <span th:text="#{event.field.description}">Description</span>
-                <textarea th:field="*{description}" rows="6" maxlength="8192"
+            <div class="cds--form-item">
+                <label for="description" class="cds--label" th:text="#{event.field.description}">Description</label>
+                <textarea class="cds--text-area" th:field="*{description}" rows="6" maxlength="8192"
                           th:aria-invalid="${#fields.hasErrors('description')} ? 'true'"
                           th:aria-describedby="${#fields.hasErrors('description')} ? 'description-error'"></textarea>
                 <small th:replace="~{admin/fragments :: fieldError('description')}"></small>
-            </label>
-            <label class="inline">
-                <input type="checkbox" th:field="*{visible}" aria-describedby="visible-help">
-                <span th:text="#{event.field.visible}">Visible on the website</span>
-            </label>
-            <small id="visible-help" class="muted" th:text="#{event.field.visible.help}">
-                Hiding the event hides its videos too.
-            </small>
-            <div class="actions">
-                <a class="button secondary" th:href="@{/admin/events}" th:text="#{action.cancel}">Cancel</a>
-                <button type="submit" th:text="#{action.save}">Save</button>
+            </div>
+            <!--/* Written out instead of th:field: its hidden marker would come between the box and its label */-->
+            <div class="cds--form-item cds--checkbox-wrapper">
+                <input type="hidden" name="_visible" value="on">
+                <input type="checkbox" class="cds--checkbox" id="visible" name="visible" value="true" th:checked="*{visible}"
+                       aria-describedby="visible-help">
+                <label class="cds--checkbox-label" for="visible">
+                    <span class="cds--checkbox-label-text" th:text="#{event.field.visible}">Visible on the website</span>
+                </label>
+                <small id="visible-help" class="cds--form__helper-text" th:text="#{event.field.visible.help}">
+                    Hiding the event hides its videos too.
+                </small>
+            </div>
+            <div class="cds--btn-set actions">
+                <a class="cds--btn cds--btn--secondary" th:href="@{/admin/events}" th:text="#{action.cancel}">Cancel</a>
+                <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.save}">Save</button>
                 <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
             </div>
         </form>
@@ -82,25 +89,25 @@
 </main>
 
 <!--/* The videos panel re-renders on its own after each htmx add or remove */-->
-<section id="event-videos" class="panel" th:fragment="videos" th:assert="${event != null}, ${eventVideos != null}">
+<section id="event-videos" class="cds--tile panel" th:fragment="videos" th:assert="${event != null}, ${eventVideos != null}">
     <h2 th:text="#{event.videos.title}">Videos</h2>
     <p th:if="${eventVideos.isEmpty()}" class="muted" th:text="#{event.videos.empty}">No videos in this event yet.</p>
-    <div class="data-table" th:unless="${eventVideos.isEmpty()}">
-        <table>
+    <div class="cds--data-table-content data-table" th:unless="${eventVideos.isEmpty()}">
+        <table class="cds--data-table cds--data-table--sm">
             <caption class="sr-only" th:text="#{event.videos.title}">Videos</caption>
             <thead>
             <tr>
-                <th scope="col" th:text="#{event.videos.video}">Video</th>
-                <th scope="col" th:text="#{video.field.shot}">Shooting date</th>
+                <th scope="col"><span class="cds--table-header-label" th:text="#{event.videos.video}">Video</span></th>
+                <th scope="col"><span class="cds--table-header-label" th:text="#{video.field.shot}">Shooting date</span></th>
                 <th scope="col"><span class="sr-only" th:text="#{table.actions}">Actions</span></th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="video : ${eventVideos}">
-                <td><a th:href="@{/admin/videos/{id}(id=${video.id})}" th:text="${video.title}">Gólyatábor 2026 - Vám</a></td>
+                <td><a class="cds--link" th:href="@{/admin/videos/{id}(id=${video.id})}" th:text="${video.title}">Gólyatábor 2026 - Vám</a></td>
                 <td class="date" th:insert="~{admin/fragments :: dates(${video.shootingDateStart}, null)}">Aug 13, 2026</td>
                 <td class="row-action">
-                    <button type="button" class="ghost"
+                    <button type="button" class="cds--btn cds--btn--ghost cds--btn--sm"
                             th:hx-delete="@{/admin/events/{id}/videos(id=${event.id}, videoId=${video.id})}"
                             hx-target="#event-videos" hx-swap="outerHTML"
                             th:aria-label="#{event.videos.remove(${video.title})}"
@@ -111,12 +118,15 @@
         </table>
     </div>
     <!--/* Typing searches the videos (htmx), and each match has its own Add button */-->
-    <label class="video-search">
-        <span th:text="#{event.videos.search}">Find a video to add</span>
-        <input id="event-video-search" type="search" name="q" autocomplete="off" th:autofocus="${videosChanged}"
-               th:hx-get="@{/admin/events/{id}/videos/search(id=${event.id})}" hx-trigger="input changed delay:300ms"
-               hx-target="#video-matches" hx-swap="outerHTML">
-    </label>
+    <div class="cds--form-item video-search">
+        <label for="event-video-search" class="cds--label" th:text="#{event.videos.search}">Find a video to add</label>
+        <div class="cds--search cds--search--md" role="search">
+            <svg th:replace="~{admin/fragments :: icon('search', 16, 'cds--search-magnifier-icon')}"></svg>
+            <input id="event-video-search" class="cds--search-input" type="search" name="q" autocomplete="off"
+                   th:autofocus="${videosChanged}" th:hx-get="@{/admin/events/{id}/videos/search(id=${event.id})}"
+                   hx-trigger="input changed delay:300ms" hx-target="#video-matches" hx-swap="outerHTML">
+        </div>
+    </div>
     <ul id="video-matches" class="matches" th:fragment="videoMatches" th:assert="${event != null}, ${q != null}, ${videoMatches != null}"
         aria-live="polite">
         <li th:if="${!q.isBlank() and videoMatches.isEmpty()}" class="muted" th:text="#{table.noMatch(${q})}">
@@ -125,7 +135,7 @@
         <li th:each="v : ${videoMatches}">
             <span th:text="${v.title}">Gólyatábor 2026 - Vám</span>
             <span class="muted date" th:insert="~{admin/fragments :: dates(${v.shootingDateStart}, null)}">Aug 13, 2026</span>
-            <button type="button" class="secondary"
+            <button type="button" class="cds--btn cds--btn--ghost cds--btn--sm"
                     th:hx-post="@{/admin/events/{id}/videos(id=${event.id}, videoId=${v.id})}"
                     hx-target="#event-videos" hx-swap="outerHTML"
                     th:aria-label="#{event.videos.add(${v.title})}" th:text="#{action.add}">Add</button>

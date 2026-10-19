@@ -11,14 +11,14 @@
     </div>
 
     <div class="columns">
-        <div class="data-table">
-            <table>
+        <div class="cds--data-table-content data-table">
+            <table class="cds--data-table cds--data-table--md">
                 <caption class="sr-only" th:text="#{label.list.title}">Labels</caption>
                 <thead>
                 <tr>
-                    <th scope="col" th:text="#{label.field.name}">Name</th>
-                    <th scope="col" th:text="#{label.field.description}">Description</th>
-                    <th scope="col" class="num" th:text="#{label.column.videos}">Videos</th>
+                    <th scope="col"><span class="cds--table-header-label" th:text="#{label.field.name}">Name</span></th>
+                    <th scope="col"><span class="cds--table-header-label" th:text="#{label.field.description}">Description</span></th>
+                    <th scope="col" class="num"><span class="cds--table-header-label" th:text="#{label.column.videos}">Videos</span></th>
                     <th scope="col"><span class="sr-only" th:text="#{table.actions}">Actions</span></th>
                 </tr>
                 </thead>
@@ -31,7 +31,7 @@
                     <td class="muted" th:text="${label.description}">University life</td>
                     <td class="num" th:text="${label.videoCount}">37</td>
                     <td class="row-action">
-                        <button type="button" class="danger ghost" command="show-modal"
+                        <button type="button" class="cds--btn cds--btn--danger--ghost cds--btn--sm" command="show-modal"
                                 th:commandfor="|delete-${label.id}|" th:aria-label="#{label.delete.label(${label.name})}"
                                 th:text="#{action.delete}">Delete</button>
                         <dialog th:replace="~{admin/fragments :: deleteDialog(|delete-${label.id}|,
@@ -43,28 +43,28 @@
             </table>
         </div>
 
-        <section class="panel">
+        <section class="cds--tile panel">
             <h2 th:text="#{label.new.title}">New label</h2>
             <form method="post" th:action="@{/admin/labels}" th:object="${form}" class="stack"
                   th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
-                <p th:replace="~{admin/fragments :: formError}"></p>
-                <label>
-                    <span th:text="#{label.field.name}">Name</span>
-                    <input type="text" th:field="*{name}" required maxlength="64"
+                <div th:replace="~{admin/fragments :: formError}"></div>
+                <div class="cds--form-item">
+                    <label for="name" class="cds--label" th:text="#{label.field.name}">Name</label>
+                    <input type="text" class="cds--text-input" th:field="*{name}" required maxlength="64"
                            th:aria-invalid="${#fields.hasErrors('name')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('name')} ? 'name-error'">
                     <small th:replace="~{admin/fragments :: fieldError('name')}"></small>
-                </label>
-                <label>
-                    <span th:text="#{label.field.description}">Description</span>
-                    <input type="text" th:field="*{description}" required maxlength="256"
+                </div>
+                <div class="cds--form-item">
+                    <label for="description" class="cds--label" th:text="#{label.field.description}">Description</label>
+                    <input type="text" class="cds--text-input" th:field="*{description}" required maxlength="256"
                            th:aria-invalid="${#fields.hasErrors('description')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('description')} ? 'description-help description-error' : 'description-help'">
-                    <small id="description-help" th:text="#{label.field.description.help}">What the label is for.</small>
+                    <small id="description-help" class="cds--form__helper-text" th:text="#{label.field.description.help}">What the label is for.</small>
                     <small th:replace="~{admin/fragments :: fieldError('description')}"></small>
-                </label>
-                <div class="actions">
-                    <button type="submit" th:text="#{label.new.submit}">Add label</button>
+                </div>
+                <div class="cds--btn-set actions">
+                    <button type="submit" class="cds--btn cds--btn--primary" th:text="#{label.new.submit}">Add label</button>
                     <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
                 </div>
             </form>

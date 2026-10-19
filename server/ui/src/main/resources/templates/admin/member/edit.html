@@ -8,89 +8,98 @@
 <main id="main" class="container" th:assert="${member != null}, ${form != null}, ${statuses != null}">
     <div class="page-header">
         <div>
-            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
-                <a th:href="@{/admin/members}" th:text="#{member.list.title}">Members</a>
+            <nav th:aria-label="#{nav.breadcrumb}">
+                <ol class="cds--breadcrumb">
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/members}" th:text="#{member.list.title}">Members</a></li>
+                </ol>
             </nav>
             <h1 th:text="${member.name}">Kovács Anna</h1>
         </div>
-        <button type="button" class="danger ghost" command="show-modal" commandfor="delete-dialog"
+        <button type="button" class="cds--btn cds--btn--danger--ghost" command="show-modal" commandfor="delete-dialog"
                 th:text="#{member.delete.title}">Delete member</button>
     </div>
 
     <div class="columns">
         <form method="post" th:action="@{/admin/members/{id}(id=${member.id})}" th:object="${form}" class="stack"
               th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
-            <p th:replace="~{admin/fragments :: formError}"></p>
+            <div th:replace="~{admin/fragments :: formError}"></div>
             <div class="grid">
-                <label>
-                    <span th:text="#{member.field.name}">Name</span>
-                    <input type="text" th:field="*{name}" required maxlength="250"
+                <div class="cds--form-item">
+                    <label for="name" class="cds--label" th:text="#{member.field.name}">Name</label>
+                    <input type="text" class="cds--text-input" th:field="*{name}" required maxlength="250"
                            th:aria-invalid="${#fields.hasErrors('name')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('name')} ? 'name-error'">
                     <small th:replace="~{admin/fragments :: fieldError('name')}"></small>
-                </label>
-                <label>
-                    <span th:text="#{member.field.nickname}">Nickname</span>
-                    <input type="text" th:field="*{nickname}" maxlength="250"
+                </div>
+                <div class="cds--form-item">
+                    <label for="nickname" class="cds--label" th:text="#{member.field.nickname}">Nickname</label>
+                    <input type="text" class="cds--text-input" th:field="*{nickname}" maxlength="250"
                            th:aria-invalid="${#fields.hasErrors('nickname')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('nickname')} ? 'nickname-error'">
                     <small th:replace="~{admin/fragments :: fieldError('nickname')}"></small>
-                </label>
+                </div>
             </div>
             <div class="grid">
-                <label>
-                    <span th:text="#{member.field.url}">URL</span>
-                    <input type="text" th:field="*{url}" required maxlength="250"
+                <div class="cds--form-item">
+                    <label for="url" class="cds--label" th:text="#{member.field.url}">URL</label>
+                    <input type="text" class="cds--text-input" th:field="*{url}" required maxlength="250"
                            th:aria-invalid="${#fields.hasErrors('url')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('url')} ? 'url-help url-error' : 'url-help'">
-                    <small id="url-help" th:text="#{member.field.url.help}">Used in the member’s page address.</small>
+                    <small id="url-help" class="cds--form__helper-text" th:text="#{member.field.url.help}">Used in the member’s page address.</small>
                     <small th:replace="~{admin/fragments :: fieldError('url')}"></small>
-                </label>
-                <label>
-                    <span th:text="#{member.field.role}">Role</span>
-                    <input type="text" th:field="*{role}" maxlength="250"
+                </div>
+                <div class="cds--form-item">
+                    <label for="role" class="cds--label" th:text="#{member.field.role}">Role</label>
+                    <input type="text" class="cds--text-input" th:field="*{role}" maxlength="250"
                            th:aria-invalid="${#fields.hasErrors('role')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('role')} ? 'role-error'">
                     <small th:replace="~{admin/fragments :: fieldError('role')}"></small>
-                </label>
+                </div>
             </div>
             <div class="grid">
-                <label>
-                    <span th:text="#{member.field.status}">Status</span>
-                    <select th:field="*{status}"
-                            th:aria-invalid="${#fields.hasErrors('status')} ? 'true'"
-                            th:aria-describedby="${#fields.hasErrors('status')} ? 'status-error'">
-                        <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
-                    </select>
+                <div class="cds--form-item cds--select">
+                    <label for="status" class="cds--label" th:text="#{member.field.status}">Status</label>
+                    <div class="cds--select-input__wrapper">
+                        <select class="cds--select-input" th:field="*{status}"
+                                th:aria-invalid="${#fields.hasErrors('status')} ? 'true'"
+                                th:aria-describedby="${#fields.hasErrors('status')} ? 'status-error'">
+                            <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
+                        </select>
+                        <svg th:replace="~{admin/fragments :: icon('chevron--down', 16, 'cds--select__arrow')}"></svg>
+                    </div>
                     <small th:replace="~{admin/fragments :: fieldError('status')}"></small>
-                </label>
-                <label>
-                    <span th:text="#{member.field.joinedAt}">Joined</span>
-                    <input type="date" th:field="*{joinedAt}" required
+                </div>
+                <div class="cds--form-item">
+                    <label for="joinedAt" class="cds--label" th:text="#{member.field.joinedAt}">Joined</label>
+                    <input type="date" class="cds--text-input" th:field="*{joinedAt}" required
                            th:aria-invalid="${#fields.hasErrors('joinedAt')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('joinedAt')} ? 'joinedAt-error'">
                     <small th:replace="~{admin/fragments :: fieldError('joinedAt')}"></small>
-                </label>
+                </div>
             </div>
-            <label>
-                <span th:text="#{member.field.description}">Description</span>
-                <textarea th:field="*{description}" rows="4" maxlength="2000"
+            <div class="cds--form-item">
+                <label for="description" class="cds--label" th:text="#{member.field.description}">Description</label>
+                <textarea class="cds--text-area" th:field="*{description}" rows="4" maxlength="2000"
                           th:aria-invalid="${#fields.hasErrors('description')} ? 'true'"
                           th:aria-describedby="${#fields.hasErrors('description')} ? 'description-error'"></textarea>
                 <small th:replace="~{admin/fragments :: fieldError('description')}"></small>
-            </label>
-            <label class="inline">
-                <input type="checkbox" th:field="*{archived}">
-                <span th:text="#{member.field.archived.help}">Archived: no longer an active member</span>
-            </label>
-            <div class="actions">
-                <a class="button secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
-                <button type="submit" th:text="#{action.save}">Save</button>
+            </div>
+            <!--/* Written out instead of th:field: its hidden marker would come between the box and its label */-->
+            <div class="cds--form-item cds--checkbox-wrapper">
+                <input type="hidden" name="_archived" value="on">
+                <input type="checkbox" class="cds--checkbox" id="archived" name="archived" value="true" th:checked="*{archived}">
+                <label class="cds--checkbox-label" for="archived">
+                    <span class="cds--checkbox-label-text" th:text="#{member.field.archived.help}">Archived: no longer an active member</span>
+                </label>
+            </div>
+            <div class="cds--btn-set actions">
+                <a class="cds--btn cds--btn--secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
+                <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.save}">Save</button>
                 <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
             </div>
         </form>
 
-        <section class="panel">
+        <section class="cds--tile panel">
             <h2 th:text="#{member.picture.title}">Profile picture</h2>
             <div th:replace="~{admin/fragments :: imagePlaceholder('portrait')}"></div>
         </section>

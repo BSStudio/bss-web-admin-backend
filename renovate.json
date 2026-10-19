@@ -24,5 +24,15 @@
       ],
       "schedule": ["on friday"]
     }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "@carbon/styles, which server/ui downloads from npm",
+      "managerFilePatterns": ["/^gradle/libs\\.versions\\.toml$/"],
+      "matchStrings": ["carbon-styles = \"(?<currentValue>[^\"]+)\""],
+      "depNameTemplate": "@carbon/styles",
+      "datasourceTemplate": "npm"
+    }
   ]
 }

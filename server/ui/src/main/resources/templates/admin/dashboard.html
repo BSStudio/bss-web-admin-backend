@@ -10,17 +10,20 @@
         <h1 th:text="#{dashboard.title}">Dashboard</h1>
     </div>
     <section class="tiles">
-        <a class="tile" th:href="@{/admin/videos}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/videos}">
             <span class="label" th:text="#{dashboard.videos}">Videos</span>
             <span class="metric" th:text="${metrics.videoCount}">0</span>
+            <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
         </a>
-        <a class="tile" th:href="@{/admin/events}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/events}">
             <span class="label" th:text="#{dashboard.events}">Events</span>
             <span class="metric" th:text="${metrics.eventCount}">0</span>
+            <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
         </a>
-        <a class="tile" th:href="@{/admin/members}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/members}">
             <span class="label" th:text="#{dashboard.members}">Members</span>
             <span class="metric" th:text="${metrics.memberCount}">0</span>
+            <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
         </a>
     </section>
 </main>

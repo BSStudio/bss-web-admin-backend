@@ -75,7 +75,11 @@ internal class MemberPageControllerTest(
                 content { string(containsString("""href="/admin/members?q=&amp;size=25&amp;sort=status,asc"""")) }
                 content { string(containsString("""<option value="ALUMNI">Alumni</option>""")) }
                 content { string(containsString("""<tr class="archived">""")) }
-                content { string(containsString("<span>1–3 of 3 items</span>")) }
+                content {
+                    string(
+                        containsString("""<span class="cds--pagination__text cds--pagination__items-count">1–3 of 3 items</span>"""),
+                    )
+                }
             }
     }
 
@@ -126,7 +130,11 @@ internal class MemberPageControllerTest(
                 status { isOk() }
                 content { string(containsString(ANNA.name)) }
                 content { string(not(containsString(BENCE.name))) }
-                content { string(containsString("<span>1–1 of 1 item</span>")) }
+                content {
+                    string(
+                        containsString("""<span class="cds--pagination__text cds--pagination__items-count">1–1 of 1 item</span>"""),
+                    )
+                }
             }
     }
 
@@ -169,7 +177,27 @@ internal class MemberPageControllerTest(
                 status { isOk() }
                 content { string(containsString("""hx-put="$BASE_URL/${ANNA.id}/archived?archived=false"""")) }
                 content { string(containsString("""id="archived-${ANNA.id}"""")) }
+                content { string(containsString("""role="switch"""")) }
+                content { string(containsString("""<div hx-swap-oob="beforeend:#toasts">""")) }
+                content { string(containsString("Archived ${ANNA.name}.")) }
                 content { string(not(containsString("<html"))) }
+            }
+    }
+
+    @Test
+    internal fun `should say in a toast that a member is restored`() {
+        every { service.archiveMembers(listOf(ANNA.id), false) } returns listOf(ANNA.id)
+        every { service.findMemberById(ANNA.id) } returns Optional.of(ANNA.copy(archived = false))
+
+        mockMvc
+            .put("$BASE_URL/${ANNA.id}/archived") {
+                with(oauth2Login())
+                with(csrf())
+                param("archived", "false")
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("""hx-put="$BASE_URL/${ANNA.id}/archived?archived=true"""")) }
+                content { string(containsString("Restored ${ANNA.name}.")) }
             }
     }
 

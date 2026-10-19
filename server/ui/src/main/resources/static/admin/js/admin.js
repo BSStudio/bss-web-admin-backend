@@ -27,17 +27,14 @@
         delete event.target.dataset.dirty;
     });
 
-    // The delete dialogs open and close with invoker commands (command, commandfor), Baseline only since Dec 2025.
-    // Older browsers get the same from a click.
-    if (!("commandForElement" in HTMLButtonElement.prototype)) {
-        document.addEventListener("click", (event) => {
-            const button = event.target.closest?.("button[commandfor]");
-            const dialog = button && document.getElementById(button.getAttribute("commandfor"));
-            if (!(dialog instanceof HTMLDialogElement)) return;
-            if (button.getAttribute("command") === "show-modal") dialog.showModal();
-            if (button.getAttribute("command") === "close") dialog.close();
-        });
-    }
+    // Toasts (#toasts in the layout) leave by themselves once their animation has faded them out (admin.css);
+    // Close takes one away at once.
+    document.addEventListener("click", (event) => {
+        event.target.closest?.(".toast [data-dismiss]")?.closest(".toast").remove();
+    });
+    document.addEventListener("animationend", (event) => {
+        if (event.animationName === "bss-toast-out") event.target.remove();
+    });
 
     // The profile menu also shows while the mouse is over the profile (admin.css). Esc hides it until the mouse
     // leaves, since content shown on hover has to be dismissable without moving the mouse (WCAG 1.4.13).
@@ -87,7 +84,7 @@
         const field = document.getElementById(event.target.dataset?.other ?? "");
         if (!field) return;
         const other = event.target.selectedOptions[0]?.hasAttribute("data-other") ?? false;
-        field.closest("label").hidden = !other;
+        field.closest(".cds--form-item").hidden = !other;
         field.required = other;
         // after the list has closed, which puts the focus back on the select
         if (other) setTimeout(() => field.focus());

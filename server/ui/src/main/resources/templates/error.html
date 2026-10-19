@@ -19,17 +19,17 @@
             <p th:text="#{${'error.lead.' + (status == 403 or status == 404 ? status : 'other')}}">
                 The admin could not finish this request.
             </p>
-            <div class="actions">
-                <a th:if="${reportUrl}" class="button" th:href="${reportUrl}" target="_blank" rel="noopener"
+            <div class="cds--btn-set actions">
+                <a th:if="${reportUrl}" class="cds--btn cds--btn--primary" th:href="${reportUrl}" target="_blank" rel="noopener"
                    th:text="#{error.report}">Report on GitHub</a>
-                <a class="button secondary" th:href="@{/admin}" th:text="#{error.home}">Back to the dashboard</a>
+                <a class="cds--btn cds--btn--secondary" th:href="@{/admin}" th:text="#{error.home}">Back to the dashboard</a>
             </div>
-            <p th:if="${reportUrl}" class="muted" th:text="#{error.report.help}">
+            <p th:if="${reportUrl}" class="cds--form__helper-text" th:text="#{error.report.help}">
                 The report opens on GitHub with the details filled in.
             </p>
         </section>
 
-        <section th:if="${reference}" class="panel">
+        <section th:if="${reference}" class="cds--tile panel">
             <h2 th:text="#{error.details}">Details</h2>
             <dl class="details">
                 <dt th:text="#{error.request}">Request</dt>

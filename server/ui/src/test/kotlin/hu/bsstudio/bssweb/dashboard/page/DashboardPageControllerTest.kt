@@ -9,6 +9,7 @@ import hu.bsstudio.bssweb.ui.user.CurrentUser
 import io.mockk.every
 import jakarta.servlet.http.Cookie
 import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.not
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,21 +44,25 @@ internal class DashboardPageControllerTest(
                 model { attribute("metrics", METRICS) }
                 content { string(containsString("""<html lang="en">""")) }
                 content { string(containsString("<h1>Dashboard</h1>")) }
-                content { string(containsString("""class="brand" title="Dashboard"""")) }
-                content { string(containsString("""aria-current="page"><strong>BSS</strong>""")) }
+                content { string(containsString("""class="cds--header__name brand" title="Dashboard"""")) }
+                content { string(containsString("""aria-current="page"><strong class="badge">BSS</strong>""")) }
                 content { string(containsString("""<span class="metric">42</span>""")) }
-                content { string(containsString("""<a class="skip-link" href="#main">Skip to content</a>""")) }
+                content { string(containsString("""<a class="cds--skip-to-content skip-link" href="#main">Skip to content</a>""")) }
                 content { string(containsString("""<main id="main" class="container">""")) }
                 content { string(containsString("""<meta name="htmx-config"""")) }
                 content { string(containsString("""hx-headers:inherited='{&quot;X-CSRF-TOKEN&quot;: """)) }
                 content { string(containsString("""hx-status:5xx:inherited="target:body swap:innerHTML select:body push:false"""")) }
-                content { string(containsString("""<button type="button" class="menu-toggle" popovertarget="sections">""")) }
-                content { string(containsString("""<ul id="sections" class="sections" popover>""")) }
-                content { string(containsString("""<span class="avatar"><span class="initials">U</span></span>""")) }
+                content {
+                    string(
+                        containsString("""<button type="button" class="cds--header__action menu-toggle" popovertarget="sections">"""),
+                    )
+                }
+                content { string(containsString("""<ul id="sections" class="cds--header__menu-bar sections" popover>""")) }
+                content { string(containsString("""<span class="cds--header__action avatar"><span class="initials">U</span></span>""")) }
                 content { string(containsString("""<a href="/admin?lang=en" hreflang="en" lang="en" title="English"""")) }
                 content { string(containsString("""<a href="/admin?lang=hu" hreflang="hu" lang="hu" title="Magyar"""")) }
                 content { string(containsString("""aria-current="true">EN</a>""")) }
-                content { string(containsString("""<button type="submit">Log out</button>""")) }
+                content { string(containsString("""<button type="submit" class="cds--btn cds--btn--ghost">Log out</button>""")) }
             }
     }
 
@@ -71,7 +76,7 @@ internal class DashboardPageControllerTest(
                 sessionAttr(CurrentUser.SESSION_KEY, me)
             }.andExpectAll {
                 status { isOk() }
-                content { string(containsString("""class="avatar" href="/admin/members/${me.memberId}"""")) }
+                content { string(containsString("""class="cds--header__action avatar" href="/admin/members/${me.memberId}"""")) }
                 content { string(containsString("""<span class="initials">KA</span>""")) }
                 content { string(containsString("""<p class="who">Kovács Anna</p>""")) }
             }
@@ -135,7 +140,9 @@ internal class DashboardPageControllerTest(
                 flashAttr("flash", Flash("video.flash.saved", "Gólyatábor 2026 - Vám"))
             }.andExpectAll {
                 status { isOk() }
-                content { string(containsString("""<p class="flash" role="status">Saved “Gólyatábor 2026 - Vám”.</p>""")) }
+                content { string(containsString("""<section id="toasts" class="toasts" role="status" aria-label="Notifications">""")) }
+                content { string(containsString("""<div class="cds--toast-notification__title">Saved “Gólyatábor 2026 - Vám”.</div>""")) }
+                content { string(not(containsString("role=\"alert\""))) }
             }
     }
 
@@ -147,7 +154,13 @@ internal class DashboardPageControllerTest(
                 flashAttr("flash", Flash("video.flash.noneSelected", error = true))
             }.andExpectAll {
                 status { isOk() }
-                content { string(containsString("""<p class="flash error" role="alert">Select at least one video first.</p>""")) }
+                content { string(containsString("""<div role="alert"""")) }
+                content {
+                    string(
+                        containsString("""<div class="cds--inline-notification__subtitle">Select at least one video first.</div>"""),
+                    )
+                }
+                content { string(not(containsString("cds--toast-notification__title"))) }
             }
     }
 

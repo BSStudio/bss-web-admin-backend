@@ -10,29 +10,38 @@
         <h1 th:text="#{video.list.title}">Videos</h1>
     </div>
 
-    <div class="table-toolbar">
-        <form id="bulk" method="post" th:action="@{/admin/videos/visibility}" class="batch-actions">
-            <span class="selected-count" th:data-template="#{table.selected}" th:text="#{video.list.batch}">Selected videos</span>
-            <button type="submit" name="visible" value="true" th:text="#{video.list.publish}">Publish</button>
-            <button type="submit" name="visible" value="false" th:text="#{video.list.hide}">Hide</button>
-            <button type="reset" th:text="#{action.cancel}">Cancel</button>
+    <section class="cds--table-toolbar table-toolbar" th:aria-label="#{table.toolbar}">
+        <form id="bulk" method="post" th:action="@{/admin/videos/visibility}" class="cds--batch-actions batch-actions">
+            <div class="cds--batch-summary">
+                <p class="cds--batch-summary__para">
+                    <span class="selected-count" th:data-template="#{table.selected}" th:text="#{video.list.batch}">Selected videos</span>
+                </p>
+            </div>
+            <div class="cds--action-list">
+                <button type="submit" class="cds--btn cds--btn--primary" name="visible" value="true" th:text="#{video.list.publish}">Publish</button>
+                <button type="submit" class="cds--btn cds--btn--primary" name="visible" value="false" th:text="#{video.list.hide}">Hide</button>
+                <button type="reset" class="cds--btn cds--btn--primary cds--batch-summary__cancel" th:text="#{action.cancel}">Cancel</button>
+            </div>
         </form>
-        <div class="toolbar-actions">
+        <div class="cds--toolbar-content toolbar-actions">
             <search th:replace="~{admin/fragments :: search('/admin/videos', ${page})}"></search>
-            <a class="button" th:href="@{/admin/videos/new}" th:text="#{video.list.new}">New video</a>
+            <a class="cds--btn cds--btn--primary" th:href="@{/admin/videos/new}">
+                <span th:text="#{video.list.new}">New video</span>
+                <svg th:replace="~{admin/fragments :: icon('add', 16, 'cds--btn__icon')}"></svg>
+            </a>
         </div>
-    </div>
+    </section>
 
     <!--/* htmx requests get only this part: see the controller */-->
     <div id="results" th:fragment="results">
-        <div class="data-table">
-            <table>
+        <div class="cds--data-table-content data-table">
+            <table class="cds--data-table cds--data-table--md">
                 <caption class="sr-only" th:text="#{video.list.title}">Videos</caption>
                 <thead>
                 <tr>
                     <th th:replace="~{admin/fragments :: selectAll('videoIds')}"></th>
                     <th th:replace="~{admin/fragments :: sortable('/admin/videos', ${page}, 'title', #{video.field.title}, '')}"></th>
-                    <th scope="col" class="hide-small" th:text="#{video.column.url}">URL</th>
+                    <th scope="col" class="hide-small"><span class="cds--table-header-label" th:text="#{video.column.url}">URL</span></th>
                     <th th:replace="~{admin/fragments :: sortable('/admin/videos', ${page}, 'shootingDateStart', #{video.field.shot}, '')}"></th>
                     <th th:replace="~{admin/fragments :: sortable('/admin/videos', ${page}, 'visible', #{video.column.visible}, '')}"></th>
                 </tr>
@@ -43,13 +52,8 @@
                         th:text="${q.isBlank()} ? #{video.list.empty} : #{table.noMatch(${q})}">No videos yet.</td>
                 </tr>
                 <tr th:each="v : ${page.content}">
-                    <td class="select">
-                        <label>
-                            <span class="sr-only" th:text="#{video.list.select(${v.title})}">Select</span>
-                            <input type="checkbox" name="videoIds" form="bulk" th:value="${v.id}">
-                        </label>
-                    </td>
-                    <td><a th:href="@{/admin/videos/{id}(id=${v.id})}" th:text="${v.title}">Gólyatábor 2026 - Vám</a></td>
+                    <td th:replace="~{admin/fragments :: selectRow('videoIds', ${v.id}, #{video.list.select(${v.title})})}"></td>
+                    <td><a class="cds--link" th:href="@{/admin/videos/{id}(id=${v.id})}" th:text="${v.title}">Gólyatábor 2026 - Vám</a></td>
                     <td class="muted hide-small" th:text="${v.urls.isEmpty()} ? '' : ${v.urls[0]}">golyatabor-2026-vam</td>
                     <td class="date"
                         th:insert="~{admin/fragments :: dates(${v.shootingDateStart}, ${v.shootingDateEnd})}">Aug 13, 2026</td>
@@ -72,16 +76,14 @@
     <tbody>
     <tr>
         <td th:fragment="visibility" th:assert="${id != null}" class="select">
-            <label>
-                <span class="sr-only" th:text="#{video.list.toggle(${title})}">Show on the website</span>
-                <input type="checkbox" th:id="|visible-${id}|" th:checked="${visible}"
-                       th:hx-put="@{/admin/videos/{id}/visibility(id=${id}, visible=${!visible})}"
-                       hx-target="closest td" hx-swap="outerHTML">
-            </label>
+            <div th:replace="~{admin/fragments :: switch(|visible-${id}|, ${visible}, #{video.list.toggle(${title})},
+                    #{visibility.shown}, #{visibility.hidden}, @{/admin/videos/{id}/visibility(id=${id}, visible=${!visible})})}"></div>
             <!--/* The database refuses to show a video while one of its events is hidden */-->
             <small th:if="${inHiddenEvent}" class="field-error" role="alert" th:text="#{video.list.inHiddenEvent}">
                 Its event is hidden.
             </small>
+            <!--/* After a change, a toast says what happened (htmx adds it to #toasts) */-->
+            <th:block th:if="${toast}"><div hx-swap-oob="beforeend:#toasts"><div th:replace="~{admin/fragments :: toast(${toast})}"></div></div></th:block>
         </td>
     </tr>
     </tbody>

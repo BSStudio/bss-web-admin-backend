@@ -10,17 +10,20 @@
         <h1 th:text="#{event.list.title}">Events</h1>
     </div>
 
-    <div class="table-toolbar">
-        <div class="toolbar-actions">
+    <section class="cds--table-toolbar table-toolbar" th:aria-label="#{table.toolbar}">
+        <div class="cds--toolbar-content toolbar-actions">
             <search th:replace="~{admin/fragments :: search('/admin/events', ${page})}"></search>
-            <a class="button" th:href="@{/admin/events/new}" th:text="#{event.list.new}">New event</a>
+            <a class="cds--btn cds--btn--primary" th:href="@{/admin/events/new}">
+                <span th:text="#{event.list.new}">New event</span>
+                <svg th:replace="~{admin/fragments :: icon('add', 16, 'cds--btn__icon')}"></svg>
+            </a>
         </div>
-    </div>
+    </section>
 
     <!--/* htmx requests get only this part: see the controller */-->
     <div id="results" th:fragment="results">
-        <div class="data-table">
-            <table>
+        <div class="cds--data-table-content data-table">
+            <table class="cds--data-table cds--data-table--md">
                 <caption class="sr-only" th:text="#{event.list.title}">Events</caption>
                 <thead>
                 <tr>
@@ -37,7 +40,7 @@
                         th:text="${q.isBlank()} ? #{event.list.empty} : #{table.noMatch(${q})}">No events yet.</td>
                 </tr>
                 <tr th:each="e : ${page.content}">
-                    <td><a th:href="@{/admin/events/{id}(id=${e.id})}" th:text="${e.title}">Gólyatábor 2026</a></td>
+                    <td><a class="cds--link" th:href="@{/admin/events/{id}(id=${e.id})}" th:text="${e.title}">Gólyatábor 2026</a></td>
                     <td class="muted hide-small" th:text="${e.url}">golyatabor-2026</td>
                     <td class="date" th:insert="~{admin/fragments :: dates(${e.dateFrom}, ${e.dateTo})}">Aug 12, 2026</td>
                     <td class="num hide-small" th:text="${e.videoCount}">12</td>
@@ -60,12 +63,10 @@
     <tbody>
     <tr>
         <td th:fragment="visibility" th:assert="${id != null}" class="select">
-            <label>
-                <span class="sr-only" th:text="#{event.list.toggle(${title})}">Show on the website</span>
-                <input type="checkbox" th:id="|visible-${id}|" th:checked="${visible}"
-                       th:hx-put="@{/admin/events/{id}/visibility(id=${id}, visible=${!visible})}"
-                       hx-target="closest td" hx-swap="outerHTML">
-            </label>
+            <div th:replace="~{admin/fragments :: switch(|visible-${id}|, ${visible}, #{event.list.toggle(${title})},
+                    #{visibility.shown}, #{visibility.hidden}, @{/admin/events/{id}/visibility(id=${id}, visible=${!visible})})}"></div>
+            <!--/* After a change, a toast says what happened (htmx adds it to #toasts) */-->
+            <th:block th:if="${toast}"><div hx-swap-oob="beforeend:#toasts"><div th:replace="~{admin/fragments :: toast(${toast})}"></div></div></th:block>
         </td>
     </tr>
     </tbody>

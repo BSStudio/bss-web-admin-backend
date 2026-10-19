@@ -3,6 +3,7 @@ package hu.bsstudio.bssweb.video.page
 import hu.bsstudio.bssweb.label.service.LabelService
 import hu.bsstudio.bssweb.member.service.MemberService
 import hu.bsstudio.bssweb.ui.config.ConditionalOnAdminUi
+import hu.bsstudio.bssweb.ui.flash.Flash
 import hu.bsstudio.bssweb.ui.flash.flash
 import hu.bsstudio.bssweb.ui.paging.PAGE_SIZE
 import hu.bsstudio.bssweb.ui.paging.TableQuery
@@ -83,16 +84,20 @@ class VideoPageController(
         @RequestParam visible: Boolean,
         model: Model,
     ): String {
-        try {
-            videoService.changeVideoVisibility(listOf(videoId), visible)
-        } catch (e: DataIntegrityViolationException) {
-            if (!e.isVideoInHiddenEvent()) throw e
-            model["inHiddenEvent"] = true
-        }
+        val changed =
+            try {
+                videoService.changeVideoVisibility(listOf(videoId), visible)
+                true
+            } catch (e: DataIntegrityViolationException) {
+                if (!e.isVideoInHiddenEvent()) throw e
+                model["inHiddenEvent"] = true
+                false
+            }
         val video = findVideo(videoId)
         model["id"] = video.id
         model["title"] = video.title
         model["visible"] = video.visible
+        if (changed) model["toast"] = Flash(if (video.visible) "video.toast.shown" else "video.toast.hidden", video.title)
         return "admin/video/list :: visibility"
     }
 
