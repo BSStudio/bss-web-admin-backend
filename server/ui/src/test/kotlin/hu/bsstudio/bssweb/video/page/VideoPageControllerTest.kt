@@ -369,7 +369,8 @@ internal class VideoPageControllerTest(
                 status { isOk() }
                 view { name("admin/video/new") }
                 model { attribute("form", NewVideoForm()) }
-                content { string(containsString("""aria-describedby="title-help" id="title" name="title" value="">""")) }
+                content { string(containsString("""id="title" required maxlength="250"""")) }
+                content { string(containsString("""aria-describedby="title-help" name="title" value="">""")) }
                 content { string(not(containsString("aria-invalid"))) }
                 content { string(not(containsString("form-error"))) }
             }
@@ -408,7 +409,8 @@ internal class VideoPageControllerTest(
                         containsString("""<small id="title-error" class="field-error">Another video already uses this title.</small>"""),
                     )
                 }
-                content { string(containsString("""aria-describedby="title-help title-error" id="title" name="title"""")) }
+                content { string(containsString("""id="title" required maxlength="250"""")) }
+                content { string(containsString("""aria-describedby="title-help title-error" name="title"""")) }
                 content { string(containsString("""aria-invalid="true"""")) }
                 content { string(containsString("""<div id="form-error" role="alert"""")) }
                 content { string(containsString("""<div class="cds--inline-notification__subtitle">Some fields need fixing.""")) }
@@ -474,7 +476,8 @@ internal class VideoPageControllerTest(
                 content { string(containsString(">$URL</textarea>")) }
                 content { string(containsString("""value="2026-08-13"""")) }
                 content { string(containsString(MEMBER.name)) }
-                content { string(containsString("""id="title" name="title" value="G&oacute;lyat&aacute;bor 2026 - V&aacute;m">""")) }
+                content { string(containsString("""id="title" required maxlength="250"""")) }
+                content { string(containsString("""name="title" value="G&oacute;lyat&aacute;bor 2026 - V&aacute;m">""")) }
                 content { string(not(containsString("aria-invalid"))) }
                 content { string(containsString("""data-unsaved="track">""")) }
                 content { string(containsString("Image uploads are coming in a later update.")) }
@@ -592,7 +595,8 @@ internal class VideoPageControllerTest(
                         containsString("""<small id="datesInOrder-error" class="field-error">The end can’t be before the start.</small>"""),
                     )
                 }
-                content { string(containsString("""aria-describedby="datesInOrder-error" id="shootingDateEnd"""")) }
+                content { string(containsString("""id="shootingDateEnd" required""")) }
+                content { string(containsString("""aria-describedby="datesInOrder-error" name="shootingDateEnd"""")) }
                 content {
                     string(
                         containsString("""<small id="description-error" class="field-error">Use at most 2,000 characters.</small>"""),
@@ -614,7 +618,8 @@ internal class VideoPageControllerTest(
             }.andExpectAll {
                 status { isOk() }
                 content { string(containsString("""<small id="shootingDateStart-error" class="field-error">Fill this in.</small>""")) }
-                content { string(containsString("""aria-describedby="shootingDateEnd-error" id="shootingDateEnd"""")) }
+                content { string(containsString("""id="shootingDateEnd" required""")) }
+                content { string(containsString("""aria-describedby="shootingDateEnd-error" name="shootingDateEnd"""")) }
                 content { string(not(containsString("datesInOrder-error"))) }
             }
     }

@@ -26,14 +26,14 @@
             <div class="grid">
                 <div class="cds--form-item">
                     <label for="name" class="cds--label" th:text="#{member.field.name}">Name</label>
-                    <input type="text" class="cds--text-input" th:field="*{name}" required maxlength="250"
+                    <input type="text" class="cds--text-input" id="name" th:field="*{name}" required maxlength="250"
                            th:aria-invalid="${#fields.hasErrors('name')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('name')} ? 'name-error'">
                     <small th:replace="~{admin/fragments :: fieldError('name')}"></small>
                 </div>
                 <div class="cds--form-item">
                     <label for="nickname" class="cds--label" th:text="#{member.field.nickname}">Nickname</label>
-                    <input type="text" class="cds--text-input" th:field="*{nickname}" maxlength="250"
+                    <input type="text" class="cds--text-input" id="nickname" th:field="*{nickname}" maxlength="250"
                            th:aria-invalid="${#fields.hasErrors('nickname')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('nickname')} ? 'nickname-error'">
                     <small th:replace="~{admin/fragments :: fieldError('nickname')}"></small>
@@ -42,7 +42,7 @@
             <div class="grid">
                 <div class="cds--form-item">
                     <label for="url" class="cds--label" th:text="#{member.field.url}">URL</label>
-                    <input type="text" class="cds--text-input" th:field="*{url}" required maxlength="250"
+                    <input type="text" class="cds--text-input" id="url" th:field="*{url}" required maxlength="250"
                            th:aria-invalid="${#fields.hasErrors('url')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('url')} ? 'url-help url-error' : 'url-help'">
                     <small id="url-help" class="cds--form__helper-text" th:text="#{member.field.url.help}">Used in the member’s page address.</small>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="cds--form-item">
                     <label for="role" class="cds--label" th:text="#{member.field.role}">Role</label>
-                    <input type="text" class="cds--text-input" th:field="*{role}" maxlength="250"
+                    <input type="text" class="cds--text-input" id="role" th:field="*{role}" maxlength="250"
                            th:aria-invalid="${#fields.hasErrors('role')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('role')} ? 'role-error'">
                     <small th:replace="~{admin/fragments :: fieldError('role')}"></small>
@@ -60,7 +60,7 @@
                 <div class="cds--form-item cds--select">
                     <label for="status" class="cds--label" th:text="#{member.field.status}">Status</label>
                     <div class="cds--select-input__wrapper">
-                        <select class="cds--select-input" th:field="*{status}"
+                        <select class="cds--select-input" id="status" th:field="*{status}"
                                 th:aria-invalid="${#fields.hasErrors('status')} ? 'true'"
                                 th:aria-describedby="${#fields.hasErrors('status')} ? 'status-error'">
                             <option th:each="s : ${statuses}" th:value="${s}" th:text="#{${'member.status.' + s}}">Member</option>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="cds--form-item">
                     <label for="joinedAt" class="cds--label" th:text="#{member.field.joinedAt}">Joined</label>
-                    <input type="date" class="cds--text-input" th:field="*{joinedAt}" required
+                    <input type="date" class="cds--text-input" id="joinedAt" th:field="*{joinedAt}" required
                            th:aria-invalid="${#fields.hasErrors('joinedAt')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('joinedAt')} ? 'joinedAt-error'">
                     <small th:replace="~{admin/fragments :: fieldError('joinedAt')}"></small>
@@ -79,7 +79,7 @@
             </div>
             <div class="cds--form-item">
                 <label for="description" class="cds--label" th:text="#{member.field.description}">Description</label>
-                <textarea class="cds--text-area" th:field="*{description}" rows="4" maxlength="2000"
+                <textarea class="cds--text-area" id="description" th:field="*{description}" rows="4" maxlength="2000"
                           th:aria-invalid="${#fields.hasErrors('description')} ? 'true'"
                           th:aria-describedby="${#fields.hasErrors('description')} ? 'description-error'"></textarea>
                 <small th:replace="~{admin/fragments :: fieldError('description')}"></small>

@@ -88,6 +88,8 @@ abstract class CarbonStyles : DefaultTask() {
 
 val carbonStyles =
     tasks.register<CarbonStyles>("carbonStyles") {
+        group = "build"
+        description = "Downloads Carbon's stylesheet from npm for the admin UI"
         version.set(libs.versions.carbon.styles)
         outputDir.set(layout.buildDirectory.dir("generated/carbon"))
     }

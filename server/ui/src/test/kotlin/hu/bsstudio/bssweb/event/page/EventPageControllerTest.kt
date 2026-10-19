@@ -252,7 +252,8 @@ internal class EventPageControllerTest(
             }.andExpectAll {
                 status { isOk() }
                 view { name("admin/event/new") }
-                content { string(containsString("""aria-describedby="url-help url-error" id="url" name="url" value="">""")) }
+                content { string(containsString("""id="url" required maxlength="250"""")) }
+                content { string(containsString("""aria-describedby="url-help url-error" name="url" value="">""")) }
                 content { string(containsString("""<small id="url-error" class="field-error">Fill this in.</small>""")) }
             }
 
@@ -369,7 +370,8 @@ internal class EventPageControllerTest(
             }.andExpectAll {
                 status { isOk() }
                 view { name("admin/event/edit") }
-                content { string(containsString("""aria-describedby="datesInOrder-error" id="dateTo"""")) }
+                content { string(containsString("""id="dateTo" required""")) }
+                content { string(containsString("""aria-describedby="datesInOrder-error" name="dateTo"""")) }
                 content {
                     string(
                         containsString("""<small id="datesInOrder-error" class="field-error">The end can’t be before the start.</small>"""),

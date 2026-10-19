@@ -22,14 +22,14 @@
         <div th:replace="~{admin/fragments :: formError}"></div>
         <div class="cds--form-item">
             <label for="name" class="cds--label" th:text="#{member.field.name}">Name</label>
-            <input type="text" class="cds--text-input" th:field="*{name}" required maxlength="250" autofocus
+            <input type="text" class="cds--text-input" id="name" th:field="*{name}" required maxlength="250"
                    th:aria-invalid="${#fields.hasErrors('name')} ? 'true'"
                    th:aria-describedby="${#fields.hasErrors('name')} ? 'name-error'">
             <small th:replace="~{admin/fragments :: fieldError('name')}"></small>
         </div>
         <div class="cds--form-item">
             <label for="url" class="cds--label" th:text="#{member.field.url}">URL</label>
-            <input type="text" class="cds--text-input" th:field="*{url}" required maxlength="250"
+            <input type="text" class="cds--text-input" id="url" th:field="*{url}" required maxlength="250"
                    th:aria-invalid="${#fields.hasErrors('url')} ? 'true'"
                    th:aria-describedby="${#fields.hasErrors('url')} ? 'url-help url-error' : 'url-help'">
             <small id="url-help" class="cds--form__helper-text" th:text="#{member.field.url.help}">Used in the member’s page address.</small>

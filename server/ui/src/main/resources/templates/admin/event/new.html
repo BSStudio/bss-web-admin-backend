@@ -22,14 +22,14 @@
         <div th:replace="~{admin/fragments :: formError}"></div>
         <div class="cds--form-item">
             <label for="title" class="cds--label" th:text="#{event.field.title}">Title</label>
-            <input type="text" class="cds--text-input" th:field="*{title}" required maxlength="250" autofocus
+            <input type="text" class="cds--text-input" id="title" th:field="*{title}" required maxlength="250"
                    th:aria-invalid="${#fields.hasErrors('title')} ? 'true'"
                    th:aria-describedby="${#fields.hasErrors('title')} ? 'title-error'">
             <small th:replace="~{admin/fragments :: fieldError('title')}"></small>
         </div>
         <div class="cds--form-item">
             <label for="url" class="cds--label" th:text="#{event.field.url}">URL</label>
-            <input type="text" class="cds--text-input" th:field="*{url}" required maxlength="250"
+            <input type="text" class="cds--text-input" id="url" th:field="*{url}" required maxlength="250"
                    th:aria-invalid="${#fields.hasErrors('url')} ? 'true'"
                    th:aria-describedby="${#fields.hasErrors('url')} ? 'url-help url-error' : 'url-help'">
             <small id="url-help" class="cds--form__helper-text" th:text="#{event.field.url.help}">Used in the event’s page address.</small>

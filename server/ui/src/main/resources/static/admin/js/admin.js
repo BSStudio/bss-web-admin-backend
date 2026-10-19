@@ -27,6 +27,11 @@
         delete event.target.dataset.dirty;
     });
 
+    // A switch's aria-checked follows its box at once; the cell htmx brings back renders it from the saved value
+    document.addEventListener("change", (event) => {
+        if (event.target.matches?.('input[role="switch"]')) event.target.ariaChecked = String(event.target.checked);
+    });
+
     // Toasts (#toasts in the layout) leave by themselves once their animation has faded them out (admin.css);
     // Close takes one away at once.
     document.addEventListener("click", (event) => {

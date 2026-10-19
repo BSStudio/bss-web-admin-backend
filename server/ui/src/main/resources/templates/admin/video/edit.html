@@ -25,7 +25,7 @@
             <div th:replace="~{admin/fragments :: formError}"></div>
             <div class="cds--form-item">
                 <label for="title" class="cds--label" th:text="#{video.field.title}">Title</label>
-                <input type="text" class="cds--text-input" th:field="*{title}" required maxlength="250"
+                <input type="text" class="cds--text-input" id="title" th:field="*{title}" required maxlength="250"
                        th:aria-invalid="${#fields.hasErrors('title')} ? 'true'"
                        th:aria-describedby="${#fields.hasErrors('title')} ? 'title-error'">
                 <small th:replace="~{admin/fragments :: fieldError('title')}"></small>
@@ -33,14 +33,14 @@
             <div class="grid">
                 <div class="cds--form-item">
                     <label for="shootingDateStart" class="cds--label" th:text="#{video.field.shootingDateStart}">Shooting started</label>
-                    <input type="date" class="cds--text-input" th:field="*{shootingDateStart}" required
+                    <input type="date" class="cds--text-input" id="shootingDateStart" th:field="*{shootingDateStart}" required
                            th:aria-invalid="${#fields.hasErrors('shootingDateStart')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('shootingDateStart')} ? 'shootingDateStart-error'">
                     <small th:replace="~{admin/fragments :: fieldError('shootingDateStart')}"></small>
                 </div>
                 <div class="cds--form-item">
                     <label for="shootingDateEnd" class="cds--label" th:text="#{video.field.shootingDateEnd}">Shooting ended</label>
-                    <input type="date" class="cds--text-input" th:field="*{shootingDateEnd}" required
+                    <input type="date" class="cds--text-input" id="shootingDateEnd" th:field="*{shootingDateEnd}" required
                            th:aria-invalid="${#fields.hasErrors('shootingDateEnd') or #fields.hasErrors('datesInOrder')} ? 'true'"
                            th:aria-describedby="${#fields.hasErrors('datesInOrder')} ? 'datesInOrder-error' : (${#fields.hasErrors('shootingDateEnd')} ? 'shootingDateEnd-error')">
                     <small th:replace="~{admin/fragments :: fieldError('shootingDateEnd')}"></small>
@@ -49,12 +49,12 @@
             </div>
             <div class="cds--form-item">
                 <label for="urls" class="cds--label" th:text="#{video.field.urls}">URLs</label>
-                <textarea class="cds--text-area" th:field="*{urls}" rows="2" aria-describedby="urls-help"></textarea>
+                <textarea class="cds--text-area" id="urls" th:field="*{urls}" rows="2" aria-describedby="urls-help"></textarea>
                 <small id="urls-help" class="cds--form__helper-text" th:text="#{video.field.urls.help}">One per line.</small>
             </div>
             <div class="cds--form-item">
                 <label for="description" class="cds--label" th:text="#{video.field.description}">Description</label>
-                <textarea class="cds--text-area" th:field="*{description}" rows="4" maxlength="2000"
+                <textarea class="cds--text-area" id="description" th:field="*{description}" rows="4" maxlength="2000"
                           th:aria-invalid="${#fields.hasErrors('description')} ? 'true'"
                           th:aria-describedby="${#fields.hasErrors('description')} ? 'description-error'"></textarea>
                 <small th:replace="~{admin/fragments :: fieldError('description')}"></small>
@@ -68,7 +68,7 @@
                 <input type="hidden" name="_labels" value="on">
                 <div class="checkboxes">
                     <div th:each="label, row : ${labels}" class="cds--checkbox-wrapper" th:title="${label.description}">
-                        <input type="checkbox" class="cds--checkbox" name="labels" th:id="|labels-${row.count}|"
+                        <input type="checkbox" class="cds--checkbox" name="labels" id="label" th:id="|labels-${row.count}|"
                                th:value="${label.name}" th:checked="${#lists.contains(form.labels, label.name)}">
                         <label class="cds--checkbox-label" th:for="|labels-${row.count}|">
                             <span class="cds--checkbox-label-text" th:text="${label.name}">Egyetemi élet</span>

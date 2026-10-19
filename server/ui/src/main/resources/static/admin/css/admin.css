@@ -202,9 +202,9 @@ body {
     }
 }
 
-/* Carbon gives many of its parts a display, which would beat the hidden attribute */
+/* Carbon gives many of its parts a display, which would beat the browser's own rule for the hidden attribute */
 [hidden] {
-    display: none !important;
+    display: none;
 }
 
 h1 {

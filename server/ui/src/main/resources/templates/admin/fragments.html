@@ -54,7 +54,7 @@
 */-->
 <td th:fragment="selectRow(name, value, label)" class="cds--table-column-checkbox select">
     <div class="cds--checkbox--inline cds--checkbox-wrapper">
-        <input type="checkbox" class="cds--checkbox" th:id="|${name}-${value}|" th:name="${name}" form="bulk"
+        <input type="checkbox" class="cds--checkbox" id="row" th:id="|${name}-${value}|" th:name="${name}" form="bulk"
                th:value="${value}">
         <label class="cds--checkbox-label" th:for="|${name}-${value}|">
             <span class="cds--checkbox-label-text cds--visually-hidden" th:text="${label}">Select</span>
@@ -154,11 +154,11 @@
   A switch, Carbon's small toggle, for a value a row action saves at once (a video's visibility, a member's
   archived state). The checkbox is the control: a change sends put (htmx), whose answer replaces the table cell.
   Carbon's label draws the track. on and off are the state words beside it, which the switch announces itself,
-  so screen readers skip them. htmx puts the focus back on the new switch, since it keeps its id.
+  so screen readers skip them. aria-checked follows the box (admin.js) until the new cell arrives. htmx puts the focus back on the new switch, since it keeps its id.
 */-->
 <div th:fragment="switch(id, checked, label, on, off, put)" class="cds--toggle switch">
-    <input type="checkbox" role="switch" class="cds--toggle__button" th:id="${id}" th:checked="${checked}"
-           th:hx-put="${put}" hx-target="closest td" hx-swap="outerHTML">
+    <input type="checkbox" role="switch" class="cds--toggle__button" id="switch" th:id="${id}" th:checked="${checked}"
+           th:aria-checked="${checked}" th:hx-put="${put}" hx-target="closest td" hx-swap="outerHTML">
     <label class="cds--toggle__label" th:for="${id}">
         <span class="cds--visually-hidden" th:text="${label}">Show on the website</span>
         <span class="cds--toggle__appearance cds--toggle__appearance--sm">

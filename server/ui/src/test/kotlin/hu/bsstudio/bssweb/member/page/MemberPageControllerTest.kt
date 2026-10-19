@@ -451,7 +451,8 @@ internal class MemberPageControllerTest(
                         containsString("""<small id="url-error" class="field-error">Another member already uses this URL.</small>"""),
                     )
                 }
-                content { string(containsString("""aria-describedby="url-help url-error" id="url" name="url"""")) }
+                content { string(containsString("""id="url" required maxlength="250"""")) }
+                content { string(containsString("""aria-describedby="url-help url-error" name="url"""")) }
             }
     }
 
