@@ -991,8 +991,7 @@ dialog.modal .cds--modal-content p {
  * The edge's size and place are set before the hover, so a hover only swaps the image: Carbon transitions the
  * whole background, which would otherwise sweep the gradient down over the label.
  */
-.cds--btn--primary,
-.tile {
+.cds--btn--primary {
     background-position: bottom;
     background-size: 100% 3px;
     background-repeat: no-repeat;
@@ -1071,11 +1070,10 @@ dialog.modal .cds--modal-content p {
     flex-direction: column;
     gap: 1.5rem;
     min-block-size: 8rem;
-    text-decoration: none;
-}
-
-.tile {
+    background-position: bottom;
     background-size: 100% 2px;
+    background-repeat: no-repeat;
+    text-decoration: none;
 }
 
 .tile:hover {
