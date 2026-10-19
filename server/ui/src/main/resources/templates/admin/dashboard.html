@@ -7,21 +7,72 @@
 <body>
 <main id="main" class="container" th:assert="${metrics != null}">
     <div class="page-header">
-        <h1 th:text="#{dashboard.title}">Dashboard</h1>
+        <div>
+            <h1 th:text="#{dashboard.title}">Dashboard</h1>
+            <p class="lede" th:text="#{dashboard.lede}">Here you look after what the BSS website shows.</p>
+        </div>
     </div>
-    <section class="tiles">
-        <a class="tile" th:href="@{/admin/videos}">
+    <!--/* One tile per section: what it holds, and how many there are */-->
+    <section class="tiles" th:aria-label="#{dashboard.sections}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/videos}">
             <span class="label" th:text="#{dashboard.videos}">Videos</span>
             <span class="metric" th:text="${metrics.videoCount}">0</span>
+            <span class="description" th:text="#{dashboard.videos.description}">Every video on the website.</span>
+            <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
         </a>
-        <a class="tile" th:href="@{/admin/events}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/events}">
             <span class="label" th:text="#{dashboard.events}">Events</span>
             <span class="metric" th:text="${metrics.eventCount}">0</span>
+            <span class="description" th:text="#{dashboard.events.description}">Groups of videos.</span>
+            <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
         </a>
-        <a class="tile" th:href="@{/admin/members}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/members}">
             <span class="label" th:text="#{dashboard.members}">Members</span>
             <span class="metric" th:text="${metrics.memberCount}">0</span>
+            <span class="description" th:text="#{dashboard.members.description}">Studio members.</span>
+            <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
         </a>
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/labels}">
+            <span class="label" th:text="#{dashboard.labels}">Labels</span>
+            <span class="metric" th:text="${metrics.labelCount}">0</span>
+            <span class="description" th:text="#{dashboard.labels.description}">Topics that sort the videos.</span>
+            <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
+        </a>
+    </section>
+
+    <!--/* A short manual: what the admin does that isn't obvious from the pages themselves */-->
+    <section class="guide" aria-labelledby="guide-title">
+        <h2 id="guide-title" th:text="#{dashboard.guide.title}">How the admin works</h2>
+        <div class="guide-items">
+            <section>
+                <h3 th:text="#{dashboard.guide.lists.title}">Finding things</h3>
+                <p th:text="#{dashboard.guide.lists.text}">Search, sort and page through every list.</p>
+            </section>
+            <section>
+                <h3 th:text="#{dashboard.guide.bulk.title}">Changing many at once</h3>
+                <p th:text="#{dashboard.guide.bulk.text}">Tick rows to act on all of them.</p>
+            </section>
+            <section>
+                <h3 th:text="#{dashboard.guide.switches.title}">Switches save at once</h3>
+                <p th:text="#{dashboard.guide.switches.text}">Visible and Archived take effect straight away.</p>
+            </section>
+            <section>
+                <h3 th:text="#{dashboard.guide.website.title}">What the website shows</h3>
+                <p th:text="#{dashboard.guide.website.text}">A video shows only while it and its events are visible.</p>
+            </section>
+            <section>
+                <h3 th:text="#{dashboard.guide.editing.title}">Editing and deleting</h3>
+                <p th:text="#{dashboard.guide.editing.text}">Delete always asks first.</p>
+            </section>
+            <section>
+                <h3 th:text="#{dashboard.guide.crew.title}">Crew and positions</h3>
+                <p th:text="#{dashboard.guide.crew.text}">Credit who worked on a video, and in what position.</p>
+            </section>
+            <section>
+                <h3 th:text="#{dashboard.guide.account.title}">Language and errors</h3>
+                <p th:text="#{dashboard.guide.account.text}">Switch the language in your menu.</p>
+            </section>
+        </div>
     </section>
 </main>
 </body>

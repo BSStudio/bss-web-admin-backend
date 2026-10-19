@@ -6,6 +6,7 @@ import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.service.EventService
 import hu.bsstudio.bssweb.eventvideo.service.EventVideoService
 import hu.bsstudio.bssweb.ui.config.ConditionalOnAdminUi
+import hu.bsstudio.bssweb.ui.flash.Flash
 import hu.bsstudio.bssweb.ui.flash.flash
 import hu.bsstudio.bssweb.ui.paging.PAGE_SIZE
 import hu.bsstudio.bssweb.ui.paging.TableSort
@@ -76,6 +77,7 @@ class EventPageController(
         model["id"] = event.id
         model["title"] = event.title
         model["visible"] = event.visible
+        model["toast"] = Flash(if (event.visible) "event.toast.shown" else "event.toast.hidden", event.title)
         return "admin/event/list :: visibility"
     }
 

@@ -8,8 +8,10 @@
 <main id="main" class="container" th:assert="${form != null}">
     <div class="page-header">
         <div>
-            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
-                <a th:href="@{/admin/videos}" th:text="#{video.list.title}">Videos</a>
+            <nav th:aria-label="#{nav.breadcrumb}">
+                <ol class="cds--breadcrumb">
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/videos}" th:text="#{video.list.title}">Videos</a></li>
+                </ol>
             </nav>
             <h1 th:text="#{video.new.title}">New video</h1>
         </div>
@@ -17,18 +19,18 @@
 
     <form method="post" th:action="@{/admin/videos}" th:object="${form}" class="stack narrow"
           th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
-        <p th:replace="~{admin/fragments :: formError}"></p>
-        <label>
-            <span th:text="#{video.field.title}">Title</span>
-            <input type="text" th:field="*{title}" required maxlength="250" autofocus
+        <div th:replace="~{admin/fragments :: formError}"></div>
+        <div class="cds--form-item">
+            <label for="title" class="cds--label" th:text="#{video.field.title}">Title</label>
+            <input type="text" class="cds--text-input" id="title" th:field="*{title}" required maxlength="250"
                    th:aria-invalid="${#fields.hasErrors('title')} ? 'true'"
                    th:aria-describedby="${#fields.hasErrors('title')} ? 'title-help title-error' : 'title-help'">
-            <small id="title-help" th:text="#{video.new.help}">Start with the title.</small>
+            <small id="title-help" class="cds--form__helper-text" th:text="#{video.new.help}">Start with the title.</small>
             <small th:replace="~{admin/fragments :: fieldError('title')}"></small>
-        </label>
-        <div class="actions">
-            <a class="button secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
-            <button type="submit" th:text="#{action.create}">Create</button>
+        </div>
+        <div class="cds--btn-set actions">
+            <a class="cds--btn cds--btn--secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
+            <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.create}">Create</button>
         </div>
     </form>
 </main>

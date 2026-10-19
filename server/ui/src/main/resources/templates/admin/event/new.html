@@ -8,8 +8,10 @@
 <main id="main" class="container" th:assert="${form != null}">
     <div class="page-header">
         <div>
-            <nav class="breadcrumb" th:aria-label="#{nav.breadcrumb}">
-                <a th:href="@{/admin/events}" th:text="#{event.list.title}">Events</a>
+            <nav th:aria-label="#{nav.breadcrumb}">
+                <ol class="cds--breadcrumb">
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/events}" th:text="#{event.list.title}">Events</a></li>
+                </ol>
             </nav>
             <h1 th:text="#{event.new.title}">New event</h1>
         </div>
@@ -17,26 +19,26 @@
 
     <form method="post" th:action="@{/admin/events}" th:object="${form}" class="stack narrow"
           th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
-        <p th:replace="~{admin/fragments :: formError}"></p>
-        <label>
-            <span th:text="#{event.field.title}">Title</span>
-            <input type="text" th:field="*{title}" required maxlength="250" autofocus
+        <div th:replace="~{admin/fragments :: formError}"></div>
+        <div class="cds--form-item">
+            <label for="title" class="cds--label" th:text="#{event.field.title}">Title</label>
+            <input type="text" class="cds--text-input" id="title" th:field="*{title}" required maxlength="250"
                    th:aria-invalid="${#fields.hasErrors('title')} ? 'true'"
                    th:aria-describedby="${#fields.hasErrors('title')} ? 'title-error'">
             <small th:replace="~{admin/fragments :: fieldError('title')}"></small>
-        </label>
-        <label>
-            <span th:text="#{event.field.url}">URL</span>
-            <input type="text" th:field="*{url}" required maxlength="250"
+        </div>
+        <div class="cds--form-item">
+            <label for="url" class="cds--label" th:text="#{event.field.url}">URL</label>
+            <input type="text" class="cds--text-input" id="url" th:field="*{url}" required maxlength="250"
                    th:aria-invalid="${#fields.hasErrors('url')} ? 'true'"
                    th:aria-describedby="${#fields.hasErrors('url')} ? 'url-help url-error' : 'url-help'">
-            <small id="url-help" th:text="#{event.field.url.help}">Used in the event’s page address.</small>
+            <small id="url-help" class="cds--form__helper-text" th:text="#{event.field.url.help}">Used in the event’s page address.</small>
             <small th:replace="~{admin/fragments :: fieldError('url')}"></small>
-        </label>
-        <p class="muted" th:text="#{event.new.help}">Start with the title and URL.</p>
-        <div class="actions">
-            <a class="button secondary" th:href="@{/admin/events}" th:text="#{action.cancel}">Cancel</a>
-            <button type="submit" th:text="#{action.create}">Create</button>
+        </div>
+        <p class="cds--form__helper-text" th:text="#{event.new.help}">Start with the title and URL.</p>
+        <div class="cds--btn-set actions">
+            <a class="cds--btn cds--btn--secondary" th:href="@{/admin/events}" th:text="#{action.cancel}">Cancel</a>
+            <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.create}">Create</button>
             <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
         </div>
     </form>

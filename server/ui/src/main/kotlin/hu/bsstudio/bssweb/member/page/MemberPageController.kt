@@ -5,6 +5,7 @@ import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.service.MemberService
 import hu.bsstudio.bssweb.ui.config.ConditionalOnAdminUi
+import hu.bsstudio.bssweb.ui.flash.Flash
 import hu.bsstudio.bssweb.ui.flash.flash
 import hu.bsstudio.bssweb.ui.paging.PAGE_SIZE
 import hu.bsstudio.bssweb.ui.paging.TableQuery
@@ -75,6 +76,7 @@ class MemberPageController(
         model["id"] = member.id
         model["name"] = member.name
         model["archived"] = member.archived
+        model["toast"] = Flash(if (member.archived) "member.toast.archived" else "member.toast.restored", member.name)
         return "admin/member/list :: archived"
     }
 

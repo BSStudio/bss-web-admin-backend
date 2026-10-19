@@ -6,86 +6,202 @@
 <body>
 
 <!--/*
-  Search above a table. Typing filters the rows: htmx loads the list (only #results, see the controllers) into
-  #results and updates the address. The search field takes the form's target, swap and history settings.
-  The page size stays; the page goes back to the first.
+  A Carbon icon (@carbon/icons, 32px grid) at size × size pixels, e.g. icon('add', 16, 'cds--btn__icon').
+  Decorative: the button or link around it carries the name. The inner path of a filled icon is the shape cut
+  out of it (the tick in checkmark--filled), which Carbon's stylesheet colours where it needs to.
 */-->
-<search th:fragment="search(path, page)" class="table-search" th:assert="${q != null}, ${sorting != null}">
+<svg th:fragment="icon(name, size, classes)" th:class="${classes}" th:width="${size}" th:height="${size}"
+     viewBox="0 0 32 32" fill="currentColor" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+     th:switch="${name}">
+    <path th:case="'add'" d="M17 15 17 8 15 8 15 15 8 15 8 17 15 17 15 24 17 24 17 17 24 17 24 15z"/>
+    <path th:case="'arrow--right'" d="M18 6 16.57 7.393 24.15 15 4 15 4 17 24.15 17 16.57 24.573 18 26 28 16 18 6z"/>
+    <path th:case="'arrow--up'" d="M16 4 6 14 7.41 15.41 15 7.83 15 28 17 28 17 7.83 24.59 15.41 26 14 16 4z"/>
+    <th:block th:case="'arrows--vertical'"><path d="M27.6 20.6 24 24.2 24 4 22 4 22 24.2 18.4 20.6 17 22 23 28 29 22z"/><path d="M9 4 3 10 4.4 11.4 8 7.8 8 28 10 28 10 7.8 13.6 11.4 15 10z"/></th:block>
+    <th:block th:case="'checkmark--filled'"><path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2ZM14,21.5908l-5-5L10.5906,15,14,18.4092,21.41,11l1.5957,1.5859Z"/><path fill="none" d="M14 21.591 9 16.591 10.591 15 14 18.409 21.41 11 23.005 12.585 14 21.591z" data-icon-path="inner-path"/></th:block>
+    <path th:case="'chevron--down'" d="M16 22 6 12 7.4 10.6 16 19.2 24.6 10.6 26 12z"/>
+    <path th:case="'chevron--left'" d="M10 16 20 6 21.4 7.4 12.8 16 21.4 24.6 20 26z"/>
+    <path th:case="'chevron--right'" d="M22 16 12 26 10.6 24.6 19.2 16 10.6 7.4 12 6z"/>
+    <path th:case="'close'" d="M17.4141 16 24 9.4141 22.5859 8 16 14.5859 9.4143 8 8 9.4141 14.5859 16 8 22.5859 9.4143 24 16 17.4141 22.5859 24 24 22.5859 17.4141 16z"/>
+    <th:block th:case="'error--filled'"><path fill="none" d="M14.9 7.2H17.1V24.799H14.9z" data-icon-path="inner-path" transform="rotate(-45 16 16)"/><path d="M16,2A13.914,13.914,0,0,0,2,16,13.914,13.914,0,0,0,16,30,13.914,13.914,0,0,0,30,16,13.914,13.914,0,0,0,16,2Zm5.4449,21L9,10.5557,10.5557,9,23,21.4448Z"/></th:block>
+    <th:block th:case="'menu'"><path d="M4 6H28V8H4z"/><path d="M4 24H28V26H4z"/><path d="M4 12H28V14H4z"/><path d="M4 18H28V20H4z"/></th:block>
+    <path th:case="'search'" d="M29,27.5859l-7.5521-7.5521a11.0177,11.0177,0,1,0-1.4141,1.4141L27.5859,29ZM4,13a9,9,0,1,1,9,9A9.01,9.01,0,0,1,4,13Z"/>
+</svg>
+
+<!--/*
+  Search above a table: Carbon's persistent toolbar search. Typing filters the rows: htmx loads the list (only
+  #results, see the controllers) into #results and updates the address. The search field takes the form's
+  target, swap and history settings. The page size stays; the page goes back to the first.
+*/-->
+<search th:fragment="search(path, page)" class="cds--toolbar-search-container-persistent table-search"
+        th:assert="${q != null}, ${sorting != null}">
     <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-target:inherited="#results"
           hx-swap:inherited="outerHTML" hx-push-url:inherited="true">
-        <label>
-            <span class="sr-only" th:text="#{table.search}">Search</span>
-            <input id="table-search" type="search" name="q" th:value="${q}" th:placeholder="#{table.search}"
-                   autocomplete="off" th:hx-get="@{${path}}" hx-trigger="input changed delay:300ms"
-                   hx-include="closest form">
-        </label>
+        <div class="cds--search cds--search--lg" role="search">
+            <svg th:replace="~{admin/fragments :: icon('search', 16, 'cds--search-magnifier-icon')}"></svg>
+            <label for="table-search" class="cds--label cds--visually-hidden" th:text="#{table.search}">Search</label>
+            <input id="table-search" class="cds--search-input" type="search" name="q" th:value="${q}"
+                   th:placeholder="#{table.search}" autocomplete="off" th:hx-get="@{${path}}"
+                   hx-trigger="input changed delay:300ms" hx-include="closest form">
+        </div>
         <input type="hidden" name="size" th:value="${page.size}">
         <input type="hidden" name="sort" th:value="${sorting.param}">
     </form>
 </search>
 
+<!--/*
+  A table row's checkbox, as Carbon draws it (the label paints the box). name is the row checkboxes' name, which
+  the header's select-all knows them by (admin.js); they belong to the selection bar's form, #bulk.
+*/-->
+<td th:fragment="selectRow(name, value, label)" class="cds--table-column-checkbox select">
+    <div class="cds--checkbox--inline cds--checkbox-wrapper">
+        <input type="checkbox" class="cds--checkbox" id="row" th:id="|${name}-${value}|" th:name="${name}" form="bulk"
+               th:value="${value}">
+        <label class="cds--checkbox-label" for="row" th:for="|${name}-${value}|">
+            <span class="cds--checkbox-label-text cds--visually-hidden" th:text="${label}">Select</span>
+        </label>
+    </div>
+</td>
+
 <!--/* The header cell that selects every row on the page; name is the row checkboxes' name. See admin.js. */-->
-<th th:fragment="selectAll(name)" scope="col" class="select">
-    <label>
-        <span class="sr-only" th:text="#{table.selectAll}">Select all rows</span>
-        <input type="checkbox" th:data-select-all="${name}">
-    </label>
+<th th:fragment="selectAll(name)" scope="col" class="cds--table-column-checkbox select">
+    <div class="cds--checkbox--inline cds--checkbox-wrapper">
+        <input type="checkbox" class="cds--checkbox" id="select-all" th:data-select-all="${name}">
+        <label class="cds--checkbox-label" for="select-all">
+            <span class="cds--checkbox-label-text cds--visually-hidden" th:text="#{table.selectAll}">Select all rows</span>
+        </label>
+    </div>
 </th>
 
 <!--/*
   A column header that sorts the table by column: ascending on the first click, then the other way round.
-  sorting (a SortHeader) marks the current column with aria-sort, which admin.css shows as an arrow.
+  sorting (a SortHeader) marks the current column with aria-sort, and Carbon's sort arrow shows it.
   The link keeps the search and the page size, and loads the list into #results like paging does.
 */-->
-<th th:fragment="sortable(path, page, column, label, classes)" th:assert="${sorting != null}" scope="col" th:class="${classes}"
+<th th:fragment="sortable(path, page, column, label, classes)" th:assert="${sorting != null}" scope="col"
+    th:class="|cds--table-sort__header ${classes}|"
     th:aria-sort="${sorting.aria(column)}"
-    th:with="link=@{${path}(q=${q}, size=${page.size}, sort=${sorting.next(column)})}">
-    <a class="sort" th:href="${link}" th:hx-get="${link}" hx-target="#results" hx-swap="outerHTML" hx-push-url="true"
-       th:text="${label}">Title</a>
+    th:with="link=@{${path}(q=${q}, size=${page.size}, sort=${sorting.next(column)})}, order=${sorting.aria(column)}">
+    <a class="cds--table-sort" th:classappend="${order != null} ? (${order == 'descending'} ? 'cds--table-sort--active cds--table-sort--descending' : 'cds--table-sort--active')"
+       th:href="${link}" th:hx-get="${link}" hx-target="#results" hx-swap="outerHTML" hx-push-url="true">
+        <span class="cds--table-sort__flex">
+            <span class="cds--table-header-label" th:text="${label}">Title</span>
+            <svg th:replace="~{admin/fragments :: icon('arrow--up', 20, 'cds--table-sort__icon')}"></svg>
+            <svg th:replace="~{admin/fragments :: icon('arrows--vertical', 20, 'cds--table-sort__icon-unsorted')}"></svg>
+        </span>
+    </a>
 </th>
 
 <!--/*
-  Footer of a data table: page size, which items are shown, and which page, as lists and arrows.
-  A change loads that page into #results. The hidden fields tell the bulk actions where to come back to.
+  Footer of a data table, as Carbon lays it out: page size, which items are shown, and which page, as lists and
+  arrows. A change loads that page into #results. The hidden fields tell the bulk actions where to come back to.
 */-->
-<nav th:fragment="pagination(page, path)" th:assert="${q != null}, ${sorting != null}" th:unless="${page.empty}" class="pagination"
-     th:aria-label="#{pagination.label}" hx-target:inherited="#results" hx-swap:inherited="outerHTML"
-     hx-push-url:inherited="true">
-    <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-trigger="change">
+<nav th:fragment="pagination(page, path)" th:assert="${q != null}, ${sorting != null}" th:unless="${page.empty}"
+     class="cds--pagination pagination" th:aria-label="#{pagination.label}" hx-target:inherited="#results"
+     hx-swap:inherited="outerHTML" hx-push-url:inherited="true">
+    <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-trigger="change" class="cds--pagination__left">
         <input type="hidden" name="q" th:value="${q}">
         <input type="hidden" name="sort" th:value="${sorting.param}">
-        <label for="page-size" th:text="#{pagination.size}">Items per page:</label>
-        <select id="page-size" name="size">
-            <option th:each="size : ${ {10, 25, 50, 100} }" th:value="${size}" th:text="${size}"
-                    th:selected="${size == page.size}">25</option>
-        </select>
-        <span th:text="#{pagination.items(${page.number * page.size + 1}, ${page.number * page.size + page.numberOfElements}, ${page.totalElements})}">1–25 of 120 items</span>
+        <label for="page-size" class="cds--pagination__text" th:text="#{pagination.size}">Items per page:</label>
+        <div class="cds--select cds--select--inline cds--select__item-count">
+            <div class="cds--select-input__wrapper">
+                <select id="page-size" name="size" class="cds--select-input">
+                    <option th:each="size : ${ {10, 25, 50, 100} }" class="cds--select-option"
+                            th:value="${size}" th:selected="${size == page.size}" th:text="${size}">25</option>
+                </select>
+                <svg th:replace="~{admin/fragments :: icon('chevron--down', 16, 'cds--select__arrow')}"></svg>
+            </div>
+        </div>
+        <span class="cds--pagination__text cds--pagination__items-count"
+              th:text="#{pagination.items(${page.number * page.size + 1}, ${page.number * page.size + page.numberOfElements}, ${page.totalElements})}">1–25 of 120 items</span>
     </form>
-    <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-trigger="change" class="pages"
+    <form method="get" th:action="@{${path}}" th:hx-get="@{${path}}" hx-trigger="change" class="cds--pagination__right pages"
           th:with="previous=@{${path}(q=${q}, size=${page.size}, sort=${sorting.param}, page=${page.number - 1})},
                    next=@{${path}(q=${q}, size=${page.size}, sort=${sorting.param}, page=${page.number + 1})}">
         <input type="hidden" name="q" th:value="${q}">
         <input type="hidden" name="size" th:value="${page.size}">
         <input type="hidden" name="sort" th:value="${sorting.param}">
-        <label>
-            <span class="sr-only" th:text="#{pagination.page}">Page</span>
-            <select id="page-number" name="page">
-                <option th:each="number : ${#numbers.sequence(0, page.totalPages - 1)}" th:value="${number}"
-                        th:text="${number + 1}" th:selected="${number == page.number}">1</option>
-            </select>
-        </label>
-        <span th:text="#{pagination.pages(${page.totalPages})}">of 5 pages</span>
-        <a th:if="${page.hasPrevious()}" th:href="${previous}" th:hx-get="${previous}"
-           th:aria-label="#{pagination.previous}">‹</a>
-        <span th:unless="${page.hasPrevious()}" class="disabled" aria-hidden="true">‹</span>
-        <a th:if="${page.hasNext()}" th:href="${next}" th:hx-get="${next}" th:aria-label="#{pagination.next}">›</a>
-        <span th:unless="${page.hasNext()}" class="disabled" aria-hidden="true">›</span>
+        <div class="cds--select cds--select--inline cds--select__page-number">
+            <label for="page-number" class="cds--label cds--visually-hidden" th:text="#{pagination.page}">Page</label>
+            <div class="cds--select-input__wrapper">
+                <select id="page-number" name="page" class="cds--select-input">
+                    <option th:each="number : ${#numbers.sequence(0, page.totalPages - 1)}" class="cds--select-option"
+                            th:value="${number}" th:text="${number + 1}" th:selected="${number == page.number}">1</option>
+                </select>
+                <svg th:replace="~{admin/fragments :: icon('chevron--down', 16, 'cds--select__arrow')}"></svg>
+            </div>
+        </div>
+        <span class="cds--pagination__text" th:text="#{pagination.pages(${page.totalPages})}">of 5 pages</span>
+        <div class="cds--pagination__control-buttons">
+            <a th:if="${page.hasPrevious()}" th:href="${previous}" th:hx-get="${previous}"
+               class="cds--btn cds--btn--ghost cds--btn--icon-only cds--pagination__button cds--pagination__button--backward"
+               th:aria-label="#{pagination.previous}"><svg th:replace="~{admin/fragments :: icon('chevron--left', 16, 'cds--btn__icon')}"></svg></a>
+            <span th:unless="${page.hasPrevious()}" aria-hidden="true"
+                  class="cds--btn cds--btn--ghost cds--btn--icon-only cds--pagination__button cds--pagination__button--backward cds--btn--disabled"><svg th:replace="~{admin/fragments :: icon('chevron--left', 16, 'cds--btn__icon')}"></svg></span>
+            <a th:if="${page.hasNext()}" th:href="${next}" th:hx-get="${next}"
+               class="cds--btn cds--btn--ghost cds--btn--icon-only cds--pagination__button cds--pagination__button--forward"
+               th:aria-label="#{pagination.next}"><svg th:replace="~{admin/fragments :: icon('chevron--right', 16, 'cds--btn__icon')}"></svg></a>
+            <span th:unless="${page.hasNext()}" aria-hidden="true"
+                  class="cds--btn cds--btn--ghost cds--btn--icon-only cds--pagination__button cds--pagination__button--forward cds--btn--disabled"><svg th:replace="~{admin/fragments :: icon('chevron--right', 16, 'cds--btn__icon')}"></svg></span>
+        </div>
     </form>
     <input type="hidden" form="bulk" name="q" th:value="${q}">
     <input type="hidden" form="bulk" name="page" th:value="${page.number}">
     <input type="hidden" form="bulk" name="size" th:value="${page.size}">
     <input type="hidden" form="bulk" name="sort" th:value="${sorting.param}">
 </nav>
+
+<!--/*
+  A switch, Carbon's small toggle, for a value a row action saves at once (a video's visibility, a member's
+  archived state). The checkbox is the control: a change sends put (htmx), whose answer replaces the table cell.
+  Carbon's label draws the track. on and off are the state words beside it, which the switch announces itself,
+  so screen readers skip them. aria-checked follows the box (admin.js) until the new cell arrives. htmx puts the focus back on the new switch, since it keeps its id.
+*/-->
+<div th:fragment="switch(id, checked, label, on, off, put)" class="cds--toggle switch">
+    <input type="checkbox" role="switch" class="cds--toggle__button" id="switch" th:id="${id}" th:checked="${checked}"
+           aria-checked="false" th:aria-checked="${checked}" th:hx-put="${put}" hx-target="closest td" hx-swap="outerHTML">
+    <label class="cds--toggle__label" for="switch" th:for="${id}">
+        <span class="cds--visually-hidden" th:text="${label}">Show on the website</span>
+        <span class="cds--toggle__appearance cds--toggle__appearance--sm">
+            <span class="cds--toggle__switch">
+                <svg class="cds--toggle__check" width="6" height="5" viewBox="0 0 6 5" aria-hidden="true">
+                    <path d="M2.2 2.7 5 0 6 1 2.2 5 0 2.7 1 1.5z"/>
+                </svg>
+            </span>
+            <span class="cds--toggle__text" aria-hidden="true">
+                <span class="on" th:text="${on}">Shown</span><span class="off" th:text="${off}">Hidden</span>
+            </span>
+        </span>
+    </label>
+</div>
+
+<!--/*
+  A toast: a short success message (a Flash) in the top right, Carbon's high-contrast style. It leaves after five
+  seconds unless the pointer or focus is on it (admin.css); Close removes it at once (admin.js). The region it
+  goes into, #toasts in the layout, is the live region that reads it out.
+*/-->
+<div th:fragment="toast(message)" class="cds--toast-notification cds--toast-notification--success toast">
+    <svg th:replace="~{admin/fragments :: icon('checkmark--filled', 20, 'cds--toast-notification__icon')}"></svg>
+    <div class="cds--toast-notification__details">
+        <div class="cds--toast-notification__title" th:text="#{${message.key}(${message.arg})}">Saved.</div>
+    </div>
+    <button type="button" class="cds--toast-notification__close-button" data-dismiss th:aria-label="#{action.close}">
+        <svg th:replace="~{admin/fragments :: icon('close', 20, 'cds--toast-notification__close-icon')}"></svg>
+    </button>
+</div>
+
+<!--/*
+  An error message above the page or a form: Carbon's low-contrast inline notification. It stays until the next
+  page, and role="alert" has it read out as the page shows it. id is optional (the form error has one).
+*/-->
+<div th:fragment="alert(id, text)" th:id="${id}" role="alert"
+     class="cds--inline-notification cds--inline-notification--error cds--inline-notification--low-contrast cds--inline-notification--hide-close-button flash error">
+    <div class="cds--inline-notification__details">
+        <svg th:replace="~{admin/fragments :: icon('error--filled', 20, 'cds--inline-notification__icon')}"></svg>
+        <div class="cds--inline-notification__text-wrapper">
+            <div class="cds--inline-notification__subtitle" th:text="${text}">Some fields need fixing.</div>
+        </div>
+    </div>
+</div>
 
 <!--/*
   Where an image goes (a video thumbnail, a member's picture) until uploading images to the file API is added.
@@ -103,34 +219,40 @@
         th:if="${to != null and to != from}"> – <time th:datetime="${to}" th:text="${#temporals.format(to, 'MEDIUM')}">Aug 15, 2026</time></th:block></th:block>
 
 <!--/*
-  Asks before deleting. id names the dialog, since a page may have several (a label list has one per row); action
-  is the address the form posts to. A button opens it with command="show-modal" and commandfor="<id>" (admin.js
-  does the same in browsers without invoker commands). Cancel has the focus, so Enter doesn't delete by accident.
+  Asks before deleting: Carbon's danger modal in a <dialog>. id names the dialog, since a page may have several
+  (a label list has one per row); action is the address the form posts to. A button opens it with
+  command="show-modal" and commandfor="<id>". Cancel has the focus, so Enter doesn't delete by accident. The form
+  sits outside the footer, so the two footer buttons can be Carbon's full-width halves.
 */-->
-<dialog th:fragment="deleteDialog(id, action, question, warning)" th:id="${id}" th:aria-labelledby="|${id}-title|">
-    <header>
-        <h2 th:id="|${id}-title|" th:text="${question}">Delete “Gólyatábor 2026 - Vám”?</h2>
-        <button type="button" class="ghost" command="close" th:commandfor="${id}" th:aria-label="#{action.close}">✕</button>
-    </header>
-    <p th:text="${warning}">This can’t be undone.</p>
-    <footer>
-        <button type="button" class="secondary" command="close" th:commandfor="${id}" autofocus
+<dialog th:fragment="deleteDialog(id, action, question, warning)" th:id="${id}" th:aria-labelledby="|${id}-title|"
+        class="cds--modal-container cds--modal-container--sm modal">
+    <form th:id="|${id}-form|" method="post" th:action="${action}"></form>
+    <div class="cds--modal-header">
+        <h2 class="cds--modal-header__heading" th:id="|${id}-title|" th:text="${question}">Delete “Gólyatábor 2026 - Vám”?</h2>
+        <div class="cds--modal-close-button">
+            <button type="button" class="cds--modal-close" command="close" th:commandfor="${id}" th:aria-label="#{action.close}">
+                <svg th:replace="~{admin/fragments :: icon('close', 20, 'cds--modal-close__icon')}"></svg>
+            </button>
+        </div>
+    </div>
+    <div class="cds--modal-content">
+        <p th:text="${warning}">This can’t be undone.</p>
+    </div>
+    <div class="cds--modal-footer cds--btn-set">
+        <button type="button" class="cds--btn cds--btn--secondary" command="close" th:commandfor="${id}" autofocus
                 th:text="#{action.cancel}">Cancel</button>
-        <form method="post" th:action="${action}">
-            <button type="submit" class="danger" th:text="#{action.delete}">Delete</button>
-        </form>
-    </footer>
+        <button type="submit" class="cds--btn cds--btn--danger" th:form="|${id}-form|" th:text="#{action.delete}">Delete</button>
+    </div>
 </dialog>
 
 <!--/*
   At the top of a form (inside its th:object) after a failed save: the form's own errors, which belong to no single
-  field (e.g. another event has this title or URL), or else a note that fields need fixing. role="alert" has it read
-  out as the page shows it.
+  field (e.g. another event has this title or URL), or else a note that fields need fixing.
 */-->
-<p th:fragment="formError" th:if="${#fields.hasAnyErrors()}" id="form-error" class="flash error" role="alert"
-   th:text="${#fields.hasGlobalErrors()} ? ${#strings.listJoin(#fields.globalErrors(), ' ')} : #{form.invalid}">
-    Some fields need fixing.
-</p>
+<th:block th:fragment="formError" th:if="${#fields.hasAnyErrors()}">
+    <div th:replace="~{admin/fragments :: alert('form-error',
+        ${#fields.hasGlobalErrors()} ? ${#strings.listJoin(#fields.globalErrors(), ' ')} : #{form.invalid})}"></div>
+</th:block>
 
 <!--/*
   A field's error, if it has one, under the field. Its id is <field>-error, so the field points at it:

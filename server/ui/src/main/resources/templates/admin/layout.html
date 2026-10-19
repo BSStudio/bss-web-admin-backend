@@ -19,6 +19,7 @@
     <link rel="apple-touch-icon" sizes="152x152" th:href="@{/admin/icons/apple-touch-icon-152x152.png}">
     <link rel="apple-touch-icon" sizes="167x167" th:href="@{/admin/icons/apple-touch-icon-167x167.png}">
     <link rel="apple-touch-icon" sizes="180x180" th:href="@{/admin/icons/apple-touch-icon-180x180.png}">
+    <!--/* admin.css brings in IBM Carbon (carbon.min.css, see build.gradle.kts) and puts the BSS theme on top */-->
     <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
     <script th:src="@{/webjars/htmx.org/dist/htmx.min.js}" defer></script>
     <script th:src="@{/admin/js/admin.js}" defer></script>
@@ -27,61 +28,70 @@
 <body th:hx-headers:inherited='|{"${_csrf?.headerName}": "${_csrf?.token}"}|'
       hx-status:4xx:inherited="target:body swap:innerHTML select:body push:false"
       hx-status:5xx:inherited="target:body swap:innerHTML select:body push:false">
-<a class="skip-link" href="#main" th:text="#{nav.skip}">Skip to content</a>
-<header class="admin-bar">
-    <nav class="container" th:with="sections=${ {'videos', 'events', 'members', 'labels'} },
-                                    inSection=${#lists.contains(sections, layoutSection)}">
-        <a th:href="@{/admin}" class="brand" th:title="#{nav.dashboard}"
-           th:aria-current="${layoutSection == 'dashboard'} ? 'page'"><strong>BSS</strong><span th:text="#{app.name}">admin</span></a>
-
-        <!--/* On narrow screens the sections fold into a menu: this button opens the list below as a popover */-->
-        <button type="button" class="menu-toggle" popovertarget="sections">
-            <span aria-hidden="true">☰</span>
-            <span class="sr-only" th:if="${inSection}" th:text="|#{nav.menu}:|">Menu:</span>
-            <span th:text="${inSection} ? #{${'nav.' + layoutSection}} : #{nav.menu}">Videos</span>
-        </button>
-        <ul id="sections" class="sections" popover>
+<a class="cds--skip-to-content skip-link" href="#main" th:text="#{nav.skip}">Skip to content</a>
+<!--/* Carbon's UI shell header. It stays dark in both colour schemes (admin.css), like the BSS badge. */-->
+<header class="cds--header admin-bar" th:aria-label="#{app.title}"
+        th:with="sections=${ {'videos', 'events', 'members', 'labels'} },
+                 inSection=${#lists.contains(sections, layoutSection)}">
+    <!--/* On narrow screens the sections fold into a menu: this button opens the list below as a popover */-->
+    <button type="button" class="cds--header__action menu-toggle" popovertarget="sections">
+        <svg th:replace="~{admin/fragments :: icon('menu', 20, '')}"></svg>
+        <span class="sr-only" th:if="${inSection}" th:text="|#{nav.menu}:|">Menu:</span>
+        <span th:text="${inSection} ? #{${'nav.' + layoutSection}} : #{nav.menu}">Videos</span>
+    </button>
+    <a th:href="@{/admin}" class="cds--header__name brand" th:title="#{nav.dashboard}"
+       th:aria-current="${layoutSection == 'dashboard'} ? 'page'"><strong class="badge">BSS</strong><span th:text="#{app.name}">admin</span></a>
+    <nav class="cds--header__nav" th:aria-label="#{nav.sections}">
+        <ul id="sections" class="cds--header__menu-bar sections" popover>
             <li th:each="section : ${sections}">
-                <a th:href="@{/admin/{section}(section=${section})}" th:aria-current="${layoutSection == section} ? 'page'"
-                   th:text="#{${'nav.' + section}}">Videos</a>
+                <a class="cds--header__menu-item" th:href="@{/admin/{section}(section=${section})}"
+                   th:aria-current="${layoutSection == section} ? 'page'">
+                    <span class="cds--text-truncate--end" th:text="#{${'nav.' + section}}">Videos</span>
+                </a>
             </li>
         </ul>
-
-        <!--/*
-          The signed-in person, as initials. They lead to their member page when they are a member. The menu with the
-          language and Log out opens on hover, or with the button (keyboard, touch).
-        */-->
-        <div class="profile" th:if="${currentUser}" th:with="me=${currentUser}">
-            <a th:if="${me.memberId}" class="avatar" th:href="@{/admin/members/{id}(id=${me.memberId})}"
-               th:title="#{nav.profile}" th:aria-label="#{nav.profile}">
-                <span class="initials" th:text="${me.initials}">KA</span>
-            </a>
-            <span th:unless="${me.memberId}" class="avatar"><span class="initials" th:text="${me.initials}">A</span></span>
-            <button type="button" class="profile-toggle" popovertarget="profile-menu">
-                <span class="sr-only" th:text="|#{nav.account}:|">Account menu:</span>
-                <span class="name" th:text="${me.name}">Kovács Anna</span>
-                <span aria-hidden="true">▾</span>
-            </button>
-            <div id="profile-menu" class="profile-menu" popover>
-                <p class="who" th:text="${me.name}">Kovács Anna</p>
-                <p class="language">
-                    <span th:text="#{nav.language}">Language</span>
-                    <!--/* The current address in the other language: see LanguageLinksAdvice */-->
-                    <a th:href="${languageLinks.en}" hreflang="en" lang="en" title="English"
-                       th:aria-current="${#locale.language == 'en'} ? 'true'">EN</a>
-                    <a th:href="${languageLinks.hu}" hreflang="hu" lang="hu" title="Magyar"
-                       th:aria-current="${#locale.language == 'hu'} ? 'true'">HU</a>
-                </p>
-                <form th:action="@{/admin/logout}" method="post">
-                    <button type="submit" th:text="#{nav.logout}">Log out</button>
-                </form>
-            </div>
-        </div>
     </nav>
+
+    <!--/*
+      The signed-in person, as initials. They lead to their member page when they are a member. The menu with the
+      language and Log out opens on hover, or with the button (keyboard, touch).
+    */-->
+    <div class="cds--header__global profile" th:if="${currentUser}" th:with="me=${currentUser}">
+        <a th:if="${me.memberId}" class="cds--header__action avatar" th:href="@{/admin/members/{id}(id=${me.memberId})}"
+           th:title="#{nav.profile}" th:aria-label="#{nav.profile}">
+            <span class="initials" th:text="${me.initials}">KA</span>
+        </a>
+        <span th:unless="${me.memberId}" class="cds--header__action avatar"><span class="initials" th:text="${me.initials}">A</span></span>
+        <button type="button" class="cds--header__menu-item profile-toggle" popovertarget="profile-menu">
+            <span class="sr-only" th:text="|#{nav.account}:|">Account menu:</span>
+            <span class="name" th:text="${me.name}">Kovács Anna</span>
+            <svg th:replace="~{admin/fragments :: icon('chevron--down', 16, '')}"></svg>
+        </button>
+        <div id="profile-menu" class="profile-menu" popover>
+            <p class="who" th:text="${me.name}">Kovács Anna</p>
+            <p class="language">
+                <span th:text="#{nav.language}">Language</span>
+                <!--/* The current address in the other language: see LanguageLinksAdvice */-->
+                <a th:href="${languageLinks.en}" hreflang="en" lang="en" title="English"
+                   th:aria-current="${#locale.language == 'en'} ? 'true'">EN</a>
+                <a th:href="${languageLinks.hu}" hreflang="hu" lang="hu" title="Magyar"
+                   th:aria-current="${#locale.language == 'hu'} ? 'true'">HU</a>
+            </p>
+            <form th:action="@{/admin/logout}" method="post">
+                <button type="submit" class="cds--btn cds--btn--ghost" th:text="#{nav.logout}">Log out</button>
+            </form>
+        </div>
+    </div>
 </header>
-<div class="container" th:if="${flash}">
-    <p class="flash" th:classappend="${flash.error} ? 'error'" th:attr="role=${flash.error} ? 'alert' : 'status'"
-       th:text="#{${flash.key}(${flash.arg})}">Saved.</p>
+<!--/*
+  Success messages are toasts in this live region; htmx responses may add more (hx-swap-oob). Errors stay in the
+  page as an alert, since a message that leaves by itself is easy to miss.
+*/-->
+<section id="toasts" class="toasts" role="status" th:aria-label="#{toast.region}">
+    <th:block th:if="${flash != null and !flash.error}"><div th:replace="~{admin/fragments :: toast(${flash})}"></div></th:block>
+</section>
+<div class="container" th:if="${flash != null and flash.error}">
+    <div th:replace="~{admin/fragments :: alert(null, #{${flash.key}(${flash.arg})})}"></div>
 </div>
 <main th:replace="${layoutContent}" class="container">Page content</main>
 </body>

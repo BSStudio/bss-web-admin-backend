@@ -105,11 +105,19 @@ internal class VideoPageControllerTest(
                 view { name("admin/video/list") }
                 content { string(containsString(TITLE)) }
                 content { string(containsString("""hx-put="$BASE_URL/$VIDEO_ID/visibility?visible=false"""")) }
-                content { string(containsString("<span>1–1 of 1 item</span>")) }
-                content { string(containsString("""<option value="25" selected="selected">25</option>""")) }
+                content {
+                    string(
+                        containsString("""<span class="cds--pagination__text cds--pagination__items-count">1–1 of 1 item</span>"""),
+                    )
+                }
+                content { string(containsString("""value="25" selected="selected">25</option>""")) }
                 content { string(containsString("""selected="selected">1</option>""")) }
-                content { string(containsString("<span>of 1 page</span>")) }
-                content { string(containsString("""<input type="checkbox" data-select-all="videoIds">""")) }
+                content { string(containsString("""<span class="cds--pagination__text">of 1 page</span>""")) }
+                content {
+                    string(
+                        containsString("""<input type="checkbox" class="cds--checkbox" id="select-all" data-select-all="videoIds">"""),
+                    )
+                }
                 content { string(containsString("""aria-sort="descending">""")) }
                 content { string(containsString("""href="/admin/videos?q=&amp;size=25&amp;sort=shootingDateStart,asc"""")) }
                 content { string(containsString("""href="/admin/videos?q=&amp;size=25&amp;sort=title,asc"""")) }
@@ -169,7 +177,11 @@ internal class VideoPageControllerTest(
                 content { string(stringContainsInOrder(opening.title, TITLE, older.title)) }
                 content { string(not(containsString(other.title))) }
                 content { string(containsString("""type="search" name="q" value="GOLYATABOR"""")) }
-                content { string(containsString("<span>1–3 of 3 items</span>")) }
+                content {
+                    string(
+                        containsString("""<span class="cds--pagination__text cds--pagination__items-count">1–3 of 3 items</span>"""),
+                    )
+                }
             }
     }
 
@@ -216,7 +228,27 @@ internal class VideoPageControllerTest(
                 status { isOk() }
                 content { string(containsString("""hx-put="$BASE_URL/$VIDEO_ID/visibility?visible=true"""")) }
                 content { string(containsString("""id="visible-$VIDEO_ID"""")) }
+                content { string(containsString("""role="switch"""")) }
+                content { string(containsString("""<div hx-swap-oob="beforeend:#toasts">""")) }
+                content { string(containsString("“$TITLE” is hidden from the website.")) }
                 content { string(not(containsString("<html"))) }
+            }
+    }
+
+    @Test
+    internal fun `should say in a toast that a video is shown`() {
+        every { videoService.changeVideoVisibility(listOf(VIDEO_ID), true) } returns listOf(VIDEO_ID)
+        every { videoService.findVideoById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO.copy(visible = true))
+
+        mockMvc
+            .put("$BASE_URL/$VIDEO_ID/visibility") {
+                with(oauth2Login())
+                with(csrf())
+                param("visible", "true")
+            }.andExpectAll {
+                status { isOk() }
+                content { string(containsString("""hx-put="$BASE_URL/$VIDEO_ID/visibility?visible=false"""")) }
+                content { string(containsString("“$TITLE” is shown on the website.")) }
             }
     }
 
@@ -236,6 +268,7 @@ internal class VideoPageControllerTest(
                 content {
                     string(containsString("""<small class="field-error" role="alert">Its event is hidden. Show the event first.</small>"""))
                 }
+                content { string(not(containsString("hx-swap-oob"))) }
             }
     }
 
@@ -336,7 +369,8 @@ internal class VideoPageControllerTest(
                 status { isOk() }
                 view { name("admin/video/new") }
                 model { attribute("form", NewVideoForm()) }
-                content { string(containsString("""aria-describedby="title-help" id="title" name="title" value="">""")) }
+                content { string(containsString("""id="title" required maxlength="250"""")) }
+                content { string(containsString("""aria-describedby="title-help" name="title" value="">""")) }
                 content { string(not(containsString("aria-invalid"))) }
                 content { string(not(containsString("form-error"))) }
             }
@@ -375,9 +409,11 @@ internal class VideoPageControllerTest(
                         containsString("""<small id="title-error" class="field-error">Another video already uses this title.</small>"""),
                     )
                 }
-                content { string(containsString("""aria-describedby="title-help title-error" id="title" name="title"""")) }
+                content { string(containsString("""id="title" required maxlength="250"""")) }
+                content { string(containsString("""aria-describedby="title-help title-error" name="title"""")) }
                 content { string(containsString("""aria-invalid="true"""")) }
-                content { string(containsString("""<p id="form-error" class="flash error" role="alert">Some fields need fixing.""")) }
+                content { string(containsString("""<div id="form-error" role="alert"""")) }
+                content { string(containsString("""<div class="cds--inline-notification__subtitle">Some fields need fixing.""")) }
             }
     }
 
@@ -440,13 +476,20 @@ internal class VideoPageControllerTest(
                 content { string(containsString(">$URL</textarea>")) }
                 content { string(containsString("""value="2026-08-13"""")) }
                 content { string(containsString(MEMBER.name)) }
-                content { string(containsString("""id="title" name="title" value="G&oacute;lyat&aacute;bor 2026 - V&aacute;m">""")) }
+                content { string(containsString("""id="title" required maxlength="250"""")) }
+                content { string(containsString("""name="title" value="G&oacute;lyat&aacute;bor 2026 - V&aacute;m">""")) }
                 content { string(not(containsString("aria-invalid"))) }
                 content { string(containsString("""data-unsaved="track">""")) }
                 content { string(containsString("Image uploads are coming in a later update.")) }
                 content { string(containsString("""<span class="unsaved" role="status" data-message="Unsaved changes"></span>""")) }
-                content { string(containsString("""<dialog id="delete-dialog" aria-labelledby="delete-dialog-title">""")) }
-                content { string(containsString("""<h2 id="delete-dialog-title">Delete “${DETAILED_VIDEO.title}”?</h2>""")) }
+                content { string(containsString("""<dialog id="delete-dialog" aria-labelledby="delete-dialog-title"""")) }
+                content {
+                    string(
+                        containsString(
+                            """<h2 class="cds--modal-header__heading" id="delete-dialog-title">Delete “${DETAILED_VIDEO.title}”?</h2>""",
+                        ),
+                    )
+                }
                 content { string(not(containsString("""autofocus="autofocus""""))) }
             }
     }
@@ -521,7 +564,8 @@ internal class VideoPageControllerTest(
             }.andExpectAll {
                 status { isOk() }
                 view { name("admin/video/edit") }
-                content { string(containsString("""aria-describedby="visible-error" id="visible1" name="visible"""")) }
+                content { string(containsString("""id="visible" name="visible" value="true"""")) }
+                content { string(containsString("""aria-describedby="visible-error"""")) }
                 content {
                     string(
                         containsString(
@@ -551,7 +595,8 @@ internal class VideoPageControllerTest(
                         containsString("""<small id="datesInOrder-error" class="field-error">The end can’t be before the start.</small>"""),
                     )
                 }
-                content { string(containsString("""aria-describedby="datesInOrder-error" id="shootingDateEnd"""")) }
+                content { string(containsString("""id="shootingDateEnd" required""")) }
+                content { string(containsString("""aria-describedby="datesInOrder-error" name="shootingDateEnd"""")) }
                 content {
                     string(
                         containsString("""<small id="description-error" class="field-error">Use at most 2,000 characters.</small>"""),
@@ -573,7 +618,8 @@ internal class VideoPageControllerTest(
             }.andExpectAll {
                 status { isOk() }
                 content { string(containsString("""<small id="shootingDateStart-error" class="field-error">Fill this in.</small>""")) }
-                content { string(containsString("""aria-describedby="shootingDateEnd-error" id="shootingDateEnd"""")) }
+                content { string(containsString("""id="shootingDateEnd" required""")) }
+                content { string(containsString("""aria-describedby="shootingDateEnd-error" name="shootingDateEnd"""")) }
                 content { string(not(containsString("datesInOrder-error"))) }
             }
     }
@@ -645,7 +691,7 @@ internal class VideoPageControllerTest(
                 param("position", " $POSITION ")
             }.andExpectAll {
                 status { isOk() }
-                content { string(containsString("""<section id="crew" class="panel">""")) }
+                content { string(containsString("""<section id="crew" class="cds--tile panel">""")) }
                 content { string(containsString("""autofocus="autofocus"""")) }
                 content { string(not(containsString("<html"))) }
             }

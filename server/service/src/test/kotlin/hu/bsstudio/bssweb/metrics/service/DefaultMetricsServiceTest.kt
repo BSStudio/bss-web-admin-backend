@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.metrics.service
 
 import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
+import hu.bsstudio.bssweb.label.repository.LabelRepository
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.metrics.model.BssMetrics
 import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
@@ -17,6 +18,7 @@ internal class DefaultMetricsServiceTest(
     @param:MockK private val videoRepository: SimpleVideoRepository,
     @param:MockK private val eventRepository: SimpleEventRepository,
     @param:MockK private val memberRepository: MemberRepository,
+    @param:MockK private val labelRepository: LabelRepository,
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultMetricsService
@@ -26,6 +28,7 @@ internal class DefaultMetricsServiceTest(
         every { videoRepository.count() } returns VIDEO_COUNT
         every { eventRepository.count() } returns EVENT_COUNT
         every { memberRepository.count() } returns MEMBER_COUNT
+        every { labelRepository.count() } returns LABEL_COUNT
 
         val actual = underTest.getMetrics()
 
@@ -36,6 +39,8 @@ internal class DefaultMetricsServiceTest(
         private const val VIDEO_COUNT = 6969L
         private const val EVENT_COUNT = 420L
         private const val MEMBER_COUNT = 125L
-        private val BSS_METRICS = BssMetrics(videoCount = VIDEO_COUNT, eventCount = EVENT_COUNT, memberCount = MEMBER_COUNT)
+        private const val LABEL_COUNT = 37L
+        private val BSS_METRICS =
+            BssMetrics(videoCount = VIDEO_COUNT, eventCount = EVENT_COUNT, memberCount = MEMBER_COUNT, labelCount = LABEL_COUNT)
     }
 }

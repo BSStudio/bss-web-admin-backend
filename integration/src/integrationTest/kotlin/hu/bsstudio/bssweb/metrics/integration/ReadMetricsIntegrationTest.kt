@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.metrics.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
+import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
 import hu.bsstudio.bssweb.metrics.client.MetricsClient
 import hu.bsstudio.bssweb.metrics.model.BssMetrics
@@ -21,7 +22,7 @@ class ReadMetricsIntegrationTest(
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!! shouldBeEqual BssMetrics(0, 0, 0)
+            body!! shouldBeEqual BssMetrics(0, 0, 0, 0)
         }
     }
 
@@ -30,12 +31,13 @@ class ReadMetricsIntegrationTest(
         this.videoRepository.save(DetailedVideoEntity(title = "title"))
         this.eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
         this.memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
+        this.labelRepository.save(LabelEntity(name = "name", description = "description"))
 
         val actual = this.client.getMetrics()
 
         assertSoftly(actual) {
             statusCode shouldBeEqual HttpStatusCode.valueOf(200)
-            body!! shouldBeEqual BssMetrics(1, 1, 1)
+            body!! shouldBeEqual BssMetrics(1, 1, 1, 1)
         }
     }
 }

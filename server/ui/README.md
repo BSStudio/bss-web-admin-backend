@@ -1,8 +1,9 @@
 # UI module
 
 This module holds the admin UI: server-rendered pages under `/admin`.
-It uses [Thymeleaf][thymeleaf] templates, [htmx][htmx] for partial page updates and one plain stylesheet of our own.
-There is no JavaScript or CSS build: htmx comes in as a WebJar.
+It uses [Thymeleaf][thymeleaf] templates, [htmx][htmx] for partial page updates and [IBM Carbon][carbon]'s styles
+with the BSS theme on top. There is no JavaScript or CSS build: htmx comes in as a WebJar, and Gradle takes Carbon's
+precompiled stylesheet from npm (`carbonStyles` in `build.gradle.kts`).
 
 Controllers call the services directly, the same way the `web` module does.
 Keep business logic in the `service` module.
@@ -23,18 +24,18 @@ Keep business logic in the `service` module.
 | `resources/templates/admin/layout.html`    | Page shell: head, top bar, flash message, language switch  |
 | `resources/templates/admin/fragments.html` | Shared pieces: search, sort, pagination, dates, dialogs    |
 | `resources/templates/admin/<section>/`     | `list.html`, `new.html`, `edit.html` of a section          |
-| `resources/static/admin/css/admin.css`     | Layout, and a few tokens for sizes and system colours      |
-| `resources/static/admin/js/admin.js`       | Unsaved changes, select all, fallbacks; our only script    |
+| `resources/static/admin/css/admin.css`     | Carbon in a layer, the BSS theme tokens, page layout       |
+| `resources/static/admin/js/admin.js`       | Unsaved changes, select all, toasts; our only script       |
 | `resources/messages*.properties`           | UI text in English (default) and Hungarian                 |
 
 ## Page patterns
 
-| Section |                              List                               |                Edit page                |
-|---------|-----------------------------------------------------------------|-----------------------------------------|
-| Videos  | Newest first; visibility checkbox; bulk publish/hide            | Details, URLs, labels; crew panel       |
-| Events  | Newest first; video count; visibility checkbox                  | Details; videos panel (search, add)     |
-| Members | By name, archived last; archived checkbox; bulk archive, status | Profile, status, joined date, archived  |
-| Labels  | One page: video count, add form in a side panel, delete dialog  | No edit page; the service has no update |
+| Section |                              List                              |                Edit page                |
+|---------|----------------------------------------------------------------|-----------------------------------------|
+| Videos  | Newest first; visibility switch; bulk publish/hide             | Details, URLs, labels; crew panel       |
+| Events  | Newest first; video count; visibility switch                   | Details; videos panel (search, add)     |
+| Members | By name, archived last; archived switch; bulk archive, status  | Profile, status, joined date, archived  |
+| Labels  | One page: video count, add form in a side panel, delete dialog | No edit page; the service has no update |
 
 Videos is the reference section; new sections follow its structure. The event and member services return every
 item at once, so their lists are paged in memory with `ui/paging/Paging.kt`.
@@ -58,7 +59,7 @@ thousand rows a search takes well under a second; move it into the database when
   a footer with the page size, the item range, a page list and previous / next. Searching, sorting and paging load
   the list into `#results` with htmx and update the address, so reloading or sharing it keeps the view.
   For an htmx request the controller renders only the `results` fragment (htmx-spring-boot's `HtmxRequest`).
-  Row actions that change one value (the visibility checkbox) use htmx and swap only their own table cell.
+  Row actions that change one value (the visibility switch) use htmx and swap only their own table cell.
 - **Dates** print in the page's language with `admin/fragments :: dates(from, to)`, inside `<time datetime>`.
 - **Selection.** Bulk actions are a plain form; the row checkboxes join it with `form="bulk"`, and so do the hidden
   `q`, `page`, `size` and `sort` fields under the table, which the controller binds as `TableQuery` and passes to
@@ -98,17 +99,32 @@ thousand rows a search takes well under a second; move it into the database when
 
 ## Look and feel
 
-For now the stylesheet only lays the pages out; the look comes in a later change.
+The pages use [Carbon][carbon]'s components and classes (`cds--btn`, `cds--data-table`, `cds--text-input` …), as
+in Carbon's own markup. Carbon's stylesheet comes from `@carbon/styles` on npm: the `carbonStyles` task downloads the
+version in `gradle/libs.versions.toml` (Renovate updates it), checks it against npm's integrity hash and serves it as
+`/admin/css/carbon.min.css`, without its `@font-face` rules, which load IBM Plex from IBM's CDN and which the
+Content-Security-Policy would block. The type falls back to the system font.
 
-- No CSS framework. Form controls are the browser's own, and so is the focus ring.
-- Colours are system colours (`Canvas`, `CanvasText`, `ButtonFace` …) or mixed from them with `color-mix()`,
-  so light and dark mode follow the browser (`color-scheme: light dark`). The one exception is `--danger`.
-- Sizes that repeat are tokens on `:root`: `--bar-height`, `--control-height`, `--gap`.
-  Add new colours and sizes as tokens, never as literals in component rules.
-- Buttons: plain (default), `ghost`, `danger`, `danger ghost`. `secondary` marks the less important action;
-  it looks the same for now.
-- Newer features are progressive: anchor positioning places the profile menu, and `appearance: base-select` makes
-  long select lists scroll, where the browser supports them.
+- `admin.css` imports Carbon into a cascade layer, so its own rules win without matching Carbon's specificity.
+- The theme is Carbon's White and Gray 100 themes as one `light-dark()` per `--cds-*` token, so the browser's colour
+  scheme picks light or dark. Carbon's greys are tinted towards the brand blue, and its blues are the BSS icon's.
+- The brand appears only as the orange-to-blue gradient (`--bss-edge`, blended in OKLCH) as a thin line along an
+  edge: under the top bar (it runs while htmx loads), under a primary button or a dashboard tile on hover, and along
+  the top of a dialog. The BSS badge in the top bar is the only rounded shape apart from the switches.
+- Primary buttons are ink (near-black, near-white in dark) instead of Carbon's blue; blue is for links and focus.
+  One primary per page; `cds--btn--secondary` for Cancel, `cds--btn--danger--ghost` for Delete.
+- The top bar stays dark in both schemes (`color-scheme: dark` on it), and the selection bar takes the opposite
+  scheme to the page, like Carbon's inverse surfaces.
+- What Carbon does with JavaScript is done in CSS: the selection bar shows with `:has()`, the switch is Carbon's
+  toggle drawn by a real checkbox's `:checked`, and the delete dialog is Carbon's modal in a `<dialog>`.
+- Write checkboxes out instead of `th:field`: its hidden `_<field>` marker would come between the box and its label,
+  which Carbon's stylesheet needs side by side. Put the marker before the box.
+- Success messages are toasts (`#toasts`, top right, gone after five seconds unless hovered or focused); errors stay
+  in the page as an inline notification. A row switch's response adds its toast out of band
+  (`hx-swap-oob="beforeend:#toasts"`).
+- Features up to Baseline 2026 are used freely (anchor positioning, invoker commands, `light-dark()`,
+  `field-sizing`). Newer ones only where nothing depends on them: a dialog's fade out (Chromium) and
+  `appearance: base-select`, which makes long select lists scroll where the browser supports it.
 
 ## Errors
 
@@ -142,7 +158,7 @@ change. The video and member edit pages already have a panel for the image, with
 - A required field left empty gets a red border once you move on (`:user-invalid`). Errors from the server set
   `aria-invalid="true"` on the field and point `aria-describedby` at its message; the alert at the top of the form
   is read out as the page shows it.
-- htmx swaps keep your place. htmx puts focus back on an element with the same `id` (the visibility checkbox), and
+- htmx swaps keep your place. htmx puts focus back on an element with the same `id` (the visibility switch), and
   focuses an `autofocus` element in swapped-in content (the crew member list after adding or removing crew).
 - Dialogs open with the safe choice (*Cancel*) focused; Esc closes them. Esc also hides the profile menu that a
   mouse over the profile opened.
@@ -289,4 +305,5 @@ Browser checks (Playwright screenshots, axe, Lighthouse, HTML and CSS linting) a
 
 [thymeleaf]: https://www.thymeleaf.org/
 [htmx]: https://htmx.org/
+[carbon]: https://carbondesignsystem.com/
 
