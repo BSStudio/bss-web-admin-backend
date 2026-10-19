@@ -44,6 +44,18 @@ internal class UiSecurityConfigTest(
     }
 
     @Test
+    internal fun `should send htmx back to its page when the session has expired`() {
+        mockMvc
+            .get("/admin/videos") {
+                header("HX-Request", "true")
+                header("HX-Current-URL", "http://localhost/admin/videos?page=2")
+            }.andExpectAll {
+                status { isUnauthorized() }
+                header { string("HX-Redirect", "/admin/videos?page=2") }
+            }
+    }
+
+    @Test
     internal fun `should start the authorization code flow`() {
         mockMvc.get("/oauth2/authorization/authentik").andExpect {
             status { is3xxRedirection() }
