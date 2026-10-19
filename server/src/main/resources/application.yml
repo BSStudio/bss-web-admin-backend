@@ -3,6 +3,19 @@ spring:
     name: BSS Web admin API
   jpa:
     open-in-view: false
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          cache-public: true
+          max-age: 365d
+      chain:
+        strategy:
+          content:
+            enabled: true
+            paths:
+            - /admin/**
+            - /webjars/**
 server:
   forward-headers-strategy: native
 springdoc:

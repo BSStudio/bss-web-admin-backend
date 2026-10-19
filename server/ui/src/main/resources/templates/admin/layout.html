@@ -11,8 +11,16 @@
     */-->
     <meta name="htmx-config" content='{"includeIndicatorCSS": false, "history": "reload"}'>
     <title th:replace="${layoutTitle}">BSS admin</title>
+    <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" th:href="@{/admin/icons/favicon.ico}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/admin/icons/favicon-16x16.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/admin/icons/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="48x48" th:href="@{/admin/icons/favicon-48x48.png}">
+    <link rel="apple-touch-icon" sizes="120x120" th:href="@{/admin/icons/apple-touch-icon-120x120.png}">
+    <link rel="apple-touch-icon" sizes="152x152" th:href="@{/admin/icons/apple-touch-icon-152x152.png}">
+    <link rel="apple-touch-icon" sizes="167x167" th:href="@{/admin/icons/apple-touch-icon-167x167.png}">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/admin/icons/apple-touch-icon-180x180.png}">
     <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
-    <script th:src="@{/admin/webjars/htmx.org/dist/htmx.min.js}" defer></script>
+    <script th:src="@{/webjars/htmx.org/dist/htmx.min.js}" defer></script>
     <script th:src="@{/admin/js/admin.js}" defer></script>
 </head>
 <!--/* htmx: every request sends the CSRF token, and an error response (the error page) replaces the whole page */-->

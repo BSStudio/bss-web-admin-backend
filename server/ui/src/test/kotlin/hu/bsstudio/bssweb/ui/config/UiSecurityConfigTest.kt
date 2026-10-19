@@ -76,7 +76,7 @@ internal class UiSecurityConfigTest(
         listOf(
             "/admin/css/admin.css",
             "/admin/js/admin.js",
-            "/admin/webjars/htmx.org/dist/htmx.min.js",
+            "/webjars/htmx.org/dist/htmx.min.js",
         ).forEach { url ->
             mockMvc.get(url).andExpect { status { isOk() } }
         }
