@@ -987,11 +987,19 @@ dialog.modal .cds--modal-content p {
     fill: var(--bss-on-ink);
 }
 
-.cds--btn--primary:hover {
-    background-image: var(--bss-edge);
+/*
+ * The edge's size and place are set before the hover, so a hover only swaps the image: Carbon transitions the
+ * whole background, which would otherwise sweep the gradient down over the label.
+ */
+.cds--btn--primary,
+.tile {
     background-position: bottom;
     background-size: 100% 3px;
     background-repeat: no-repeat;
+}
+
+.cds--btn--primary:hover {
+    background-image: var(--bss-edge);
 }
 
 /* ---------- Image placeholders ---------- */
@@ -1066,11 +1074,12 @@ dialog.modal .cds--modal-content p {
     text-decoration: none;
 }
 
+.tile {
+    background-size: 100% 2px;
+}
+
 .tile:hover {
     background-image: var(--bss-edge);
-    background-position: bottom;
-    background-size: 100% 2px;
-    background-repeat: no-repeat;
 }
 
 .tile .metric {
