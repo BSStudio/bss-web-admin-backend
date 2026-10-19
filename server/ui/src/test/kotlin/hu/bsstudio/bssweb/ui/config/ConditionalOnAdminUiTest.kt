@@ -21,6 +21,13 @@ internal class ConditionalOnAdminUiTest {
             .run { it.getBeansOfType(AdminUiBean::class.java) shouldHaveSize 1 }
     }
 
+    @Test
+    internal fun `should turn the UI on with a registration of another id`() {
+        runner
+            .withPropertyValues("spring.security.oauth2.client.registration.authelia.client-id=admin-ui")
+            .run { it.getBeansOfType(AdminUiBean::class.java) shouldHaveSize 1 }
+    }
+
     @Configuration
     @ConditionalOnAdminUi
     internal class AdminUiBean

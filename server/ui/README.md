@@ -123,7 +123,8 @@ and API responses keep Spring's defaults, without messages.
   with the page, reference and details filled in. Issue form fields are pre-filled by their `id`, so keep the ids
   in the form and the parameter names in `AdminErrorAttributes` the same.
 - When an htmx update fails, the error page replaces the whole page (`hx-status:4xx` and `hx-status:5xx` on
-  `<body>` in `layout.html`). When the session has expired, htmx reloads the page, which leads to the login.
+  `<body>` in `layout.html`). When the session has expired, htmx loads the page it was on
+  (htmx-spring-boot's `HxRedirectToPageAuthenticationEntryPoint`), which leads to the login.
 - The admin filter chain serves `/error` and permits it, so the page also renders after a session has expired.
 
 ## Images
@@ -187,10 +188,11 @@ Prefer the typographic apostrophe (’), which needs no escaping.
 The admin UI uses its own filter chain with OAuth2 login (authorization code flow) and session cookies.
 The REST API under `/api` keeps its opaque-token filter chain from the `web` module.
 
-The UI is enabled only when the `authentik` client registration is configured. Every UI bean (the filter chain,
-the controllers, the error details) carries `@ConditionalOnAdminUi`, so without it nothing of the UI exists:
-`/admin` falls through to the API filter chain, which answers `401` without a token and has no admin page to serve
-with one.
+The UI is enabled only when a client registration is configured, and logs in with it. Production calls it
+`authentik`, as in the table below, but the id is up to the deployment: configure one registration, with any id.
+Every UI bean (the filter chain, the controllers, the error details) carries `@ConditionalOnAdminUi`, so without it
+nothing of the UI exists: `/admin` falls through to the API filter chain, which answers `401` without a token and has
+no admin page to serve with one.
 
 **Who can use it.** Anyone who can finish the Authentik login can change every video, event and member; the app
 itself checks no group. Restrict the login with the Authentik application's policy bindings (e.g. a group
