@@ -6,7 +6,7 @@ spotless = "8.10.4"
 detekt = "2.0.0-alpha.6"
 kotlin = "2.4.21"
 htmx = "4.0.0"
-htmx-spring-boot = "6.0.0"
+htmx-spring-boot = "6.0.1"
 # Security overrides: raise versions Spring Boot 4.1.1 still manages at vulnerable releases.
 # Drop each one once springBoot manages an equal or newer version.
 jackson = "3.2.3"
