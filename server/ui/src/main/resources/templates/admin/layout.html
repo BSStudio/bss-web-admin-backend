@@ -11,14 +11,11 @@
     */-->
     <meta name="htmx-config" content='{"includeIndicatorCSS": false, "history": "reload"}'>
     <title th:replace="${layoutTitle}">BSS admin</title>
-    <link rel="icon" type="image/x-icon" sizes="16x16 32x32 48x48" th:href="@{/admin/icons/favicon.ico}">
-    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/admin/icons/favicon-16x16.png}">
-    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/admin/icons/favicon-32x32.png}">
-    <link rel="icon" type="image/png" sizes="48x48" th:href="@{/admin/icons/favicon-48x48.png}">
-    <link rel="apple-touch-icon" sizes="120x120" th:href="@{/admin/icons/apple-touch-icon-120x120.png}">
-    <link rel="apple-touch-icon" sizes="152x152" th:href="@{/admin/icons/apple-touch-icon-152x152.png}">
-    <link rel="apple-touch-icon" sizes="167x167" th:href="@{/admin/icons/apple-touch-icon-167x167.png}">
-    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/admin/icons/apple-touch-icon-180x180.png}">
+    <link rel="icon" type="image/svg+xml" th:href="@{/admin/icons/favicon.svg}">
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/admin/icons/favicon-96x96.png}">
+    <link rel="shortcut icon" th:href="@{/admin/icons/favicon.ico}">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/admin/icons/apple-touch-icon.png}">
+    <link rel="manifest" th:href="@{/admin/icons/site.webmanifest}">
     <!--/* admin.css brings in IBM Carbon (carbon.min.css, see build.gradle.kts) and puts the BSS theme on top */-->
     <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
     <script th:src="@{/webjars/htmx.org/dist/htmx.min.js}" defer></script>
@@ -29,7 +26,7 @@
       hx-status:4xx:inherited="target:body swap:innerHTML select:body push:false"
       hx-status:5xx:inherited="target:body swap:innerHTML select:body push:false">
 <a class="cds--skip-to-content skip-link" href="#main" th:text="#{nav.skip}">Skip to content</a>
-<!--/* Carbon's UI shell header. It stays dark in both colour schemes (admin.css), like the BSS badge. */-->
+<!--/* Carbon's UI shell header. It stays dark in both colour schemes (admin.css), like the BSS logo. */-->
 <header class="cds--header admin-bar" th:aria-label="#{app.title}"
         th:with="sections=${ {'videos', 'events', 'members', 'labels'} },
                  inSection=${#lists.contains(sections, layoutSection)}">
@@ -40,7 +37,8 @@
         <span th:text="${inSection} ? #{${'nav.' + layoutSection}} : #{nav.menu}">Videos</span>
     </button>
     <a th:href="@{/admin}" class="cds--header__name brand" th:title="#{nav.dashboard}"
-       th:aria-current="${layoutSection == 'dashboard'} ? 'page'"><strong class="badge">BSS</strong><span th:text="#{app.name}">admin</span></a>
+       th:aria-current="${layoutSection == 'dashboard'} ? 'page'"><img class="brand-logo"
+          th:src="@{/admin/icons/logo-horizontal.svg}" th:alt="BSS" width="96" height="56"></a>
     <nav class="cds--header__nav" th:aria-label="#{nav.sections}">
         <ul id="sections" class="cds--header__menu-bar sections" popover>
             <li th:each="section : ${sections}">

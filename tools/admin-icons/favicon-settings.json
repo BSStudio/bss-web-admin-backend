@@ -1,0 +1,46 @@
+{
+  "icon": {
+    "desktop": {
+      "regularIconTransformation": {
+        "type": "none",
+        "backgroundRadius": 0,
+        "backgroundColor": "#141414",
+        "imageScale": 1,
+        "brightness": 1
+      },
+      "darkIconType": "none",
+      "darkIconTransformation": {
+        "type": "none",
+        "backgroundRadius": 0,
+        "backgroundColor": "#141414",
+        "imageScale": 1,
+        "brightness": 1
+      }
+    },
+    "touch": {
+      "appTitle": "BSS admin",
+      "transformation": {
+        "type": "none",
+        "backgroundRadius": 0,
+        "backgroundColor": "#141414",
+        "imageScale": 1,
+        "brightness": 1
+      }
+    },
+    "webAppManifest": {
+      "name": "BSS admin",
+      "shortName": "BSS admin",
+      "backgroundColor": "#141414",
+      "themeColor": "#141414",
+      "transformation": {
+        "type": "none",
+        "backgroundRadius": 0,
+        "backgroundColor": "#141414",
+        "imageScale": 1,
+        "brightness": 1
+      }
+    }
+  },
+  "path": "/admin/icons/",
+  "skipMetadataInjection": true
+}
