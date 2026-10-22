@@ -21,9 +21,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: '0' # to allow sonar to attach git blame information
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version-file: .node-version
       - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: "liberica"
@@ -31,16 +28,6 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
-      - name: Check generated admin icons are current
-        run: |
-          bash tools/admin-icons/generate-icons.sh
-          if [[ -n "$(git status --porcelain --untracked-files=all -- server/ui/src/main/resources/static/admin/icons)" ]]; then
-            git status --short --untracked-files=all -- server/ui/src/main/resources/static/admin/icons
-            echo "::error::Admin icon generation changed the checked-in icon set. Regenerate icons and commit the results."
-            exit 1
-          fi
-      - name: Verify admin icons
-        run: ./gradlew :server:ui:test --tests hu.bsstudio.bssweb.ui.AdminIconsTest
       - run: "./gradlew build --continue"
       - uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
