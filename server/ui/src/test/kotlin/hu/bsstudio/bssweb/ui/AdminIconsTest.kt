@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.core.io.ClassPathResource
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import javax.imageio.ImageIO
 
 internal class AdminIconsTest {
     @Test
@@ -43,6 +44,23 @@ internal class AdminIconsTest {
         assertEquals(3, ico.getShort(4).toInt(), "ICO image count")
         val sizes = (0..2).map { index -> (ico.get(6 + index * 16).toInt() and 0xff).let { if (it == 0) 256 else it } }
         assertEquals(listOf(16, 32, 48), sizes.sorted())
+    }
+
+    @Test
+    internal fun `device icons should be opaque to their corners`() {
+        listOf("apple-touch-icon.png", "web-app-manifest-192x192.png", "web-app-manifest-512x512.png").forEach { name ->
+            val image = icon(name).inputStream.use { ImageIO.read(it) }
+            val corners = listOf(0 to 0, image.width - 1 to 0, 0 to image.height - 1, image.width - 1 to image.height - 1)
+            corners.forEach { (x, y) -> assertEquals(0xff, image.getRGB(x, y) ushr 24, "$name is opaque at $x,$y") }
+        }
+    }
+
+    @Test
+    internal fun `svg favicon should be dark by default and light in the light scheme`() {
+        val favicon = readResource("static/icons/favicon.svg")
+        assertTrue(favicon.contains("class=\"tile\" fill=\"#151619\""))
+        assertTrue(favicon.contains("<g class=\"letters\" fill=\"#fff\">"))
+        assertTrue(favicon.contains("@media (prefers-color-scheme: light)"))
     }
 
     @Test

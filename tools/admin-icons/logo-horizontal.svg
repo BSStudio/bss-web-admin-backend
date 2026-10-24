@@ -1,12 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 28" role="img" aria-labelledby="title">
   <title id="title">BSS</title>
+  <!--
+    Always dark: it sits in the top bar, which is dark in both colour schemes. The tile is the stylesheet's dark page
+    background.
+  -->
   <defs>
+    <!-- The stylesheet blends the frame in OKLCH; SVG gradients blend only in sRGB, so these stops sample that blend. -->
     <linearGradient id="frame" x1="0%" y1="100%" x2="100%" y2="0%">
       <stop offset="0" stop-color="#f29050" />
+      <stop offset="0.1667" stop-color="#f6796b" />
+      <stop offset="0.3333" stop-color="#ee678f" />
+      <stop offset="0.5" stop-color="#d95db6" />
+      <stop offset="0.6667" stop-color="#b85bdb" />
+      <stop offset="0.8333" stop-color="#895ff5" />
       <stop offset="1" stop-color="#4168fe" />
     </linearGradient>
   </defs>
-  <rect x="1.5" y="1.5" width="45" height="25" rx="4.5" fill="#141414" stroke="url(#frame)" stroke-width="3" />
+  <rect x="1.5" y="1.5" width="45" height="25" rx="4.5" fill="#151619" stroke="url(#frame)" stroke-width="3" />
   <!-- BSS is outlined from Roboto Bold so the mark renders identically on every device. -->
   <g fill="#fff">
     <path d="M700 639L326 639L324 845L638 845Q721 845 774 866.5Q827 888 853.5 929.5Q880 971 880 1031Q880 1099 854.5 1141Q829 1183 775.5 1202Q722 1221 638 1221L430 1221L430 0L130 0L130 1456L638 1456Q765 1456 865.5 1432Q966 1408 1036 1359Q1106 1310 1143 1235.5Q1180 1161 1180 1059Q1180 969 1139.5 893Q1099 817 1012.5 769Q926 721 787 716ZM687 0L244 0L361 234L687 234Q766 234 816 259.5Q866 285 890 329Q914 373 914 430Q914 494 892.5 541Q871 588 824 613.5Q777 639 700 639L411 639L413 845L773 845L842 764Q975 766 1056.5 717.5Q1138 669 1175.5 592Q1213 515 1213 427Q1213 287 1152 191.5Q1091 96 973.5 48Q856 0 687 0Z" transform="translate(8.4598 20) scale(0.00830078125 -0.00830078125)" />
