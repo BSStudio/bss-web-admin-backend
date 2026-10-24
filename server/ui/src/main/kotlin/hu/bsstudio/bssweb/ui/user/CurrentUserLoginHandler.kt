@@ -16,10 +16,6 @@ import org.springframework.security.web.authentication.SavedRequestAwareAuthenti
 class CurrentUserLoginHandler(
     private val memberService: ObjectProvider<MemberService>,
 ) : SavedRequestAwareAuthenticationSuccessHandler() {
-    init {
-        defaultTargetUrl = "/"
-    }
-
     override fun onAuthenticationSuccess(
         request: HttpServletRequest,
         response: HttpServletResponse,

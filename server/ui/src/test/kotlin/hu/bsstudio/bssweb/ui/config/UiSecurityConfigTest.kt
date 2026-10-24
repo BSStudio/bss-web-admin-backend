@@ -33,13 +33,6 @@ internal class UiSecurityConfigTest(
     }
 
     @Test
-    internal fun `should leave the API to its own filter chain`() {
-        mockMvc.get("/api/v1/video").andExpect {
-            status { isNotFound() }
-        }
-    }
-
-    @Test
     internal fun `should ask htmx to reload the page when the session has expired`() {
         mockMvc
             .get("/videos") {

@@ -48,10 +48,10 @@ class UiWebConfig : WebMvcConfigurer {
         val redirect = UrlHandlerFilter.trailingSlashHandler("/**").redirect(HttpStatus.PERMANENT_REDIRECT).build()
         val filter =
             Filter { request, response, chain ->
-                if (UiPaths.isUi(request as HttpServletRequest)) {
-                    redirect.doFilter(request, response, chain)
-                } else {
+                if (ApiPaths.matches(request as HttpServletRequest)) {
                     chain.doFilter(request, response)
+                } else {
+                    redirect.doFilter(request, response, chain)
                 }
             }
         return FilterRegistrationBean(filter).apply { order = Ordered.HIGHEST_PRECEDENCE }
@@ -61,7 +61,7 @@ class UiWebConfig : WebMvcConfigurer {
         registry
             .addInterceptor(LocaleChangeInterceptor().apply { paramName = LOCALE_PARAM })
             .addPathPatterns("/**")
-            .excludePathPatterns(UiPaths.EXCLUDED)
+            .excludePathPatterns(ApiPaths.PATTERN)
     }
 
     companion object {

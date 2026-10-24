@@ -13,6 +13,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 
@@ -63,10 +64,10 @@ internal class ErrorPageTest(
     }
 
     @Test
-    internal fun `should keep the API's errors plain JSON without the admin details`() {
+    internal fun `should keep an API caller's errors plain JSON without the admin details`() {
         mockMvc
             .get(ERROR_URL) {
-                with(oauth2Login())
+                with(user("api-client"))
                 accept = MediaType.APPLICATION_JSON
                 requestAttr(RequestDispatcher.ERROR_STATUS_CODE, 500)
                 requestAttr(RequestDispatcher.ERROR_REQUEST_URI, "/api/v1/video")

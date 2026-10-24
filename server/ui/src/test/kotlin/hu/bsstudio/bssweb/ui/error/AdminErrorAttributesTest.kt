@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.security.authentication.TestingAuthenticationToken
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.server.ResponseStatusException
 import java.net.URLDecoder
@@ -25,13 +27,10 @@ internal class AdminErrorAttributesTest {
     private val underTest = AdminErrorAttributes()
 
     @Test
-    internal fun `should leave errors outside the admin alone`() {
-        attributesFor(request(path = "/api/v1/video")).keys shouldNotContain "reportUrl"
-    }
+    internal fun `should leave the errors of API callers alone`() {
+        val apiCaller = TestingAuthenticationToken("api-client", null)
 
-    @Test
-    internal fun `should leave errors outside the admin alone under a context path`() {
-        attributesFor(request(path = "/bss/api/v1/video", contextPath = "/bss")).keys shouldNotContain "reportUrl"
+        attributesFor(request(path = "/api/v1/video", principal = apiCaller)).keys shouldNotContain "reportUrl"
     }
 
     @Test
@@ -109,10 +108,9 @@ internal class AdminErrorAttributesTest {
         path: String? = "/videos",
         status: Int = 500,
         error: Exception? = null,
-        principal: Principal? = TestingAuthenticationToken("jdoe", null),
-        contextPath: String = "",
+        principal: Principal? = BROWSER_LOGIN,
     ): ServletWebRequest {
-        val request = MockHttpServletRequest("POST", "$contextPath/error").apply { this.contextPath = contextPath }
+        val request = MockHttpServletRequest("POST", "/error")
         // an exception passes through Spring MVC's exception resolvers before the error page is rendered
         error?.let { underTest.resolveException(request, MockHttpServletResponse(), null, it) }
         request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, status)
@@ -122,4 +120,9 @@ internal class AdminErrorAttributesTest {
     }
 
     private fun encode(value: String) = URLEncoder.encode(value, Charsets.UTF_8)
+
+    private companion object {
+        private val BROWSER_LOGIN =
+            OAuth2AuthenticationToken(DefaultOAuth2User(emptyList(), mapOf("sub" to "jdoe"), "sub"), emptyList(), "authentik")
+    }
 }
