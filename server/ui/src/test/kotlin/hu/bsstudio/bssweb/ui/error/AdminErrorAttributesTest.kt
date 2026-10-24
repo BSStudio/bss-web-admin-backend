@@ -30,6 +30,11 @@ internal class AdminErrorAttributesTest {
     }
 
     @Test
+    internal fun `should leave errors outside the admin alone under a context path`() {
+        attributesFor(request(path = "/bss/api/v1/video", contextPath = "/bss")).keys shouldNotContain "reportUrl"
+    }
+
+    @Test
     internal fun `should leave errors without a path alone`() {
         attributesFor(request(path = null)).keys shouldNotContain "reportUrl"
     }
@@ -105,8 +110,9 @@ internal class AdminErrorAttributesTest {
         status: Int = 500,
         error: Exception? = null,
         principal: Principal? = TestingAuthenticationToken("jdoe", null),
+        contextPath: String = "",
     ): ServletWebRequest {
-        val request = MockHttpServletRequest("POST", "/error")
+        val request = MockHttpServletRequest("POST", "$contextPath/error").apply { this.contextPath = contextPath }
         // an exception passes through Spring MVC's exception resolvers before the error page is rendered
         error?.let { underTest.resolveException(request, MockHttpServletResponse(), null, it) }
         request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, status)

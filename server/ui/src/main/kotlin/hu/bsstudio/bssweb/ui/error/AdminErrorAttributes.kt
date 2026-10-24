@@ -42,7 +42,7 @@ class AdminErrorAttributes : DefaultErrorAttributes() {
     ): MutableMap<String, Any?> {
         val attributes = super.getErrorAttributes(webRequest, options)
         val path = attributes["path"] as? String
-        if (path == null || !UiPaths.isUi(path) || webRequest.userPrincipal == null) {
+        if (path == null || !UiPaths.isUi(path.removePrefix(webRequest.contextPath)) || webRequest.userPrincipal == null) {
             return attributes
         }
         val status = attributes["status"] as Int
