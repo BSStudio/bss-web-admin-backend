@@ -1,6 +1,6 @@
 [versions]
 springdoc = "3.1.1"
-springBoot = "4.1.1"
+springBoot = "4.1.2"
 kotest = "6.2.6"
 spotless = "8.10.4"
 detekt = "2.0.0-alpha.6"
@@ -8,7 +8,7 @@ kotlin = "2.4.21"
 htmx = "4.0.0"
 htmx-spring-boot = "6.0.1"
 # The admin UI's Carbon stylesheet, downloaded from npm by server/ui (see renovate.json)
-carbon-styles = "1.117.0"
+carbon-styles = "1.118.0"
 # Security overrides: raise versions Spring Boot 4.1.1 still manages at vulnerable releases.
 # Drop each one once springBoot manages an equal or newer version.
 jackson = "3.2.4"
