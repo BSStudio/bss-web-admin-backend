@@ -19,8 +19,9 @@ import org.springframework.security.web.servlet.util.matcher.PathPatternRequestM
 import org.springframework.security.web.util.matcher.OrRequestMatcher
 
 /**
- * Token-based security for the REST API, its documentation and the actuator. The admin UI's chain, when there is
- * one, takes every other address; without it, [fallbackSecurityFilterChain] asks for a token there too.
+ * Token-based security for the REST API and the actuator; the API's documentation (the OpenAPI document and the
+ * Swagger UI) is public. The admin UI's chain, when there is one, takes every other address; without it,
+ * [fallbackSecurityFilterChain] asks for a token there too.
  */
 @Configuration
 @EnableWebSecurity
@@ -28,7 +29,7 @@ class SecurityConfig {
     @Bean
     @Order(1)
     fun apiSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
-        tokenAuthentication(http.securityMatcher(OrRequestMatcher(API_PATHS.map(path::matcher) + EndpointRequest.toAnyEndpoint())))
+        tokenAuthentication(http.securityMatcher(OrRequestMatcher(API_REQUESTS)))
 
     @Bean
     @Conditional(WithoutAdminUi::class)
@@ -38,6 +39,7 @@ class SecurityConfig {
         http {
             authorizeHttpRequests {
                 authorize(EndpointRequest.to(HealthEndpoint::class.java, InfoEndpoint::class.java), permitAll)
+                DOCUMENTATION_PATHS.forEach { authorize(it, permitAll) }
                 authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer { opaqueToken { } }
@@ -49,7 +51,8 @@ class SecurityConfig {
 
     private companion object {
         private val path = PathPatternRequestMatcher.withDefaults()
-        private val API_PATHS = listOf("/api/**", "/open-api.yaml", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
+        private val DOCUMENTATION_PATHS = listOf("/open-api.yaml", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**")
+        private val API_REQUESTS = (DOCUMENTATION_PATHS + "/api/**").map(path::matcher) + EndpointRequest.toAnyEndpoint()
     }
 
     /** Matches when no OAuth2 client registration is configured, which is when the admin UI is turned off. */

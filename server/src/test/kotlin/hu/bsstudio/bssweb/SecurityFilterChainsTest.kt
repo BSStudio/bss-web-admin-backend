@@ -18,9 +18,15 @@ class SecurityFilterChainsTest(
     @param:Autowired private val mockMvc: MockMvc,
 ) {
     @Test
-    fun `should ask for a token on the API and its documentation`() {
-        listOf("/api/v1/video", "/open-api.yaml", "/swagger-ui.html", "/v3/api-docs/swagger-config").forEach { url ->
-            mockMvc.get(url).andExpect { status { isUnauthorized() } }
+    fun `should ask for a token on the API`() {
+        mockMvc.get("/api/v1/video").andExpect { status { isUnauthorized() } }
+    }
+
+    @Test
+    fun `should serve the API's documentation without a token`() {
+        mockMvc.get("/swagger-ui.html").andExpect { redirectedUrl("/swagger-ui/index.html") }
+        listOf("/swagger-ui/index.html", "/open-api.yaml", "/v3/api-docs/swagger-config").forEach { url ->
+            mockMvc.get(url).andExpect { status { isOk() } }
         }
     }
 

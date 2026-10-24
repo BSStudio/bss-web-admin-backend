@@ -215,9 +215,9 @@ Prefer the typographic apostrophe (’), which needs no escaping.
 ## Login
 
 The app has two filter chains. The `web` module's comes first and takes the REST API (`/api`), the Swagger UI,
-the OpenAPI document and the actuator: it accepts only an opaque token, keeps no session, and so ignores the admin's
-session cookie. The admin UI's chain takes every other address, with OAuth2 login (authorization code flow) and
-session cookies.
+the OpenAPI document and the actuator: the documentation and the health check are public, everything else accepts
+only an opaque token. It keeps no session, and so ignores the admin's session cookie. The admin UI's chain takes
+every other address, with OAuth2 login (authorization code flow) and session cookies.
 
 The UI is enabled only when a client registration is configured, and logs in with it. Production calls it
 `authentik`, as in the table below, but the id is up to the deployment: configure one registration, with any id.
