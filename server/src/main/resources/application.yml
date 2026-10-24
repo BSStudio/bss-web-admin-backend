@@ -14,7 +14,9 @@ spring:
           content:
             enabled: true
             paths:
-            - /admin/**
+            - /css/**
+            - /js/**
+            - /icons/**
             - /webjars/**
 server:
   forward-headers-strategy: native
@@ -22,6 +24,5 @@ springdoc:
   swagger-ui:
     url: /open-api.yaml
     display-request-duration: true
-    use-root-path: true
   enable-spring-security: true
   show-actuator: true

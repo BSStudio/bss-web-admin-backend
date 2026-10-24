@@ -14,25 +14,25 @@
     </div>
     <!--/* One tile per section: what it holds, and how many there are */-->
     <section class="tiles" th:aria-label="#{dashboard.sections}">
-        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/videos}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/videos}">
             <span class="label" th:text="#{dashboard.videos}">Videos</span>
             <span class="metric" th:text="${metrics.videoCount}">0</span>
             <span class="description" th:text="#{dashboard.videos.description}">Every video on the website.</span>
             <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
         </a>
-        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/events}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/events}">
             <span class="label" th:text="#{dashboard.events}">Events</span>
             <span class="metric" th:text="${metrics.eventCount}">0</span>
             <span class="description" th:text="#{dashboard.events.description}">Groups of videos.</span>
             <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
         </a>
-        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/members}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/members}">
             <span class="label" th:text="#{dashboard.members}">Members</span>
             <span class="metric" th:text="${metrics.memberCount}">0</span>
             <span class="description" th:text="#{dashboard.members.description}">Studio members.</span>
             <svg th:replace="~{admin/fragments :: icon('arrow--right', 16, 'cds--tile--icon')}"></svg>
         </a>
-        <a class="cds--tile cds--tile--clickable tile" th:href="@{/admin/labels}">
+        <a class="cds--tile cds--tile--clickable tile" th:href="@{/labels}">
             <span class="label" th:text="#{dashboard.labels}">Labels</span>
             <span class="metric" th:text="${metrics.labelCount}">0</span>
             <span class="description" th:text="#{dashboard.labels.description}">Topics that sort the videos.</span>

@@ -72,7 +72,7 @@ internal class MemberPageControllerTest(
                 view { name("admin/member/list") }
                 content { string(stringContainsInOrder(ANNA.name, BENCE.name, ARCHIVED.name)) }
                 content { string(containsString("<td>Member</td>")) }
-                content { string(containsString("""href="/admin/members?q=&amp;size=25&amp;sort=status,asc"""")) }
+                content { string(containsString("""href="/members?q=&amp;size=25&amp;sort=status,asc"""")) }
                 content { string(containsString("""<option value="ALUMNI">Alumni</option>""")) }
                 content { string(containsString("""<tr class="archived">""")) }
                 content {
@@ -540,7 +540,7 @@ internal class MemberPageControllerTest(
     }
 
     private companion object {
-        private const val BASE_URL = "/admin/members"
+        private const val BASE_URL = "/members"
         private val ANNA =
             Member(
                 id = UUID.randomUUID(),

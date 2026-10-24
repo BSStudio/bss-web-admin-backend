@@ -14,10 +14,13 @@ import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInit
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher
+import org.springframework.security.web.util.matcher.OrRequestMatcher
 
 /**
- * Browser login for the admin UI. Runs before the API's token-based filter chain
- * and only takes over the admin pages, the OAuth2 login endpoints and the error page.
+ * Browser login for the admin UI. Runs before the API's token-based filter chain and takes over every address
+ * that [UiPaths] doesn't leave to the API: the admin pages, the OAuth2 login endpoints and the error page.
  * The UI stays disabled until a client registration is configured, and logs in with it
  * whatever its id is: `authentik` in production.
  */
@@ -34,14 +37,14 @@ class UiSecurityConfig {
     ): SecurityFilterChain {
         val login = LoginUrlAuthenticationEntryPoint("/oauth2/authorization/${oauth2Client.registration.keys.single()}")
         http {
-            // /error is here so the admin's error page renders after a session has expired. Every error of the app,
-            // the API's too, is rendered in an /error dispatch, so it passes this chain with permitAll; API errors
-            // still get Spring's plain JSON body, because AdminErrorAttributes adds details only for /admin pages.
-            securityMatcher("/admin/**", "/oauth2/**", "/login/oauth2/**", "/error")
+            // Every error of the app, the API's too, is rendered in an /error dispatch, so it passes this chain with
+            // permitAll; API errors still get Spring's plain JSON body, because AdminErrorAttributes adds details
+            // only for the UI's pages.
+            securityMatcher(UI_ADDRESSES)
             authorizeHttpRequests {
-                authorize("/admin/css/**", permitAll)
-                authorize("/admin/js/**", permitAll)
-                authorize("/admin/icons/**", permitAll)
+                authorize("/css/**", permitAll)
+                authorize("/js/**", permitAll)
+                authorize("/icons/**", permitAll)
                 authorize("/error", permitAll)
                 authorize(anyRequest, authenticated)
             }
@@ -58,13 +61,13 @@ class UiSecurityConfig {
                 authenticationEntryPoint = HxRedirectToPageAuthenticationEntryPoint(login)
             }
             logout {
-                logoutUrl = "/admin/logout"
+                logoutUrl = "/logout"
                 logoutSuccessHandler =
                     OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository).apply {
                         // used when the provider has an end-session endpoint (Authentik does)
-                        setPostLogoutRedirectUri("{baseUrl}/admin")
+                        setPostLogoutRedirectUri("{baseUrl}/")
                         // used otherwise
-                        setDefaultTargetUrl("/admin")
+                        setDefaultTargetUrl("/")
                     }
             }
         }
@@ -73,6 +76,9 @@ class UiSecurityConfig {
     }
 
     private companion object {
+        private val UI_ADDRESSES =
+            NegatedRequestMatcher(OrRequestMatcher(UiPaths.EXCLUDED.map(PathPatternRequestMatcher.withDefaults()::matcher)))
+
         private const val CONTENT_SECURITY_POLICY =
             "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; " +
                 "base-uri 'self'; frame-ancestors 'none'"

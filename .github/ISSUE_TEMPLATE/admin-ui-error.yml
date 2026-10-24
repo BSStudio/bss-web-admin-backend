@@ -26,7 +26,7 @@ body:
     attributes:
       label: Page
       description: The request that failed.
-      placeholder: POST /admin/videos/…
+      placeholder: POST /videos/…
   - type: input
     id: reference
     attributes:

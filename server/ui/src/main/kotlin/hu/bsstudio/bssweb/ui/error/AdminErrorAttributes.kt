@@ -1,6 +1,7 @@
 package hu.bsstudio.bssweb.ui.error
 
 import hu.bsstudio.bssweb.ui.config.ConditionalOnAdminUi
+import hu.bsstudio.bssweb.ui.config.UiPaths
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
@@ -41,7 +42,7 @@ class AdminErrorAttributes : DefaultErrorAttributes() {
     ): MutableMap<String, Any?> {
         val attributes = super.getErrorAttributes(webRequest, options)
         val path = attributes["path"] as? String
-        if (path == null || !path.startsWith(ADMIN_PATH) || webRequest.userPrincipal == null) {
+        if (path == null || !UiPaths.isUi(path.removePrefix(webRequest.contextPath)) || webRequest.userPrincipal == null) {
             return attributes
         }
         val status = attributes["status"] as Int
@@ -88,7 +89,6 @@ class AdminErrorAttributes : DefaultErrorAttributes() {
 
     private companion object {
         private val logger = LoggerFactory.getLogger(AdminErrorAttributes::class.java)
-        private const val ADMIN_PATH = "/admin"
         private val METHOD_ATTRIBUTE = "${AdminErrorAttributes::class.java.name}.METHOD"
         private const val SERVER_ERROR = 500
         private const val REFERENCE_LENGTH = 8

@@ -48,7 +48,7 @@ internal class DashboardPageControllerTest(
                 content {
                     string(
                         containsString(
-                            """src="/admin/icons/logo-horizontal.svg" alt="BSS" width="96" height="56">""",
+                            """src="/icons/logo-horizontal.svg" alt="BSS" width="96" height="56">""",
                         ),
                     )
                 }
@@ -67,8 +67,8 @@ internal class DashboardPageControllerTest(
                 }
                 content { string(containsString("""<ul id="sections" class="cds--header__menu-bar sections" popover>""")) }
                 content { string(containsString("""<span class="cds--header__action avatar"><span class="initials">U</span></span>""")) }
-                content { string(containsString("""<a href="/admin?lang=en" hreflang="en" lang="en" title="English"""")) }
-                content { string(containsString("""<a href="/admin?lang=hu" hreflang="hu" lang="hu" title="Magyar"""")) }
+                content { string(containsString("""<a href="/?lang=en" hreflang="en" lang="en" title="English"""")) }
+                content { string(containsString("""<a href="/?lang=hu" hreflang="hu" lang="hu" title="Magyar"""")) }
                 content { string(containsString("""aria-current="true">EN</a>""")) }
                 content { string(containsString("""<button type="submit" class="cds--btn cds--btn--ghost">Log out</button>""")) }
             }
@@ -84,7 +84,7 @@ internal class DashboardPageControllerTest(
                 sessionAttr(CurrentUser.SESSION_KEY, me)
             }.andExpectAll {
                 status { isOk() }
-                content { string(containsString("""class="cds--header__action avatar" href="/admin/members/${me.memberId}"""")) }
+                content { string(containsString("""class="cds--header__action avatar" href="/members/${me.memberId}"""")) }
                 content { string(containsString("""<span class="initials">KA</span>""")) }
                 content { string(containsString("""<p class="who">Kovács Anna</p>""")) }
             }
@@ -93,11 +93,21 @@ internal class DashboardPageControllerTest(
     @Test
     internal fun `should redirect an address with a trailing slash to the one without it`() {
         mockMvc
-            .get("$BASE_URL/?lang=hu") {
+            .get("/videos/?lang=hu") {
                 with(oauth2Login())
             }.andExpectAll {
                 status { isPermanentRedirect() }
-                redirectedUrl("$BASE_URL?lang=hu")
+                redirectedUrl("/videos?lang=hu")
+            }
+    }
+
+    @Test
+    internal fun `should leave a trailing slash on an API address alone`() {
+        mockMvc
+            .get("/api/v1/video/") {
+                with(oauth2Login())
+            }.andExpect {
+                status { isNotFound() }
             }
     }
 
@@ -173,7 +183,7 @@ internal class DashboardPageControllerTest(
     }
 
     private companion object {
-        private const val BASE_URL = "/admin"
+        private const val BASE_URL = "/"
         private const val LOCALE_COOKIE = "bss-admin-lang"
         private val METRICS = BssMetrics(videoCount = 42, eventCount = 7, memberCount = 120, labelCount = 9)
     }

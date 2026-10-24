@@ -11,15 +11,15 @@
     */-->
     <meta name="htmx-config" content='{"includeIndicatorCSS": false, "history": "reload"}'>
     <title th:replace="${layoutTitle}">BSS admin</title>
-    <link rel="icon" type="image/svg+xml" th:href="@{/admin/icons/favicon.svg}">
-    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/admin/icons/favicon-96x96.png}">
-    <link rel="shortcut icon" th:href="@{/admin/icons/favicon.ico}">
-    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/admin/icons/apple-touch-icon.png}">
-    <link rel="manifest" th:href="@{/admin/icons/site.webmanifest}">
+    <link rel="icon" type="image/svg+xml" th:href="@{/icons/favicon.svg}">
+    <link rel="icon" type="image/png" sizes="96x96" th:href="@{/icons/favicon-96x96.png}">
+    <link rel="shortcut icon" th:href="@{/icons/favicon.ico}">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/icons/apple-touch-icon.png}">
+    <link rel="manifest" th:href="@{/icons/site.webmanifest}">
     <!--/* admin.css brings in IBM Carbon (carbon.min.css, see build.gradle.kts) and puts the BSS theme on top */-->
-    <link rel="stylesheet" th:href="@{/admin/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
     <script th:src="@{/webjars/htmx.org/dist/htmx.min.js}" defer></script>
-    <script th:src="@{/admin/js/admin.js}" defer></script>
+    <script th:src="@{/js/admin.js}" defer></script>
 </head>
 <!--/* htmx: every request sends the CSRF token, and an error response (the error page) replaces the whole page */-->
 <body th:hx-headers:inherited='|{"${_csrf?.headerName}": "${_csrf?.token}"}|'
@@ -36,13 +36,13 @@
         <span class="sr-only" th:if="${inSection}" th:text="|#{nav.menu}:|">Menu:</span>
         <span th:text="${inSection} ? #{${'nav.' + layoutSection}} : #{nav.menu}">Videos</span>
     </button>
-    <a th:href="@{/admin}" class="cds--header__name brand" th:title="#{nav.dashboard}"
+    <a th:href="@{/}" class="cds--header__name brand" th:title="#{nav.dashboard}"
        th:aria-current="${layoutSection == 'dashboard'} ? 'page'"><img class="brand-logo"
-          th:src="@{/admin/icons/logo-horizontal.svg}" th:alt="BSS" width="96" height="56"></a>
+          th:src="@{/icons/logo-horizontal.svg}" th:alt="BSS" width="96" height="56"></a>
     <nav class="cds--header__nav" th:aria-label="#{nav.sections}">
         <ul id="sections" class="cds--header__menu-bar sections" popover>
             <li th:each="section : ${sections}">
-                <a class="cds--header__menu-item" th:href="@{/admin/{section}(section=${section})}"
+                <a class="cds--header__menu-item" th:href="@{/{section}(section=${section})}"
                    th:aria-current="${layoutSection == section} ? 'page'">
                     <span class="cds--text-truncate--end" th:text="#{${'nav.' + section}}">Videos</span>
                 </a>
@@ -55,7 +55,7 @@
       language and Log out opens on hover, or with the button (keyboard, touch).
     */-->
     <div class="cds--header__global profile" th:if="${currentUser}" th:with="me=${currentUser}">
-        <a th:if="${me.memberId}" class="cds--header__action avatar" th:href="@{/admin/members/{id}(id=${me.memberId})}"
+        <a th:if="${me.memberId}" class="cds--header__action avatar" th:href="@{/members/{id}(id=${me.memberId})}"
            th:title="#{nav.profile}" th:aria-label="#{nav.profile}">
             <span class="initials" th:text="${me.initials}">KA</span>
         </a>
@@ -75,7 +75,7 @@
                 <a th:href="${languageLinks.hu}" hreflang="hu" lang="hu" title="Magyar"
                    th:aria-current="${#locale.language == 'hu'} ? 'true'">HU</a>
             </p>
-            <form th:action="@{/admin/logout}" method="post">
+            <form th:action="@{/logout}" method="post">
                 <button type="submit" class="cds--btn cds--btn--ghost" th:text="#{nav.logout}">Log out</button>
             </form>
         </div>

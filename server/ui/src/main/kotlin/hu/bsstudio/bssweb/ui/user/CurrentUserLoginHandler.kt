@@ -17,7 +17,7 @@ class CurrentUserLoginHandler(
     private val memberService: ObjectProvider<MemberService>,
 ) : SavedRequestAwareAuthenticationSuccessHandler() {
     init {
-        defaultTargetUrl = "/admin"
+        defaultTargetUrl = "/"
     }
 
     override fun onAuthenticationSuccess(

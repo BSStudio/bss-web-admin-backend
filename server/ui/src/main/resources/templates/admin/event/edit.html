@@ -10,7 +10,7 @@
         <div>
             <nav th:aria-label="#{nav.breadcrumb}">
                 <ol class="cds--breadcrumb">
-                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/events}" th:text="#{event.list.title}">Events</a></li>
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/events}" th:text="#{event.list.title}">Events</a></li>
                 </ol>
             </nav>
             <h1 th:text="${event.title}">Gólyatábor 2026</h1>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="columns">
-        <form method="post" th:action="@{/admin/events/{id}(id=${event.id})}" th:object="${form}" class="stack"
+        <form method="post" th:action="@{/events/{id}(id=${event.id})}" th:object="${form}" class="stack"
               th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
             <div th:replace="~{admin/fragments :: formError}"></div>
             <div class="cds--form-item">
@@ -75,7 +75,7 @@
                 </small>
             </div>
             <div class="cds--btn-set actions">
-                <a class="cds--btn cds--btn--secondary" th:href="@{/admin/events}" th:text="#{action.cancel}">Cancel</a>
+                <a class="cds--btn cds--btn--secondary" th:href="@{/events}" th:text="#{action.cancel}">Cancel</a>
                 <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.save}">Save</button>
                 <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
             </div>
@@ -84,7 +84,7 @@
         <section th:replace="~{admin/event/edit :: videos}"></section>
     </div>
 
-    <dialog th:replace="~{admin/fragments :: deleteDialog('delete-dialog', @{/admin/events/{id}/delete(id=${event.id})},
+    <dialog th:replace="~{admin/fragments :: deleteDialog('delete-dialog', @{/events/{id}/delete(id=${event.id})},
             #{event.delete.question(${event.title})}, #{event.delete.warning})}"></dialog>
 </main>
 
@@ -104,11 +104,11 @@
             </thead>
             <tbody>
             <tr th:each="video : ${eventVideos}">
-                <td><a class="cds--link" th:href="@{/admin/videos/{id}(id=${video.id})}" th:text="${video.title}">Gólyatábor 2026 - Vám</a></td>
+                <td><a class="cds--link" th:href="@{/videos/{id}(id=${video.id})}" th:text="${video.title}">Gólyatábor 2026 - Vám</a></td>
                 <td class="date" th:insert="~{admin/fragments :: dates(${video.shootingDateStart}, null)}">Aug 13, 2026</td>
                 <td class="row-action">
                     <button type="button" class="cds--btn cds--btn--ghost cds--btn--sm"
-                            th:hx-delete="@{/admin/events/{id}/videos(id=${event.id}, videoId=${video.id})}"
+                            th:hx-delete="@{/events/{id}/videos(id=${event.id}, videoId=${video.id})}"
                             hx-target="#event-videos" hx-swap="outerHTML"
                             th:aria-label="#{event.videos.remove(${video.title})}"
                             th:text="#{action.remove}">Remove</button>
@@ -123,7 +123,7 @@
         <div class="cds--search cds--search--md" role="search">
             <svg th:replace="~{admin/fragments :: icon('search', 16, 'cds--search-magnifier-icon')}"></svg>
             <input id="event-video-search" class="cds--search-input" type="search" name="q" autocomplete="off"
-                   th:autofocus="${videosChanged}" th:hx-get="@{/admin/events/{id}/videos/search(id=${event.id})}"
+                   th:autofocus="${videosChanged}" th:hx-get="@{/events/{id}/videos/search(id=${event.id})}"
                    hx-trigger="input changed delay:300ms" hx-target="#video-matches" hx-swap="outerHTML">
         </div>
     </div>
@@ -136,7 +136,7 @@
             <span th:text="${v.title}">Gólyatábor 2026 - Vám</span>
             <span class="muted date" th:insert="~{admin/fragments :: dates(${v.shootingDateStart}, null)}">Aug 13, 2026</span>
             <button type="button" class="cds--btn cds--btn--ghost cds--btn--sm"
-                    th:hx-post="@{/admin/events/{id}/videos(id=${event.id}, videoId=${v.id})}"
+                    th:hx-post="@{/events/{id}/videos(id=${event.id}, videoId=${v.id})}"
                     hx-target="#event-videos" hx-swap="outerHTML"
                     th:aria-label="#{event.videos.add(${v.title})}" th:text="#{action.add}">Add</button>
         </li>

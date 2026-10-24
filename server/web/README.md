@@ -7,6 +7,7 @@ Mainly controllers and the authorisation logic for the app.
 
 The resources folder contains the [open-api.yaml][open-api-yaml] file.
 This is hosted by the server using [Springdoc openapi][springdoc] library.
+The Swagger UI is at `/swagger-ui.html`; the root belongs to the admin UI.
 Read the docs to see how to disable/customise the open api endpoint.
 
 ## Security

@@ -29,6 +29,6 @@ internal class CurrentUserLoginHandlerTest {
         )
 
         request.session.getAttribute(CurrentUser.SESSION_KEY) shouldBe CurrentUser("admin", "A", null)
-        response.redirectedUrl shouldBe "/admin"
+        response.redirectedUrl shouldBe "/"
     }
 }

@@ -10,7 +10,7 @@
         <div>
             <nav th:aria-label="#{nav.breadcrumb}">
                 <ol class="cds--breadcrumb">
-                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/videos}" th:text="#{video.list.title}">Videos</a></li>
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/videos}" th:text="#{video.list.title}">Videos</a></li>
                 </ol>
             </nav>
             <h1 th:text="${video.title}">Gólyatábor 2026 - Vám</h1>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="columns">
-        <form method="post" th:action="@{/admin/videos/{id}(id=${video.id})}" th:object="${form}" class="stack"
+        <form method="post" th:action="@{/videos/{id}(id=${video.id})}" th:object="${form}" class="stack"
               th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
             <div th:replace="~{admin/fragments :: formError}"></div>
             <div class="cds--form-item">
@@ -87,7 +87,7 @@
                 <small th:replace="~{admin/fragments :: fieldError('visible')}"></small>
             </div>
             <div class="cds--btn-set actions">
-                <a class="cds--btn cds--btn--secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
+                <a class="cds--btn cds--btn--secondary" th:href="@{/videos}" th:text="#{action.cancel}">Cancel</a>
                 <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.save}">Save</button>
                 <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
             </div>
@@ -102,7 +102,7 @@
         </div>
     </div>
 
-    <dialog th:replace="~{admin/fragments :: deleteDialog('delete-dialog', @{/admin/videos/{id}/delete(id=${video.id})},
+    <dialog th:replace="~{admin/fragments :: deleteDialog('delete-dialog', @{/videos/{id}/delete(id=${video.id})},
             #{video.delete.question(${video.title})}, #{video.delete.warning})}"></dialog>
 </main>
 
@@ -130,7 +130,7 @@
                 <td th:text="${crew.position}">Camera</td>
                 <td class="row-action">
                     <button type="button" class="cds--btn cds--btn--ghost cds--btn--sm"
-                            th:hx-delete="@{/admin/videos/{id}/crew(id=${video.id}, memberId=${crew.member.id}, position=${crew.position})}"
+                            th:hx-delete="@{/videos/{id}/crew(id=${video.id}, memberId=${crew.member.id}, position=${crew.position})}"
                             hx-target="#crew" hx-swap="outerHTML"
                             th:aria-label="#{video.crew.remove(${crew.member.name}, ${crew.position})}"
                             th:text="#{action.remove}">Remove</button>
@@ -139,7 +139,7 @@
             </tbody>
         </table>
     </div>
-    <form class="inline-form" th:hx-post="@{/admin/videos/{id}/crew(id=${video.id})}" hx-target="#crew" hx-swap="outerHTML">
+    <form class="inline-form" th:hx-post="@{/videos/{id}/crew(id=${video.id})}" hx-target="#crew" hx-swap="outerHTML">
         <div class="cds--select">
             <label for="crew-member" class="cds--label cds--visually-hidden" th:text="#{video.crew.member}">Member</label>
             <div class="cds--select-input__wrapper">

@@ -26,8 +26,8 @@ jobs:
       - name: Check generated files are current
         run: |
           bash tools/admin-icons/generate-icons.sh
-          if [[ -n "$(git status --porcelain --untracked-files=all -- server/ui/src/main/resources/static/admin/icons)" ]]; then
-            git status --short --untracked-files=all -- server/ui/src/main/resources/static/admin/icons
+          if [[ -n "$(git status --porcelain --untracked-files=all -- server/ui/src/main/resources/static/icons)" ]]; then
+            git status --short --untracked-files=all -- server/ui/src/main/resources/static/icons
             echo "::error::Admin icon generation changed the checked-in icon set. Regenerate icons and commit the results."
             exit 1
           fi

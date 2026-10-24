@@ -10,14 +10,14 @@
         <div>
             <nav th:aria-label="#{nav.breadcrumb}">
                 <ol class="cds--breadcrumb">
-                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/members}" th:text="#{member.list.title}">Members</a></li>
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/members}" th:text="#{member.list.title}">Members</a></li>
                 </ol>
             </nav>
             <h1 th:text="#{member.new.title}">New member</h1>
         </div>
     </div>
 
-    <form method="post" th:action="@{/admin/members}" th:object="${form}" class="stack narrow"
+    <form method="post" th:action="@{/members}" th:object="${form}" class="stack narrow"
           th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
         <div th:replace="~{admin/fragments :: formError}"></div>
         <div class="cds--form-item">
@@ -37,7 +37,7 @@
         </div>
         <p class="cds--form__helper-text" th:text="#{member.new.help}">Start with the name and URL.</p>
         <div class="cds--btn-set actions">
-            <a class="cds--btn cds--btn--secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
+            <a class="cds--btn cds--btn--secondary" th:href="@{/members}" th:text="#{action.cancel}">Cancel</a>
             <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.create}">Create</button>
             <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
         </div>

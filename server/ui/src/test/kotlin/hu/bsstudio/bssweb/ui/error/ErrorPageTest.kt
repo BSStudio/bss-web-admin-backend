@@ -32,7 +32,7 @@ internal class ErrorPageTest(
                 with(oauth2Login())
                 accept = MediaType.TEXT_HTML
                 requestAttr(RequestDispatcher.ERROR_STATUS_CODE, 500)
-                requestAttr(RequestDispatcher.ERROR_REQUEST_URI, "/admin/videos")
+                requestAttr(RequestDispatcher.ERROR_REQUEST_URI, "/videos")
                 requestAttr(RequestDispatcher.ERROR_EXCEPTION, IllegalStateException("Database is down"))
             }.andExpectAll {
                 status { isInternalServerError() }
@@ -54,7 +54,7 @@ internal class ErrorPageTest(
                 with(oauth2Login())
                 accept = MediaType.TEXT_HTML
                 requestAttr(RequestDispatcher.ERROR_STATUS_CODE, 404)
-                requestAttr(RequestDispatcher.ERROR_REQUEST_URI, "/admin/nope")
+                requestAttr(RequestDispatcher.ERROR_REQUEST_URI, "/nope")
             }.andExpectAll {
                 status { isNotFound() }
                 content { string(containsString("<h1>We couldn’t find that page</h1>")) }
@@ -89,7 +89,7 @@ internal class ErrorPageTest(
                 with(oauth2Login())
                 accept = MediaType.TEXT_HTML
                 requestAttr(RequestDispatcher.ERROR_STATUS_CODE, 404)
-                requestAttr(RequestDispatcher.ERROR_REQUEST_URI, "/admin/videos/nope")
+                requestAttr(RequestDispatcher.ERROR_REQUEST_URI, "/videos/nope")
                 requestAttr(RequestDispatcher.ERROR_EXCEPTION, IllegalStateException("No such video"))
             }.andExpectAll {
                 status { isNotFound() }
@@ -104,7 +104,7 @@ internal class ErrorPageTest(
             .get(ERROR_URL) {
                 accept = MediaType.TEXT_HTML
                 requestAttr(RequestDispatcher.ERROR_STATUS_CODE, 403)
-                requestAttr(RequestDispatcher.ERROR_REQUEST_URI, "/admin/videos")
+                requestAttr(RequestDispatcher.ERROR_REQUEST_URI, "/videos")
             }.andExpectAll {
                 status { isForbidden() }
                 content { string(containsString("<h1>You can’t do that</h1>")) }

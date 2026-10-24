@@ -14,7 +14,7 @@
         <!--/* The form comes first: above the list on a phone, on its left elsewhere */-->
         <section class="cds--tile panel">
             <h2 th:text="#{label.new.title}">New label</h2>
-            <form method="post" th:action="@{/admin/labels}" th:object="${form}" class="stack"
+            <form method="post" th:action="@{/labels}" th:object="${form}" class="stack"
                   th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
                 <div th:replace="~{admin/fragments :: formError}"></div>
                 <div class="cds--form-item">
@@ -62,7 +62,7 @@
                                 th:commandfor="|delete-${label.id}|" th:aria-label="#{label.delete.label(${label.name})}"
                                 th:text="#{action.delete}">Delete</button>
                         <dialog th:replace="~{admin/fragments :: deleteDialog(|delete-${label.id}|,
-                                @{/admin/labels/{id}/delete(id=${label.id})},
+                                @{/labels/{id}/delete(id=${label.id})},
                                 #{label.delete.question(${label.name})}, #{label.delete.warning})}"></dialog>
                     </td>
                 </tr>
