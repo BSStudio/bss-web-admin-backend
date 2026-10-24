@@ -2,8 +2,8 @@
 
 This module holds the admin UI: server-rendered pages under `/admin`.
 It uses [Thymeleaf][thymeleaf] templates, [htmx][htmx] for partial page updates and [IBM Carbon][carbon]'s styles
-with the BSS theme on top. There is no JavaScript or CSS build: htmx comes in as a WebJar, and Gradle takes Carbon's
-precompiled stylesheet from npm (`carbonStyles` in `build.gradle.kts`).
+with the BSS theme on top. htmx comes in as a WebJar, and Gradle takes Carbon's precompiled stylesheet from npm
+(`carbonStyles` in `build.gradle.kts`).
 
 Controllers call the services directly, the same way the `web` module does.
 Keep business logic in the `service` module.
@@ -27,6 +27,17 @@ Keep business logic in the `service` module.
 | `resources/static/admin/css/admin.css`     | Carbon in a layer, the BSS theme tokens, page layout       |
 | `resources/static/admin/js/admin.js`       | Unsaved changes, select all, toasts; our only script       |
 | `resources/messages*.properties`           | UI text in English (default) and Hungarian                 |
+
+## Logo and icons
+
+The logo artwork lives in `../../tools/admin-icons/logo.svg` (square) and `../../tools/admin-icons/logo-horizontal.svg`
+(rectangular BSS lockup). Both use Roboto lettering outlined as paths and the BSS orange-to-blue frame. Device icons are
+generated from the square artwork with [RealFaviconGenerator's CLI][rfg]. The checked-in icon set includes an SVG and ICO
+for desktop browsers, Apple's 180px touch icon, and Android's 192px and 512px web-app icons and manifest.
+
+The generation command is in `tools/admin-icons/generate-icons.sh`. It uses the pinned `realfavicon` CLI through `npx` and does not add a JavaScript package to the application. CI pins Node via `.node-version`, reruns the generator, and fails if the checked-in icon set changes. `AdminIconsTest` checks the icon files and their dimensions.
+
+[rfg]: https://realfavicongenerator.net/favicon-generator/node-cli
 
 ## Page patterns
 
@@ -110,7 +121,7 @@ Content-Security-Policy would block. The type falls back to the system font.
   scheme picks light or dark. Carbon's greys are tinted towards the brand blue, and its blues are the BSS icon's.
 - The brand appears only as the orange-to-blue gradient (`--bss-edge`, blended in OKLCH) as a thin line along an
   edge: under the top bar (it runs while htmx loads), under a primary button or a dashboard tile on hover, and along
-  the top of a dialog. The BSS badge in the top bar is the only rounded shape apart from the switches.
+  the top of a dialog. The BSS logo's frame is the only rounded shape apart from the switches.
 - Primary buttons are ink (near-black, near-white in dark) instead of Carbon's blue; blue is for links and focus.
   One primary per page; `cds--btn--secondary` for Cancel, `cds--btn--danger--ghost` for Delete.
 - The top bar stays dark in both schemes (`color-scheme: dark` on it), and the selection bar takes the opposite

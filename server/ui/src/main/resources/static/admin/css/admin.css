@@ -246,7 +246,7 @@ strong {
 
 /* ---------- Top bar (Carbon's UI shell header) ---------- */
 
-/* Dark in both schemes, like the BSS badge: the tokens inside it resolve to their dark values */
+/* Dark in both schemes, like the BSS logo: the tokens inside it resolve to their dark values */
 .admin-bar {
     color-scheme: dark;
     border-block-end: 0;
@@ -309,16 +309,10 @@ body:has(.htmx-request) .admin-bar::before {
     color: var(--cds-text-primary);
 }
 
-/* The icon's mark: white letters on black in a gradient frame. The one rounded shape, since it is the logo. */
-.badge {
-    padding: 0 0.3rem;
-    border: 2px solid transparent;
-    border-radius: 0.25rem;
-    background: linear-gradient(oklch(0.08 0 0), oklch(0.08 0 0)) padding-box, var(--bss-frame) border-box;
-    color: oklch(1 0 0);
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    line-height: 1.25rem;
+.brand-logo {
+    display: block;
+    width: auto;
+    height: 2rem;
 }
 
 /* The current section is a lighter cell; the brand edge under the bar replaces Carbon's blue underline */

@@ -45,7 +45,13 @@ internal class DashboardPageControllerTest(
                 content { string(containsString("""<html lang="en">""")) }
                 content { string(containsString("<h1>Dashboard</h1>")) }
                 content { string(containsString("""class="cds--header__name brand" title="Dashboard"""")) }
-                content { string(containsString("""aria-current="page"><strong class="badge">BSS</strong>""")) }
+                content {
+                    string(
+                        containsString(
+                            """src="/admin/icons/logo-horizontal.svg" alt="BSS" width="96" height="56">""",
+                        ),
+                    )
+                }
                 content { string(containsString("""<span class="metric">42</span>""")) }
                 content { string(containsString("""<span class="metric">9</span>""")) }
                 content { string(containsString("""<h2 id="guide-title">How the admin works</h2>""")) }

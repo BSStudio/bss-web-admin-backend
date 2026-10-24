@@ -33,6 +33,15 @@
       "matchStrings": ["carbon-styles = \"(?<currentValue>[^\"]+)\""],
       "depNameTemplate": "@carbon/styles",
       "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "description": "Pinned RealFaviconGenerator CLI used to generate admin icons",
+      "managerFilePatterns": ["/^tools\\/admin-icons\\/generate-icons\\.sh$/"],
+      "matchStrings": ["realfavicon@(?<currentValue>\\d+\\.\\d+\\.\\d+)"],
+      "depNameTemplate": "realfavicon",
+      "datasourceTemplate": "npm",
+      "versioningTemplate": "semver"
     }
   ]
 }
