@@ -13,15 +13,15 @@ internal class AdminLocaleResolverTest {
 
     @Test
     internal fun `should read the admin's language from the cookie, English by default`() {
-        underTest.resolveLocale(request("/admin/videos")) shouldBe Locale.ENGLISH
-        underTest.resolveLocale(request("/admin/videos").apply { setCookies(Cookie(COOKIE, "hu")) }) shouldBe HUNGARIAN
+        underTest.resolveLocale(request("/videos")) shouldBe Locale.ENGLISH
+        underTest.resolveLocale(request("/videos").apply { setCookies(Cookie(COOKIE, "hu")) }) shouldBe HUNGARIAN
     }
 
     @Test
     internal fun `should remember a language the admin chooses in the cookie`() {
         val response = MockHttpServletResponse()
 
-        underTest.setLocale(request("/admin"), response, HUNGARIAN)
+        underTest.setLocale(request("/"), response, HUNGARIAN)
 
         response.getCookie(COOKIE)?.value shouldBe "hu"
     }
@@ -30,7 +30,7 @@ internal class AdminLocaleResolverTest {
     internal fun `should treat an admin page's error page as part of the admin`() {
         val request =
             request("/error").apply {
-                setAttribute(RequestDispatcher.ERROR_REQUEST_URI, "/admin/videos")
+                setAttribute(RequestDispatcher.ERROR_REQUEST_URI, "/videos")
                 setCookies(Cookie(COOKIE, "hu"))
             }
 

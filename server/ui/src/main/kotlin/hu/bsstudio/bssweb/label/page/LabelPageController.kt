@@ -22,7 +22,7 @@ import java.util.UUID
 
 @ConditionalOnAdminUi
 @Controller
-@RequestMapping("/admin/labels")
+@RequestMapping("/labels")
 class LabelPageController(
     private val labelService: LabelService,
 ) {
@@ -43,7 +43,7 @@ class LabelPageController(
         return try {
             val label = labelService.insertLabel(CreateLabel(form.name.trim(), form.description.trim()))
             redirect.flash("label.flash.created", label.name)
-            "redirect:/admin/labels"
+            "redirect:/labels"
         } catch (_: DataIntegrityViolationException) {
             binding.rejectValue("name", "label.error.duplicate")
             listPage(model)
@@ -60,7 +60,7 @@ class LabelPageController(
                 ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         labelService.removeLabel(labelId)
         redirect.flash("label.flash.deleted", label.name)
-        return "redirect:/admin/labels"
+        return "redirect:/labels"
     }
 
     private fun listPage(model: Model): String {

@@ -47,7 +47,7 @@ internal class AdminIconsTest {
 
     @Test
     internal fun `should declare the android manifest icons`() {
-        val manifest = readResource("static/admin/icons/site.webmanifest")
+        val manifest = readResource("static/icons/site.webmanifest")
         assertTrue(manifest.contains("\"name\": \"BSS admin\""))
         assertTrue(manifest.contains("\"sizes\": \"192x192\""))
         assertTrue(manifest.contains("\"sizes\": \"512x512\""))
@@ -56,7 +56,7 @@ internal class AdminIconsTest {
 
     @Test
     internal fun `square logo frame should reach the canvas edges`() {
-        val logo = readResource("static/admin/icons/logo.svg")
+        val logo = readResource("static/icons/logo.svg")
         assertTrue(logo.contains("viewBox=\"0 0 48 48\""))
         assertTrue(logo.contains("<rect x=\"1.5\" y=\"1.5\" width=\"45\" height=\"45\" rx=\"6.5\""))
         assertTrue(logo.contains("stroke-width=\"3\""))
@@ -64,7 +64,7 @@ internal class AdminIconsTest {
 
     @Test
     internal fun `rectangular logo should frame only BSS with matching top and side padding`() {
-        val logo = readResource("static/admin/icons/logo-horizontal.svg")
+        val logo = readResource("static/icons/logo-horizontal.svg")
         assertTrue(logo.contains("viewBox=\"0 0 48 28\""))
         assertTrue(logo.contains("<rect x=\"1.5\" y=\"1.5\" width=\"45\" height=\"25\" rx=\"4.5\""))
         assertTrue(logo.contains("translate(8.4598 20)"))
@@ -78,7 +78,7 @@ internal class AdminIconsTest {
         return png.getInt(16) to png.getInt(20)
     }
 
-    private fun icon(name: String) = ClassPathResource("static/admin/icons/$name")
+    private fun icon(name: String) = ClassPathResource("static/icons/$name")
 
     private fun readResource(path: String) = ClassPathResource(path).inputStream.bufferedReader().use { it.readText() }
 }

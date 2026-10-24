@@ -12,8 +12,8 @@
 
     <section class="cds--table-toolbar table-toolbar" th:aria-label="#{table.toolbar}">
         <div class="cds--toolbar-content toolbar-actions">
-            <search th:replace="~{admin/fragments :: search('/admin/events', ${page})}"></search>
-            <a class="cds--btn cds--btn--primary" th:href="@{/admin/events/new}">
+            <search th:replace="~{admin/fragments :: search('/events', ${page})}"></search>
+            <a class="cds--btn cds--btn--primary" th:href="@{/events/new}">
                 <span th:text="#{event.list.new}">New event</span>
                 <svg th:replace="~{admin/fragments :: icon('add', 16, 'cds--btn__icon')}"></svg>
             </a>
@@ -27,11 +27,11 @@
                 <caption class="sr-only" th:text="#{event.list.title}">Events</caption>
                 <thead>
                 <tr>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'title', #{event.field.title}, '')}"></th>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'url', #{event.field.url}, 'hide-small')}"></th>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'dateFrom', #{event.column.dates}, '')}"></th>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'videoCount', #{event.column.videos}, 'num hide-small')}"></th>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/events', ${page}, 'visible', #{event.column.visible}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/events', ${page}, 'title', #{event.field.title}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/events', ${page}, 'url', #{event.field.url}, 'hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/events', ${page}, 'dateFrom', #{event.column.dates}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/events', ${page}, 'videoCount', #{event.column.videos}, 'num hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/events', ${page}, 'visible', #{event.column.visible}, '')}"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,7 +40,7 @@
                         th:text="${q.isBlank()} ? #{event.list.empty} : #{table.noMatch(${q})}">No events yet.</td>
                 </tr>
                 <tr th:each="e : ${page.content}">
-                    <td><a class="cds--link" th:href="@{/admin/events/{id}(id=${e.id})}" th:text="${e.title}">Gólyatábor 2026</a></td>
+                    <td><a class="cds--link" th:href="@{/events/{id}(id=${e.id})}" th:text="${e.title}">Gólyatábor 2026</a></td>
                     <td class="muted hide-small" th:text="${e.url}">golyatabor-2026</td>
                     <td class="date" th:insert="~{admin/fragments :: dates(${e.dateFrom}, ${e.dateTo})}">Aug 12, 2026</td>
                     <td class="num hide-small" th:text="${e.videoCount}">12</td>
@@ -49,7 +49,7 @@
                 </tbody>
             </table>
         </div>
-        <nav th:replace="~{admin/fragments :: pagination(${page}, '/admin/events')}"></nav>
+        <nav th:replace="~{admin/fragments :: pagination(${page}, '/events')}"></nav>
     </div>
 </main>
 
@@ -64,7 +64,7 @@
     <tr>
         <td th:fragment="visibility" th:assert="${id != null}" class="select">
             <div th:replace="~{admin/fragments :: switch(|visible-${id}|, ${visible}, #{event.list.toggle(${title})},
-                    #{visibility.shown}, #{visibility.hidden}, @{/admin/events/{id}/visibility(id=${id}, visible=${!visible})})}"></div>
+                    #{visibility.shown}, #{visibility.hidden}, @{/events/{id}/visibility(id=${id}, visible=${!visible})})}"></div>
             <!--/* After a change, a toast says what happened (htmx adds it to #toasts) */-->
             <th:block th:if="${toast}"><div hx-swap-oob="beforeend:#toasts"><div th:replace="~{admin/fragments :: toast(${toast})}"></div></div></th:block>
         </td>

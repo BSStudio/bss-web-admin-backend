@@ -10,14 +10,14 @@
         <div>
             <nav th:aria-label="#{nav.breadcrumb}">
                 <ol class="cds--breadcrumb">
-                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/videos}" th:text="#{video.list.title}">Videos</a></li>
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/videos}" th:text="#{video.list.title}">Videos</a></li>
                 </ol>
             </nav>
             <h1 th:text="#{video.new.title}">New video</h1>
         </div>
     </div>
 
-    <form method="post" th:action="@{/admin/videos}" th:object="${form}" class="stack narrow"
+    <form method="post" th:action="@{/videos}" th:object="${form}" class="stack narrow"
           th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
         <div th:replace="~{admin/fragments :: formError}"></div>
         <div class="cds--form-item">
@@ -29,7 +29,7 @@
             <small th:replace="~{admin/fragments :: fieldError('title')}"></small>
         </div>
         <div class="cds--btn-set actions">
-            <a class="cds--btn cds--btn--secondary" th:href="@{/admin/videos}" th:text="#{action.cancel}">Cancel</a>
+            <a class="cds--btn cds--btn--secondary" th:href="@{/videos}" th:text="#{action.cancel}">Cancel</a>
             <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.create}">Create</button>
         </div>
     </form>

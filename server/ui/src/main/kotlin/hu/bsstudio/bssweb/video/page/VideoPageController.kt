@@ -45,7 +45,7 @@ import java.util.UUID
 
 @ConditionalOnAdminUi
 @Controller
-@RequestMapping("/admin/videos")
+@RequestMapping("/videos")
 @Suppress("TooManyFunctions")
 class VideoPageController(
     private val videoService: VideoService,
@@ -141,7 +141,7 @@ class VideoPageController(
         return try {
             val video = videoService.insertVideo(CreateVideo(title))
             redirect.flash("video.flash.created", video.title)
-            "redirect:/admin/videos/${video.id}"
+            "redirect:/videos/${video.id}"
         } catch (_: DataIntegrityViolationException) {
             binding.rejectValue("title", "video.error.duplicateTitle")
             NEW_PAGE
@@ -189,7 +189,7 @@ class VideoPageController(
             // the changes are saved; only passing the URLs on to the file server failed
             logger.warn("File server failed after saving video {}", videoId, e)
             redirect.flash("video.flash.savedWithoutFiles", form.title.trim(), error = true)
-            "redirect:/admin/videos/$videoId"
+            "redirect:/videos/$videoId"
         }
     }
 
@@ -231,7 +231,7 @@ class VideoPageController(
             REDIRECT_TO_LIST
         } catch (_: DataIntegrityViolationException) {
             redirect.flash("video.flash.deleteBlocked", video.title, error = true)
-            "redirect:/admin/videos/$videoId"
+            "redirect:/videos/$videoId"
         }
     }
 
@@ -270,7 +270,7 @@ class VideoPageController(
 
     private companion object {
         private val logger = LoggerFactory.getLogger(VideoPageController::class.java)
-        private const val REDIRECT_TO_LIST = "redirect:/admin/videos"
+        private const val REDIRECT_TO_LIST = "redirect:/videos"
         private const val NEW_PAGE = "admin/video/new"
         private const val POSITION_LENGTH = 250
 

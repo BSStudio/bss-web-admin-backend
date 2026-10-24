@@ -119,8 +119,8 @@ internal class VideoPageControllerTest(
                     )
                 }
                 content { string(containsString("""aria-sort="descending">""")) }
-                content { string(containsString("""href="/admin/videos?q=&amp;size=25&amp;sort=shootingDateStart,asc"""")) }
-                content { string(containsString("""href="/admin/videos?q=&amp;size=25&amp;sort=title,asc"""")) }
+                content { string(containsString("""href="/videos?q=&amp;size=25&amp;sort=shootingDateStart,asc"""")) }
+                content { string(containsString("""href="/videos?q=&amp;size=25&amp;sort=title,asc"""")) }
             }
 
         pageable.captured.pageSize shouldBe 25
@@ -138,7 +138,7 @@ internal class VideoPageControllerTest(
                 param("sort", "title,desc")
             }.andExpectAll {
                 status { isOk() }
-                content { string(containsString("""href="/admin/videos?q=&amp;size=25&amp;sort=title,asc"""")) }
+                content { string(containsString("""href="/videos?q=&amp;size=25&amp;sort=title,asc"""")) }
                 content { string(containsString("""<input type="hidden" name="sort" value="title,desc">""")) }
             }
 
@@ -819,7 +819,7 @@ internal class VideoPageControllerTest(
     }
 
     private companion object {
-        private const val BASE_URL = "/admin/videos"
+        private const val BASE_URL = "/videos"
         private val IN_HIDDEN_EVENT =
             DataIntegrityViolationException(
                 "could not execute statement",

@@ -34,7 +34,7 @@ dependencies {
 }
 
 /**
- * Carbon's precompiled stylesheet from npm (`@carbon/styles`), served as `/admin/css/carbon.min.css`. The WebJar
+ * Carbon's precompiled stylesheet from npm (`@carbon/styles`), served as `/css/carbon.min.css`. The WebJar
  * on Maven Central is far behind npm, so the build takes the package itself and checks it against npm's
  * integrity hash. Its `@font-face` rules load IBM Plex from IBM's CDN, which the Content-Security-Policy blocks:
  * they are left out, and the type falls back to the system font Carbon lists after Plex.
@@ -68,7 +68,7 @@ abstract class CarbonStyles : DefaultTask() {
                 .singleFile
                 .readText()
                 .replace(FONT_FACE, "")
-        val target = outputDir.file("static/admin/css/carbon.min.css").get().asFile
+        val target = outputDir.file("static/css/carbon.min.css").get().asFile
         target.parentFile.mkdirs()
         target.writeText("/*! @carbon/styles $version | Apache-2.0 | https://carbondesignsystem.com */\n$css")
     }

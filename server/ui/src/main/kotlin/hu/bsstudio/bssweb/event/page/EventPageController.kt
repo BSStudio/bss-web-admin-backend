@@ -40,7 +40,7 @@ import java.util.UUID
 
 @ConditionalOnAdminUi
 @Controller
-@RequestMapping("/admin/events")
+@RequestMapping("/events")
 @Suppress("TooManyFunctions")
 class EventPageController(
     private val eventService: EventService,
@@ -97,7 +97,7 @@ class EventPageController(
         return try {
             val event = eventService.insertEvent(CreateEvent(form.url.trim(), form.title.trim()))
             redirect.flash("event.flash.created", event.title)
-            "redirect:/admin/events/${event.id}"
+            "redirect:/events/${event.id}"
         } catch (_: DataIntegrityViolationException) {
             binding.reject("event.error.duplicate")
             NEW_PAGE
@@ -182,7 +182,7 @@ class EventPageController(
             REDIRECT_TO_LIST
         } catch (_: DataIntegrityViolationException) {
             redirect.flash("event.flash.deleteBlocked", event.title, error = true)
-            "redirect:/admin/events/$eventId"
+            "redirect:/events/$eventId"
         }
     }
 
@@ -231,7 +231,7 @@ class EventPageController(
                     "visible" to compareBy { it.visible },
                 ),
             )
-        private const val REDIRECT_TO_LIST = "redirect:/admin/events"
+        private const val REDIRECT_TO_LIST = "redirect:/events"
         private const val NEW_PAGE = "admin/event/new"
     }
 }

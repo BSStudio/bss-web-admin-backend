@@ -11,7 +11,7 @@
     </div>
 
     <section class="cds--table-toolbar table-toolbar" th:aria-label="#{table.toolbar}">
-        <form id="bulk" method="post" th:action="@{/admin/members/archived}" class="cds--batch-actions batch-actions">
+        <form id="bulk" method="post" th:action="@{/members/archived}" class="cds--batch-actions batch-actions">
             <div class="cds--batch-summary">
                 <p class="cds--batch-summary__para">
                     <span class="selected-count" th:data-template="#{table.selected}" th:text="#{member.list.batch}">Selected members</span>
@@ -28,15 +28,15 @@
                         <svg th:replace="~{admin/fragments :: icon('chevron--down', 16, 'cds--select__arrow')}"></svg>
                     </div>
                 </div>
-                <button type="submit" class="cds--btn cds--btn--primary" th:formaction="@{/admin/members/status}" th:text="#{member.list.setStatus}">Set status</button>
+                <button type="submit" class="cds--btn cds--btn--primary" th:formaction="@{/members/status}" th:text="#{member.list.setStatus}">Set status</button>
                 <button type="submit" class="cds--btn cds--btn--primary" name="archived" value="true" formnovalidate th:text="#{member.list.archive}">Archive</button>
                 <button type="submit" class="cds--btn cds--btn--primary" name="archived" value="false" formnovalidate th:text="#{member.list.restore}">Restore</button>
                 <button type="reset" class="cds--btn cds--btn--primary cds--batch-summary__cancel" th:text="#{action.cancel}">Cancel</button>
             </div>
         </form>
         <div class="cds--toolbar-content toolbar-actions">
-            <search th:replace="~{admin/fragments :: search('/admin/members', ${page})}"></search>
-            <a class="cds--btn cds--btn--primary" th:href="@{/admin/members/new}">
+            <search th:replace="~{admin/fragments :: search('/members', ${page})}"></search>
+            <a class="cds--btn cds--btn--primary" th:href="@{/members/new}">
                 <span th:text="#{member.list.new}">New member</span>
                 <svg th:replace="~{admin/fragments :: icon('add', 16, 'cds--btn__icon')}"></svg>
             </a>
@@ -51,11 +51,11 @@
                 <thead>
                 <tr>
                     <th th:replace="~{admin/fragments :: selectAll('memberIds')}"></th>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'name', #{member.field.name}, '')}"></th>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'url', #{member.field.url}, 'hide-small')}"></th>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'status', #{member.field.status}, '')}"></th>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'joinedAt', #{member.field.joinedAt}, 'hide-small')}"></th>
-                    <th th:replace="~{admin/fragments :: sortable('/admin/members', ${page}, 'archived', #{member.field.archived}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/members', ${page}, 'name', #{member.field.name}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/members', ${page}, 'url', #{member.field.url}, 'hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/members', ${page}, 'status', #{member.field.status}, '')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/members', ${page}, 'joinedAt', #{member.field.joinedAt}, 'hide-small')}"></th>
+                    <th th:replace="~{admin/fragments :: sortable('/members', ${page}, 'archived', #{member.field.archived}, '')}"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -66,7 +66,7 @@
                 <tr th:each="m : ${page.content}" th:classappend="${m.archived} ? 'archived'">
                     <td th:replace="~{admin/fragments :: selectRow('memberIds', ${m.id}, #{member.list.select(${m.name})})}"></td>
                     <td>
-                        <a class="cds--link" th:href="@{/admin/members/{id}(id=${m.id})}" th:text="${m.name}">Kovács Anna</a>
+                        <a class="cds--link" th:href="@{/members/{id}(id=${m.id})}" th:text="${m.name}">Kovács Anna</a>
                         <span class="muted" th:unless="${m.nickname.isBlank()}" th:text="|(${m.nickname})|">(Panni)</span>
                     </td>
                     <td class="muted hide-small" th:text="${m.url}">kovacs-anna</td>
@@ -77,7 +77,7 @@
                 </tbody>
             </table>
         </div>
-        <nav th:replace="~{admin/fragments :: pagination(${page}, '/admin/members')}"></nav>
+        <nav th:replace="~{admin/fragments :: pagination(${page}, '/members')}"></nav>
     </div>
 </main>
 
@@ -92,7 +92,7 @@
     <tr>
         <td th:fragment="archived" th:assert="${id != null}" class="select">
             <div th:replace="~{admin/fragments :: switch(|archived-${id}|, ${archived}, #{member.list.toggle(${name})},
-                    #{member.archived.on}, #{member.archived.off}, @{/admin/members/{id}/archived(id=${id}, archived=${!archived})})}"></div>
+                    #{member.archived.on}, #{member.archived.off}, @{/members/{id}/archived(id=${id}, archived=${!archived})})}"></div>
             <!--/* After a change, a toast says what happened (htmx adds it to #toasts) */-->
             <th:block th:if="${toast}"><div hx-swap-oob="beforeend:#toasts"><div th:replace="~{admin/fragments :: toast(${toast})}"></div></div></th:block>
         </td>
