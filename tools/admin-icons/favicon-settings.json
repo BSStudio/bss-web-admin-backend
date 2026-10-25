@@ -4,7 +4,7 @@
       "regularIconTransformation": {
         "type": "none",
         "backgroundRadius": 0,
-        "backgroundColor": "#141414",
+        "backgroundColor": "#151619",
         "imageScale": 1,
         "brightness": 1
       },
@@ -12,7 +12,7 @@
       "darkIconTransformation": {
         "type": "none",
         "backgroundRadius": 0,
-        "backgroundColor": "#141414",
+        "backgroundColor": "#151619",
         "imageScale": 1,
         "brightness": 1
       }
@@ -20,23 +20,23 @@
     "touch": {
       "appTitle": "BSS admin",
       "transformation": {
-        "type": "none",
+        "type": "background",
         "backgroundRadius": 0,
-        "backgroundColor": "#141414",
-        "imageScale": 1,
+        "backgroundColor": "#151619",
+        "imageScale": 0.8,
         "brightness": 1
       }
     },
     "webAppManifest": {
       "name": "BSS admin",
       "shortName": "BSS admin",
-      "backgroundColor": "#141414",
-      "themeColor": "#141414",
+      "backgroundColor": "#151619",
+      "themeColor": "#151619",
       "transformation": {
-        "type": "none",
+        "type": "background",
         "backgroundRadius": 0,
-        "backgroundColor": "#141414",
-        "imageScale": 1,
+        "backgroundColor": "#151619",
+        "imageScale": 0.6,
         "brightness": 1
       }
     }

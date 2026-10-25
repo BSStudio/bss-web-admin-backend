@@ -37,6 +37,17 @@ The logo artwork lives in `../../tools/admin-icons/logo.svg` (square) and `../..
 generated from the square artwork with [RealFaviconGenerator's CLI][rfg]. The checked-in icon set includes an SVG and ICO
 for desktop browsers, Apple's 180px touch icon, and Android's 192px and 512px web-app icons and manifest.
 
+- The square logo, and so the SVG favicon, follows the colour scheme: its attributes draw the dark tile, and a
+  `prefers-color-scheme: light` rule in its `<style>` turns the tile white and the letters ink. The PNG and ICO icons
+  are rendered from the attributes, so they are dark. The horizontal logo has no such rule: the top bar is dark in both
+  schemes.
+- The touch and web-app icons are opaque squares in the tile colour with the logo scaled into the middle (80% and
+  60%), so iOS's rounded mask and Android's circle never cut the frame, and iOS has no transparent corners to fill
+  with black. Home Screen icons are bitmaps and can't follow the scheme; the dark tile with its gradient frame stands
+  out on both light and dark wallpapers.
+- SVG gradients blend only in sRGB, so the frame's stops sample the OKLCH blend of `--bss-frame`. Keep the logo's
+  colours in step with `admin.css`. XML comments can't contain `--`, so don't name a token in one.
+
 The generation command is in `tools/admin-icons/generate-icons.sh`. It uses the pinned `realfavicon` CLI through `npx` and does not add a JavaScript package to the application. CI pins Node via `.node-version`, reruns the generator, and fails if the checked-in icon set changes. `AdminIconsTest` checks the icon files and their dimensions.
 
 [rfg]: https://realfavicongenerator.net/favicon-generator/node-cli
