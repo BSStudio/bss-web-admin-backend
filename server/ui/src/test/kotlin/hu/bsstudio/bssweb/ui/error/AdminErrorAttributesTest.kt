@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.security.authentication.TestingAuthenticationToken
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User
 import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.server.ResponseStatusException
 import java.net.URLDecoder
@@ -25,8 +27,10 @@ internal class AdminErrorAttributesTest {
     private val underTest = AdminErrorAttributes()
 
     @Test
-    internal fun `should leave errors outside the admin alone`() {
-        attributesFor(request(path = "/api/v1/video")).keys shouldNotContain "reportUrl"
+    internal fun `should leave the errors of API callers alone`() {
+        val apiCaller = TestingAuthenticationToken("api-client", null)
+
+        attributesFor(request(path = "/api/v1/video", principal = apiCaller)).keys shouldNotContain "reportUrl"
     }
 
     @Test
@@ -47,17 +51,17 @@ internal class AdminErrorAttributesTest {
 
         val reference = attributes["reference"] as String
         reference shouldHaveLength 8
-        attributes["request"] shouldBe "POST /admin/videos"
+        attributes["request"] shouldBe "POST /videos"
         attributes["message"] shouldBe "Database is down"
         attributes["trace"] as String shouldStartWith "java.sql.SQLException: connection refused"
         val reportUrl = attributes["reportUrl"] as String
         reportUrl shouldStartWith "https://github.com/BSStudio/bss-web-admin-backend/issues/new?template=admin-ui-error.yml&"
-        reportUrl shouldContain "title=${encode("[Admin UI] 500 Internal Server Error on POST /admin/videos")}"
-        reportUrl shouldContain "page=${encode("POST /admin/videos")}"
+        reportUrl shouldContain "title=${encode("[Admin UI] 500 Internal Server Error on POST /videos")}"
+        reportUrl shouldContain "page=${encode("POST /videos")}"
         reportUrl shouldContain "reference=$reference"
         // the public issue gets only the request, the time and the reference, never the message or the trace
         val details = URLDecoder.decode(reportUrl.substringAfter("details="), Charsets.UTF_8)
-        details shouldStartWith "Request: POST /admin/videos\nTime: "
+        details shouldStartWith "Request: POST /videos\nTime: "
         details shouldEndWith "\nReference: $reference"
         reportUrl shouldNotContain encode("Database is down")
         reportUrl shouldNotContain "SQLException"
@@ -70,7 +74,7 @@ internal class AdminErrorAttributesTest {
         val attributes = attributesFor(request(status = 404, error = error))
 
         attributes["reference"] as String shouldHaveLength 8
-        attributes["request"] shouldBe "POST /admin/videos"
+        attributes["request"] shouldBe "POST /videos"
         attributes.keys shouldNotContain "reportUrl"
         attributes.keys shouldNotContain "trace"
         attributes["message"] shouldBe null
@@ -92,7 +96,7 @@ internal class AdminErrorAttributesTest {
     internal fun `should fall back to the status and path when there is no exception`() {
         val attributes = attributesFor(request())
 
-        attributes["request"] shouldBe "/admin/videos"
+        attributes["request"] shouldBe "/videos"
         attributes["message"] shouldBe "Internal Server Error"
         attributes["trace"] shouldBe null
     }
@@ -101,10 +105,10 @@ internal class AdminErrorAttributesTest {
         underTest.getErrorAttributes(request, ErrorAttributeOptions.defaults())
 
     private fun request(
-        path: String? = "/admin/videos",
+        path: String? = "/videos",
         status: Int = 500,
         error: Exception? = null,
-        principal: Principal? = TestingAuthenticationToken("jdoe", null),
+        principal: Principal? = BROWSER_LOGIN,
     ): ServletWebRequest {
         val request = MockHttpServletRequest("POST", "/error")
         // an exception passes through Spring MVC's exception resolvers before the error page is rendered
@@ -116,4 +120,9 @@ internal class AdminErrorAttributesTest {
     }
 
     private fun encode(value: String) = URLEncoder.encode(value, Charsets.UTF_8)
+
+    private companion object {
+        private val BROWSER_LOGIN =
+            OAuth2AuthenticationToken(DefaultOAuth2User(emptyList(), mapOf("sub" to "jdoe"), "sub"), emptyList(), "authentik")
+    }
 }

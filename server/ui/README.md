@@ -1,6 +1,7 @@
 # UI module
 
-This module holds the admin UI: server-rendered pages under `/admin`.
+This module holds the admin UI: server-rendered pages from the root, `/`. The REST API (`/api`), the actuator,
+the Swagger UI (`/swagger-ui.html`) and the OpenAPI document keep their own addresses.
 It uses [Thymeleaf][thymeleaf] templates, [htmx][htmx] for partial page updates and [IBM Carbon][carbon]'s styles
 with the BSS theme on top. htmx comes in as a WebJar, and Gradle takes Carbon's precompiled stylesheet from npm
 (`carbonStyles` in `build.gradle.kts`).
@@ -10,23 +11,24 @@ Keep business logic in the `service` module.
 
 ## Layout
 
-|                    Path                    |                       What it holds                        |
-|--------------------------------------------|------------------------------------------------------------|
-| `<feature>/page/*PageController.kt`        | One controller per section, returning template names       |
-| `<feature>/page/*Form.kt`                  | A form's fields, their validation and mapping to the model |
-| `ui/config/ConditionalOnAdminUi.kt`        | Turns every UI bean on or off together                     |
-| `ui/config/UiSecurityConfig.kt`            | Browser login and security headers for `/admin/**`         |
-| `ui/config/UiWebConfig.kt`                 | Languages and locale interceptors for `/admin/**`          |
-| `ui/config/AdminLocaleResolver.kt`         | Language cookie for `/admin`, Accept-Language elsewhere    |
-| `ui/config/LanguageLinksAdvice.kt`         | Language links that keep the current address               |
-| `ui/flash/Flash.kt`                        | One-off messages shown after a redirect                    |
-| `ui/paging/`                               | Paging, search and sorting of lists, and a table's state   |
-| `resources/templates/admin/layout.html`    | Page shell: head, top bar, flash message, language switch  |
-| `resources/templates/admin/fragments.html` | Shared pieces: search, sort, pagination, dates, dialogs    |
-| `resources/templates/admin/<section>/`     | `list.html`, `new.html`, `edit.html` of a section          |
-| `resources/static/admin/css/admin.css`     | Carbon in a layer, the BSS theme tokens, page layout       |
-| `resources/static/admin/js/admin.js`       | Unsaved changes, select all, toasts; our only script       |
-| `resources/messages*.properties`           | UI text in English (default) and Hungarian                 |
+|                    Path                    |                          What it holds                          |
+|--------------------------------------------|-----------------------------------------------------------------|
+| `<feature>/page/*PageController.kt`        | One controller per section, returning template names            |
+| `<feature>/page/*Form.kt`                  | A form's fields, their validation and mapping to the model      |
+| `ui/config/ConditionalOnAdminUi.kt`        | Turns every UI bean on or off together                          |
+| `ui/config/ApiPaths.kt`                    | The API's addresses, which the UI's language and URL rules skip |
+| `ui/config/UiSecurityConfig.kt`            | Browser login and security headers for every UI address         |
+| `ui/config/UiWebConfig.kt`                 | Languages and locale interceptors for every UI address          |
+| `ui/config/AdminLocaleResolver.kt`         | Language cookie for the UI, Accept-Language for the API         |
+| `ui/config/LanguageLinksAdvice.kt`         | Language links that keep the current address                    |
+| `ui/flash/Flash.kt`                        | One-off messages shown after a redirect                         |
+| `ui/paging/`                               | Paging, search and sorting of lists, and a table's state        |
+| `resources/templates/admin/layout.html`    | Page shell: head, top bar, flash message, language switch       |
+| `resources/templates/admin/fragments.html` | Shared pieces: search, sort, pagination, dates, dialogs         |
+| `resources/templates/admin/<section>/`     | `list.html`, `new.html`, `edit.html` of a section               |
+| `resources/static/css/admin.css`           | Carbon in a layer, the BSS theme tokens, page layout            |
+| `resources/static/js/admin.js`             | Unsaved changes, select all, toasts; our only script            |
+| `resources/messages*.properties`           | UI text in English (default) and Hungarian                      |
 
 ## Logo and icons
 
@@ -66,7 +68,7 @@ thousand rows a search takes well under a second; move it into the database when
   touch. At login, `CurrentUserLoginHandler` looks for the member they are, once per session: their username
   (`preferred_username`) as a member's URL, else the only member with their full name. Their initials then lead to
   that member's page.
-- **List.** `GET /admin/<section>?q=&page=&size=&sort=` shows a toolbar (search, *New*), a compact table, and
+- **List.** `GET /<section>?q=&page=&size=&sort=` shows a toolbar (search, *New*), a compact table, and
   a footer with the page size, the item range, a page list and previous / next. Searching, sorting and paging load
   the list into `#results` with htmx and update the address, so reloading or sharing it keeps the view.
   For an htmx request the controller renders only the `results` fragment (htmx-spring-boot's `HtmxRequest`).
@@ -80,8 +82,8 @@ thousand rows a search takes well under a second; move it into the database when
   Each controller lists its sortable columns in a `TableSort`, with a comparator for each; other columns, or none,
   get the default order, which also breaks ties. Videos sort in the database unless there is a search; the other
   lists sort in memory. Text sorts the Hungarian way. Events can also be sorted by their video count, which the database counts as it loads them.
-- **New.** `GET /admin/<section>/new` asks only for the required fields, then opens the edit page.
-- **Edit.** `GET /admin/<section>/{id}` is a full page: the form on the left, related lists (crew) in a side
+- **New.** `GET /<section>/new` asks only for the required fields, then opens the edit page.
+- **Edit.** `GET /<section>/{id}` is a full page: the form on the left, related lists (crew) in a side
   panel on the right. *Save* posts the form and redirects to the list with a flash message.
 - **Validation.** Every form, the create forms too, is a `*Form` class with Bean Validation: `@NotBlank`, `@Size`
   from the column lengths, and `@AssertTrue datesInOrder` where there is a date range. The controller takes
@@ -97,7 +99,7 @@ thousand rows a search takes well under a second; move it into the database when
   styled too. When new values must stay possible, add a last option marked `data-other` and give the select
   `data-other="<id of a text field>"`: `admin.js` shows that field while the option is chosen, as for crew positions.
 - **Delete** sits in the page header (in each row for labels) and opens `admin/fragments :: deleteDialog`, a native
-  `<dialog>`, with `command="show-modal"`. Its form posts to `/admin/<section>/{id}/delete`. Invoker commands are
+  `<dialog>`, with `command="show-modal"`. Its form posts to `/<section>/{id}/delete`. Invoker commands are
   Baseline only since December 2025; in older browsers `admin.js` opens and closes the dialog instead.
 - **Unsaved changes.** Forms carry `th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'"` and an empty
   `<span class="unsaved" role="status">` next to *Save*. While the values differ from the loaded ones, `admin.js`
@@ -113,7 +115,7 @@ thousand rows a search takes well under a second; move it into the database when
 The pages use [Carbon][carbon]'s components and classes (`cds--btn`, `cds--data-table`, `cds--text-input` …), as
 in Carbon's own markup. Carbon's stylesheet comes from `@carbon/styles` on npm: the `carbonStyles` task downloads the
 version in `gradle/libs.versions.toml` (Renovate updates it), checks it against npm's integrity hash and serves it as
-`/admin/css/carbon.min.css`, without its `@font-face` rules, which load IBM Plex from IBM's CDN and which the
+`/css/carbon.min.css`, without its `@font-face` rules, which load IBM Plex from IBM's CDN and which the
 Content-Security-Policy would block. The type falls back to the system font.
 
 - `admin.css` imports Carbon into a cascade layer, so its own rules win without matching Carbon's specificity.
@@ -212,14 +214,16 @@ Prefer the typographic apostrophe (’), which needs no escaping.
 
 ## Login
 
-The admin UI uses its own filter chain with OAuth2 login (authorization code flow) and session cookies.
-The REST API under `/api` keeps its opaque-token filter chain from the `web` module.
+The app has two filter chains. The `web` module's comes first and takes the REST API (`/api`), the Swagger UI,
+the OpenAPI document and the actuator: the documentation and the health check are public, everything else accepts
+only an opaque token. It keeps no session, and so ignores the admin's session cookie. The admin UI's chain takes
+every other address, with OAuth2 login (authorization code flow) and session cookies.
 
 The UI is enabled only when a client registration is configured, and logs in with it. Production calls it
 `authentik`, as in the table below, but the id is up to the deployment: configure one registration, with any id.
 Every UI bean (the filter chain, the controllers, the error details) carries `@ConditionalOnAdminUi`, so without it
-nothing of the UI exists: `/admin` falls through to the API filter chain, which answers `401` without a token and has
-no admin page to serve with one.
+nothing of the UI exists. The `web` module then adds a catch-all chain that asks for a token everywhere, so `/`
+answers `401` without one and has no admin page to serve with one.
 
 **Who can use it.** Anyone who can finish the Authentik login can change every video, event and member; the app
 itself checks no group. Restrict the login with the Authentik application's policy bindings (e.g. a group
@@ -238,7 +242,8 @@ used: see [Behind a proxy](../README.md#behind-a-proxy) in the server module.
 | `provider.authentik.issuer-uri`                   | `https://login.bsstudio.hu/application/o/<app-slug>/` |
 | `provider.authentik.user-name-attribute`          | `preferred_username`                                  |
 
-In Authentik, register `https://<admin host>/login/oauth2/code/authentik` as the redirect URI.
+In Authentik, register `https://<admin host>/login/oauth2/code/authentik` as the redirect URI, and
+`https://<admin host>/` as the one to return to after logging out.
 
 ## Local development
 
@@ -300,7 +305,7 @@ in a separate file, `docker-compose.ui.yml`:
 docker compose -f docker-compose.yml -f docker-compose.ui.yml --profile app up -d --build
 ```
 
-Then open <http://localhost:8080/admin>.
+Then open <http://localhost:8080>.
 
 ## Testing
 

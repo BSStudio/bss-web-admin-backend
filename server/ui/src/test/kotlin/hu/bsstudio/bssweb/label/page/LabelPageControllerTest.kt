@@ -58,7 +58,7 @@ internal class LabelPageControllerTest(
                     )
                 }
                 content { string(containsString("""<p>It is removed from every video. This can’t be undone.</p>""")) }
-                content { string(containsString("""action="/admin/labels/${SPORT.id}/delete">""")) }
+                content { string(containsString("""action="/labels/${SPORT.id}/delete">""")) }
             }
     }
 
@@ -159,7 +159,7 @@ internal class LabelPageControllerTest(
     }
 
     private companion object {
-        private const val BASE_URL = "/admin/labels"
+        private const val BASE_URL = "/labels"
         private val SPORT = Label(UUID.randomUUID(), "Sport", "Sport events", videoCount = 37)
         private val UNIVERSITY_LIFE = Label(UUID.randomUUID(), "Egyetemi élet", "University life")
     }

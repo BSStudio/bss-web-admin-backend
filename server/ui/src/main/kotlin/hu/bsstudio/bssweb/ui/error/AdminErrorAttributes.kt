@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.boot.web.error.ErrorAttributeOptions
 import org.springframework.boot.webmvc.error.DefaultErrorAttributes
 import org.springframework.core.NestedExceptionUtils
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
 import org.springframework.stereotype.Component
 import org.springframework.web.ErrorResponse
 import org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST
@@ -19,7 +20,8 @@ import java.util.UUID
 /**
  * Adds what an admin needs to report an error: the error message, a short reference that is logged
  * together with the stack trace, and a link that opens a pre-filled GitHub issue.
- * Only for admin pages and logged-in users; API responses and anonymous visitors keep Spring's defaults.
+ * Only for admins logged in through the browser; API callers, who log in with a token, and anonymous visitors keep
+ * Spring's defaults.
  */
 @ConditionalOnAdminUi
 @Component
@@ -41,7 +43,7 @@ class AdminErrorAttributes : DefaultErrorAttributes() {
     ): MutableMap<String, Any?> {
         val attributes = super.getErrorAttributes(webRequest, options)
         val path = attributes["path"] as? String
-        if (path == null || !path.startsWith(ADMIN_PATH) || webRequest.userPrincipal == null) {
+        if (path == null || webRequest.userPrincipal !is OAuth2AuthenticationToken) {
             return attributes
         }
         val status = attributes["status"] as Int
@@ -88,7 +90,6 @@ class AdminErrorAttributes : DefaultErrorAttributes() {
 
     private companion object {
         private val logger = LoggerFactory.getLogger(AdminErrorAttributes::class.java)
-        private const val ADMIN_PATH = "/admin"
         private val METHOD_ATTRIBUTE = "${AdminErrorAttributes::class.java.name}.METHOD"
         private const val SERVER_ERROR = 500
         private const val REFERENCE_LENGTH = 8

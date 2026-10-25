@@ -3,7 +3,7 @@
 # they cost nothing when unused, and the integration tests don't use this file.
 #   docker compose -f docker-compose.yml -f docker-compose.ui.yml --profile app up -d --build
 # With ./gradlew bootRun, plain `docker compose up -d` is enough; see server/ui/README.md.
-# Open http://localhost:8080/admin and type any username on the login form.
+# Open http://localhost:8080 and type any username on the login form.
 services:
   app:
     environment:

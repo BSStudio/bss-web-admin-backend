@@ -41,6 +41,6 @@
       }
     }
   },
-  "path": "/admin/icons/",
+  "path": "/icons/",
   "skipMetadataInjection": true
 }

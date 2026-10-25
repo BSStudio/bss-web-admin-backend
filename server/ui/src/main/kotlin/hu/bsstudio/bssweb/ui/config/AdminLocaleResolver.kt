@@ -30,6 +30,6 @@ class AdminLocaleResolver(
 
     private fun resolverFor(request: HttpServletRequest): LocaleResolver {
         val uri = request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI) as String? ?: request.requestURI
-        return if (uri.removePrefix(request.contextPath).startsWith("/admin")) admin else other
+        return if (ApiPaths.matches(request, uri)) other else admin
     }
 }

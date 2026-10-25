@@ -10,7 +10,7 @@
         <div>
             <nav th:aria-label="#{nav.breadcrumb}">
                 <ol class="cds--breadcrumb">
-                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/members}" th:text="#{member.list.title}">Members</a></li>
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/members}" th:text="#{member.list.title}">Members</a></li>
                 </ol>
             </nav>
             <h1 th:text="${member.name}">Kovács Anna</h1>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="columns">
-        <form method="post" th:action="@{/admin/members/{id}(id=${member.id})}" th:object="${form}" class="stack"
+        <form method="post" th:action="@{/members/{id}(id=${member.id})}" th:object="${form}" class="stack"
               th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
             <div th:replace="~{admin/fragments :: formError}"></div>
             <div class="grid">
@@ -93,7 +93,7 @@
                 </label>
             </div>
             <div class="cds--btn-set actions">
-                <a class="cds--btn cds--btn--secondary" th:href="@{/admin/members}" th:text="#{action.cancel}">Cancel</a>
+                <a class="cds--btn cds--btn--secondary" th:href="@{/members}" th:text="#{action.cancel}">Cancel</a>
                 <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.save}">Save</button>
                 <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
             </div>
@@ -105,7 +105,7 @@
         </section>
     </div>
 
-    <dialog th:replace="~{admin/fragments :: deleteDialog('delete-dialog', @{/admin/members/{id}/delete(id=${member.id})},
+    <dialog th:replace="~{admin/fragments :: deleteDialog('delete-dialog', @{/members/{id}/delete(id=${member.id})},
             #{member.delete.question(${member.name})}, #{member.delete.warning})}"></dialog>
 </main>
 

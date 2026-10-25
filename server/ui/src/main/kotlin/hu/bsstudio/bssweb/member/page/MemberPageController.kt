@@ -40,7 +40,7 @@ import java.util.UUID
 
 @ConditionalOnAdminUi
 @Controller
-@RequestMapping("/admin/members")
+@RequestMapping("/members")
 @Suppress("TooManyFunctions")
 class MemberPageController(
     private val memberService: MemberService,
@@ -130,7 +130,7 @@ class MemberPageController(
         return try {
             val member = memberService.insertMember(CreateMember(form.url.trim(), form.name.trim()))
             redirect.flash("member.flash.created", member.name)
-            "redirect:/admin/members/${member.id}"
+            "redirect:/members/${member.id}"
         } catch (_: DataIntegrityViolationException) {
             binding.rejectValue("url", "member.error.duplicateUrl")
             NEW_PAGE
@@ -174,7 +174,7 @@ class MemberPageController(
             // the changes are saved; only passing the URL on to the file server failed
             logger.warn("File server failed after saving member {}", memberId, e)
             redirect.flash("member.flash.savedWithoutFiles", form.name.trim(), error = true)
-            "redirect:/admin/members/$memberId"
+            "redirect:/members/$memberId"
         }
     }
 
@@ -190,7 +190,7 @@ class MemberPageController(
             REDIRECT_TO_LIST
         } catch (_: DataIntegrityViolationException) {
             redirect.flash("member.flash.deleteBlocked", member.name, error = true)
-            "redirect:/admin/members/$memberId"
+            "redirect:/members/$memberId"
         }
     }
 
@@ -209,7 +209,7 @@ class MemberPageController(
 
     private companion object {
         private val logger = LoggerFactory.getLogger(MemberPageController::class.java)
-        private const val REDIRECT_TO_LIST = "redirect:/admin/members"
+        private const val REDIRECT_TO_LIST = "redirect:/members"
         private const val NEW_PAGE = "admin/member/new"
 
         // in the order a member goes through them

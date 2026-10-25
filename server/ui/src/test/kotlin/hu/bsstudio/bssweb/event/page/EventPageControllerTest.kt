@@ -561,7 +561,7 @@ internal class EventPageControllerTest(
     }
 
     private companion object {
-        private const val BASE_URL = "/admin/events"
+        private const val BASE_URL = "/events"
         private val ARRIVAL = video("Gólyatábor 2026 - Megérkezés", LocalDate.of(2026, 8, 12))
         private val CUSTOMS = video("Gólyatábor 2026 - Vám", LocalDate.of(2026, 8, 13))
         private val OPEN_DAY = video("BME Nyílt nap 2025", LocalDate.of(2025, 11, 14))

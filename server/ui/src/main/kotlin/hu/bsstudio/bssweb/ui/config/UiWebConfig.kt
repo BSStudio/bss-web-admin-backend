@@ -1,5 +1,7 @@
 package hu.bsstudio.bssweb.ui.config
 
+import jakarta.servlet.Filter
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.MessageSource
 import org.springframework.context.annotation.Bean
@@ -37,20 +39,29 @@ class UiWebConfig : WebMvcConfigurer {
         }
 
     /**
-     * An admin address with a trailing slash, such as `/admin/`, redirects to the one without it. Spring no longer
+     * An admin address with a trailing slash, such as `/videos/`, redirects to the one without it. Spring no longer
      * treats them as the same page, and this keeps one address per page. It runs before the login, so the address
-     * saved for after the login is already the right one.
+     * saved for after the login is already the right one. The API's addresses are left as they are.
      */
     @Bean
-    fun trailingSlashRedirect(): FilterRegistrationBean<UrlHandlerFilter> =
-        FilterRegistrationBean(
-            UrlHandlerFilter.trailingSlashHandler("/admin/**").redirect(HttpStatus.PERMANENT_REDIRECT).build(),
-        ).apply { order = Ordered.HIGHEST_PRECEDENCE }
+    fun trailingSlashRedirect(): FilterRegistrationBean<Filter> {
+        val redirect = UrlHandlerFilter.trailingSlashHandler("/**").redirect(HttpStatus.PERMANENT_REDIRECT).build()
+        val filter =
+            Filter { request, response, chain ->
+                if (ApiPaths.matches(request as HttpServletRequest)) {
+                    chain.doFilter(request, response)
+                } else {
+                    redirect.doFilter(request, response, chain)
+                }
+            }
+        return FilterRegistrationBean(filter).apply { order = Ordered.HIGHEST_PRECEDENCE }
+    }
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry
             .addInterceptor(LocaleChangeInterceptor().apply { paramName = LOCALE_PARAM })
-            .addPathPatterns("/admin/**")
+            .addPathPatterns("/**")
+            .excludePathPatterns(ApiPaths.PATTERN)
     }
 
     companion object {

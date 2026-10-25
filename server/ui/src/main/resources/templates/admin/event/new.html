@@ -10,14 +10,14 @@
         <div>
             <nav th:aria-label="#{nav.breadcrumb}">
                 <ol class="cds--breadcrumb">
-                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/admin/events}" th:text="#{event.list.title}">Events</a></li>
+                    <li class="cds--breadcrumb-item"><a class="cds--link" th:href="@{/events}" th:text="#{event.list.title}">Events</a></li>
                 </ol>
             </nav>
             <h1 th:text="#{event.new.title}">New event</h1>
         </div>
     </div>
 
-    <form method="post" th:action="@{/admin/events}" th:object="${form}" class="stack narrow"
+    <form method="post" th:action="@{/events}" th:object="${form}" class="stack narrow"
           th:data-unsaved="${#fields.hasAnyErrors()} ? 'pending' : 'track'">
         <div th:replace="~{admin/fragments :: formError}"></div>
         <div class="cds--form-item">
@@ -37,7 +37,7 @@
         </div>
         <p class="cds--form__helper-text" th:text="#{event.new.help}">Start with the title and URL.</p>
         <div class="cds--btn-set actions">
-            <a class="cds--btn cds--btn--secondary" th:href="@{/admin/events}" th:text="#{action.cancel}">Cancel</a>
+            <a class="cds--btn cds--btn--secondary" th:href="@{/events}" th:text="#{action.cancel}">Cancel</a>
             <button type="submit" class="cds--btn cds--btn--primary" th:text="#{action.create}">Create</button>
             <span class="unsaved" role="status" th:data-message="#{form.unsaved}"></span>
         </div>

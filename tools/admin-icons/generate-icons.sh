@@ -3,7 +3,7 @@ set -euo pipefail
 
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 repo_root="$(cd -- "$script_dir/../.." && pwd)"
-icons_dir="$repo_root/server/ui/src/main/resources/static/admin/icons"
+icons_dir="$repo_root/server/ui/src/main/resources/static/icons"
 html_data="$(mktemp)"
 trap 'rm -f "$html_data"' EXIT
 
