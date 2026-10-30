@@ -2,6 +2,8 @@ package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.label.repository.LabelRepository
+import hu.bsstudio.bssweb.revision.mapper.RevisionMapper
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
 import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.CreateVideo
@@ -11,6 +13,7 @@ import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.repository.VideoRepository
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
@@ -23,6 +26,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.data.history.Revision
+import org.springframework.data.history.RevisionMetadata
+import org.springframework.data.history.Revisions
+import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
@@ -31,6 +38,7 @@ internal class DefaultVideoServiceTest(
     @param:MockK private val mockRepository: VideoRepository,
     @param:MockK private val mockMapper: VideoMapper,
     @param:MockK private val mockLabelRepository: LabelRepository,
+    @param:MockK private val mockRevisionMapper: RevisionMapper,
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultVideoService
@@ -141,7 +149,93 @@ internal class DefaultVideoServiceTest(
         underTest.deleteVideoById(VIDEO_ID)
     }
 
+    @Test
+    internal fun `should return deleted videos`() {
+        every { mockRepository.findAllDeleted(PAGEABLE) } returns PageImpl(listOf(VIDEO_ENTITY))
+        every { mockMapper.entityToModel(VIDEO_ENTITY) } returns VIDEO
+
+        val actual = underTest.findDeletedVideos(PAGEABLE)
+
+        actual shouldBeEqual PageImpl(listOf(VIDEO))
+    }
+
+    @Test
+    internal fun `should restore a deleted video`() {
+        val entity =
+            VideoEntity(title = "title").apply {
+                id = UUID.randomUUID()
+                deletedAt = Instant.now()
+            }
+        every { mockRepository.findDeletedById(VIDEO_ID) } returns Optional.of(entity)
+        every { mockRepository.save(entity) } returns entity
+        every { mockMapper.entityToDetailedModel(entity) } returns DETAILED_VIDEO
+
+        val actual = underTest.restoreVideo(VIDEO_ID)
+
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
+        entity.deletedAt.shouldBeNull()
+    }
+
+    @Test
+    internal fun `should not restore a video that is not deleted`() {
+        every { mockRepository.findDeletedById(VIDEO_ID) } returns Optional.empty()
+
+        val actual = underTest.restoreVideo(VIDEO_ID)
+
+        actual.shouldBeEmpty()
+    }
+
+    @Test
+    internal fun `should return the revisions of a video`() {
+        val revisions = Revisions.none<Long, VideoEntity>()
+        every { mockRepository.findRevisions(VIDEO_ID) } returns revisions
+        every { mockRevisionMapper.revisionsToModel(revisions, any<(VideoEntity) -> Instant?>()) } returns REVISION_INFOS
+
+        val actual = underTest.findVideoRevisions(VIDEO_ID)
+
+        actual shouldBeEqual REVISION_INFOS
+    }
+
+    @Test
+    internal fun `should return a video as it was at a revision`() {
+        every { mockRepository.findRevision(VIDEO_ID, REVISION) } returns Optional.of(Revision.of(REVISION_METADATA, VIDEO_ENTITY))
+        every { mockMapper.revisionToModel(VIDEO_ENTITY) } returns DETAILED_VIDEO
+
+        val actual = underTest.findVideoRevision(VIDEO_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
+    }
+
+    @Test
+    internal fun `should give a video the fields it had at a revision`() {
+        val current = VideoEntity(title = "title").apply { id = UUID.randomUUID() }
+        every { mockRepository.findRevision(VIDEO_ID, REVISION) } returns Optional.of(Revision.of(REVISION_METADATA, VIDEO_ENTITY))
+        every { mockMapper.entityToUpdate(VIDEO_ENTITY) } returns UPDATE_VIDEO
+        every { UPDATE_VIDEO.labels } returns LABELS
+        every { mockLabelRepository.findAllByNameIn(LABELS) } returns LABEL_ENTITIES
+        every { mockMapper.updateToEntity(current, UPDATE_VIDEO, LABEL_ENTITIES) } returns current
+        every { mockRepository.findById(VIDEO_ID) } returns Optional.of(current)
+        every { mockRepository.save(current) } returns current
+        every { mockMapper.entityToDetailedModel(current) } returns DETAILED_VIDEO
+
+        val actual = underTest.restoreVideoRevision(VIDEO_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
+    }
+
+    @Test
+    internal fun `should not restore a revision that is missing`() {
+        every { mockRepository.findRevision(VIDEO_ID, REVISION) } returns Optional.empty()
+
+        val actual = underTest.restoreVideoRevision(VIDEO_ID, REVISION)
+
+        actual.shouldBeEmpty()
+    }
+
     private companion object {
+        private const val REVISION = 3L
+        private val REVISION_METADATA = mockk<RevisionMetadata<Long>>()
+        private val REVISION_INFOS = listOf(mockk<RevisionInfo>())
         private val PAGEABLE = Pageable.unpaged()
         private val VIDEO_ID = mockk<UUID>()
         private val VIDEO_ENTITY = mockk<VideoEntity>()

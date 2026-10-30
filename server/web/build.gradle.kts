@@ -18,6 +18,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-security-oauth2-client")
     implementation(libs.springdocOpenapiStarterWebmvcUi)
     implementation("org.springframework.data:spring-data-commons")
+    implementation("org.springframework:spring-tx")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
     testImplementation("org.springframework.boot:spring-boot-starter-jackson-test")

@@ -110,6 +110,124 @@ paths:
       responses:
         "204":
           description: No content
+  /api/v1/member/deleted:
+    get:
+      operationId: getDeletedMembers
+      summary: Read the deleted members (paginated)
+      description: Read the deleted members (paginated). A deleted member is left
+        out of every other endpoint until it is restored.
+      tags:
+      - Member
+      parameters:
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  properties:
+                    content:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/Member"
+                - $ref: "#/components/schemas/Page"
+  /api/v1/member/{memberId}/restore:
+    post:
+      operationId: restoreMember
+      summary: Restore deleted member
+      description: Restore a deleted member
+      tags:
+      - Member
+      parameters:
+      - $ref: "#/components/parameters/memberId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        "404":
+          description: No deleted member has the id
+        "409":
+          description: Another member has taken its title or URL since
+  /api/v1/member/{memberId}/revisions:
+    get:
+      operationId: getMemberRevisions
+      summary: Read the revisions of member
+      description: "Read the changes of a member, newest first, including the ones\
+        \ made while it was deleted"
+      tags:
+      - Member
+      parameters:
+      - $ref: "#/components/parameters/memberId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RevisionInfo"
+  /api/v1/member/{memberId}/revisions/{revision}:
+    get:
+      operationId: getMemberRevision
+      summary: Read member at a revision
+      description: Read a member as it was at a revision.
+      tags:
+      - Member
+      parameters:
+      - $ref: "#/components/parameters/memberId"
+      - $ref: "#/components/parameters/revision"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        "404":
+          description: The member has no such revision
+  /api/v1/member/{memberId}/revisions/{revision}/restore:
+    post:
+      operationId: restoreMemberRevision
+      summary: Restore member to a revision
+      description: Give a member the fields it had at a revision. A deleted member
+        has to be restored first.
+      tags:
+      - Member
+      parameters:
+      - $ref: "#/components/parameters/memberId"
+      - $ref: "#/components/parameters/revision"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        "404":
+          description: "The member is deleted, or has no such revision"
+        "409":
+          description: Another member has taken its title or URL since
   /api/v1/video:
     post:
       operationId: createVideo
@@ -243,6 +361,125 @@ paths:
       responses:
         "204":
           description: No content
+  /api/v1/video/deleted:
+    get:
+      operationId: getDeletedVideos
+      summary: Read the deleted videos (paginated)
+      description: Read the deleted videos (paginated). A deleted video is left out
+        of every other endpoint until it is restored.
+      tags:
+      - Video
+      parameters:
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  properties:
+                    content:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/Video"
+                - $ref: "#/components/schemas/Page"
+  /api/v1/video/{videoId}/restore:
+    post:
+      operationId: restoreVideo
+      summary: Restore deleted video
+      description: Restore a deleted video
+      tags:
+      - Video
+      parameters:
+      - $ref: "#/components/parameters/videoId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailedVideo"
+        "404":
+          description: No deleted video has the id
+        "409":
+          description: Another video has taken its title or URL since
+  /api/v1/video/{videoId}/revisions:
+    get:
+      operationId: getVideoRevisions
+      summary: Read the revisions of video
+      description: "Read the changes of a video, newest first, including the ones\
+        \ made while it was deleted"
+      tags:
+      - Video
+      parameters:
+      - $ref: "#/components/parameters/videoId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RevisionInfo"
+  /api/v1/video/{videoId}/revisions/{revision}:
+    get:
+      operationId: getVideoRevision
+      summary: Read video at a revision
+      description: "Read a video as it was at a revision. Its crew has no history,\
+        \ so it is empty."
+      tags:
+      - Video
+      parameters:
+      - $ref: "#/components/parameters/videoId"
+      - $ref: "#/components/parameters/revision"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailedVideo"
+        "404":
+          description: The video has no such revision
+  /api/v1/video/{videoId}/revisions/{revision}/restore:
+    post:
+      operationId: restoreVideoRevision
+      summary: Restore video to a revision
+      description: Give a video the fields it had at a revision. A deleted video has
+        to be restored first.
+      tags:
+      - Video
+      parameters:
+      - $ref: "#/components/parameters/videoId"
+      - $ref: "#/components/parameters/revision"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailedVideo"
+        "404":
+          description: "The video is deleted, or has no such revision"
+        "409":
+          description: Another video has taken its title or URL since
   /api/v1/videoCrew:
     put:
       operationId: addPosition
@@ -435,6 +672,125 @@ paths:
       responses:
         "204":
           description: No content
+  /api/v1/event/deleted:
+    get:
+      operationId: getDeletedEvents
+      summary: Read the deleted events (paginated)
+      description: Read the deleted events (paginated). A deleted event is left out
+        of every other endpoint until it is restored.
+      tags:
+      - Event
+      parameters:
+      - name: size
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  properties:
+                    content:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/Event"
+                - $ref: "#/components/schemas/Page"
+  /api/v1/event/{eventId}/restore:
+    post:
+      operationId: restoreEvent
+      summary: Restore deleted event
+      description: Restore a deleted event
+      tags:
+      - Event
+      parameters:
+      - $ref: "#/components/parameters/eventId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailedEvent"
+        "404":
+          description: No deleted event has the id
+        "409":
+          description: Another event has taken its title or URL since
+  /api/v1/event/{eventId}/revisions:
+    get:
+      operationId: getEventRevisions
+      summary: Read the revisions of event
+      description: "Read the changes of a event, newest first, including the ones\
+        \ made while it was deleted"
+      tags:
+      - Event
+      parameters:
+      - $ref: "#/components/parameters/eventId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RevisionInfo"
+  /api/v1/event/{eventId}/revisions/{revision}:
+    get:
+      operationId: getEventRevision
+      summary: Read event at a revision
+      description: "Read a event as it was at a revision. Its videos have no history,\
+        \ so its video count is 0."
+      tags:
+      - Event
+      parameters:
+      - $ref: "#/components/parameters/eventId"
+      - $ref: "#/components/parameters/revision"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+        "404":
+          description: The event has no such revision
+  /api/v1/event/{eventId}/revisions/{revision}/restore:
+    post:
+      operationId: restoreEventRevision
+      summary: Restore event to a revision
+      description: Give a event the fields it had at a revision. A deleted event has
+        to be restored first.
+      tags:
+      - Event
+      parameters:
+      - $ref: "#/components/parameters/eventId"
+      - $ref: "#/components/parameters/revision"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DetailedEvent"
+        "404":
+          description: "The event is deleted, or has no such revision"
+        "409":
+          description: Another event has taken its title or URL since
   /api/v1/eventVideo:
     put:
       operationId: addVideoToEvent
@@ -531,6 +887,13 @@ components:
       schema:
         type: string
         format: uuid
+    revision:
+      name: revision
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
   schemas:
     Sort:
       type: object
@@ -779,6 +1142,26 @@ components:
             type: array
             items:
               $ref: "#/components/schemas/Video"
+    RevisionInfo:
+      type: object
+      properties:
+        number:
+          type: integer
+          format: int64
+        timestamp:
+          type: string
+          format: date-time
+        author:
+          type: string
+          nullable: true
+          description: "Who made the change, or null if nobody was signed in"
+        type:
+          type: string
+          enum:
+          - CREATED
+          - UPDATED
+          - DELETED
+          - RESTORED
     BssMetrics:
       type: object
       properties:
