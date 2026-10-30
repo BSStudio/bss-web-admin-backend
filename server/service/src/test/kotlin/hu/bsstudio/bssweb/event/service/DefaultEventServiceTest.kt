@@ -1,14 +1,12 @@
 package hu.bsstudio.bssweb.event.service
 
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
-import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
+import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.mapper.EventMapper
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
-import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
-import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
+import hu.bsstudio.bssweb.event.repository.EventRepository
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.optional.shouldBeEmpty
@@ -26,8 +24,7 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultEventServiceTest(
-    @param:MockK private val mockRepository: SimpleEventRepository,
-    @param:MockK private val mockDetailedRepository: DetailedEventRepository,
+    @param:MockK private val mockRepository: EventRepository,
     @param:MockK private val mockMapper: EventMapper,
 ) {
     @InjectMockKs
@@ -70,8 +67,8 @@ internal class DefaultEventServiceTest(
 
     @Test
     internal fun `should find event by id`() {
-        every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_ENTITY)
-        every { mockMapper.entityToModel(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT
+        every { mockRepository.findById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_ENTITY)
+        every { mockMapper.entityToDetailedModel(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT
 
         val actual = underTest.findEventById(EVENT_ID)
 
@@ -80,7 +77,7 @@ internal class DefaultEventServiceTest(
 
     @Test
     internal fun `should return empty if event was not found`() {
-        every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.empty()
+        every { mockRepository.findById(EVENT_ID) } returns Optional.empty()
 
         val actual = underTest.findEventById(EVENT_ID)
 
@@ -89,7 +86,7 @@ internal class DefaultEventServiceTest(
 
     @Test
     internal fun `should not update event if id was not found`() {
-        every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.empty()
+        every { mockRepository.findById(EVENT_ID) } returns Optional.empty()
 
         val actual = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
@@ -98,10 +95,10 @@ internal class DefaultEventServiceTest(
 
     @Test
     internal fun `should update event`() {
-        every { mockDetailedRepository.findById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_ENTITY)
+        every { mockRepository.findById(EVENT_ID) } returns Optional.of(DETAILED_EVENT_ENTITY)
         every { mockMapper.updateToEntity(DETAILED_EVENT_ENTITY, UPDATE_EVENT) } returns DETAILED_EVENT_ENTITY
-        every { mockDetailedRepository.save(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT_ENTITY
-        every { mockMapper.entityToModel(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT
+        every { mockRepository.save(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT_ENTITY
+        every { mockMapper.entityToDetailedModel(DETAILED_EVENT_ENTITY) } returns DETAILED_EVENT
 
         val actual = underTest.updateEvent(EVENT_ID, UPDATE_EVENT)
 
@@ -118,10 +115,10 @@ internal class DefaultEventServiceTest(
     private companion object {
         private val EVENT_ID = mockk<UUID>()
         private val EVENT = mockk<Event>()
-        private val EVENT_ENTITY = mockk<SimpleEventEntity>()
+        private val EVENT_ENTITY = mockk<EventEntity>()
         private val CREATE_EVENT = mockk<CreateEvent>()
         private val UPDATE_EVENT = mockk<UpdateEvent>()
         private val DETAILED_EVENT = mockk<DetailedEvent>()
-        private val DETAILED_EVENT_ENTITY = mockk<DetailedEventEntity>()
+        private val DETAILED_EVENT_ENTITY = mockk<EventEntity>()
     }
 }

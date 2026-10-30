@@ -2,7 +2,7 @@ package hu.bsstudio.bssweb.video.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.video.client.VideoClient
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.model.Video
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -28,7 +28,7 @@ class ReadAllVideoIntegrationTest(
 
     @Test
     internal fun `it should return 200 and list with 1 video`() {
-        val entity = videoRepository.save(DetailedVideoEntity(title = TITLE))
+        val entity = videoRepository.save(VideoEntity(title = TITLE))
 
         val actual = client.getAllVideos()
 

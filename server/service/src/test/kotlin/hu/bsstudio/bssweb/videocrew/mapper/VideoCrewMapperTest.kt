@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.videocrew.mapper
 
-import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
+import hu.bsstudio.bssweb.member.entity.MemberEntity
 import hu.bsstudio.bssweb.member.mapper.MemberMapper
 import hu.bsstudio.bssweb.member.model.SimpleMember
 import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
@@ -41,7 +41,7 @@ internal class VideoCrewMapperTest(
 
     @Test
     internal fun `should map entity to model`() {
-        every { memberMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
+        every { memberMapper.entityToSimpleModel(MEMBER_ENTITY) } returns MEMBER
 
         val actual = underTest.entityToModel(DETAILED_VIDEO_CREW_ENTITY)
 
@@ -57,7 +57,7 @@ internal class VideoCrewMapperTest(
         private val VIDEO_CREW_REQUEST = VideoCrewRequest(VIDEO_ID, POSITION, MEMBER_ID)
         private val VIDEO_CREW_ENTITY_ID = VideoCrewEntityId(VIDEO_ID, POSITION, MEMBER_ID)
         private val VIDEO_CREW_ENTITY = VideoCrewEntity(VIDEO_CREW_ENTITY_ID)
-        private val MEMBER_ENTITY = SimpleMemberEntity("name", "nickname").apply { id = MEMBER_ID }
+        private val MEMBER_ENTITY = MemberEntity(url = "url", name = "name", nickname = "nickname").apply { id = MEMBER_ID }
         private val DETAILED_VIDEO_CREW_ENTITY = DetailedVideoCrewEntity(id = VIDEO_CREW_ENTITY_ID, member = MEMBER_ENTITY)
     }
 }

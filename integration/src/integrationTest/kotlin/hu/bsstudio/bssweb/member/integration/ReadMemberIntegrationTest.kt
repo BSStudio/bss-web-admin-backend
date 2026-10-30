@@ -2,7 +2,7 @@ package hu.bsstudio.bssweb.member.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
-import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
+import hu.bsstudio.bssweb.member.entity.MemberEntity
 import hu.bsstudio.bssweb.member.model.Member
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
@@ -18,7 +18,7 @@ class ReadMemberIntegrationTest(
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and member`() {
-        val entity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
+        val entity = memberRepository.save(MemberEntity(url = "url", name = "name"))
 
         val actual = client.getMemberById(entity.id)
 

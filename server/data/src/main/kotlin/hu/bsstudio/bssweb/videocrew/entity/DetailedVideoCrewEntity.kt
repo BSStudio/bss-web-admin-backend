@@ -1,6 +1,6 @@
 package hu.bsstudio.bssweb.videocrew.entity
 
-import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
+import hu.bsstudio.bssweb.member.entity.MemberEntity
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
 import jakarta.persistence.JoinColumn
@@ -15,7 +15,7 @@ data class DetailedVideoCrewEntity(
     var id: VideoCrewEntityId,
     @ManyToOne
     @JoinColumn(insertable = false, updatable = false)
-    var member: SimpleMemberEntity,
+    var member: MemberEntity,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -1,11 +1,11 @@
 package hu.bsstudio.bssweb
 
 import hu.bsstudio.bssweb.config.BssWebAdminBackendClientConfig
-import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
+import hu.bsstudio.bssweb.event.repository.EventRepository
 import hu.bsstudio.bssweb.eventvideo.repository.EventVideoRepository
 import hu.bsstudio.bssweb.label.repository.LabelRepository
 import hu.bsstudio.bssweb.member.repository.MemberRepository
-import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
+import hu.bsstudio.bssweb.video.repository.VideoRepository
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,9 +24,9 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
     ],
 )
 open class IntegrationTest {
-    @Autowired protected lateinit var eventRepository: DetailedEventRepository
+    @Autowired protected lateinit var eventRepository: EventRepository
 
-    @Autowired protected lateinit var videoRepository: DetailedVideoRepository
+    @Autowired protected lateinit var videoRepository: VideoRepository
 
     @Autowired protected lateinit var memberRepository: MemberRepository
 

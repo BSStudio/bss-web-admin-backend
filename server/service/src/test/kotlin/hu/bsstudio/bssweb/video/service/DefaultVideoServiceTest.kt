@@ -2,15 +2,13 @@ package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.label.repository.LabelRepository
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
-import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
-import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
-import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
+import hu.bsstudio.bssweb.video.repository.VideoRepository
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.optional.shouldBeEmpty
@@ -29,8 +27,7 @@ import java.util.UUID
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultVideoServiceTest(
-    @param:MockK private val mockRepository: SimpleVideoRepository,
-    @param:MockK private val mockDetailedRepository: DetailedVideoRepository,
+    @param:MockK private val mockRepository: VideoRepository,
     @param:MockK private val mockMapper: VideoMapper,
     @param:MockK private val mockLabelRepository: LabelRepository,
 ) {
@@ -83,8 +80,8 @@ internal class DefaultVideoServiceTest(
 
     @Test
     internal fun `should find video by id`() {
-        every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_ENTITY)
-        every { mockMapper.entityToModel(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO
+        every { mockRepository.findById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_ENTITY)
+        every { mockMapper.entityToDetailedModel(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO
 
         val actual = underTest.findVideoById(VIDEO_ID)
 
@@ -93,7 +90,7 @@ internal class DefaultVideoServiceTest(
 
     @Test
     internal fun `should return empty if video was not found`() {
-        every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.empty()
+        every { mockRepository.findById(VIDEO_ID) } returns Optional.empty()
 
         val actual = underTest.findVideoById(VIDEO_ID)
 
@@ -104,7 +101,7 @@ internal class DefaultVideoServiceTest(
     internal fun `should not update video if id was not found`() {
         every { UPDATE_VIDEO.labels } returns LABELS
         every { mockLabelRepository.findAllByNameIn(LABELS) } returns LABEL_ENTITIES
-        every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.empty()
+        every { mockRepository.findById(VIDEO_ID) } returns Optional.empty()
 
         val actual = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
@@ -115,10 +112,10 @@ internal class DefaultVideoServiceTest(
     internal fun `should update video`() {
         every { UPDATE_VIDEO.labels } returns LABELS
         every { mockLabelRepository.findAllByNameIn(LABELS) } returns LABEL_ENTITIES
-        every { mockDetailedRepository.findById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_ENTITY)
+        every { mockRepository.findById(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO_ENTITY)
         every { mockMapper.updateToEntity(DETAILED_VIDEO_ENTITY, UPDATE_VIDEO, LABEL_ENTITIES) } returns DETAILED_VIDEO_ENTITY
-        every { mockDetailedRepository.save(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO_ENTITY
-        every { mockMapper.entityToModel(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO
+        every { mockRepository.save(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO_ENTITY
+        every { mockMapper.entityToDetailedModel(DETAILED_VIDEO_ENTITY) } returns DETAILED_VIDEO
 
         val actual = underTest.updateVideo(VIDEO_ID, UPDATE_VIDEO)
 
@@ -135,12 +132,12 @@ internal class DefaultVideoServiceTest(
     private companion object {
         private val PAGEABLE = Pageable.unpaged()
         private val VIDEO_ID = mockk<UUID>()
-        private val VIDEO_ENTITY = mockk<SimpleVideoEntity>()
+        private val VIDEO_ENTITY = mockk<VideoEntity>()
         private val VIDEO_ENTITY_LIST = listOf(VIDEO_ENTITY)
         private val VIDEO = mockk<Video>()
         private val PAGED_VIDEOS = PageImpl(listOf(VIDEO))
         private val CREATE_VIDEO = mockk<CreateVideo>()
-        private val DETAILED_VIDEO_ENTITY = mockk<DetailedVideoEntity>()
+        private val DETAILED_VIDEO_ENTITY = mockk<VideoEntity>()
         private val DETAILED_VIDEO = mockk<DetailedVideo>()
         private val UPDATE_VIDEO = mockk<UpdateVideo>()
         private val LABELS = mockk<List<String>>()

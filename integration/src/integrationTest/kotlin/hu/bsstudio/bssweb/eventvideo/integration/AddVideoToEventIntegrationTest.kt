@@ -1,10 +1,10 @@
 package hu.bsstudio.bssweb.eventvideo.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
+import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.eventvideo.client.EventVideoClient
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.model.Video
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
@@ -20,8 +20,8 @@ class AddVideoToEventIntegrationTest(
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and add video to event`() {
-        val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
-        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
+        val eventEntity = eventRepository.save(EventEntity(url = "url", title = "title"))
+        val videoEntity = videoRepository.save(VideoEntity(title = "title"))
 
         val actual = client.addVideoToEvent(eventEntity.id, videoEntity.id)
 
@@ -54,7 +54,7 @@ class AddVideoToEventIntegrationTest(
 
     @Test
     internal fun `it should return 500 when event does not exist`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
+        val videoEntity = videoRepository.save(VideoEntity(title = "title"))
 
         shouldThrow<HttpServerErrorException.InternalServerError> {
             client.addVideoToEvent(
@@ -66,7 +66,7 @@ class AddVideoToEventIntegrationTest(
 
     @Test
     internal fun `it should return 404 when video does not exist`() {
-        val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
+        val eventEntity = eventRepository.save(EventEntity(url = "url", title = "title"))
 
         shouldThrow<HttpServerErrorException.InternalServerError> {
             client.addVideoToEvent(

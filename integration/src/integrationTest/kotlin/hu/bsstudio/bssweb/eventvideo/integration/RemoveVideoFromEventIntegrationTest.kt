@@ -1,11 +1,10 @@
 package hu.bsstudio.bssweb.eventvideo.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
+import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.eventvideo.client.EventVideoClient
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
-import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.equals.shouldBeEqual
@@ -20,14 +19,14 @@ class RemoveVideoFromEventIntegrationTest(
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 204 and remove video from event`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
+        val videoEntity = videoRepository.save(VideoEntity(title = "title"))
         val eventEntity =
             eventRepository
-                .save(DetailedEventEntity(url = "url", title = "title"))
+                .save(EventEntity(url = "url", title = "title"))
                 .apply {
                     this.videos =
                         listOf(
-                            SimpleVideoEntity(
+                            VideoEntity(
                                 title = videoEntity.title,
                             ).apply { this.id = videoEntity.id },
                         )
@@ -53,7 +52,7 @@ class RemoveVideoFromEventIntegrationTest(
 
     @Test
     internal fun `it should return 404 when event does not exist`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
+        val videoEntity = videoRepository.save(VideoEntity(title = "title"))
 
         shouldThrow<HttpClientErrorException.NotFound> {
             client.removeVideoFromEvent(
@@ -65,7 +64,7 @@ class RemoveVideoFromEventIntegrationTest(
 
     @Test
     internal fun `it should return 200 when video does not exist`() {
-        val eventEntity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
+        val eventEntity = eventRepository.save(EventEntity(url = "url", title = "title"))
 
         val actual =
             client.removeVideoFromEvent(

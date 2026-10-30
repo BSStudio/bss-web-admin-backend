@@ -2,10 +2,9 @@ package hu.bsstudio.bssweb.video.repository
 
 import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.label.repository.LabelRepository
-import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
-import hu.bsstudio.bssweb.member.entity.SimpleMemberEntity
+import hu.bsstudio.bssweb.member.entity.MemberEntity
 import hu.bsstudio.bssweb.member.repository.MemberRepository
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntityId
@@ -28,8 +27,8 @@ import kotlin.time.Duration.Companion.minutes
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-internal class DetailedVideoRepositoryTest(
-    @param:Autowired private val underTest: DetailedVideoRepository,
+internal class VideoRepositoryTest(
+    @param:Autowired private val underTest: VideoRepository,
     @param:Autowired private val memberRepository: MemberRepository,
     @param:Autowired private val videoCrewRepository: VideoCrewRepository,
     @param:Autowired private val labelRepository: LabelRepository,
@@ -39,7 +38,7 @@ internal class DetailedVideoRepositoryTest(
     internal fun `create read delete`() {
         underTest.count().shouldBeZero()
 
-        val entity = DetailedVideoEntity(title = TITLE)
+        val entity = VideoEntity(title = TITLE)
         val id = underTest.save(entity).id
         entityManager.run {
             flush()
@@ -60,12 +59,12 @@ internal class DetailedVideoRepositoryTest(
     @Test
     internal fun `create read delete with crew and label`() {
         val memberId =
-            DetailedMemberEntity(name = MEMBER_NAME, url = MEMBER_URL, nickname = MEMBER_NICKNAME)
+            MemberEntity(name = MEMBER_NAME, url = MEMBER_URL, nickname = MEMBER_NICKNAME)
                 .let { this.memberRepository.save(it) }
                 .id
         val label = this.labelRepository.save(LabelEntity(name = "Label", description = "Label description"))
         val videoId =
-            DetailedVideoEntity(title = TITLE)
+            VideoEntity(title = TITLE)
                 .apply { this.labels = listOf(label) }
                 .let { this.underTest.save(it) }
                 .id
@@ -82,7 +81,7 @@ internal class DetailedVideoRepositoryTest(
                 listOf(
                     DetailedVideoCrewEntity(
                         videoCrewId,
-                        SimpleMemberEntity(MEMBER_NAME, MEMBER_NICKNAME).apply {
+                        MemberEntity(url = MEMBER_URL, name = MEMBER_NAME, nickname = MEMBER_NICKNAME).apply {
                             id = memberId
                         },
                     ),
@@ -102,7 +101,7 @@ internal class DetailedVideoRepositoryTest(
         id: UUID,
         videoCrew: List<DetailedVideoCrewEntity> = emptyList(),
         labels: List<LabelEntity> = emptyList(),
-    ) = DetailedVideoEntity(
+    ) = VideoEntity(
         urls = emptyList(),
         title = TITLE,
         description = "",

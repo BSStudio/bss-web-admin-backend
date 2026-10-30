@@ -3,8 +3,7 @@ package hu.bsstudio.bssweb.video.config
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
 import hu.bsstudio.bssweb.label.repository.LabelRepository
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
-import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
-import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
+import hu.bsstudio.bssweb.video.repository.VideoRepository
 import hu.bsstudio.bssweb.video.service.DefaultVideoService
 import hu.bsstudio.bssweb.video.service.FileUpdatingVideoService
 import hu.bsstudio.bssweb.video.service.VideoService
@@ -15,8 +14,7 @@ import org.springframework.context.annotation.Primary
 
 @Configuration
 class VideoServiceConfig(
-    private val videoRepository: SimpleVideoRepository,
-    private val detailedRepository: DetailedVideoRepository,
+    private val videoRepository: VideoRepository,
     private val fileClient: FileApiClient,
     private val videoCrewMapper: VideoCrewMapper,
 ) {
@@ -28,7 +26,7 @@ class VideoServiceConfig(
     fun defaultVideoService(
         videoMapper: VideoMapper,
         labelRepository: LabelRepository,
-    ): VideoService = DefaultVideoService(videoRepository, detailedRepository, videoMapper, labelRepository)
+    ): VideoService = DefaultVideoService(videoRepository, videoMapper, labelRepository)
 
     @Bean
     fun videoMapper() = VideoMapper(videoCrewMapper)

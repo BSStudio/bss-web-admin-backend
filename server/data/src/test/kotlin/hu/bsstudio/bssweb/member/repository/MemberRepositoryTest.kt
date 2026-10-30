@@ -1,7 +1,7 @@
 package hu.bsstudio.bssweb.member.repository
 
 import hu.bsstudio.bssweb.member.common.MemberStatus
-import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
+import hu.bsstudio.bssweb.member.entity.MemberEntity
 import io.kotest.matchers.date.shouldBeCloseTo
 import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.longs.shouldBeZero
@@ -26,13 +26,13 @@ internal class MemberRepositoryTest(
     internal fun `create read delete`() {
         underTest.count().shouldBeZero()
 
-        val entity = DetailedMemberEntity(name = NAME, url = URL)
+        val entity = MemberEntity(name = NAME, url = URL)
         val id = underTest.save(entity).id
 
         entityManager.flush()
 
         val expected =
-            DetailedMemberEntity(
+            MemberEntity(
                 name = NAME,
                 url = URL,
                 nickname = "",

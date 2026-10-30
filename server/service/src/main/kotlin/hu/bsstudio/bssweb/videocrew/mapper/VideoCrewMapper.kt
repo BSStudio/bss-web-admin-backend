@@ -23,6 +23,6 @@ class VideoCrewMapper(
         VideoCrew(
             videoId = entity.id.videoId,
             position = entity.id.position,
-            member = memberMapper.entityToModel(entity.member),
+            member = memberMapper.entityToSimpleModel(entity.member),
         )
 }

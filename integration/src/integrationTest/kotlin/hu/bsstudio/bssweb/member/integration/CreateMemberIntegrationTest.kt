@@ -3,7 +3,7 @@ package hu.bsstudio.bssweb.member.integration
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.common.MemberStatus
-import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
+import hu.bsstudio.bssweb.member.entity.MemberEntity
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import io.kotest.assertions.assertSoftly
@@ -87,7 +87,7 @@ class CreateMemberIntegrationTest(
 
     @Test
     internal fun `it should return 500 when duplicate urls were specified`() {
-        memberRepository.save(DetailedMemberEntity(url = CREATE_MEMBER.url, name = CREATE_MEMBER.name))
+        memberRepository.save(MemberEntity(url = CREATE_MEMBER.url, name = CREATE_MEMBER.name))
 
         shouldThrow<HttpServerErrorException.InternalServerError> {
             client.createMember(CreateMember(url = CREATE_MEMBER.url, name = CREATE_MEMBER.name))
