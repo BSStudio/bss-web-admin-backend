@@ -1,8 +1,8 @@
 package hu.bsstudio.bssweb.videocrew.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
-import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.member.entity.MemberEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.videocrew.client.VideoCrewClient
 import hu.bsstudio.bssweb.videocrew.entity.VideoCrewEntity
@@ -18,8 +18,8 @@ class RemoveVideoCrewIntegrationTest(
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and delete video crew`() {
-        val videoEntity = videoRepository.save(DetailedVideoEntity(title = "title"))
-        val memberEntity = memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
+        val videoEntity = videoRepository.save(VideoEntity(title = "title"))
+        val memberEntity = memberRepository.save(MemberEntity(url = "url", name = "name"))
         videoCrewRepository.save(VideoCrewEntity(VideoCrewEntityId(videoEntity.id, "position", memberEntity.id)))
 
         val actual = client.removePosition(videoEntity.id, "position", memberEntity.id)

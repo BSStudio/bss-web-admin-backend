@@ -2,7 +2,7 @@ package hu.bsstudio.bssweb.event.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
+import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.model.Event
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -28,7 +28,7 @@ internal class ReadAllEventIntegrationTest(
 
     @Test
     internal fun `it should return 200 and list with 1 event`() {
-        val entity = eventRepository.save(DetailedEventEntity(url = URL, title = TITLE))
+        val entity = eventRepository.save(EventEntity(url = URL, title = TITLE))
 
         val actual = client.findAllEvent()
 

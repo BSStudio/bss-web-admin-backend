@@ -2,7 +2,7 @@ package hu.bsstudio.bssweb.event.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
+import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import io.kotest.assertions.assertSoftly
@@ -21,7 +21,7 @@ internal class UpdateEventIntegrationTest(
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and updated event`() {
-        val entity = this.eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
+        val entity = this.eventRepository.save(EventEntity(url = "url", title = "title"))
 
         val actual = client.updateEvent(entity.id, UPDATE_EVENT)
 
@@ -43,7 +43,7 @@ internal class UpdateEventIntegrationTest(
 
     @Test
     internal fun `it should return 500 when dateTo is before dateFrom`() {
-        val entity = this.eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
+        val entity = this.eventRepository.save(EventEntity(url = "url", title = "title"))
 
         val updateEvent = UPDATE_EVENT.copy(dateTo = LocalDate.EPOCH)
         shouldThrow<HttpServerErrorException.InternalServerError> {

@@ -1,7 +1,6 @@
 package hu.bsstudio.bssweb.event.mapper
 
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
-import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
+import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
@@ -11,7 +10,7 @@ import hu.bsstudio.bssweb.video.mapper.VideoMapper
 class EventMapper(
     private val videoMapper: VideoMapper,
 ) {
-    fun entityToModel(entity: SimpleEventEntity): Event =
+    fun entityToModel(entity: EventEntity): Event =
         Event(
             id = entity.id,
             url = entity.url,
@@ -23,7 +22,7 @@ class EventMapper(
             videoCount = entity.videoCount,
         )
 
-    fun entityToModel(entity: DetailedEventEntity): DetailedEvent =
+    fun entityToDetailedModel(entity: EventEntity): DetailedEvent =
         DetailedEvent(
             id = entity.id,
             url = entity.url,
@@ -35,16 +34,16 @@ class EventMapper(
             videos = entity.videos.map(videoMapper::entityToModel),
         )
 
-    fun modelToEntity(model: CreateEvent): SimpleEventEntity =
-        SimpleEventEntity(
+    fun modelToEntity(model: CreateEvent): EventEntity =
+        EventEntity(
             url = model.url,
             title = model.title,
         )
 
     fun updateToEntity(
-        eventEntity: DetailedEventEntity,
+        eventEntity: EventEntity,
         updateEvent: UpdateEvent,
-    ): DetailedEventEntity {
+    ): EventEntity {
         eventEntity.url = updateEvent.url
         eventEntity.title = updateEvent.title
         eventEntity.description = updateEvent.description

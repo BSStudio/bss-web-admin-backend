@@ -2,7 +2,7 @@ package hu.bsstudio.bssweb.event.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
+import hu.bsstudio.bssweb.event.entity.EventEntity
 import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.Event
 import io.kotest.assertions.assertSoftly
@@ -47,7 +47,7 @@ internal class CreateEventIntegrationTest : IntegrationTest() {
 
     @Test
     internal fun `it should retun 500 when duplicate urls were specified`() {
-        eventRepository.save(DetailedEventEntity(url = CREATE_EVENT.url, title = CREATE_EVENT.title))
+        eventRepository.save(EventEntity(url = CREATE_EVENT.url, title = CREATE_EVENT.title))
 
         shouldThrow<HttpServerErrorException.InternalServerError> {
             client.createEvent(CREATE_EVENT)

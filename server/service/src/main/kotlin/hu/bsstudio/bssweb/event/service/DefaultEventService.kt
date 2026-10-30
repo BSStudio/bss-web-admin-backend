@@ -5,16 +5,14 @@ import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
-import hu.bsstudio.bssweb.event.repository.DetailedEventRepository
-import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
+import hu.bsstudio.bssweb.event.repository.EventRepository
 import org.springframework.transaction.annotation.Transactional
 import java.util.Optional
 import java.util.UUID
 
 @Transactional
 class DefaultEventService(
-    private val repository: SimpleEventRepository,
-    private val detailedRepository: DetailedEventRepository,
+    private val repository: EventRepository,
     private val mapper: EventMapper,
 ) : EventService {
     override fun findAllEvent(): List<Event> =
@@ -29,9 +27,9 @@ class DefaultEventService(
             .let(mapper::entityToModel)
 
     override fun findEventById(eventId: UUID): Optional<DetailedEvent> =
-        detailedRepository
+        repository
             .findById(eventId)
-            .map(mapper::entityToModel)
+            .map(mapper::entityToDetailedModel)
 
     override fun changeEventVisibility(
         eventIds: List<UUID>,
@@ -49,11 +47,11 @@ class DefaultEventService(
         eventId: UUID,
         updateEvent: UpdateEvent,
     ): Optional<DetailedEvent> =
-        detailedRepository
+        repository
             .findById(eventId)
             .map { mapper.updateToEntity(it, updateEvent) }
-            .map(detailedRepository::save)
-            .map(mapper::entityToModel)
+            .map(repository::save)
+            .map(mapper::entityToDetailedModel)
 
     override fun removeEvent(eventId: UUID) = repository.deleteById(eventId)
 }

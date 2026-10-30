@@ -1,8 +1,8 @@
 package hu.bsstudio.bssweb.label.repository
 
 import hu.bsstudio.bssweb.label.entity.LabelEntity
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
-import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
+import hu.bsstudio.bssweb.video.entity.VideoEntity
+import hu.bsstudio.bssweb.video.repository.VideoRepository
 import io.kotest.matchers.longs.shouldBeExactly
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
@@ -15,7 +15,7 @@ import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class LabelEntityRepositoryTest(
     @param:Autowired private val underTest: LabelRepository,
-    @param:Autowired private val videoRepository: DetailedVideoRepository,
+    @param:Autowired private val videoRepository: VideoRepository,
     @param:Autowired private val entityManager: TestEntityManager,
 ) {
     @Test
@@ -43,8 +43,8 @@ internal class LabelEntityRepositoryTest(
     @Test
     internal fun `it should count the videos of each label when loading them`() {
         val labels = listOf("Popular", "Rare", "Unused").map { underTest.save(LabelEntity(name = it, description = it)) }
-        videoRepository.save(DetailedVideoEntity(title = "Both").apply { this.labels = labels.take(2) })
-        videoRepository.save(DetailedVideoEntity(title = "Popular only").apply { this.labels = labels.take(1) })
+        videoRepository.save(VideoEntity(title = "Both").apply { this.labels = labels.take(2) })
+        videoRepository.save(VideoEntity(title = "Popular only").apply { this.labels = labels.take(1) })
         entityManager.run {
             flush()
             clear()

@@ -2,7 +2,7 @@ package hu.bsstudio.bssweb.event.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.event.client.EventClient
-import hu.bsstudio.bssweb.event.entity.DetailedEventEntity
+import hu.bsstudio.bssweb.event.entity.EventEntity
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +14,7 @@ internal class DeleteEventIntegrationTest(
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 204 and delete event`() {
-        val entity = eventRepository.save(DetailedEventEntity(url = "url", title = "title"))
+        val entity = eventRepository.save(EventEntity(url = "url", title = "title"))
 
         val actual = client.deleteEvent(entity.id)
 

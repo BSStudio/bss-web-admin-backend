@@ -2,7 +2,7 @@ package hu.bsstudio.bssweb.video.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.video.client.VideoClient
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import io.kotest.matchers.equals.shouldBeEqual
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +14,7 @@ class DeleteVideoIntegrationTest(
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 204 and delete video`() {
-        val entity = videoRepository.save(DetailedVideoEntity(urls = emptyList(), title = "title"))
+        val entity = videoRepository.save(VideoEntity(urls = emptyList(), title = "title"))
 
         val actual = client.deleteVideo(entity.id)
 

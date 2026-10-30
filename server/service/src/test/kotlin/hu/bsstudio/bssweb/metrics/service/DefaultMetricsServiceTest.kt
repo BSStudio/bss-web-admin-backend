@@ -1,10 +1,10 @@
 package hu.bsstudio.bssweb.metrics.service
 
-import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
+import hu.bsstudio.bssweb.event.repository.EventRepository
 import hu.bsstudio.bssweb.label.repository.LabelRepository
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.metrics.model.BssMetrics
-import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
+import hu.bsstudio.bssweb.video.repository.VideoRepository
 import io.kotest.matchers.equals.shouldBeEqual
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -15,8 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
 internal class DefaultMetricsServiceTest(
-    @param:MockK private val videoRepository: SimpleVideoRepository,
-    @param:MockK private val eventRepository: SimpleEventRepository,
+    @param:MockK private val videoRepository: VideoRepository,
+    @param:MockK private val eventRepository: EventRepository,
     @param:MockK private val memberRepository: MemberRepository,
     @param:MockK private val labelRepository: LabelRepository,
 ) {

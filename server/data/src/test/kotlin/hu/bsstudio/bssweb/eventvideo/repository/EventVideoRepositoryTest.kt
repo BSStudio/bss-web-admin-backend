@@ -1,10 +1,10 @@
 package hu.bsstudio.bssweb.eventvideo.repository
 
-import hu.bsstudio.bssweb.event.entity.SimpleEventEntity
-import hu.bsstudio.bssweb.event.repository.SimpleEventRepository
+import hu.bsstudio.bssweb.event.entity.EventEntity
+import hu.bsstudio.bssweb.event.repository.EventRepository
 import hu.bsstudio.bssweb.eventvideo.entity.EventVideoEntity
-import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
-import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
+import hu.bsstudio.bssweb.video.entity.VideoEntity
+import hu.bsstudio.bssweb.video.repository.VideoRepository
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
@@ -17,14 +17,14 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 internal class EventVideoRepositoryTest(
-    @param:Autowired private val eventRepository: SimpleEventRepository,
-    @param:Autowired private val videoRepository: SimpleVideoRepository,
+    @param:Autowired private val eventRepository: EventRepository,
+    @param:Autowired private val videoRepository: VideoRepository,
     @param:Autowired private val underTest: EventVideoRepository,
 ) {
     @Test
     internal fun `create read delete`() {
-        val videoId = videoRepository.save(SimpleVideoEntity(title = "title")).id
-        val eventId = eventRepository.save(SimpleEventEntity(url = "url", title = "title")).id
+        val videoId = videoRepository.save(VideoEntity(title = "title")).id
+        val eventId = eventRepository.save(EventEntity(url = "url", title = "title")).id
 
         val entity = EventVideoEntity(eventId, videoId)
         underTest.save(entity)

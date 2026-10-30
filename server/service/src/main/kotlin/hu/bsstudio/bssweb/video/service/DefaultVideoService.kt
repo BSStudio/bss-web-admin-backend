@@ -6,8 +6,7 @@ import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import hu.bsstudio.bssweb.video.model.Video
-import hu.bsstudio.bssweb.video.repository.DetailedVideoRepository
-import hu.bsstudio.bssweb.video.repository.SimpleVideoRepository
+import hu.bsstudio.bssweb.video.repository.VideoRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.transaction.annotation.Transactional
@@ -16,8 +15,7 @@ import java.util.UUID
 
 @Transactional
 class DefaultVideoService(
-    private val repository: SimpleVideoRepository,
-    private val detailedRepository: DetailedVideoRepository,
+    private val repository: VideoRepository,
     private val mapper: VideoMapper,
     private val labelRepository: LabelRepository,
 ) : VideoService {
@@ -50,20 +48,20 @@ class DefaultVideoService(
             .map { it.id }
 
     override fun findVideoById(videoId: UUID): Optional<DetailedVideo> =
-        detailedRepository
+        repository
             .findById(videoId)
-            .map(mapper::entityToModel)
+            .map(mapper::entityToDetailedModel)
 
     override fun updateVideo(
         videoId: UUID,
         updateVideo: UpdateVideo,
     ): Optional<DetailedVideo> {
         val labels = labelRepository.findAllByNameIn(updateVideo.labels)
-        return detailedRepository
+        return repository
             .findById(videoId)
             .map { mapper.updateToEntity(it, updateVideo, labels) }
-            .map(detailedRepository::save)
-            .map(mapper::entityToModel)
+            .map(repository::save)
+            .map(mapper::entityToDetailedModel)
     }
 
     override fun deleteVideoById(videoId: UUID) = repository.deleteById(videoId)

@@ -2,7 +2,7 @@ package hu.bsstudio.bssweb.video.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.video.client.VideoClient
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.Video
 import io.kotest.assertions.assertSoftly
@@ -43,7 +43,7 @@ class CreateVideoIntegrationTest(
 
     @Test
     internal fun `it should retun 500 when duplicate urls were specified`() {
-        videoRepository.save(DetailedVideoEntity(title = CREATE_VIDEO.title))
+        videoRepository.save(VideoEntity(title = CREATE_VIDEO.title))
 
         shouldThrow<HttpServerErrorException.InternalServerError> {
             client.createVideo(CREATE_VIDEO)

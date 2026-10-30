@@ -2,7 +2,7 @@ package hu.bsstudio.bssweb.video.integration
 
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.video.client.VideoClient
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.equals.shouldBeEqual
@@ -18,8 +18,8 @@ class UpdateVideoVisibilityIntegrationTest(
         val entities =
             videoRepository.saveAll(
                 listOf(
-                    DetailedVideoEntity(title = TITLE_1),
-                    DetailedVideoEntity(title = TITLE_2),
+                    VideoEntity(title = TITLE_1),
+                    VideoEntity(title = TITLE_2),
                 ),
             )
 
@@ -36,8 +36,8 @@ class UpdateVideoVisibilityIntegrationTest(
         val entities =
             videoRepository.saveAll(
                 listOf(
-                    DetailedVideoEntity(title = TITLE_1, visible = true),
-                    DetailedVideoEntity(title = TITLE_2, visible = true),
+                    VideoEntity(title = TITLE_1, visible = true),
+                    VideoEntity(title = TITLE_2, visible = true),
                 ),
             )
 

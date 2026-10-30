@@ -3,7 +3,7 @@ package hu.bsstudio.bssweb.member.integration
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.member.client.MemberClient
 import hu.bsstudio.bssweb.member.common.MemberStatus
-import hu.bsstudio.bssweb.member.entity.DetailedMemberEntity
+import hu.bsstudio.bssweb.member.entity.MemberEntity
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import io.kotest.assertions.assertSoftly
@@ -21,7 +21,7 @@ class UpdateMemberIntegrationTest(
 ) : IntegrationTest() {
     @Test
     internal fun `it should return 200 and updated member`() {
-        val entity = this.memberRepository.save(DetailedMemberEntity(url = "url", name = "name"))
+        val entity = this.memberRepository.save(MemberEntity(url = "url", name = "name"))
 
         val actual = client.updateMember(entity.id, UPDATE_MEMBER)
 

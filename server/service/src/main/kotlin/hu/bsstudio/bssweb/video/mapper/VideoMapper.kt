@@ -1,8 +1,7 @@
 package hu.bsstudio.bssweb.video.mapper
 
 import hu.bsstudio.bssweb.label.entity.LabelEntity
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
-import hu.bsstudio.bssweb.video.entity.SimpleVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
@@ -12,7 +11,7 @@ import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 class VideoMapper(
     private val videoCrewMapper: VideoCrewMapper,
 ) {
-    fun entityToModel(entity: SimpleVideoEntity): Video =
+    fun entityToModel(entity: VideoEntity): Video =
         Video(
             id = entity.id,
             title = entity.title,
@@ -23,7 +22,7 @@ class VideoMapper(
             visible = entity.visible,
         )
 
-    fun entityToModel(entity: DetailedVideoEntity): DetailedVideo =
+    fun entityToDetailedModel(entity: VideoEntity): DetailedVideo =
         DetailedVideo(
             id = entity.id,
             title = entity.title,
@@ -36,13 +35,13 @@ class VideoMapper(
             crew = entity.videoCrew.map(videoCrewMapper::entityToModel),
         )
 
-    fun modelToEntity(model: CreateVideo): SimpleVideoEntity = SimpleVideoEntity(title = model.title)
+    fun modelToEntity(model: CreateVideo): VideoEntity = VideoEntity(title = model.title)
 
     fun updateToEntity(
-        videoEntity: DetailedVideoEntity,
+        videoEntity: VideoEntity,
         updateVideo: UpdateVideo,
         labels: List<LabelEntity>,
-    ): DetailedVideoEntity {
+    ): VideoEntity {
         videoEntity.title = updateVideo.title
         videoEntity.urls = updateVideo.urls
         videoEntity.description = updateVideo.description

@@ -3,7 +3,7 @@ package hu.bsstudio.bssweb.video.integration
 import hu.bsstudio.bssweb.IntegrationTest
 import hu.bsstudio.bssweb.label.entity.LabelEntity
 import hu.bsstudio.bssweb.video.client.VideoClient
-import hu.bsstudio.bssweb.video.entity.DetailedVideoEntity
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
 import io.kotest.assertions.assertSoftly
@@ -23,7 +23,7 @@ class UpdateVideoIntegrationTest(
     @Test
     internal fun `it should return 200 and updated video`() {
         this.labelRepository.save(LabelEntity(name = LABEL_NAME, description = "description"))
-        val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
+        val entity = this.videoRepository.save(VideoEntity(title = "title"))
 
         val actual = client.updateVideo(entity.id, UPDATE_VIDEO)
 
@@ -46,7 +46,7 @@ class UpdateVideoIntegrationTest(
 
     @Test
     internal fun `it should return 500 when dateTo is before dateFrom`() {
-        val entity = this.videoRepository.save(DetailedVideoEntity(title = "title"))
+        val entity = this.videoRepository.save(VideoEntity(title = "title"))
 
         val updateVideo = UPDATE_VIDEO.copy(shootingDateEnd = LocalDate.EPOCH)
         shouldThrow<HttpServerErrorException.InternalServerError> {
