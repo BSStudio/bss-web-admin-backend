@@ -1,0 +1,32 @@
+# The linters CI runs besides Gradle's: `uv run <tool>` in this folder, see server/data/README.md
+[project]
+name = "bss-web-admin-backend-lint"
+version = "0.0.0"
+requires-python = "==3.14.*"
+dependencies = [
+  "actionlint-py==1.7.12.25",
+  "sqlfluff==4.5.0",
+  "squawk-cli==2.71.0",
+]
+
+[tool.uv]
+package = false
+
+# SQLFluff lints the Flyway migrations: https://docs.sqlfluff.com/en/stable/configuration/
+[tool.sqlfluff.core]
+dialect = "postgres"
+# Flyway reads the migrations from .pgsql files, see FlywayConfig
+sql_file_exts = ".pgsql"
+max_line_length = 120
+# RF04: the migrations keep column names such as timestamp and role that the tables already have
+# ST06: its fix reorders the columns of a select, which CREATE OR REPLACE VIEW can't do
+exclude_rules = "RF04, ST06"
+
+[tool.sqlfluff.rules.capitalisation.keywords]
+capitalisation_policy = "upper"
+
+[tool.sqlfluff.rules.capitalisation.functions]
+extended_capitalisation_policy = "lower"
+
+[tool.sqlfluff.rules.capitalisation.types]
+extended_capitalisation_policy = "upper"
