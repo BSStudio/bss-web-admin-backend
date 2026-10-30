@@ -6,6 +6,9 @@ import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import java.util.Optional
 import java.util.UUID
 
@@ -44,4 +47,25 @@ class FileUpdatingMemberService(
             }
 
     override fun removeMember(memberId: UUID) = this.server.removeMember(memberId)
+
+    override fun findDeletedMembers(pageable: Pageable): Page<Member> = this.server.findDeletedMembers(pageable)
+
+    override fun restoreMember(memberId: UUID): Optional<Member> = this.server.restoreMember(memberId).map(::updateFolder)
+
+    override fun findMemberRevisions(memberId: UUID): List<RevisionInfo> = this.server.findMemberRevisions(memberId)
+
+    override fun findMemberRevision(
+        memberId: UUID,
+        revision: Long,
+    ): Optional<Member> = this.server.findMemberRevision(memberId, revision)
+
+    override fun restoreMemberRevision(
+        memberId: UUID,
+        revision: Long,
+    ): Optional<Member> = this.server.restoreMemberRevision(memberId, revision).map(::updateFolder)
+
+    private fun updateFolder(member: Member): Member {
+        fileClient.updateMemberFolder(MemberFileUpdate(member.id, member.url))
+        return member
+    }
 }

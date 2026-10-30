@@ -6,6 +6,7 @@ import hu.bsstudio.bssweb.member.common.MemberStatus
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
@@ -14,8 +15,11 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import java.util.Optional
 import java.util.UUID
 
@@ -124,7 +128,64 @@ internal class FileUpdatingMemberServiceTest(
         underTest.removeMember(MEMBER_ID)
     }
 
+    @Test
+    internal fun `should return deleted members`() {
+        every { mockService.findDeletedMembers(PAGEABLE) } returns PAGED_MEMBERS
+
+        val actual = underTest.findDeletedMembers(PAGEABLE)
+
+        actual shouldBeEqual PAGED_MEMBERS
+    }
+
+    @Test
+    internal fun `should restore a member and update its folder`() {
+        every { mockService.restoreMember(MEMBER_ID) } returns Optional.of(MEMBER)
+        every { MEMBER.id } returns MEMBER_ID
+        every { MEMBER.url } returns URL
+        every { mockClient.updateMemberFolder(FILE_UPDATE) } returns FILE_UPDATE
+
+        val actual = underTest.restoreMember(MEMBER_ID)
+
+        actual shouldBePresent { it shouldBeEqual MEMBER }
+        verify { mockClient.updateMemberFolder(FILE_UPDATE) }
+    }
+
+    @Test
+    internal fun `should return the revisions of a member`() {
+        every { mockService.findMemberRevisions(MEMBER_ID) } returns REVISION_INFOS
+
+        val actual = underTest.findMemberRevisions(MEMBER_ID)
+
+        actual shouldBeEqual REVISION_INFOS
+    }
+
+    @Test
+    internal fun `should return a member as it was at a revision`() {
+        every { mockService.findMemberRevision(MEMBER_ID, REVISION) } returns Optional.of(MEMBER)
+
+        val actual = underTest.findMemberRevision(MEMBER_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual MEMBER }
+    }
+
+    @Test
+    internal fun `should restore a revision of a member and update its folder`() {
+        every { mockService.restoreMemberRevision(MEMBER_ID, REVISION) } returns Optional.of(MEMBER)
+        every { MEMBER.id } returns MEMBER_ID
+        every { MEMBER.url } returns URL
+        every { mockClient.updateMemberFolder(FILE_UPDATE) } returns FILE_UPDATE
+
+        val actual = underTest.restoreMemberRevision(MEMBER_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual MEMBER }
+        verify { mockClient.updateMemberFolder(FILE_UPDATE) }
+    }
+
     private companion object {
+        private const val REVISION = 3L
+        private val REVISION_INFOS = listOf(mockk<RevisionInfo>())
+        private val PAGEABLE = mockk<Pageable>()
+        private val PAGED_MEMBERS = Page.empty<Member>()
         private val MEMBER_ID = mockk<UUID>()
         private const val URL = "url"
         private val MEMBER = mockk<Member>()

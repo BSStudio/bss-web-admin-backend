@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.video.config
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
 import hu.bsstudio.bssweb.label.repository.LabelRepository
+import hu.bsstudio.bssweb.revision.mapper.RevisionMapper
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.repository.VideoRepository
 import hu.bsstudio.bssweb.video.service.DefaultVideoService
@@ -26,7 +27,8 @@ class VideoServiceConfig(
     fun defaultVideoService(
         videoMapper: VideoMapper,
         labelRepository: LabelRepository,
-    ): VideoService = DefaultVideoService(videoRepository, videoMapper, labelRepository)
+        revisionMapper: RevisionMapper,
+    ): VideoService = DefaultVideoService(videoRepository, videoMapper, labelRepository, revisionMapper)
 
     @Bean
     fun videoMapper() = VideoMapper(videoCrewMapper)
