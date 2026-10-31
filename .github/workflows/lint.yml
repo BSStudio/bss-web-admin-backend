@@ -1,0 +1,33 @@
+name: Lint
+
+on:
+  pull_request:
+  workflow_dispatch:
+  merge_group:
+  push:
+    branches: [ "main" ]
+
+permissions: read-all
+
+jobs:
+  lint:
+    runs-on: ubuntu-26.04-arm
+    name: "Lint workflows and migrations"
+    defaults:
+      run:
+        working-directory: lint
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          working-directory: lint
+          enable-cache: true
+          cache-dependency-glob: lint/uv.lock
+      - id: sync
+        run: uv sync --locked
+      - run: uv run actionlint
+      # V0 to V8 are excluded in .squawk.toml
+      - run: uv run squawk --no-error-on-unmatched-pattern '../server/data/src/main/resources/db/migration/*.pgsql'
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+      - run: uv run sqlfluff lint ../server/data/src/main/resources/db/migration
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}

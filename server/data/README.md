@@ -13,6 +13,25 @@ you should create a new migration file in the
 [`src/main/resources/db/migration`][migrations-folder]
 directory.
 
+- **Name it `V<n>__<description>.pgsql`.** `FlywayConfig` makes Flyway read `.pgsql` instead of `.sql`, because
+  SonarCloud analyses every `.sql` file as Oracle PL/SQL and flags valid PostgreSQL.
+- **Lint it.** The `Lint` workflow runs [Squawk][squawk], which flags migrations that would lock or rewrite a table,
+  and [SQLFluff][sqlfluff], which checks the style and can fix it. They are pinned in [`lint/`][lint], with their
+  config; run them from there with [uv][uv]:
+
+  ```shell
+  cd lint
+  uv run squawk --no-error-on-unmatched-pattern '../server/data/src/main/resources/db/migration/*.pgsql'
+  uv run sqlfluff fix ../server/data/src/main/resources/db/migration
+  ```
+
+  Check what `sqlfluff fix` changed before committing it. Where a rule doesn't apply, a `-- squawk-ignore-file`
+  comment can turn it off for that migration, with a line saying why.
+
+- **Never change a migration once it has been deployed.** Flyway checksums each migration it has run and refuses to
+  start if one changes. Squawk leaves out V0 to V8: they were written before it, and fixing its warnings would change
+  the schema they create.
+
 ### Schemas
 
 The project uses the `private` schema for all the tables.
@@ -143,6 +162,10 @@ video_url ||--|{ video: has
 
 [flyway]: https://flywaydb.org/
 [migrations-folder]: src/main/resources/db/migration
+[squawk]: https://squawkhq.com/
+[sqlfluff]: https://sqlfluff.com/
+[lint]: ../../lint
+[uv]: https://docs.astral.sh/uv/
 [graphql-backend]: https://github.com/BSStudio/bss-web-graphql-backend
 [testcontainers]: https://www.testcontainers.org/quickstart/junit_5/
 [test-properties]: src/test/resources/application.yml

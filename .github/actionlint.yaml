@@ -1,0 +1,5 @@
+# actionlint 1.7.12 doesn't know GitHub's Ubuntu 26.04 runners yet
+self-hosted-runner:
+  labels:
+    - ubuntu-26.04
+    - ubuntu-26.04-arm
