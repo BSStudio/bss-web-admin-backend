@@ -6,6 +6,7 @@ import hu.bsstudio.bssweb.member.repository.MemberRepository
 import hu.bsstudio.bssweb.member.service.DefaultMemberService
 import hu.bsstudio.bssweb.member.service.FileUpdatingMemberService
 import hu.bsstudio.bssweb.member.service.MemberService
+import hu.bsstudio.bssweb.revision.mapper.RevisionMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -20,7 +21,10 @@ class MemberServiceConfig(
     fun memberService(defaultMemberService: MemberService): MemberService = FileUpdatingMemberService(defaultMemberService, fileClient)
 
     @Bean
-    fun defaultMemberService(memberMapper: MemberMapper): MemberService = DefaultMemberService(repository, memberMapper)
+    fun defaultMemberService(
+        memberMapper: MemberMapper,
+        revisionMapper: RevisionMapper,
+    ): MemberService = DefaultMemberService(repository, memberMapper, revisionMapper)
 
     @Bean
     fun memberMapper() = MemberMapper()

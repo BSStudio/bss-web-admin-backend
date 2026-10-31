@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
 import hu.bsstudio.bssweb.fileserver.model.VideoFileUpdate
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
@@ -15,6 +16,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.Page
@@ -116,7 +118,62 @@ internal class FileUpdatingVideoServiceTest(
         underTest.deleteVideoById(VIDEO_ID)
     }
 
+    @Test
+    internal fun `should return deleted videos`() {
+        every { mockService.findDeletedVideos(PAGEABLE) } returns PAGED_VIDEOS
+
+        val actual = underTest.findDeletedVideos(PAGEABLE)
+
+        actual shouldBeEqual PAGED_VIDEOS
+    }
+
+    @Test
+    internal fun `should restore a video and update its folder`() {
+        every { mockService.restoreVideo(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO)
+        every { DETAILED_VIDEO.id } returns VIDEO_ID
+        every { DETAILED_VIDEO.urls } returns URLS
+        every { mockClient.updateVideoFolder(FILE_UPDATE) } returns FILE_UPDATE
+
+        val actual = underTest.restoreVideo(VIDEO_ID)
+
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
+        verify { mockClient.updateVideoFolder(FILE_UPDATE) }
+    }
+
+    @Test
+    internal fun `should return the revisions of a video`() {
+        every { mockService.findVideoRevisions(VIDEO_ID) } returns REVISION_INFOS
+
+        val actual = underTest.findVideoRevisions(VIDEO_ID)
+
+        actual shouldBeEqual REVISION_INFOS
+    }
+
+    @Test
+    internal fun `should return a video as it was at a revision`() {
+        every { mockService.findVideoRevision(VIDEO_ID, REVISION) } returns Optional.of(DETAILED_VIDEO)
+
+        val actual = underTest.findVideoRevision(VIDEO_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
+    }
+
+    @Test
+    internal fun `should restore a revision of a video and update its folder`() {
+        every { mockService.restoreVideoRevision(VIDEO_ID, REVISION) } returns Optional.of(DETAILED_VIDEO)
+        every { DETAILED_VIDEO.id } returns VIDEO_ID
+        every { DETAILED_VIDEO.urls } returns URLS
+        every { mockClient.updateVideoFolder(FILE_UPDATE) } returns FILE_UPDATE
+
+        val actual = underTest.restoreVideoRevision(VIDEO_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual DETAILED_VIDEO }
+        verify { mockClient.updateVideoFolder(FILE_UPDATE) }
+    }
+
     private companion object {
+        private const val REVISION = 3L
+        private val REVISION_INFOS = listOf(mockk<RevisionInfo>())
         private val PAGEABLE = mockk<Pageable>()
         private val VIDEO_ID = mockk<UUID>()
         private val URLS = listOf("url")

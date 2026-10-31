@@ -48,6 +48,15 @@ internal class MemberMapperTest {
         actual shouldBeEqual UPDATED_MEMBER_ENTITY
     }
 
+    @Test
+    internal fun `should map entity to update model`() {
+        val entity = MemberEntity(URL, NAME, NICKNAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
+
+        val actual = underTest.entityToUpdate(entity)
+
+        actual shouldBeEqual UpdateMember(URL, NAME, NICKNAME, DESCRIPTION, JOINED_AT, ROLE, STATUS, ARCHIVED)
+    }
+
     private companion object {
         private val ID = mockk<UUID>()
         private const val URL = "url"

@@ -6,6 +6,10 @@ import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.operation.EventOperation
 import hu.bsstudio.bssweb.event.service.EventService
+import hu.bsstudio.bssweb.revision.controller.restoring
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -42,6 +46,31 @@ class EventController(
         service.removeEvent(eventId)
         return ResponseEntity.noContent().build()
     }
+
+    override fun getDeletedEvents(pageable: Pageable): ResponseEntity<Page<Event>> =
+        service
+            .findDeletedEvents(pageable)
+            .let { ResponseEntity.ok(it) }
+
+    override fun restoreEvent(eventId: UUID): ResponseEntity<DetailedEvent> = restoring { service.restoreEvent(eventId) }
+
+    override fun getEventRevisions(eventId: UUID): ResponseEntity<List<RevisionInfo>> =
+        service
+            .findEventRevisions(eventId)
+            .let { ResponseEntity.ok(it) }
+
+    override fun getEventRevision(
+        eventId: UUID,
+        revision: Long,
+    ): ResponseEntity<Event> =
+        service
+            .findEventRevision(eventId, revision)
+            .let { ResponseEntity.of(it) }
+
+    override fun restoreEventRevision(
+        eventId: UUID,
+        revision: Long,
+    ): ResponseEntity<DetailedEvent> = restoring { service.restoreEventRevision(eventId, revision) }
 
     private fun locationUri(id: UUID) =
         ServletUriComponentsBuilder

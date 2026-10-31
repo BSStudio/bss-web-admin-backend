@@ -2,6 +2,7 @@ package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.fileserver.client.FileApiClient
 import hu.bsstudio.bssweb.fileserver.model.VideoFileUpdate
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
@@ -43,4 +44,25 @@ class FileUpdatingVideoService(
             }
 
     override fun deleteVideoById(videoId: UUID) = this.service.deleteVideoById(videoId)
+
+    override fun findDeletedVideos(pageable: Pageable): Page<Video> = this.service.findDeletedVideos(pageable)
+
+    override fun restoreVideo(videoId: UUID): Optional<DetailedVideo> = this.service.restoreVideo(videoId).map(::updateFolder)
+
+    override fun findVideoRevisions(videoId: UUID): List<RevisionInfo> = this.service.findVideoRevisions(videoId)
+
+    override fun findVideoRevision(
+        videoId: UUID,
+        revision: Long,
+    ): Optional<DetailedVideo> = this.service.findVideoRevision(videoId, revision)
+
+    override fun restoreVideoRevision(
+        videoId: UUID,
+        revision: Long,
+    ): Optional<DetailedVideo> = this.service.restoreVideoRevision(videoId, revision).map(::updateFolder)
+
+    private fun updateFolder(video: DetailedVideo): DetailedVideo {
+        this.fileClient.updateVideoFolder(VideoFileUpdate(video.id, video.urls))
+        return video
+    }
 }

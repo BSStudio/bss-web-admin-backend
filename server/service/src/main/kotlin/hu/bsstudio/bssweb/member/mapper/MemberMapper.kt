@@ -47,4 +47,16 @@ class MemberMapper {
         memberEntity.archived = updateMember.archived
         return memberEntity
     }
+
+    fun entityToUpdate(entity: MemberEntity) =
+        UpdateMember(
+            url = entity.url,
+            name = entity.name,
+            nickname = entity.nickname,
+            description = entity.description,
+            joinedAt = entity.joinedAt,
+            role = entity.role,
+            status = entity.status,
+            archived = entity.archived,
+        )
 }
