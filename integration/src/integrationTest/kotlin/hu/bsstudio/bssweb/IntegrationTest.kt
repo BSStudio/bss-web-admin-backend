@@ -9,6 +9,7 @@ import hu.bsstudio.bssweb.video.repository.VideoRepository
 import hu.bsstudio.bssweb.videocrew.repository.VideoCrewRepository
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 
@@ -36,13 +37,14 @@ open class IntegrationTest {
 
     @Autowired protected lateinit var labelRepository: LabelRepository
 
+    @Autowired private lateinit var jdbcTemplate: JdbcTemplate
+
     @BeforeEach
     fun setUp() {
-        this.labelRepository.deleteAll()
-        this.videoCrewRepository.deleteAll()
-        this.eventVideoRepository.deleteAll()
-        this.memberRepository.deleteAll()
-        this.videoRepository.deleteAll()
-        this.eventRepository.deleteAll()
+        // not deleteAll(): it only marks videos, events and members deleted, so their rows and history would carry over
+        jdbcTemplate.execute(
+            "truncate crew, event_video, video_label, video_url, label, video, event, member, " +
+                "video_aud, video_url_aud, video_label_aud, event_aud, member_aud, revinfo",
+        )
     }
 }

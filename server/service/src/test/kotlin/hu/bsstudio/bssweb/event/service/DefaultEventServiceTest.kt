@@ -9,6 +9,7 @@ import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.EventRepository
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
 import io.mockk.every
@@ -106,8 +107,19 @@ internal class DefaultEventServiceTest(
     }
 
     @Test
-    internal fun `should remove entity by id`() {
-        every { mockRepository.deleteById(EVENT_ID) } returns Unit
+    internal fun `should mark the entity deleted`() {
+        val entity = EventEntity(url = "url", title = "title").apply { id = UUID.randomUUID() }
+        every { mockRepository.findById(EVENT_ID) } returns Optional.of(entity)
+        every { mockRepository.save(entity) } returns entity
+
+        underTest.removeEvent(EVENT_ID)
+
+        entity.deletedAt.shouldNotBeNull()
+    }
+
+    @Test
+    internal fun `should do nothing when deleting a missing entity`() {
+        every { mockRepository.findById(EVENT_ID) } returns Optional.empty()
 
         underTest.removeEvent(EVENT_ID)
     }
