@@ -15,13 +15,21 @@ import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
 import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.SQLRestriction
 import org.hibernate.annotations.UpdateTimestamp
+import org.hibernate.envers.AuditTable
+import org.hibernate.envers.Audited
+import org.hibernate.envers.NotAudited
+import org.hibernate.envers.RelationTargetAuditMode
 import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
 @Entity
 @Table(name = "video")
+@Audited
+@AuditTable("video_aud")
+@SQLRestriction("deleted_at is null")
 data class VideoEntity(
     var title: String,
     @Column(name = "url")
@@ -37,6 +45,7 @@ data class VideoEntity(
     @GeneratedValue
     lateinit var id: UUID
 
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @OneToMany
     @JoinTable(
         name = "video_label",
@@ -45,8 +54,10 @@ data class VideoEntity(
     )
     var labels: List<LabelEntity> = emptyList()
 
+    @NotAudited
     @OneToMany
     @JoinColumn(name = "video_id")
+    @SQLRestriction("member_id in (select m.id from member m where m.deleted_at is null)")
     var videoCrew: List<DetailedVideoCrewEntity> = emptyList()
 
     @CreationTimestamp
@@ -54,6 +65,9 @@ data class VideoEntity(
 
     @UpdateTimestamp
     lateinit var updatedAt: Instant
+
+    /** When the video was deleted, or `null`. A deleted video stays in the table; the restriction above hides it. */
+    var deletedAt: Instant? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

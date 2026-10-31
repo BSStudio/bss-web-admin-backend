@@ -7,6 +7,7 @@ import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.EventRepository
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
@@ -53,5 +54,9 @@ class DefaultEventService(
             .map(repository::save)
             .map(mapper::entityToDetailedModel)
 
-    override fun removeEvent(eventId: UUID) = repository.deleteById(eventId)
+    override fun removeEvent(eventId: UUID) =
+        repository.findById(eventId).ifPresent {
+            it.deletedAt = Instant.now()
+            repository.save(it)
+        }
 }
