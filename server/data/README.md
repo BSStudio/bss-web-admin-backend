@@ -29,8 +29,8 @@ directory.
   comment can turn it off for that migration, with a line saying why.
 
 - **Never change a migration once it has been deployed.** Flyway checksums each migration it has run and refuses to
-  start if one changes. Squawk leaves out V0 to V8: they were written before it, and fixing its warnings would change
-  the schema they create.
+  start if one changes. Squawk leaves out V0 to V8, which were written before it. V9 changes the column types it
+  flagged in them; the rest of its warnings are about how they changed the schema, which a later migration can't undo.
 
 ### Schemas
 
@@ -85,18 +85,18 @@ erDiagram
 crew {
    uuid video_id FK
    uuid member_id FK
-   varchar(250) position
+   text position
 }
 
 event {
    uuid id PK
-   varchar(250) url
-   varchar(250) title
-   varchar(8192) description
+   text url
+   text title
+   text description
    date date_from
    boolean visible
-   timestamp created_at
-   timestamp updated_at
+   timestamptz created_at
+   timestamptz updated_at
    date date_to
 }
 
@@ -107,36 +107,36 @@ event_video {
 
 label {
    uuid id PK
-   varchar(64) name
-   varchar(256) description
+   text name
+   text description
 }
 
 member {
    uuid id PK
-   varchar(250) url
-   varchar(250) name
-   varchar(250) nickname
-   varchar(2000) description
+   text url
+   text name
+   text nickname
+   text description
    date joined_at
-   varchar(250) role
-   varchar(250) status
+   text role
+   text status
    boolean archived
-   timestamp created_at
-   timestamp updated_at
+   timestamptz created_at
+   timestamptz updated_at
 }
 
 status {
-   varchar(250) name PK
+   text name PK
 }
 
 video {
    uuid id PK
-   varchar(250) title
-   varchar(2000) description
+   text title
+   text description
    date shooting_date_start
    boolean visible
-   timestamp created_at
-   timestamp updated_at
+   timestamptz created_at
+   timestamptz updated_at
    date shooting_date_end
 }
 
@@ -147,7 +147,7 @@ video_label {
 
 video_url {
    uuid video_id FK
-   varchar(255) url
+   text url
 }
 
 member ||--|| status: has
