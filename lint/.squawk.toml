@@ -4,7 +4,8 @@ pg_version = "18.0"
 assume_in_transaction = true
 # The migrations run when the app starts, where waiting for a lock is better than failing to start
 excluded_rules = ["require-lock-timeout", "require-statement-timeout"]
-# Written before Squawk was added: fixing its warnings would change the schema they create, not only their layout
+# Written before Squawk was added. V9 changes the column types they chose; their other warnings are about how they
+# changed the schema, which a later migration can't undo
 excluded_paths = [
   "../server/data/src/main/resources/db/migration/V0__*.pgsql",
   "../server/data/src/main/resources/db/migration/V1__*.pgsql",
