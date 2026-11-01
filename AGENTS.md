@@ -28,8 +28,8 @@ UI. This file lists what those don't say, or what is easy to get wrong.
   Spotless. `./gradlew spotlessApply` fixes formatting, Markdown included. `./gradlew build` checks everything.
 - A new migration is a `.pgsql` file, linted by Squawk and SQLFluff; see
   [server/data/README.md](server/data/README.md#flyway-migrations). Never edit a deployed one.
-- The linters that aren't Gradle's (actionlint, Squawk, SQLFluff) are pinned in `lint/pyproject.toml`; run them with
-  `uv run` from `lint/`.
+- Squawk and SQLFluff are pinned in `lint/pyproject.toml`; run them with `uv run` from `lint/`. actionlint runs from
+  its Docker image (the `Lint` workflow pins the digest): `docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint`.
 - Controller tests compare rendered markup as strings. A change to a template's classes or attribute order changes
   them; update the expected strings from the rendered page, not by guessing.
 - Commit messages follow Conventional Commits (`feat(ui): …`, `fix(ui): …`); semantic-release builds the release

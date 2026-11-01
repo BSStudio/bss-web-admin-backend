@@ -1,10 +1,9 @@
-# The linters CI runs besides Gradle's: `uv run <tool>` in this folder, see server/data/README.md
+# The migration linters: `uv run <tool>` in this folder, see server/data/README.md
 [project]
 name = "bss-web-admin-backend-lint"
 version = "0.0.0"
 requires-python = "==3.14.*"
 dependencies = [
-  "actionlint-py==1.7.12.25",
   "sqlfluff==4.5.0",
   "squawk-cli==2.71.0",
 ]

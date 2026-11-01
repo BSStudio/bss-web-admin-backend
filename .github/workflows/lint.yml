@@ -7,7 +7,8 @@ on:
   push:
     branches: [ "main" ]
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   lint:
@@ -23,11 +24,16 @@ jobs:
           working-directory: lint
           enable-cache: true
           cache-dependency-glob: lint/uv.lock
+      # --no-build installs wheels only, so no package runs a setup script
       - id: sync
-        run: uv sync --locked
-      - run: uv run actionlint
+        run: uv sync --locked --no-build
       # V0 to V8 are excluded in .squawk.toml
-      - run: uv run squawk --no-error-on-unmatched-pattern '../server/data/src/main/resources/db/migration/*.pgsql'
+      - run: uv run --locked --no-build squawk --no-error-on-unmatched-pattern '../server/data/src/main/resources/db/migration/*.pgsql'
+        if: ${{ steps.sync.outcome == 'success' }}
+      - run: uv run --locked --no-build sqlfluff lint ../server/data/src/main/resources/db/migration
         if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
-      - run: uv run sqlfluff lint ../server/data/src/main/resources/db/migration
-        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+      # actionlint's only Python package builds from source, so it runs from its image, which bundles ShellCheck
+      - uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
+        if: ${{ !cancelled() }}
+        with:
+          args: -color
