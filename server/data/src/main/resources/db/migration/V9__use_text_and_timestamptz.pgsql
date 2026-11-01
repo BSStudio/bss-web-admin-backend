@@ -14,7 +14,8 @@ ALTER TABLE status
 ALTER COLUMN name TYPE TEXT,
 ADD CONSTRAINT status_name_max_length CHECK (char_length(name) <= 250);
 
--- the app ran in UTC, so the TIMESTAMP columns hold UTC times
+-- a TIMESTAMP is read in the session's time zone, which the JDBC driver sets to the app's default time zone: the
+-- one it wrote the values in
 ALTER TABLE member
 ALTER COLUMN url TYPE TEXT,
 ALTER COLUMN name TYPE TEXT,
@@ -22,8 +23,8 @@ ALTER COLUMN nickname TYPE TEXT,
 ALTER COLUMN description TYPE TEXT,
 ALTER COLUMN role TYPE TEXT,
 ALTER COLUMN status TYPE TEXT,
-ALTER COLUMN created_at TYPE TIMESTAMP WITH TIME ZONE USING created_at AT TIME ZONE 'UTC',
-ALTER COLUMN updated_at TYPE TIMESTAMP WITH TIME ZONE USING updated_at AT TIME ZONE 'UTC',
+ALTER COLUMN created_at TYPE TIMESTAMP WITH TIME ZONE,
+ALTER COLUMN updated_at TYPE TIMESTAMP WITH TIME ZONE,
 ADD CONSTRAINT member_url_max_length CHECK (char_length(url) <= 250),
 ADD CONSTRAINT member_name_max_length CHECK (char_length(name) <= 250),
 ADD CONSTRAINT member_nickname_max_length CHECK (char_length(nickname) <= 250),
@@ -33,8 +34,8 @@ ADD CONSTRAINT member_role_max_length CHECK (char_length(role) <= 250);
 ALTER TABLE video
 ALTER COLUMN title TYPE TEXT,
 ALTER COLUMN description TYPE TEXT,
-ALTER COLUMN created_at TYPE TIMESTAMP WITH TIME ZONE USING created_at AT TIME ZONE 'UTC',
-ALTER COLUMN updated_at TYPE TIMESTAMP WITH TIME ZONE USING updated_at AT TIME ZONE 'UTC',
+ALTER COLUMN created_at TYPE TIMESTAMP WITH TIME ZONE,
+ALTER COLUMN updated_at TYPE TIMESTAMP WITH TIME ZONE,
 ADD CONSTRAINT video_title_max_length CHECK (char_length(title) <= 250),
 ADD CONSTRAINT video_description_max_length CHECK (char_length(description) <= 2000);
 
@@ -50,8 +51,8 @@ ALTER TABLE event
 ALTER COLUMN url TYPE TEXT,
 ALTER COLUMN title TYPE TEXT,
 ALTER COLUMN description TYPE TEXT,
-ALTER COLUMN created_at TYPE TIMESTAMP WITH TIME ZONE USING created_at AT TIME ZONE 'UTC',
-ALTER COLUMN updated_at TYPE TIMESTAMP WITH TIME ZONE USING updated_at AT TIME ZONE 'UTC',
+ALTER COLUMN created_at TYPE TIMESTAMP WITH TIME ZONE,
+ALTER COLUMN updated_at TYPE TIMESTAMP WITH TIME ZONE,
 ADD CONSTRAINT event_url_max_length CHECK (char_length(url) <= 250),
 ADD CONSTRAINT event_title_max_length CHECK (char_length(title) <= 250),
 ADD CONSTRAINT event_description_max_length CHECK (char_length(description) <= 8192);
