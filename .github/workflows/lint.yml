@@ -1,0 +1,39 @@
+name: Lint
+
+on:
+  pull_request:
+  workflow_dispatch:
+  merge_group:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-26.04-arm
+    name: "Lint workflows and migrations"
+    defaults:
+      run:
+        working-directory: lint
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          working-directory: lint
+          enable-cache: true
+          cache-dependency-glob: lint/uv.lock
+      # --no-build installs wheels only, so no package runs a setup script
+      - id: sync
+        run: uv sync --locked --no-build
+      # V0 to V8 are excluded in .squawk.toml
+      - run: uv run --locked --no-build squawk --no-error-on-unmatched-pattern '../server/data/src/main/resources/db/migration/*.pgsql'
+        if: ${{ steps.sync.outcome == 'success' }}
+      - run: uv run --locked --no-build sqlfluff lint ../server/data/src/main/resources/db/migration
+        if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
+      # actionlint's only Python package builds from source, so it runs from its image, which bundles ShellCheck
+      - uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
+        if: ${{ !cancelled() }}
+        with:
+          args: -color
