@@ -30,7 +30,7 @@ directory.
 
 - **Never change a migration once it has been deployed.** Flyway checksums each migration it has run and refuses to
   start if one changes. Squawk leaves out V0 to V8: they were written before it, and fixing its warnings would change
-  the schema they create. SQLFluff leaves them out too, in `lint/.sqlfluffignore`.
+  the schema they create.
 
 ### Schemas
 
