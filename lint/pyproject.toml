@@ -2,7 +2,7 @@
 [project]
 name = "bss-web-admin-backend-lint"
 version = "0.0.0"
-requires-python = "==3.14.*"
+requires-python = "==3.15.*"
 dependencies = [
   "sqlfluff==4.5.0",
   "squawk-cli==2.71.0",
