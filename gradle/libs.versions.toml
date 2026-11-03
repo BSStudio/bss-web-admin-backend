@@ -5,7 +5,7 @@ kotest = "6.2.6"
 spotless = "8.10.4"
 detekt = "2.0.0-alpha.6"
 kotlin = "2.4.21"
-htmx = "4.0.0"
+htmx = "4.0.1"
 htmx-spring-boot = "6.0.1"
 # The admin UI's Carbon stylesheet, downloaded from npm by server/ui (see renovate.json)
 carbon-styles = "1.118.0"
