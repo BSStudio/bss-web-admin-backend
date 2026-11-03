@@ -1,5 +1,7 @@
 package hu.bsstudio.bssweb.video.controller
 
+import hu.bsstudio.bssweb.revision.controller.restoring
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
@@ -57,6 +59,31 @@ class VideoController(
         service.deleteVideoById(videoId)
         return ResponseEntity.noContent().build()
     }
+
+    override fun getDeletedVideos(pageable: Pageable): ResponseEntity<Page<Video>> =
+        service
+            .findDeletedVideos(pageable)
+            .let { ResponseEntity.ok(it) }
+
+    override fun restoreVideo(videoId: UUID): ResponseEntity<DetailedVideo> = restoring { service.restoreVideo(videoId) }
+
+    override fun getVideoRevisions(videoId: UUID): ResponseEntity<List<RevisionInfo>> =
+        service
+            .findVideoRevisions(videoId)
+            .let { ResponseEntity.ok(it) }
+
+    override fun getVideoRevision(
+        videoId: UUID,
+        revision: Long,
+    ): ResponseEntity<DetailedVideo> =
+        service
+            .findVideoRevision(videoId, revision)
+            .let { ResponseEntity.of(it) }
+
+    override fun restoreVideoRevision(
+        videoId: UUID,
+        revision: Long,
+    ): ResponseEntity<DetailedVideo> = restoring { service.restoreVideoRevision(videoId, revision) }
 
     private fun locationUri(id: UUID) =
         ServletUriComponentsBuilder

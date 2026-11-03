@@ -4,6 +4,9 @@ import hu.bsstudio.bssweb.event.model.CreateEvent
 import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
@@ -39,4 +42,29 @@ interface EventOperation {
     fun deleteEvent(
         @PathVariable eventId: UUID,
     ): ResponseEntity<Unit>
+
+    @GetExchange("/deleted")
+    fun getDeletedEvents(pageable: Pageable): ResponseEntity<Page<Event>>
+
+    @PostExchange("/{eventId}/restore")
+    fun restoreEvent(
+        @PathVariable eventId: UUID,
+    ): ResponseEntity<DetailedEvent>
+
+    @GetExchange("/{eventId}/revisions")
+    fun getEventRevisions(
+        @PathVariable eventId: UUID,
+    ): ResponseEntity<List<RevisionInfo>>
+
+    @GetExchange("/{eventId}/revisions/{revision}")
+    fun getEventRevision(
+        @PathVariable eventId: UUID,
+        @PathVariable revision: Long,
+    ): ResponseEntity<Event>
+
+    @PostExchange("/{eventId}/revisions/{revision}/restore")
+    fun restoreEventRevision(
+        @PathVariable eventId: UUID,
+        @PathVariable revision: Long,
+    ): ResponseEntity<DetailedEvent>
 }

@@ -6,10 +6,16 @@ import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.service.MemberService
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
+import hu.bsstudio.bssweb.revision.model.RevisionType
 import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.http.MediaType
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic
@@ -19,6 +25,7 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
 import tools.jackson.databind.ObjectMapper
+import java.time.Instant
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
@@ -151,7 +158,101 @@ internal class MemberControllerTest(
             }
     }
 
+    @Test
+    internal fun `should return the deleted members`() {
+        every { mockService.findDeletedMembers(DELETED_PAGEABLE) } returns PageImpl(listOf(MEMBER), DELETED_PAGEABLE, 1)
+
+        mockMvc
+            .get("$BASE_URL/deleted") {
+                param("page", "0")
+                param("size", "20")
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                jsonPath("$.content[0].id") { value("$MEMBER_ID") }
+            }
+    }
+
+    @Test
+    internal fun `should restore a deleted member`() {
+        every { mockService.restoreMember(MEMBER_ID) } returns Optional.of(MEMBER)
+
+        mockMvc
+            .post("$BASE_URL/$MEMBER_ID/restore") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(MEMBER)) }
+            }
+    }
+
+    @Test
+    internal fun `should answer 404 when there is no deleted member to restore`() {
+        every { mockService.restoreMember(MEMBER_ID) } returns Optional.empty()
+
+        mockMvc
+            .post("$BASE_URL/$MEMBER_ID/restore") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpect { status { isNotFound() } }
+    }
+
+    @Test
+    internal fun `should answer 409 when the restored member clashes with another`() {
+        every { mockService.restoreMember(MEMBER_ID) } throws DataIntegrityViolationException("duplicate")
+
+        mockMvc
+            .post("$BASE_URL/$MEMBER_ID/restore") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpect { status { isConflict() } }
+    }
+
+    @Test
+    internal fun `should return the revisions of a member`() {
+        every { mockService.findMemberRevisions(MEMBER_ID) } returns listOf(REVISION_INFO)
+
+        mockMvc
+            .get("$BASE_URL/$MEMBER_ID/revisions") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(listOf(REVISION_INFO))) }
+            }
+    }
+
+    @Test
+    internal fun `should return a member as it was at a revision`() {
+        every { mockService.findMemberRevision(MEMBER_ID, REVISION) } returns Optional.of(MEMBER)
+
+        mockMvc
+            .get("$BASE_URL/$MEMBER_ID/revisions/$REVISION") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(MEMBER)) }
+            }
+    }
+
+    @Test
+    internal fun `should restore a revision of a member`() {
+        every { mockService.restoreMemberRevision(MEMBER_ID, REVISION) } returns Optional.of(MEMBER)
+
+        mockMvc
+            .post("$BASE_URL/$MEMBER_ID/revisions/$REVISION/restore") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(MEMBER)) }
+            }
+    }
+
     private companion object {
+        private const val REVISION = 3L
+        private val REVISION_INFO = RevisionInfo(REVISION, Instant.parse("2026-10-30T12:00:00Z"), "author", RevisionType.UPDATED)
+        private val DELETED_PAGEABLE: Pageable = PageRequest.of(0, 20)
         private const val BASE_URL = "/api/v1/member"
         private const val USERNAME = "user"
         private const val PASSWORD = "password"

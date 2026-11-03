@@ -10,6 +10,7 @@ import hu.bsstudio.bssweb.videocrew.entity.DetailedVideoCrewEntity
 import hu.bsstudio.bssweb.videocrew.mapper.VideoCrewMapper
 import hu.bsstudio.bssweb.videocrew.model.VideoCrew
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -63,6 +64,33 @@ internal class VideoMapperTest(
         val actual = underTest.updateToEntity(entity, UPDATE_VIDEO, LABEL_ENTITIES)
 
         actual shouldBeEqual UPDATED_VIDEO_ENTITY
+    }
+
+    @Test
+    internal fun `should give the entity URLs that Hibernate can refill`() {
+        val entity = VideoEntity(TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE)
+
+        val actual = underTest.updateToEntity(entity, UPDATE_VIDEO.copy(urls = emptyList()), LABEL_ENTITIES)
+
+        actual.urls.shouldBeInstanceOf<ArrayList<String>>()
+    }
+
+    @Test
+    internal fun `should map a revision to a detailed model without its crew`() {
+        every { LABEL_ENTITY.name } returns LABEL_NAME
+
+        val actual = underTest.revisionToModel(DETAILED_VIDEO_ENTITY)
+
+        actual shouldBeEqual DETAILED_VIDEO.copy(crew = emptyList())
+    }
+
+    @Test
+    internal fun `should map entity to update model`() {
+        every { LABEL_ENTITY.name } returns LABEL_NAME
+
+        val actual = underTest.entityToUpdate(DETAILED_VIDEO_ENTITY)
+
+        actual shouldBeEqual UpdateVideo(TITLE, URLS, DESCRIPTION, SHOOTING_DATE_START, SHOOTING_DATE_END, VISIBLE, LABELS)
     }
 
     private companion object {
