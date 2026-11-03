@@ -10,6 +10,7 @@ import hu.bsstudio.bssweb.video.repository.VideoRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
@@ -64,5 +65,9 @@ class DefaultVideoService(
             .map(mapper::entityToDetailedModel)
     }
 
-    override fun deleteVideoById(videoId: UUID) = repository.deleteById(videoId)
+    override fun deleteVideoById(videoId: UUID) =
+        repository.findById(videoId).ifPresent {
+            it.deletedAt = Instant.now()
+            repository.save(it)
+        }
 }
