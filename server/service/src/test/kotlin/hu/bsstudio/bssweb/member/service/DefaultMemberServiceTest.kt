@@ -7,8 +7,11 @@ import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.repository.MemberRepository
+import hu.bsstudio.bssweb.revision.mapper.RevisionMapper
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
@@ -20,6 +23,12 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
+import org.springframework.data.history.Revision
+import org.springframework.data.history.RevisionMetadata
+import org.springframework.data.history.Revisions
+import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
@@ -27,6 +36,7 @@ import java.util.UUID
 internal class DefaultMemberServiceTest(
     @param:MockK private val mockRepository: MemberRepository,
     @param:MockK private val mockMapper: MemberMapper,
+    @param:MockK private val mockRevisionMapper: RevisionMapper,
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultMemberService
@@ -137,7 +147,92 @@ internal class DefaultMemberServiceTest(
         underTest.removeMember(MEMBER_ID)
     }
 
+    @Test
+    internal fun `should return deleted members`() {
+        every { mockRepository.findAllDeleted(PAGEABLE) } returns PageImpl(listOf(MEMBER_ENTITY))
+        every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
+
+        val actual = underTest.findDeletedMembers(PAGEABLE)
+
+        actual shouldBeEqual PageImpl(listOf(MEMBER))
+    }
+
+    @Test
+    internal fun `should restore a deleted member`() {
+        val entity =
+            MemberEntity(url = "url", name = "name").apply {
+                id = UUID.randomUUID()
+                deletedAt = Instant.now()
+            }
+        every { mockRepository.findDeletedById(MEMBER_ID) } returns Optional.of(entity)
+        every { mockRepository.save(entity) } returns entity
+        every { mockMapper.entityToModel(entity) } returns MEMBER
+
+        val actual = underTest.restoreMember(MEMBER_ID)
+
+        actual shouldBePresent { it shouldBeEqual MEMBER }
+        entity.deletedAt.shouldBeNull()
+    }
+
+    @Test
+    internal fun `should not restore a member that is not deleted`() {
+        every { mockRepository.findDeletedById(MEMBER_ID) } returns Optional.empty()
+
+        val actual = underTest.restoreMember(MEMBER_ID)
+
+        actual.shouldBeEmpty()
+    }
+
+    @Test
+    internal fun `should return the revisions of a member`() {
+        val revisions = Revisions.none<Long, MemberEntity>()
+        every { mockRepository.findRevisions(MEMBER_ID) } returns revisions
+        every { mockRevisionMapper.revisionsToModel(revisions, any<(MemberEntity) -> Instant?>()) } returns REVISION_INFOS
+
+        val actual = underTest.findMemberRevisions(MEMBER_ID)
+
+        actual shouldBeEqual REVISION_INFOS
+    }
+
+    @Test
+    internal fun `should return a member as it was at a revision`() {
+        every { mockRepository.findRevision(MEMBER_ID, REVISION) } returns Optional.of(Revision.of(REVISION_METADATA, MEMBER_ENTITY))
+        every { mockMapper.entityToModel(MEMBER_ENTITY) } returns MEMBER
+
+        val actual = underTest.findMemberRevision(MEMBER_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual MEMBER }
+    }
+
+    @Test
+    internal fun `should give a member the fields it had at a revision`() {
+        val current = MemberEntity(url = "url", name = "name").apply { id = UUID.randomUUID() }
+        every { mockRepository.findRevision(MEMBER_ID, REVISION) } returns Optional.of(Revision.of(REVISION_METADATA, MEMBER_ENTITY))
+        every { mockMapper.entityToUpdate(MEMBER_ENTITY) } returns UPDATE_MEMBER
+        every { mockMapper.updateToEntity(current, UPDATE_MEMBER) } returns current
+        every { mockRepository.findById(MEMBER_ID) } returns Optional.of(current)
+        every { mockRepository.save(current) } returns current
+        every { mockMapper.entityToModel(current) } returns MEMBER
+
+        val actual = underTest.restoreMemberRevision(MEMBER_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual MEMBER }
+    }
+
+    @Test
+    internal fun `should not restore a revision that is missing`() {
+        every { mockRepository.findRevision(MEMBER_ID, REVISION) } returns Optional.empty()
+
+        val actual = underTest.restoreMemberRevision(MEMBER_ID, REVISION)
+
+        actual.shouldBeEmpty()
+    }
+
     private companion object {
+        private const val REVISION = 3L
+        private val REVISION_METADATA = mockk<RevisionMetadata<Long>>()
+        private val REVISION_INFOS = listOf(mockk<RevisionInfo>())
+        private val PAGEABLE = Pageable.unpaged()
         private val MEMBER_ID = mockk<UUID>()
         private val MEMBER_ENTITY = mockk<MemberEntity>()
         private val MEMBER = mockk<Member>()

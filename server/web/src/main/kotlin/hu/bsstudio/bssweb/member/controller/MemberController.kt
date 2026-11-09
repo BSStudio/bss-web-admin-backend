@@ -5,6 +5,10 @@ import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.operation.MemberOperation
 import hu.bsstudio.bssweb.member.service.MemberService
+import hu.bsstudio.bssweb.revision.controller.restoring
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
@@ -49,6 +53,31 @@ class MemberController(
         service.removeMember(memberId)
         return ResponseEntity.noContent().build()
     }
+
+    override fun getDeletedMembers(pageable: Pageable): ResponseEntity<Page<Member>> =
+        service
+            .findDeletedMembers(pageable)
+            .let { ResponseEntity.ok(it) }
+
+    override fun restoreMember(memberId: UUID): ResponseEntity<Member> = restoring { service.restoreMember(memberId) }
+
+    override fun getMemberRevisions(memberId: UUID): ResponseEntity<List<RevisionInfo>> =
+        service
+            .findMemberRevisions(memberId)
+            .let { ResponseEntity.ok(it) }
+
+    override fun getMemberRevision(
+        memberId: UUID,
+        revision: Long,
+    ): ResponseEntity<Member> =
+        service
+            .findMemberRevision(memberId, revision)
+            .let { ResponseEntity.of(it) }
+
+    override fun restoreMemberRevision(
+        memberId: UUID,
+        revision: Long,
+    ): ResponseEntity<Member> = restoring { service.restoreMemberRevision(memberId, revision) }
 
     private fun locationUri(id: UUID) =
         ServletUriComponentsBuilder
