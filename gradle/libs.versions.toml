@@ -13,7 +13,7 @@ carbon-styles = "1.119.0"
 # Drop each one once springBoot manages an equal or newer version.
 jackson = "3.3.0"
 jackson2 = "2.23.0"
-tomcat = "11.0.27"
+tomcat = "11.0.29"
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
