@@ -1,4 +1,4 @@
-FROM bellsoft/hardened-liberica-runtime-container:jdk-25.0.5.0.3-cds-musl@sha256:3e619b990371778d17b84e26dfad183b0e7a4d5fff29184babf81207804e5ed8 AS build
+FROM bellsoft/hardened-liberica-runtime-container:jdk-25.0.5.0.3-cds-musl@sha256:a3162289cf01a9cca326aa7c23fb77faf2b02cd42b803bc3f82cce44f3201eb1 AS build
 WORKDIR /usr/src/app
 # health probe for the runtime image, which has no shell, curl or wget
 COPY ./docker/healthcheck/HealthCheck.java ./healthcheck/
@@ -30,7 +30,7 @@ ARG BUILD_ARG="bootJar"
 RUN --mount=type=cache,target=/root/.gradle \
     ./gradlew ${BUILD_ARG}
 
-FROM bellsoft/hardened-liberica-runtime-container:jre-25.0.5.0.3-cds-distroless-musl@sha256:3c25d1b4f03d7e530077e29b7a43201229352cbd2918e9c31b816b6c7f481662 AS app
+FROM bellsoft/hardened-liberica-runtime-container:jre-25.0.5.0.3-cds-distroless-musl@sha256:eb0c5447cc191e29fc47dfeab03feac8818788562320d64bbf78508b057fba30 AS app
 # distroless: no shell or package manager; run as the image's non-root appuser
 USER 10001:10001
 WORKDIR /home/appuser
