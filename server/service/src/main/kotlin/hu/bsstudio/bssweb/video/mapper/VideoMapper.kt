@@ -23,16 +23,34 @@ class VideoMapper(
         )
 
     fun entityToDetailedModel(entity: VideoEntity): DetailedVideo =
+        revisionToModel(entity).copy(crew = entity.videoCrew.map(videoCrewMapper::entityToModel))
+
+    /**
+     * A video as it was at a revision. Its crew has no history, so it is left empty. A revision's URLs are a lazy list
+     * that can only be read while its session is open, so they are copied here and in [entityToUpdate].
+     */
+    fun revisionToModel(entity: VideoEntity): DetailedVideo =
         DetailedVideo(
             id = entity.id,
             title = entity.title,
-            urls = entity.urls,
+            urls = entity.urls.toList(),
             description = entity.description,
             shootingDateStart = entity.shootingDateStart,
             shootingDateEnd = entity.shootingDateEnd,
             visible = entity.visible,
             labels = entity.labels.map { it.name },
-            crew = entity.videoCrew.map(videoCrewMapper::entityToModel),
+            crew = emptyList(),
+        )
+
+    fun entityToUpdate(entity: VideoEntity): UpdateVideo =
+        UpdateVideo(
+            title = entity.title,
+            urls = entity.urls.toList(),
+            description = entity.description,
+            shootingDateStart = entity.shootingDateStart,
+            shootingDateEnd = entity.shootingDateEnd,
+            visible = entity.visible,
+            labels = entity.labels.map { it.name },
         )
 
     fun modelToEntity(model: CreateVideo): VideoEntity = VideoEntity(title = model.title)
@@ -43,7 +61,8 @@ class VideoMapper(
         labels: List<LabelEntity>,
     ): VideoEntity {
         videoEntity.title = updateVideo.title
-        videoEntity.urls = updateVideo.urls
+        // a merge refills the entity's collection in place, so it can't be a read-only list such as emptyList()
+        videoEntity.urls = updateVideo.urls.toMutableList()
         videoEntity.description = updateVideo.description
         videoEntity.shootingDateStart = updateVideo.shootingDateStart
         videoEntity.shootingDateEnd = updateVideo.shootingDateEnd

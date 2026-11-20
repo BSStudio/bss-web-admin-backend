@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.video.service
 
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
@@ -29,4 +30,24 @@ interface VideoService {
     ): Optional<DetailedVideo>
 
     fun deleteVideoById(videoId: UUID)
+
+    fun findDeletedVideos(pageable: Pageable): Page<Video>
+
+    /** Brings back a deleted video, or returns empty if no deleted video has the id. */
+    fun restoreVideo(videoId: UUID): Optional<DetailedVideo>
+
+    /** The changes of the video, newest first, including the ones made while it was deleted. */
+    fun findVideoRevisions(videoId: UUID): List<RevisionInfo>
+
+    /** The video as it was at [revision], without its crew, which has no history. */
+    fun findVideoRevision(
+        videoId: UUID,
+        revision: Long,
+    ): Optional<DetailedVideo>
+
+    /** Gives the video the fields and labels it had at [revision]. A deleted video has to be restored first. */
+    fun restoreVideoRevision(
+        videoId: UUID,
+        revision: Long,
+    ): Optional<DetailedVideo>
 }

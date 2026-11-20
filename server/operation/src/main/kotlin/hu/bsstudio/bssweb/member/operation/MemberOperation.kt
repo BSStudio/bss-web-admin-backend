@@ -3,6 +3,9 @@ package hu.bsstudio.bssweb.member.operation
 import hu.bsstudio.bssweb.member.model.CreateMember
 import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
@@ -45,4 +48,29 @@ interface MemberOperation {
     fun removeMember(
         @PathVariable memberId: UUID,
     ): ResponseEntity<Unit>
+
+    @GetExchange("/deleted")
+    fun getDeletedMembers(pageable: Pageable): ResponseEntity<Page<Member>>
+
+    @PostExchange("/{memberId}/restore")
+    fun restoreMember(
+        @PathVariable memberId: UUID,
+    ): ResponseEntity<Member>
+
+    @GetExchange("/{memberId}/revisions")
+    fun getMemberRevisions(
+        @PathVariable memberId: UUID,
+    ): ResponseEntity<List<RevisionInfo>>
+
+    @GetExchange("/{memberId}/revisions/{revision}")
+    fun getMemberRevision(
+        @PathVariable memberId: UUID,
+        @PathVariable revision: Long,
+    ): ResponseEntity<Member>
+
+    @PostExchange("/{memberId}/revisions/{revision}/restore")
+    fun restoreMemberRevision(
+        @PathVariable memberId: UUID,
+        @PathVariable revision: Long,
+    ): ResponseEntity<Member>
 }

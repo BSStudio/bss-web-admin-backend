@@ -1,6 +1,9 @@
 package hu.bsstudio.bssweb.video.service
 
 import hu.bsstudio.bssweb.label.repository.LabelRepository
+import hu.bsstudio.bssweb.revision.mapper.RevisionMapper
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
+import hu.bsstudio.bssweb.video.entity.VideoEntity
 import hu.bsstudio.bssweb.video.mapper.VideoMapper
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
@@ -19,6 +22,7 @@ class DefaultVideoService(
     private val repository: VideoRepository,
     private val mapper: VideoMapper,
     private val labelRepository: LabelRepository,
+    private val revisionMapper: RevisionMapper,
 ) : VideoService {
     override fun findAllVideos(): List<Video> =
         repository
@@ -70,4 +74,37 @@ class DefaultVideoService(
             it.deletedAt = Instant.now()
             repository.save(it)
         }
+
+    override fun findDeletedVideos(pageable: Pageable): Page<Video> =
+        repository
+            .findAllDeleted(pageable)
+            .map(mapper::entityToModel)
+
+    override fun restoreVideo(videoId: UUID): Optional<DetailedVideo> =
+        repository
+            .findDeletedById(videoId)
+            .map {
+                it.deletedAt = null
+                it
+            }.map(repository::save)
+            .map(mapper::entityToDetailedModel)
+
+    override fun findVideoRevisions(videoId: UUID): List<RevisionInfo> =
+        revisionMapper.revisionsToModel(repository.findRevisions(videoId), VideoEntity::deletedAt)
+
+    override fun findVideoRevision(
+        videoId: UUID,
+        revision: Long,
+    ): Optional<DetailedVideo> =
+        repository
+            .findRevision(videoId, revision)
+            .map { mapper.revisionToModel(it.entity) }
+
+    override fun restoreVideoRevision(
+        videoId: UUID,
+        revision: Long,
+    ): Optional<DetailedVideo> =
+        repository
+            .findRevision(videoId, revision)
+            .flatMap { updateVideo(videoId, mapper.entityToUpdate(it.entity)) }
 }
