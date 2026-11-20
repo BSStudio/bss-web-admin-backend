@@ -7,6 +7,7 @@ import hu.bsstudio.bssweb.member.model.Member
 import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import org.springframework.transaction.annotation.Transactional
+import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
@@ -66,5 +67,9 @@ class DefaultMemberService(
             .findById(memberIds)
             .map(mapper::entityToModel)
 
-    override fun removeMember(memberId: UUID) = repository.deleteById(memberId)
+    override fun removeMember(memberId: UUID) =
+        repository.findById(memberId).ifPresent {
+            it.deletedAt = Instant.now()
+            repository.save(it)
+        }
 }

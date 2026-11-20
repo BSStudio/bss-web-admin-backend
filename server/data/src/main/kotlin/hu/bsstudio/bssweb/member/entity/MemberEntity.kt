@@ -9,13 +9,19 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.SQLRestriction
 import org.hibernate.annotations.UpdateTimestamp
+import org.hibernate.envers.AuditTable
+import org.hibernate.envers.Audited
 import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
 @Entity
 @Table(name = "member")
+@Audited
+@AuditTable("member_aud")
+@SQLRestriction("deleted_at is null")
 data class MemberEntity(
     var url: String,
     var name: String,
@@ -36,6 +42,9 @@ data class MemberEntity(
 
     @UpdateTimestamp
     lateinit var updatedAt: Instant
+
+    /** When the member was deleted, or `null`. A deleted member stays in the table; the restriction above hides it. */
+    var deletedAt: Instant? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

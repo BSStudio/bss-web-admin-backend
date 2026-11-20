@@ -1,6 +1,9 @@
 spring:
   datasource:
     url: jdbc:tc:postgresql:18-alpine:///db?currentSchema=private
+  jpa:
+    hibernate:
+      ddl-auto: validate
   flyway:
     default-schema: private
     schemas: "private,public"

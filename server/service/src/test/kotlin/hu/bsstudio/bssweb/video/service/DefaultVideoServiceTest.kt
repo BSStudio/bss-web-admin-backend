@@ -11,6 +11,7 @@ import hu.bsstudio.bssweb.video.model.Video
 import hu.bsstudio.bssweb.video.repository.VideoRepository
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
 import io.mockk.every
@@ -123,8 +124,19 @@ internal class DefaultVideoServiceTest(
     }
 
     @Test
-    internal fun `should remove entity by id`() {
-        every { mockRepository.deleteById(VIDEO_ID) } returns Unit
+    internal fun `should mark the entity deleted`() {
+        val entity = VideoEntity(title = "title").apply { id = UUID.randomUUID() }
+        every { mockRepository.findById(VIDEO_ID) } returns Optional.of(entity)
+        every { mockRepository.save(entity) } returns entity
+
+        underTest.deleteVideoById(VIDEO_ID)
+
+        entity.deletedAt.shouldNotBeNull()
+    }
+
+    @Test
+    internal fun `should do nothing when deleting a missing entity`() {
+        every { mockRepository.findById(VIDEO_ID) } returns Optional.empty()
 
         underTest.deleteVideoById(VIDEO_ID)
     }
