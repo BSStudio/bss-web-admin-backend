@@ -23,14 +23,14 @@ jobs:
         with:
           working-directory: lint
           enable-cache: true
-          cache-dependency-glob: lint/uv.lock
-      # --no-build installs wheels only, so no package runs a setup script
+          cache-dependency-glob: uv.lock
+      # PyYAML has no Python 3.15 wheel; allow only it to build from source.
       - id: sync
-        run: uv sync --locked --no-build
+        run: uv sync --locked --no-build --no-binary-package pyyaml
       # V0 to V8 are excluded in .squawk.toml
-      - run: uv run --locked --no-build squawk --no-error-on-unmatched-pattern '../server/data/src/main/resources/db/migration/*.pgsql'
+      - run: uv run --locked --no-build --no-binary-package pyyaml squawk --no-error-on-unmatched-pattern '../server/data/src/main/resources/db/migration/*.pgsql'
         if: ${{ steps.sync.outcome == 'success' }}
-      - run: uv run --locked --no-build sqlfluff lint ../server/data/src/main/resources/db/migration
+      - run: uv run --locked --no-build --no-binary-package pyyaml sqlfluff lint ../server/data/src/main/resources/db/migration
         if: ${{ !cancelled() && steps.sync.outcome == 'success' }}
       # actionlint's only Python package builds from source, so it runs from its image, which bundles ShellCheck
       - uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
