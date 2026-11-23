@@ -11,13 +11,20 @@ import jakarta.persistence.Table
 import org.hibernate.Hibernate
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.Formula
+import org.hibernate.annotations.SQLRestriction
 import org.hibernate.annotations.UpdateTimestamp
+import org.hibernate.envers.AuditTable
+import org.hibernate.envers.Audited
+import org.hibernate.envers.NotAudited
 import java.time.Instant
 import java.time.LocalDate
 import java.util.UUID
 
 @Entity
 @Table(name = "event")
+@Audited
+@AuditTable("event_aud")
+@SQLRestriction("deleted_at is null")
 data class EventEntity(
     var url: String,
     var title: String,
@@ -36,10 +43,17 @@ data class EventEntity(
     @UpdateTimestamp
     lateinit var updatedAt: Instant
 
-    /** How many videos the event has, counted in the same query that loads the event. */
-    @Formula("(select count(*) from event_video ev where ev.event_id = id)")
+    /** When the event was deleted, or `null`. A deleted event stays in the table; the restriction above hides it. */
+    var deletedAt: Instant? = null
+
+    /** How many videos the event has, deleted ones left out, counted in the same query that loads the event. */
+    @NotAudited
+    @Formula(
+        "(select count(*) from event_video ev join video v on v.id = ev.video_id where ev.event_id = id and v.deleted_at is null)",
+    )
     var videoCount: Long = 0
 
+    @NotAudited
     @OneToMany
     @JoinTable(
         name = "event_video",

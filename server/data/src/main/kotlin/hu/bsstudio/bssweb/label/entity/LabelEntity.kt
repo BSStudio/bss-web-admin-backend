@@ -18,8 +18,10 @@ data class LabelEntity(
     @GeneratedValue
     lateinit var id: UUID
 
-    /** How many videos have the label, counted in the same query that loads the label. */
-    @Formula("(select count(*) from video_label vl where vl.label_id = id)")
+    /** How many videos have the label, deleted ones left out, counted in the same query that loads the label. */
+    @Formula(
+        "(select count(*) from video_label vl join video v on v.id = vl.video_id where vl.label_id = id and v.deleted_at is null)",
+    )
     var videoCount: Long = 0
 
     override fun equals(other: Any?): Boolean {

@@ -9,6 +9,7 @@ import hu.bsstudio.bssweb.member.model.UpdateMember
 import hu.bsstudio.bssweb.member.repository.MemberRepository
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
 import io.mockk.every
@@ -119,8 +120,19 @@ internal class DefaultMemberServiceTest(
     }
 
     @Test
-    internal fun `should remove entity by id`() {
-        every { mockRepository.deleteById(MEMBER_ID) } returns Unit
+    internal fun `should mark the entity deleted`() {
+        val entity = MemberEntity(url = "url", name = "name").apply { id = UUID.randomUUID() }
+        every { mockRepository.findById(MEMBER_ID) } returns Optional.of(entity)
+        every { mockRepository.save(entity) } returns entity
+
+        underTest.removeMember(MEMBER_ID)
+
+        entity.deletedAt.shouldNotBeNull()
+    }
+
+    @Test
+    internal fun `should do nothing when deleting a missing entity`() {
+        every { mockRepository.findById(MEMBER_ID) } returns Optional.empty()
 
         underTest.removeMember(MEMBER_ID)
     }
