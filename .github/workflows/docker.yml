@@ -69,8 +69,8 @@ jobs:
           sbom: true
           provenance: true
           set: |
-            *.cache-from=type=gha,scope=bss-web-admin-backend-v2
-            *.cache-to=type=gha,mode=max,scope=bss-web-admin-backend-v2
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max
 
       - uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
         id: scan
