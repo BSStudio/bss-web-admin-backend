@@ -62,6 +62,13 @@ internal class EventMapperTest(
         actual shouldBeEqual UPDATED_ENTITY
     }
 
+    @Test
+    internal fun `should map entity to update model`() {
+        val actual = underTest.entityToUpdate(ENTITY)
+
+        actual shouldBeEqual UpdateEvent(URL, TITLE, DESCRIPTION, DATE_FROM, DATE_TO, VISIBLE)
+    }
+
     private companion object {
         private val ID = mockk<UUID>()
         private const val URL = "URL"

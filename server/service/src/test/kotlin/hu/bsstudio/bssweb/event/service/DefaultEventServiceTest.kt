@@ -7,8 +7,11 @@ import hu.bsstudio.bssweb.event.model.DetailedEvent
 import hu.bsstudio.bssweb.event.model.Event
 import hu.bsstudio.bssweb.event.model.UpdateEvent
 import hu.bsstudio.bssweb.event.repository.EventRepository
+import hu.bsstudio.bssweb.revision.mapper.RevisionMapper
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.optional.shouldBeEmpty
 import io.kotest.matchers.optional.shouldBePresent
@@ -20,6 +23,12 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
+import org.springframework.data.history.Revision
+import org.springframework.data.history.RevisionMetadata
+import org.springframework.data.history.Revisions
+import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 
@@ -27,6 +36,7 @@ import java.util.UUID
 internal class DefaultEventServiceTest(
     @param:MockK private val mockRepository: EventRepository,
     @param:MockK private val mockMapper: EventMapper,
+    @param:MockK private val mockRevisionMapper: RevisionMapper,
 ) {
     @InjectMockKs
     private lateinit var underTest: DefaultEventService
@@ -124,7 +134,92 @@ internal class DefaultEventServiceTest(
         underTest.removeEvent(EVENT_ID)
     }
 
+    @Test
+    internal fun `should return deleted events`() {
+        every { mockRepository.findAllDeleted(PAGEABLE) } returns PageImpl(listOf(EVENT_ENTITY))
+        every { mockMapper.entityToModel(EVENT_ENTITY) } returns EVENT
+
+        val actual = underTest.findDeletedEvents(PAGEABLE)
+
+        actual shouldBeEqual PageImpl(listOf(EVENT))
+    }
+
+    @Test
+    internal fun `should restore a deleted event`() {
+        val entity =
+            EventEntity(url = "url", title = "title").apply {
+                id = UUID.randomUUID()
+                deletedAt = Instant.now()
+            }
+        every { mockRepository.findDeletedById(EVENT_ID) } returns Optional.of(entity)
+        every { mockRepository.save(entity) } returns entity
+        every { mockMapper.entityToDetailedModel(entity) } returns DETAILED_EVENT
+
+        val actual = underTest.restoreEvent(EVENT_ID)
+
+        actual shouldBePresent { it shouldBeEqual DETAILED_EVENT }
+        entity.deletedAt.shouldBeNull()
+    }
+
+    @Test
+    internal fun `should not restore a event that is not deleted`() {
+        every { mockRepository.findDeletedById(EVENT_ID) } returns Optional.empty()
+
+        val actual = underTest.restoreEvent(EVENT_ID)
+
+        actual.shouldBeEmpty()
+    }
+
+    @Test
+    internal fun `should return the revisions of a event`() {
+        val revisions = Revisions.none<Long, EventEntity>()
+        every { mockRepository.findRevisions(EVENT_ID) } returns revisions
+        every { mockRevisionMapper.revisionsToModel(revisions, any<(EventEntity) -> Instant?>()) } returns REVISION_INFOS
+
+        val actual = underTest.findEventRevisions(EVENT_ID)
+
+        actual shouldBeEqual REVISION_INFOS
+    }
+
+    @Test
+    internal fun `should return a event as it was at a revision`() {
+        every { mockRepository.findRevision(EVENT_ID, REVISION) } returns Optional.of(Revision.of(REVISION_METADATA, EVENT_ENTITY))
+        every { mockMapper.entityToModel(EVENT_ENTITY) } returns EVENT
+
+        val actual = underTest.findEventRevision(EVENT_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual EVENT }
+    }
+
+    @Test
+    internal fun `should give a event the fields it had at a revision`() {
+        val current = EventEntity(url = "url", title = "title").apply { id = UUID.randomUUID() }
+        every { mockRepository.findRevision(EVENT_ID, REVISION) } returns Optional.of(Revision.of(REVISION_METADATA, EVENT_ENTITY))
+        every { mockMapper.entityToUpdate(EVENT_ENTITY) } returns UPDATE_EVENT
+        every { mockMapper.updateToEntity(current, UPDATE_EVENT) } returns current
+        every { mockRepository.findById(EVENT_ID) } returns Optional.of(current)
+        every { mockRepository.save(current) } returns current
+        every { mockMapper.entityToDetailedModel(current) } returns DETAILED_EVENT
+
+        val actual = underTest.restoreEventRevision(EVENT_ID, REVISION)
+
+        actual shouldBePresent { it shouldBeEqual DETAILED_EVENT }
+    }
+
+    @Test
+    internal fun `should not restore a revision that is missing`() {
+        every { mockRepository.findRevision(EVENT_ID, REVISION) } returns Optional.empty()
+
+        val actual = underTest.restoreEventRevision(EVENT_ID, REVISION)
+
+        actual.shouldBeEmpty()
+    }
+
     private companion object {
+        private const val REVISION = 3L
+        private val REVISION_METADATA = mockk<RevisionMetadata<Long>>()
+        private val REVISION_INFOS = listOf(mockk<RevisionInfo>())
+        private val PAGEABLE = Pageable.unpaged()
         private val EVENT_ID = mockk<UUID>()
         private val EVENT = mockk<Event>()
         private val EVENT_ENTITY = mockk<EventEntity>()

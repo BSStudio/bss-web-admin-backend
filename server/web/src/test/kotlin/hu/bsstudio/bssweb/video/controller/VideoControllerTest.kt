@@ -1,6 +1,8 @@
 package hu.bsstudio.bssweb.video.controller
 
 import com.ninjasquad.springmockk.MockkBean
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
+import hu.bsstudio.bssweb.revision.model.RevisionType
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
@@ -10,6 +12,7 @@ import io.mockk.every
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -22,6 +25,7 @@ import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import org.springframework.test.web.servlet.put
 import tools.jackson.databind.ObjectMapper
+import java.time.Instant
 import java.time.LocalDate
 import java.util.Optional
 import java.util.UUID
@@ -171,7 +175,101 @@ internal class VideoControllerTest(
             }
     }
 
+    @Test
+    internal fun `should return the deleted videos`() {
+        every { mockService.findDeletedVideos(DELETED_PAGEABLE) } returns PageImpl(listOf(VIDEO), DELETED_PAGEABLE, 1)
+
+        mockMvc
+            .get("$BASE_URL/deleted") {
+                param("page", "0")
+                param("size", "20")
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                jsonPath("$.content[0].id") { value("$VIDEO_ID") }
+            }
+    }
+
+    @Test
+    internal fun `should restore a deleted video`() {
+        every { mockService.restoreVideo(VIDEO_ID) } returns Optional.of(DETAILED_VIDEO)
+
+        mockMvc
+            .post("$BASE_URL/$VIDEO_ID/restore") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(DETAILED_VIDEO)) }
+            }
+    }
+
+    @Test
+    internal fun `should answer 404 when there is no deleted video to restore`() {
+        every { mockService.restoreVideo(VIDEO_ID) } returns Optional.empty()
+
+        mockMvc
+            .post("$BASE_URL/$VIDEO_ID/restore") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpect { status { isNotFound() } }
+    }
+
+    @Test
+    internal fun `should answer 409 when the restored video clashes with another`() {
+        every { mockService.restoreVideo(VIDEO_ID) } throws DataIntegrityViolationException("duplicate")
+
+        mockMvc
+            .post("$BASE_URL/$VIDEO_ID/restore") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpect { status { isConflict() } }
+    }
+
+    @Test
+    internal fun `should return the revisions of a video`() {
+        every { mockService.findVideoRevisions(VIDEO_ID) } returns listOf(REVISION_INFO)
+
+        mockMvc
+            .get("$BASE_URL/$VIDEO_ID/revisions") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(listOf(REVISION_INFO))) }
+            }
+    }
+
+    @Test
+    internal fun `should return a video as it was at a revision`() {
+        every { mockService.findVideoRevision(VIDEO_ID, REVISION) } returns Optional.of(DETAILED_VIDEO)
+
+        mockMvc
+            .get("$BASE_URL/$VIDEO_ID/revisions/$REVISION") {
+                with(httpBasic(USERNAME, PASSWORD))
+            }.andExpectAll {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(DETAILED_VIDEO)) }
+            }
+    }
+
+    @Test
+    internal fun `should restore a revision of a video`() {
+        every { mockService.restoreVideoRevision(VIDEO_ID, REVISION) } returns Optional.of(DETAILED_VIDEO)
+
+        mockMvc
+            .post("$BASE_URL/$VIDEO_ID/revisions/$REVISION/restore") {
+                with(httpBasic(USERNAME, PASSWORD))
+                with(csrf())
+            }.andExpectAll {
+                status { isOk() }
+                content { json(objectMapper.writeValueAsString(DETAILED_VIDEO)) }
+            }
+    }
+
     private companion object {
+        private const val REVISION = 3L
+        private val REVISION_INFO = RevisionInfo(REVISION, Instant.parse("2026-10-30T12:00:00Z"), "author", RevisionType.UPDATED)
+        private val DELETED_PAGEABLE: Pageable = PageRequest.of(0, 20)
         private const val BASE_URL = "/api/v1/video"
         private const val USERNAME = "user"
         private const val PASSWORD = "password"

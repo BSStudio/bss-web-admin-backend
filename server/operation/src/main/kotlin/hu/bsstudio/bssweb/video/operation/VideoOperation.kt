@@ -1,5 +1,6 @@
 package hu.bsstudio.bssweb.video.operation
 
+import hu.bsstudio.bssweb.revision.model.RevisionInfo
 import hu.bsstudio.bssweb.video.model.CreateVideo
 import hu.bsstudio.bssweb.video.model.DetailedVideo
 import hu.bsstudio.bssweb.video.model.UpdateVideo
@@ -51,4 +52,29 @@ interface VideoOperation {
     fun deleteVideo(
         @PathVariable videoId: UUID,
     ): ResponseEntity<Unit>
+
+    @GetExchange("/deleted")
+    fun getDeletedVideos(pageable: Pageable): ResponseEntity<Page<Video>>
+
+    @PostExchange("/{videoId}/restore")
+    fun restoreVideo(
+        @PathVariable videoId: UUID,
+    ): ResponseEntity<DetailedVideo>
+
+    @GetExchange("/{videoId}/revisions")
+    fun getVideoRevisions(
+        @PathVariable videoId: UUID,
+    ): ResponseEntity<List<RevisionInfo>>
+
+    @GetExchange("/{videoId}/revisions/{revision}")
+    fun getVideoRevision(
+        @PathVariable videoId: UUID,
+        @PathVariable revision: Long,
+    ): ResponseEntity<DetailedVideo>
+
+    @PostExchange("/{videoId}/revisions/{revision}/restore")
+    fun restoreVideoRevision(
+        @PathVariable videoId: UUID,
+        @PathVariable revision: Long,
+    ): ResponseEntity<DetailedVideo>
 }

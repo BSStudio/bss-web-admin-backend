@@ -52,4 +52,14 @@ class EventMapper(
         eventEntity.visible = updateEvent.visible
         return eventEntity
     }
+
+    fun entityToUpdate(entity: EventEntity): UpdateEvent =
+        UpdateEvent(
+            url = entity.url,
+            title = entity.title,
+            description = entity.description,
+            dateFrom = entity.dateFrom,
+            dateTo = entity.dateTo,
+            visible = entity.visible,
+        )
 }
